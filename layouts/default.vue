@@ -28,7 +28,7 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title v-text="title" />
       <v-spacer />
-      <v-btn @click.stop="rightDrawer = !rightDrawer"> Login </v-btn>
+      <v-btn @click.stop="logInOut"> {{ login }} </v-btn>
     </v-app-bar>
     <v-main>
       <v-container>
@@ -48,16 +48,23 @@ export default {
       clipped: false,
       drawer: false,
       fixed: false,
+      loggedIn: this.$fire.auth.currentUser !== null,
+      login: !this.loggedIn ? 'Login' : 'Logout',
       items: [
         {
           icon: 'mdi-apps',
-          title: 'Welcome',
+          title: 'Home',
           to: '/',
         },
         {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire',
+          icon: 'mdi-settings',
+          title: 'Einstellungen',
+          to: '/settings',
+        },
+        {
+          icon: 'mdi-settings',
+          title: 'Login',
+          to: '/login',
         },
       ],
       miniVariant: false,
@@ -65,6 +72,15 @@ export default {
       rightDrawer: false,
       title: 'Sichere Zuflucht',
     }
+  },
+  methods: {
+    logInOut() {
+      if (this.loggedIn) {
+        this.$fire.auth.signOut()
+      } else {
+        this.$router.push('/login')
+      }
+    },
   },
 }
 </script>
