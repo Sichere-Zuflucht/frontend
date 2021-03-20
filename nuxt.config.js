@@ -15,7 +15,7 @@ export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: '%s - sichere-zufluch',
-    title: 'sichere-zufluch',
+    title: 'sichere-zuflucht',
     htmlAttrs: {
       lang: 'en',
     },

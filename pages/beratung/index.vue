@@ -5,6 +5,17 @@
       <v-expansion-panels>
         <v-expansion-panel v-for="(item, i) in women" :key="i">
           <v-expansion-panel-header>
+            <v-chip
+              v-if="item.isAccepted"
+              class="ma-2"
+              color="green"
+              text-color="white"
+            >
+              zugesagt
+            </v-chip>
+            <v-chip v-else class="ma-2" color="orange" text-color="white">
+              noch offen
+            </v-chip>
             {{ item.userName }}
           </v-expansion-panel-header>
           <v-expansion-panel-content>
@@ -30,47 +41,41 @@
                     Bitte füge mind. 3 Terminvorschläge für Frau
                     <b class="">{{ item.userName }}</b> hinzu.
                   </p>
+                  <p v-for="d in dates" :key="d">{{ d }}</p>
+                  <v-btn @click="menu = true">Termin hinzufügen</v-btn>
                   <v-menu
                     ref="menu"
                     v-model="menu"
                     :close-on-content-click="false"
-                    :return-value.sync="dates"
+                    :return-value.sync="date"
                     transition="scale-transition"
-                    offset-y
                     min-width="auto"
+                    position-x="au"
+                    position-y="20"
                   >
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-combobox
-                        v-model="dates"
-                        multiple
-                        chips
-                        small-chips
-                        label="Termine auswählen"
-                        prepend-icon="mdi-calendar"
-                        readonly
-                        v-bind="attrs"
-                        v-on="on"
-                      ></v-combobox>
-                    </template>
                     <v-date-picker
-                      v-model="dates"
-                      multiple
+                      v-model="date"
                       no-title
                       scrollable
                       :min="today"
+                      elevation="15"
                     >
                       <v-spacer></v-spacer>
                       <v-btn text color="primary" @click="menu = false">
                         Schließen
                       </v-btn>
-                      <v-btn text color="primary" @click="saveDates(item.uid)">
+                      <v-btn text color="primary" @click="addDates()">
                         OK
                       </v-btn>
                     </v-date-picker>
                   </v-menu>
-                  <v-text-field label="Terminvorschlag 1"></v-text-field>
 
-                  <v-btn color="success">Zusagen </v-btn>
+                  <v-btn
+                    v-if="dates.length >= 3"
+                    color="success"
+                    @click="saveDates(item.uid)"
+                    >Zusagen
+                  </v-btn>
                 </div>
                 <v-btn
                   v-else
@@ -97,6 +102,7 @@ export default {
     return {
       name: '{name}',
       women: [],
+      date: '',
       dates: [],
       menu: false,
       today: this.formatDate(new Date()),
@@ -129,7 +135,6 @@ export default {
                   avatar: subsubDoc.data().avatar,
                   userName: subsubDoc.data().userName,
                   message: subDoc.data().message,
-                  showInputs: false,
                 }
                 this.women.push(user)
               })
@@ -147,13 +152,20 @@ export default {
 
       return [year, month, day].join('-')
     },
+    addDates() {
+      this.dates.push(this.date)
+      console.log(this.dates)
+      this.menu = false
+    },
     saveDates(docID) {
       const uid = 'Jb7kyiXffQaRsTWIcFAm'
       const db = window.$nuxt.$fire.firestore
-      const dateList = {}
+      const dateList = []
+      dateList.push(this.dates)
       this.dates.forEach((date, i) => {
         dateList[i] = date
       })
+
       this.menu = false
       db.collection('users/' + uid + '/requests')
         .doc(docID)
