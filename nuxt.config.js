@@ -72,6 +72,16 @@ export default {
         emulatorPort: undefined,
         // emulatorHost: 'http://localhost',
       },
+      firestore: {
+        memoryOnly: false, // default
+        chunkName:
+          process.env.NODE_ENV !== 'production' ? 'firebase-auth' : '[id]', // default
+        enablePersistence: true,
+        emulatorPort: undefined,
+        settings: {
+          // Firestore Settings - currently only works in SPA mode
+        },
+      },
     },
   },
 
@@ -79,16 +89,25 @@ export default {
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: true,
+      dark: false,
       themes: {
-        dark: {
-          primary: colors.blue.darken2,
+        light: {
+          primary: colors.purple.lighten3,
           accent: colors.grey.darken3,
           secondary: colors.amber.darken3,
           info: colors.teal.lighten1,
           warning: colors.amber.base,
           error: colors.deepOrange.accent4,
-          success: colors.green.accent3,
+          success: colors.teal.darken1,
+        },
+        dark: {
+          primary: colors.purple.lighten4,
+          accent: colors.grey.darken3,
+          secondary: colors.amber.darken3,
+          info: colors.teal.lighten1,
+          warning: colors.amber.base,
+          error: colors.deepOrange.accent4,
+          success: colors.teal.darken1,
         },
       },
     },
