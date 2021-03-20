@@ -1,0 +1,3 @@
+<template>
+  <Register></Register>
+</template>

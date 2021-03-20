@@ -12,6 +12,10 @@ export default {
     prefix: '/frontend/',
   },
 
+  env: {
+    baseUrl: process.env.BASE_URL || 'http://localhost:3000',
+  },
+
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: '%s - sichere-zufluch',
@@ -46,44 +50,40 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: [
-    [
-      '@nuxtjs/firebase',
-      {
-        config: {
-          apiKey: 'AIzaSyDMjjzgxNWEsDWYETgWbFgaYnwzAmLyzhM',
-          authDomain: 'sicherezuflucht.firebaseapp.com',
-          projectId: 'sicherezuflucht',
-          storageBucket: 'sicherezuflucht.appspot.com',
-          messagingSenderId: '163834643967',
-          appId: '1:163834643967:web:277673f1c69b5eaf3213ca',
+  modules: ['@nuxtjs/firebase'],
+  firebase: {
+    config: {
+      apiKey: 'AIzaSyDMjjzgxNWEsDWYETgWbFgaYnwzAmLyzhM',
+      authDomain: 'sicherezuflucht.firebaseapp.com',
+      projectId: 'sicherezuflucht',
+      storageBucket: 'sicherezuflucht.appspot.com',
+      messagingSenderId: '163834643967',
+      appId: '1:163834643967:web:277673f1c69b5eaf3213ca',
+    },
+    services: {
+      auth: {
+        persistence: 'local', // default
+        initialize: {
+          onAuthStateChangedMutation: 'ON_AUTH_STATE_CHANGED_MUTATION',
+          onAuthStateChangedAction: 'onAuthStateChangedAction',
+          subscribeManually: false,
         },
-        services: {
-          auth: {
-            persistence: 'local', // default
-            initialize: {
-              onAuthStateChangedMutation: 'ON_AUTH_STATE_CHANGED_MUTATION',
-              onAuthStateChangedAction: 'onAuthStateChangedAction',
-              subscribeManually: false,
-            },
-            ssr: false, // default
-            emulatorPort: undefined,
-            // emulatorHost: 'http://localhost',
-          },
-          firestore: {
-            memoryOnly: false, // default
-            chunkName:
-              process.env.NODE_ENV !== 'production' ? 'firebase-auth' : '[id]', // default
-            enablePersistence: true,
-            emulatorPort: undefined,
-            settings: {
-              // Firestore Settings - currently only works in SPA mode
-            },
-          },
+        ssr: true, // default
+        emulatorPort: undefined,
+        // emulatorHost: 'http://localhost',
+      },
+      firestore: {
+        memoryOnly: false, // default
+        chunkName:
+          process.env.NODE_ENV !== 'production' ? 'firebase-auth' : '[id]', // default
+        enablePersistence: true,
+        emulatorPort: undefined,
+        settings: {
+          // Firestore Settings - currently only works in SPA mode
         },
       },
-    ],
-  ],
+    },
+  },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
@@ -114,5 +114,15 @@ export default {
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
+  build: {
+    extend(config, { isDev }) {
+      // Sets webpack's mode to development if `isDev` is true.
+      if (isDev) {
+        config.mode = 'development'
+      }
+    },
+  },
+  server: {
+    host: '0.0.0.0',
+  },
 }
