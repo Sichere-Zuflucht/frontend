@@ -42,7 +42,6 @@
                     <b class="">{{ item.userName }}</b> hinzu.
                   </p>
                   <p v-for="d in dates" :key="d">{{ d }}</p>
-                  <v-btn @click="menu = true">Termin hinzufügen</v-btn>
                   <v-menu
                     ref="menu"
                     v-model="menu"
@@ -50,9 +49,12 @@
                     :return-value.sync="date"
                     transition="scale-transition"
                     min-width="auto"
-                    position-x="au"
-                    position-y="20"
+                    top
+                    offset-y
                   >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn v-on="on" v-bind="attrs">Termin hinzufügen</v-btn>
+                    </template>
                     <v-date-picker
                       v-model="date"
                       no-title
