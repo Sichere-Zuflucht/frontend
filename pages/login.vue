@@ -1,9 +1,11 @@
 <template>
-  <v-container> Login </v-container>
+  <v-container> <Signup></Signup> </v-container>
 </template>
 
 <script>
+import Signup from '~/pages/signup'
 export default {
   name: 'Login',
+  components: { Signup },
 }
 </script>

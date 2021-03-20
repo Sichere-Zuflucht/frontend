@@ -48,8 +48,7 @@ export default {
       clipped: false,
       drawer: false,
       fixed: false,
-      loggedIn: this.$fire.auth.currentUser !== null,
-      login: !this.loggedIn ? 'Login' : 'Logout',
+      loggedIn: false,
       items: [
         {
           icon: 'mdi-apps',
@@ -72,6 +71,14 @@ export default {
       rightDrawer: false,
       title: 'Sichere Zuflucht',
     }
+  },
+  computed: {
+    login: (that) => (!that.loggedIn ? 'Login' : 'Logout'),
+  },
+  watch: {
+    '$store.state.user'() {
+      this.loggedIn = this.$fire.auth.currentUser !== null
+    },
   },
   methods: {
     logInOut() {
