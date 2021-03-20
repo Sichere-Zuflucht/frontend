@@ -41,42 +41,20 @@
                     Bitte füge mind. 3 Terminvorschläge für Frau
                     <b class="">{{ item.userName }}</b> hinzu.
                   </p>
-                  <p v-for="d in dates" :key="d">{{ d }}</p>
-                  <v-menu
-                    ref="menu"
-                    v-model="menu"
-                    :close-on-content-click="false"
-                    :return-value.sync="date"
-                    transition="scale-transition"
-                    min-width="auto"
-                    top
-                    offset-y
-                  >
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-btn v-on="on" v-bind="attrs">Termin hinzufügen</v-btn>
-                    </template>
-                    <v-date-picker
-                      v-model="date"
-                      no-title
-                      scrollable
-                      :min="today"
-                      elevation="15"
-                    >
-                      <v-spacer></v-spacer>
-                      <v-btn text color="primary" @click="menu = false">
-                        Schließen
-                      </v-btn>
-                      <v-btn text color="primary" @click="addDates()">
-                        OK
-                      </v-btn>
-                    </v-date-picker>
-                  </v-menu>
+                  <p v-for="d in item.dates" :key="d">{{ d }}</p>
+                  <DatePicker :item="item" />
 
                   <v-btn
-                    v-if="dates.length >= 3"
+                    v-if="item.dates.length >= 3"
                     color="success"
-                    @click="saveDates(item.uid)"
+                    @click="saveDates(item)"
                     >Zusagen
+                  </v-btn>
+                  <v-btn
+                    v-if="item.dates.length >= 3"
+                    color="success"
+                    @click="showDates(item)"
+                    >show
                   </v-btn>
                 </div>
                 <v-btn
@@ -104,10 +82,7 @@ export default {
     return {
       name: '{name}',
       women: [],
-      date: '',
-      dates: [],
-      menu: false,
-      today: this.formatDate(new Date()),
+      endpoint: 'https://formspree.io/f/xknkwgnn',
     }
   },
   computed: {
@@ -137,47 +112,49 @@ export default {
                   avatar: subsubDoc.data().avatar,
                   userName: subsubDoc.data().userName,
                   message: subDoc.data().message,
+                  dates: [],
                 }
                 this.women.push(user)
               })
           })
         })
     },
-    formatDate(date) {
-      const d = new Date(date)
-      let month = '' + (d.getMonth() + 1)
-      let day = '' + d.getDate()
-      const year = d.getFullYear()
 
-      if (month.length < 2) month = '0' + month
-      if (day.length < 2) day = '0' + day
-
-      return [year, month, day].join('-')
+    showDates(d) {
+      console.log(d.dates)
     },
-    addDates() {
-      this.dates.push(this.date)
-      console.log(this.dates)
-      this.menu = false
-    },
-    saveDates(docID) {
+    saveDates(w) {
       const uid = 'Jb7kyiXffQaRsTWIcFAm'
       const db = window.$nuxt.$fire.firestore
-      const dateList = []
-      dateList.push(this.dates)
-      this.dates.forEach((date, i) => {
-        dateList[i] = date
-      })
-
-      this.menu = false
+      w.isAccepted = true
       db.collection('users/' + uid + '/requests')
-        .doc(docID)
+        .doc(w.uid)
         .update({
-          dates: dateList,
-          jitsiRoom: uid.substring(0, 8) + '_' + docID.substring(0, 8),
+          dates: w.dates,
+          jitsiRoom: uid.substring(0, 8) + '_' + w.uid.substring(0, 8),
           isAccepted: true,
+          message: null,
+        })
+        .then(() => {
+          // this.submitForm(w.email, this.dateList)
+          // this.dataList = []
         })
     },
-    acceptRequest(user) {},
+    async submitForm(uEmail, list) {
+      const data = {
+        email: uEmail,
+        message:
+          'Ihnen stehen folgende Terminvorschläge zur Verfügung: ' + list + '.',
+      }
+      const response = await fetch(this.endpoint, {
+        method: 'POST',
+        body: data,
+        headers: {
+          'Content-Type': 'text/plain',
+        },
+      })
+      console.log('email res: ', response)
+    },
   },
 }
 </script>
