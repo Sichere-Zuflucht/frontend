@@ -21,7 +21,6 @@
       Dir wurde an {{ email }} eine Bestätigunsmail geschickt. Bitte folge den
       Anweisungen dort.</v-row
     >
-    <v-btn @click="$router.push({ path: '/update-profile2' })"></v-btn>
   </v-container>
 </template>
 

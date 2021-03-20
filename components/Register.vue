@@ -10,7 +10,6 @@
       Irgendetwas ist schief gelaufen. Versuche dich erneut zu registrieren.
       <v-btn :to="{ path: '/sign-up' }">Erneut registrieren</v-btn>
     </v-row>
-    <!--    <v-btn @click="$router.push({ path: '/update-profile' })"></v-btn>-->
   </v-container>
 </template>
 
@@ -31,7 +30,6 @@ export default {
       // Confirm the link is a sign-in with email link.
       if (window.$nuxt.$fire.auth.isSignInWithEmailLink(window.location.href)) {
         const email = window.localStorage.getItem('emailForSignIn')
-        console.log(email)
         if (email) {
           this.email = email
           this.login()
@@ -39,17 +37,15 @@ export default {
       }
     },
     login() {
-      console.log('hehllo?????')
-      console.log(this.$router)
-      this.$router.push({ path: '/update-profile' })
-
       // The client SDK will parse the code from the link for you.
       window.$nuxt.$fire.auth
         .signInWithEmailLink(this.email, window.location.href)
         .then((result) => {
           window.localStorage.removeItem('emailForSignIn')
-          console.log(result, 'got everything')
-          this.$router.push({ path: '/update-profile' })
+          this.$router.push({
+            path: '/update-profile',
+            query: { eMail: this.email },
+          })
         })
         .catch((e) => {
           this.showError = true
