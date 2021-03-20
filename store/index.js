@@ -39,6 +39,8 @@ const createStore = () => {
         if (authUser) {
           const { uid, email, emailVerified } = authUser
           state.user = { uid, email, emailVerified }
+        } else {
+          state.user = null
         }
       },
     },

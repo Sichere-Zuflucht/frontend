@@ -1,8 +1,13 @@
 export default function ({ store, redirect, route }) {
   if (route.path === '/register' && !isSignInWithEmailLink(route))
-    redirect('/signup')
+    redirect('/login')
+
   if (route.path === '/update-profile' && route.query.eMail === undefined) {
-    redirect('/signup')
+    redirect('/login')
+  }
+
+  if (route.path === '/login' && store.state.user) {
+    redirect('/')
   }
 }
 
