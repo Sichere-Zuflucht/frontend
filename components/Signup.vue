@@ -35,8 +35,10 @@ export default {
     ],
     loading: false,
     showConfirmation: false,
+    baseUrl: '',
   }),
   mounted() {
+    this.baseUrl = window.location.origin
     const email = window.localStorage.getItem('emailForSignIn')
     if (email) {
       this.email = email
@@ -48,7 +50,7 @@ export default {
       this.loading = true
       window.$nuxt.$fire.auth
         .sendSignInLinkToEmail(this.email, {
-          url: process.env.baseUrl + '/register',
+          url: this.baseUrl + '/register',
           handleCodeInApp: true,
         })
         .then(() => {
