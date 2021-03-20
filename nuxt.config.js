@@ -6,7 +6,7 @@ export default {
 
   router: {
     base: '/frontend/',
-    middleware: 'authenticated',
+    middleware: 'index',
   },
   static: {
     prefix: '/frontend/',
@@ -69,6 +69,16 @@ export default {
             ssr: false, // default
             emulatorPort: undefined,
             // emulatorHost: 'http://localhost',
+          },
+          firestore: {
+            memoryOnly: false, // default
+            chunkName:
+              process.env.NODE_ENV !== 'production' ? 'firebase-auth' : '[id]', // default
+            enablePersistence: true,
+            emulatorPort: undefined,
+            settings: {
+              // Firestore Settings - currently only works in SPA mode
+            },
           },
         },
       },
