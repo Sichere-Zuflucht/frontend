@@ -1,10 +1,11 @@
 export default function ({ store, redirect, route }) {
-  if (store.state.user != null && route.path === '/login') redirect('/admin')
-  if (store.state.user == null && isAdminRoute(route)) redirect('/login')
+  if (route.path === '/register' && !isSignInWithEmailLink(route))
+    redirect('/signup')
 }
 
-function isAdminRoute(route) {
-  if (route.matched.some((record) => record.path === '/admin')) {
-    return true
+function isSignInWithEmailLink(route) {
+  if (process.client) {
+    return window.$nuxt.$fire.auth.isSignInWithEmailLink(route.fullPath)
   }
+  return false
 }
