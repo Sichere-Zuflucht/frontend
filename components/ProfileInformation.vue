@@ -3,6 +3,13 @@
     <v-form v-model="valid">
       <v-text-field v-model="name" label="Name" required></v-text-field>
       <v-text-field v-model="surName" label="Vorname" required></v-text-field>
+      <v-select
+        :items="memberships"
+        v-model="membership"
+        label="Als was meldest du dich an?"
+        item-text="description"
+        item-value="name"
+      ></v-select>
       <v-text-field
         v-model="password"
         label="Passwort"
@@ -51,24 +58,47 @@ export default {
       ],
       showError: false,
       loading: false,
+      memberships: [],
+      membership: undefined,
     }
+  },
+  mounted() {
+    window.$nuxt.$fire.firestore
+      .collection('memberships')
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          this.memberships.push(doc.data())
+          if (!this.membership) this.membership = doc.data()
+        })
+      })
   },
   methods: {
     updateProfile() {
       this.loading = true
+      const db = window.$nuxt.$fire.firestore
       window.$nuxt.$fire.auth.currentUser
         .updatePassword(this.password)
-        .catch(() => (this.showError = true))
+        .catch((e) => {
+          console.error(e)
+          this.showError = true
+        })
         .then(() => {
-          // window.$nuxt.$fire.firestore.collection('users').doc().push({
-          //   fistName: this.surName,
-          //   lastName: this.name,
-          //   avatar: 'https://picsum.photos/seed/g00385/200',
-          // })
+          db.collection('users/')
+            .doc(window.$nuxt.$fire.auth.currentUser.uid)
+            .set({
+              fistName: this.surName,
+              lastName: this.name,
+              avatar: 'https://picsum.photos/seed/g00385/200',
+              createdAt: new Date(),
+              membership: db
+                .collection('memberships')
+                .doc(this.membership.name),
+            })
         })
         .then(() => {
           this.loading = false
-          // this.$router.push('/')
+          this.$router.push('/' + this.membership.name)
         })
     },
   },
