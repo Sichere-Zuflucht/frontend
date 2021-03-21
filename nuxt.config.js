@@ -1,6 +1,6 @@
 import colors from 'vuetify/es5/util/colors'
 
-const base = '/frontent'
+const base = '/frontend'
 
 export default {
   // Target: https://go.nuxtjs.dev/config-target
