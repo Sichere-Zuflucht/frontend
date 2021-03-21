@@ -9,6 +9,8 @@ export default function ({ store, redirect, route }) {
   if (route.path === '/login' && store.state.user) {
     redirect('/')
   }
+
+  redirectProfil(store, redirect, route)
 }
 
 function isSignInWithEmailLink(route) {
@@ -16,4 +18,13 @@ function isSignInWithEmailLink(route) {
     return window.$nuxt.$fire.auth.isSignInWithEmailLink(route.fullPath)
   }
   return false
+}
+
+function redirectProfil(store, redirect, route) {
+  if (route.path === '/profile') {
+    store.state.user.membership.get().then((doc) => {
+      redirect(doc.data().routing)
+    })
+    redirect('/')
+  }
 }
