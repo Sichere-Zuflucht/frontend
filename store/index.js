@@ -5,6 +5,7 @@ const createStore = () => {
     state: {
       user: null,
       account: null,
+      membership: null,
     },
     getters: {
       isAuthenticated(state) {
@@ -23,7 +24,7 @@ const createStore = () => {
           commit('ON_AUTH_STATE_CHANGED_MUTATION', { authUser, claims, token })
         }
       },
-      onAuthStateChangedAction: (ctx, { authUser, claims }) => {
+      onAuthStateChangedAction(ctx, { authUser, claims }) {
         if (!authUser) {
           // claims = null
           // Perform logout operations
@@ -35,10 +36,19 @@ const createStore = () => {
       },
     },
     mutations: {
-      ON_AUTH_STATE_CHANGED_MUTATION: (state, { authUser, claims }) => {
+      ON_AUTH_STATE_CHANGED_MUTATION(state, { authUser, claims }) {
         if (authUser) {
           const { uid, email, emailVerified } = authUser
           state.user = { uid, email, emailVerified }
+          this.$fire.firestore
+            .collection('users')
+            .doc(uid)
+            .get()
+            .then((user) => {
+              Object.entries(user.data()).forEach((key) => {
+                state.user[key[0]] = key[1]
+              })
+            })
         } else {
           state.user = null
         }
