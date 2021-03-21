@@ -72,7 +72,6 @@
         </v-expansion-panel>
       </v-expansion-panels>
     </div>
-    <signup />
   </div>
 </template>
 
@@ -95,7 +94,8 @@ export default {
   },
   methods: {
     loadRequests() {
-      const uid = 'Jb7kyiXffQaRsTWIcFAm'
+      console.log(this.$store.state.user.uid)
+      const uid = this.$store.state.user.uid
       const db = window.$nuxt.$fire.firestore
       db.collection('users/' + uid + '/requests')
         .get()
