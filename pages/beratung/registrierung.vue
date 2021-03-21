@@ -31,9 +31,11 @@ export default {
         .collection('users')
         .doc(window.$nuxt.$fire.auth.currentUser.uid)
         .update({
-          languages: data.lang,
-          topic: data.topic,
-          types: data.type,
+          info: {
+            languages: data.lang,
+            topic: data.topic,
+            types: data.type,
+          },
         })
     },
   },

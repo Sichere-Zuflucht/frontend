@@ -13,7 +13,7 @@
         <v-chip value="russian"> russisch</v-chip>
         <v-chip value="arabic"> arabisch</v-chip>
       </v-chip-group>
-      <v-btn color="primary" @click="e6 = 2"> Weiter</v-btn>
+      <v-btn color="primary" @click="update(2)"> Weiter</v-btn>
     </v-stepper-content>
     <v-stepper-step :complete="e6 > 2" editable step="2"
       >Wobei bietest du Hilfe?
@@ -30,7 +30,7 @@
       >
         <v-chip :value="t.title">{{ t.title }}</v-chip>
       </v-chip-group>
-      <v-btn color="primary" @click="e6 = 3"> Weiter</v-btn>
+      <v-btn color="primary" @click="update(2)"> Weiter</v-btn>
     </v-stepper-content>
     <v-stepper-step :complete="e6 > 3" editable step="3"
       >Was sind deine Themengebiete?
@@ -84,8 +84,16 @@ export default {
       this.types = res[0].area
     },
     finish() {
-      this.e6 = 4
+      this.update(4)
       this.$emit('selection', {
+        lang: this.lang,
+        topic: this.topic,
+        type: this.type,
+      })
+    },
+    update(val) {
+      this.e6 = val
+      this.$emit('filter', {
         lang: this.lang,
         topic: this.topic,
         type: this.type,
