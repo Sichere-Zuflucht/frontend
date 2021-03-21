@@ -1,5 +1,14 @@
 <template>
-  <v-container>{{ coachings }} </v-container>
+  <v-container
+    ><CoachingSelection @selection="filter" />
+    <div
+      v-for="(coaching, i) in coachings"
+      class="mt-5"
+      :key="i"
+      :coaching="coaching"
+    >
+      <Coaching :coach="coaching" /></div
+  ></v-container>
 </template>
 
 <script>
@@ -17,8 +26,14 @@ export default {
       .where('membership', '==', coach)
       .get()
       .then((ref) => {
-        ref.docs.forEach((doc) => this.coachings.push(doc.data()))
+        ref.docs.forEach((doc) => {
+          const data = doc.data()
+          if (data.info) this.coachings.push(doc.data())
+        })
       })
+  },
+  methods: {
+    filter(data) {},
   },
 }
 </script>
