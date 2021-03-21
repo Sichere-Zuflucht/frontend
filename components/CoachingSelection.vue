@@ -30,7 +30,7 @@
       >
         <v-chip :value="t.title">{{ t.title }}</v-chip>
       </v-chip-group>
-      <v-btn color="primary" @click="update(2)"> Weiter</v-btn>
+      <v-btn color="primary" @click="update(3)"> Weiter</v-btn>
     </v-stepper-content>
     <v-stepper-step :complete="e6 > 3" editable step="3"
       >Was sind deine Themengebiete?
