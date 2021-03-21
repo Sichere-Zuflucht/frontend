@@ -4,11 +4,11 @@
       <v-text-field v-model="name" label="Name" required></v-text-field>
       <v-text-field v-model="surName" label="Vorname" required></v-text-field>
       <v-select
-        :items="memberships"
         v-model="membership"
+        :items="memberships"
         label="Als was meldest du dich an?"
         item-text="description"
-        item-value="name"
+        return-object
       ></v-select>
       <v-text-field
         v-model="password"
@@ -87,7 +87,7 @@ export default {
           db.collection('users/')
             .doc(window.$nuxt.$fire.auth.currentUser.uid)
             .set({
-              fistName: this.surName,
+              firstName: this.surName,
               lastName: this.name,
               avatar:
                 'https://picsum.photos/seed/' +
@@ -96,9 +96,7 @@ export default {
               createdAt: new Date(),
               userName: window.$nuxt.$fire.auth.currentUser.uid.substring(0, 8),
               email: window.$nuxt.$fire.auth.currentUser.email,
-              membership: db
-                .collection('memberships')
-                .doc(this.membership.name),
+              membership: db.collection('memberships').doc(this.membership.id),
             })
         })
         .then(() => {
