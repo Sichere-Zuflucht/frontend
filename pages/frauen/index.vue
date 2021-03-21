@@ -76,15 +76,12 @@ export default {
   methods: {
     cancle(coaching) {
       const db = window.$nuxt.$fire.firestore
-
       db.collection('users/' + coaching.id + '/requests')
-        .get()
-        .then((snapshot) => {
-          snapshot.docs.forEach((doc) => {
-            console.log(doc)
-          })
-        })
-      console.log(coaching)
+        .doc(this.$store.state.user.uid)
+        .delete()
+      db.collection('users/' + this.$store.state.user.uid + '/response')
+        .doc(coaching.id)
+        .delete()
     },
   },
 }
