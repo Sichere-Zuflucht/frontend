@@ -25,9 +25,8 @@
               <v-col cols="5"><v-btn color="green">Zusagen</v-btn></v-col>
             </v-row>
             <v-row class="mb-2"
-              ><v-btn color="red">Absagen</v-btn><v-spacer /><v-btn
-                >Nachfrage</v-btn
-              >
+              ><v-btn color="red" @click="cancle(response)">Absagen</v-btn
+              ><v-spacer /><v-btn>Nachfrage</v-btn>
             </v-row>
           </v-expansion-panel-content>
         </v-expansion-panel>
@@ -63,18 +62,30 @@ export default {
       .then((snapshot) => {
         snapshot.forEach((subDoc) => {
           const data = subDoc.data()
-
-          console.log('res: ', data)
-
           subDoc
             .data()
             .from.get()
             .then((a) => {
               data.coach = a.data()
+              data.id = a.id
               this.responses.push(data)
             })
         })
       })
+  },
+  methods: {
+    cancle(coaching) {
+      const db = window.$nuxt.$fire.firestore
+
+      db.collection('users/' + coaching.id + '/requests')
+        .get()
+        .then((snapshot) => {
+          snapshot.docs.forEach((doc) => {
+            console.log(doc)
+          })
+        })
+      console.log(coaching)
+    },
   },
 }
 </script>
