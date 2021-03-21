@@ -58,7 +58,7 @@ export default {
     requestPassword: false,
   }),
   mounted() {
-    this.baseUrl = window.location.origin
+    this.baseUrl = window.location.origin + process.env.base
     const email = window.localStorage.getItem('emailForSignIn')
     if (email) {
       this.email = email
@@ -85,8 +85,7 @@ export default {
         const loginMethods = await window.$nuxt.$fire.auth.fetchSignInMethodsForEmail(
           this.email
         )
-        console.log('methods:', loginMethods)
-        if (loginMethods.length === 0) {
+        if (loginMethods.length <= 1) {
           this.signup()
         } else {
           this.requestPassword = true
