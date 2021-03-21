@@ -43,14 +43,14 @@ export default {
         // language
         add =
           add &&
-          coach.info.languages.filter((value) => data.lang.includes(value))
+          coach.info.languages.filter((value) => data.languages.includes(value))
             .length >= 1
         // topic
         add = add && coach.info.topic === data.topic
         // types
         add =
           add &&
-          coach.info.types.filter((value) => data.type.includes(value))
+          coach.info.types.filter((value) => data.types.includes(value))
             .length >= 1
         if (add) this.filteredCoaches.push(coach)
       })
