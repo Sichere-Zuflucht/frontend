@@ -3,7 +3,7 @@
     <h1>
       Hallo <span v-if="data">{{ data.firstName }} {{ data.lastName }}</span>
     </h1>
-    <v-alert v-if="!data.language" color="red" type="warning"
+    <v-alert v-if="!data.info" color="red" type="warning"
       >Bitte füllen Sie ihr Profil fertig aus.
       <v-btn to="registrierung" append class="ma-2 ml-0">weiter</v-btn></v-alert
     >
@@ -136,9 +136,13 @@ export default {
     },
 
     showDates(womenUser) {
-      console.log(womenUser)
-      const list = JSON.stringify(womenUser.dates)
-      console.log(list.substring(1, list.length - 1))
+      const db = window.$nuxt.$fire.firestore
+      db.collection('users')
+        .doc(this.$fire.auth.currentUser.uid)
+        .get()
+        .then((e) => {
+          console.log(e.data())
+        })
     },
     saveDates(w) {
       const uid = this.$fire.auth.currentUser.uid
@@ -161,26 +165,28 @@ export default {
       const list = JSON.stringify(womenUser.dates)
       console.log(list)
       const db = window.$nuxt.$fire.firestore
-      const currUserData = db
-        .collection('users')
+      db.collection('users')
         .doc(this.$fire.auth.currentUser.uid)
         .get()
-      db.collection('users')
-        .doc(womenUser.uid)
-        .collection('response')
-        .set({
-          emailNotification:
-            'Der Coach ' +
-            currUserData.data().firstName +
-            ' ' +
-            currUserData.data().lastName +
-            'hat auf Ihre Anfrage reagiert und schickt ihnen folgende Terminvorschläge: ' +
-            list +
-            '. Bitte loggen Sie sich auf unserer Plattform ein, um einen Termin auszuwählen.',
-          from: db
-            .collection('users')
-            .doc(window.$nuxt.$fire.auth.currentUser.uid),
-          suggestions: womenUser.dates,
+        .then((e) => {
+          db.collection('users')
+            .doc(womenUser.uid)
+            .collection('response')
+            .doc(window.$nuxt.$fire.auth.currentUser.uid)
+            .set({
+              emailNotification:
+                'Der Coach ' +
+                e.data().firstName +
+                ' ' +
+                e.data().lastName +
+                'hat auf Ihre Anfrage reagiert und schickt ihnen folgende Terminvorschläge: ' +
+                list +
+                '. Bitte loggen Sie sich auf unserer Plattform ein, um einen Termin auszuwählen.',
+              from: db
+                .collection('users')
+                .doc(window.$nuxt.$fire.auth.currentUser.uid),
+              suggestions: womenUser.dates,
+            })
         })
       /*
       const data = {
