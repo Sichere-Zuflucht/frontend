@@ -1,7 +1,7 @@
 <template>
   <div v-if="user">
     <v-img :lazy-src="user.avatar" :src="user.avatar"></v-img>
-    <h1 class="text-center">{{ user.fistName }} {{ user.lastName }}</h1>
+    <h1 class="text-center">{{ user.firstName }} {{ user.lastName }}</h1>
     <v-container fluid>
       <v-textarea
         v-model="message"

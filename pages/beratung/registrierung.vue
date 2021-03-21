@@ -2,6 +2,7 @@
   <div>
     <h1>Herzlich Willkommen bei Sichere Zuflucht</h1>
     <p>Fülle direkt dein Profil aus</p>
+    <p>{{ user ? user.email : null }}</p>
     <v-divider></v-divider>
     <v-stepper v-model="e6" vertical>
       <v-stepper-step :complete="e6 > 1" step="1" editable
@@ -51,7 +52,17 @@
         >
           <v-chip :value="t">{{ t }}</v-chip>
         </v-chip-group>
-        <v-btn color="primary" @click="e6 = 4"> Weiter </v-btn>
+        <v-btn
+          color="primary"
+          @click="
+            () => {
+              e6 = 4
+              sendData
+            }
+          "
+        >
+          Weiter
+        </v-btn>
         <v-btn text @click="showData"> show data </v-btn>
       </v-stepper-content>
     </v-stepper>
@@ -71,6 +82,11 @@ export default {
       e6: 1,
     }
   },
+  computed: {
+    user() {
+      return this.$store.state.user
+    },
+  },
   mounted() {
     window.$nuxt.$fire.firestore
       .collection('coachingTypes')
@@ -85,6 +101,16 @@ export default {
   methods: {
     showData() {
       console.log(this.lang, this.topic, this.type)
+    },
+    sendData() {
+      window.$nuxt.$fire.firestore
+        .collection('users')
+        .doc(window.$nuxt.$fire.auth.currentUser.uid)
+        .update({
+          languages: this.lang,
+          topic: this.topic,
+          types: this.type,
+        })
     },
     loadPropperTypes(t) {
       const res = this.topics.filter((top) => {
