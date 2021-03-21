@@ -89,8 +89,13 @@ export default {
             .set({
               fistName: this.surName,
               lastName: this.name,
-              avatar: 'https://picsum.photos/seed/g00385/200',
+              avatar:
+                'https://picsum.photos/seed/' +
+                window.$nuxt.$fire.auth.currentUser.uid.substring(0, 8) +
+                '/200',
               createdAt: new Date(),
+              userName: window.$nuxt.$fire.auth.currentUser.uid.substring(0, 8),
+              email: window.$nuxt.$fire.auth.currentUser.email,
               membership: db
                 .collection('memberships')
                 .doc(this.membership.name),
