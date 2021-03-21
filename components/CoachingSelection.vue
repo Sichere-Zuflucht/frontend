@@ -5,7 +5,7 @@
       <small>In welchen Sprachen kannst du helfen?</small>
     </v-stepper-step>
     <v-stepper-content step="1">
-      <v-chip-group v-model="lang" active-class="primary" column multiple>
+      <v-chip-group v-model="languages" active-class="primary" column multiple>
         <v-chip value="german">deutsch</v-chip>
         <v-chip value="english"> englisch</v-chip>
         <v-chip value="french"> französisch</v-chip>
@@ -56,7 +56,7 @@ export default {
   name: 'CoachingSelection',
   data() {
     return {
-      lang: [],
+      languages: [],
       topic: '',
       type: [],
       collection: [],
@@ -86,17 +86,17 @@ export default {
     finish() {
       this.update(4)
       this.$emit('selection', {
-        lang: this.lang,
+        languages: this.languages,
         topic: this.topic,
-        type: this.type,
+        types: this.type,
       })
     },
     update(val) {
       this.e6 = val
       this.$emit('filter', {
-        lang: this.lang,
+        languages: this.languages,
         topic: this.topic,
-        type: this.type,
+        types: this.type,
       })
     },
   },
