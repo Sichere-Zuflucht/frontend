@@ -87,7 +87,7 @@ export default {
           db.collection('users/')
             .doc(window.$nuxt.$fire.auth.currentUser.uid)
             .set({
-              fistName: this.surName,
+              firstName: this.surName,
               lastName: this.name,
               avatar:
                 'https://picsum.photos/seed/' +
