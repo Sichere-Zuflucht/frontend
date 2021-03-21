@@ -1,5 +1,8 @@
 <template>
-  <v-card outlined>
+  <v-card
+    outlined
+    @click="coach.id ? $router.push('/beratung/' + coach.id) : ''"
+  >
     <v-list-item three-line>
       <v-list-item-content>
         <div class="overline mb-4">
