@@ -124,7 +124,7 @@ export default {
       console.log(d.dates)
     },
     saveDates(w) {
-      const uid = 'Jb7kyiXffQaRsTWIcFAm'
+      const uid = this.$fire.auth.currentUser.uid
       const db = window.$nuxt.$fire.firestore
       w.isAccepted = true
       db.collection('users/' + uid + '/requests')
@@ -136,13 +136,14 @@ export default {
           message: null,
         })
         .then(() => {
-          // this.submitForm(w.email, this.dateList)
-          // this.dataList = []
+          this.submitForm(w, this.dateList)
+          this.dataList = []
         })
     },
-    async submitForm(uEmail, list) {
+    async submitForm(user, list) {
+      /*
       const data = {
-        email: uEmail,
+        email: user.email,
         message:
           'Ihnen stehen folgende Terminvorschläge zur Verfügung: ' + list + '.',
       }
@@ -154,6 +155,7 @@ export default {
         },
       })
       console.log('email res: ', response)
+      */
     },
   },
 }
