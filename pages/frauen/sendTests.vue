@@ -26,12 +26,12 @@ export default {
       db.collection('users')
         .doc(uid)
         .collection('requests')
-        .doc()
+        .doc(window.$nuxt.$fire.auth.currentUser.uid)
         .set({
           isAccepted: false,
           message: this.message,
           from: db
-            .collection('user')
+            .collection('users')
             .doc(window.$nuxt.$fire.auth.currentUser.uid),
         })
     },
