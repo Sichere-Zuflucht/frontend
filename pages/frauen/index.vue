@@ -1,17 +1,38 @@
 <template>
   <v-container>
     <h1>Frauen Dashboard</h1>
-    <v-expansion-panels v-if="responses">
-      <v-expansion-panel v-for="(item, i) in 5" :key="i">
-        <v-expansion-panel-header> Item </v-expansion-panel-header>
-        <v-expansion-panel-content>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat.
-        </v-expansion-panel-content>
-      </v-expansion-panel>
-    </v-expansion-panels>
+    <div v-if="responses">
+      <h2>Deine Anfragen</h2>
+      <v-expansion-panels>
+        <v-expansion-panel v-for="(response, i) in responses" :key="i">
+          <v-expansion-panel-header>
+            {{ response.coach.firstName }}
+            {{ response.coach.lastName }}</v-expansion-panel-header
+          >
+          <v-expansion-panel-content>
+            <v-row class="mb-4">
+              <Coaching :coach="response.coach" />
+            </v-row>
+            <v-row>
+              <v-col cols="7">
+                <v-select
+                  :items="response.suggestions"
+                  label="Termin"
+                  dense
+                ></v-select>
+              </v-col>
+
+              <v-col cols="5"><v-btn color="green">Zusagen</v-btn></v-col>
+            </v-row>
+            <v-row class="mb-2"
+              ><v-btn color="red">Absagen</v-btn><v-spacer /><v-btn
+                >Nachfrage</v-btn
+              >
+            </v-row>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
+    </div>
     <h2>Suchst du Hilfe?</h2>
     <v-btn class="my-2" to="filter" append color="primary">
       Beratung finden
@@ -27,7 +48,7 @@ export default {
   data() {
     return {
       userData: null,
-      respones: null,
+      responses: [],
     }
   },
   computed: {
@@ -37,13 +58,21 @@ export default {
   },
   mounted() {
     const db = window.$nuxt.$fire.firestore
-    console.log(this.user.uid)
     db.collection('users/' + this.user.uid + '/response')
       .get()
       .then((snapshot) => {
         snapshot.forEach((subDoc) => {
-          this.responses = subDoc.data()
-          console.log('res: ', subDoc.data())
+          const data = subDoc.data()
+
+          console.log('res: ', data)
+
+          subDoc
+            .data()
+            .from.get()
+            .then((a) => {
+              data.coach = a.data()
+              this.responses.push(data)
+            })
         })
       })
   },
