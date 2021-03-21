@@ -60,7 +60,12 @@ export default {
           to: '/settings',
         },
         {
-          icon: 'mdi-settings',
+          icon: 'mdi-profile',
+          title: 'Profil',
+          to: '/profile',
+        },
+        {
+          icon: 'mdi-login',
           title: 'Login',
           to: '/login',
         },
@@ -79,6 +84,7 @@ export default {
     logInOut() {
       if (this.loggedIn) {
         this.$fire.auth.signOut()
+        this.$router.push('/')
       } else {
         this.$router.push('/login')
       }

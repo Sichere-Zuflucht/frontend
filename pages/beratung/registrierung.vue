@@ -20,11 +20,11 @@ export default {
     return {
       select: true,
       profile: {},
+      user: this.$store.state.user,
     }
   },
   methods: {
     updateProfile(data) {
-      console.log(data)
       this.profile = data
       this.select = false
       window.$nuxt.$fire.firestore

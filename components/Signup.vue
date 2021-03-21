@@ -26,10 +26,7 @@
           ></v-text-field>
         </v-row>
         <v-row
-          ><v-btn
-            :loading="loading"
-            :disabled="!valid || showConfirmation"
-            @click="handleEmail"
+          ><v-btn :loading="loading" :disabled="!valid" @click="handleEmail"
             >Next</v-btn
           ></v-row
         >
