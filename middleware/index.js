@@ -22,9 +22,10 @@ function isSignInWithEmailLink(route) {
 
 function redirectProfil(store, redirect, route) {
   if (route.path === '/profile') {
-    store.state.user.membership.get().then((doc) => {
-      redirect(doc.data().routing)
-    })
-    redirect('/')
+    if (store.state.user) {
+      redirect(store.state.user.membership.routing)
+    } else {
+      redirect('/')
+    }
   }
 }

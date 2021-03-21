@@ -48,7 +48,6 @@ export default {
       clipped: false,
       drawer: false,
       fixed: false,
-      loggedIn: false,
       items: [
         {
           icon: 'mdi-apps',
@@ -74,11 +73,7 @@ export default {
   },
   computed: {
     login: (that) => (!that.loggedIn ? 'Login' : 'Logout'),
-  },
-  watch: {
-    '$store.state.user'() {
-      this.loggedIn = this.$fire.auth.currentUser !== null
-    },
+    loggedIn: (that) => that.$fire.auth.currentUser !== null,
   },
   methods: {
     logInOut() {

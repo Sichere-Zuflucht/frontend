@@ -48,6 +48,9 @@ const createStore = () => {
               Object.entries(user.data()).forEach((key) => {
                 state.user[key[0]] = key[1]
               })
+              state.user.membership.get().then((doc) => {
+                state.user.membership = doc.data()
+              })
             })
         } else {
           state.user = null
