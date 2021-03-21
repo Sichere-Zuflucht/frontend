@@ -1,6 +1,12 @@
 <template>
   <div>
-    <h1>Hallo {{ user ? user.email : null }}</h1>
+    <h1>
+      Hallo <span v-if="data">{{ data.firstName }} {{ data.lastName }}</span>
+    </h1>
+    <v-alert v-if="!data.language" color="red" type="warning"
+      >Bitte füllen Sie ihr Profil fertig aus.
+      <v-btn to="registrierung" append class="ma-2 ml-0">weiter</v-btn></v-alert
+    >
     <div v-if="women">
       <v-expansion-panels>
         <v-expansion-panel v-for="(item, i) in women" :key="i">
@@ -80,6 +86,7 @@ export default {
   data() {
     return {
       name: '{name}',
+      data: {},
       women: [],
       endpoint: 'https://formspree.io/f/xknkwgnn',
     }
@@ -94,9 +101,17 @@ export default {
   },
   methods: {
     loadRequests() {
-      console.log(this.$store.state.user.uid)
+      console.log('$Store user: ', this.$store.state.user)
       const uid = this.$store.state.user.uid
       const db = window.$nuxt.$fire.firestore
+      db.collection('users')
+        .doc(uid)
+        .get()
+        .then((data) => {
+          console.log(data.data())
+          this.data = data.data()
+        })
+      console.log(this.data)
       db.collection('users/' + uid + '/requests')
         .get()
         .then((snapshot) => {
@@ -120,8 +135,10 @@ export default {
         })
     },
 
-    showDates(d) {
-      console.log(d.dates)
+    showDates(womenUser) {
+      console.log(womenUser)
+      const list = JSON.stringify(womenUser.dates)
+      console.log(list.substring(1, list.length - 1))
     },
     saveDates(w) {
       const uid = this.$fire.auth.currentUser.uid
@@ -136,11 +153,35 @@ export default {
           message: null,
         })
         .then(() => {
-          this.submitForm(w, this.dateList)
-          this.dataList = []
+          this.submitForm(w)
         })
     },
-    async submitForm(user, list) {
+    submitForm(womenUser) {
+      console.log(womenUser)
+      const list = JSON.stringify(womenUser.dates)
+      console.log(list)
+      const db = window.$nuxt.$fire.firestore
+      const currUserData = db
+        .collection('users')
+        .doc(this.$fire.auth.currentUser.uid)
+        .get()
+      db.collection('users')
+        .doc(womenUser.uid)
+        .collection('response')
+        .set({
+          emailNotification:
+            'Der Coach ' +
+            currUserData.data().firstName +
+            ' ' +
+            currUserData.data().lastName +
+            'hat auf Ihre Anfrage reagiert und schickt ihnen folgende Terminvorschläge: ' +
+            list +
+            '. Bitte loggen Sie sich auf unserer Plattform ein, um einen Termin auszuwählen.',
+          from: db
+            .collection('users')
+            .doc(window.$nuxt.$fire.auth.currentUser.uid),
+          suggestions: womenUser.dates,
+        })
       /*
       const data = {
         email: user.email,
