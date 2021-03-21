@@ -73,7 +73,7 @@ export default {
   },
   computed: {
     login: (that) => (!that.loggedIn ? 'Login' : 'Logout'),
-    loggedIn: (that) => that.$fire.auth.currentUser !== null,
+    loggedIn: (that) => that.$store.state.user !== null,
   },
   methods: {
     logInOut() {
