@@ -1,19 +1,22 @@
 import colors from 'vuetify/es5/util/colors'
 
+const base = '/frontent'
+
 export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
 
   router: {
-    base: '/frontend/',
+    base,
     middleware: 'index',
   },
   static: {
-    prefix: '/frontend/',
+    prefix: base,
   },
 
   env: {
     baseUrl: process.env.BASE_URL || 'http://localhost:3000',
+    base,
   },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
