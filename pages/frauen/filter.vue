@@ -29,14 +29,13 @@ export default {
       .then((ref) => {
         ref.docs.forEach((doc) => {
           const data = doc.data()
-          if (data.info) this.allCoaches.push(doc.data())
+          if (data.info) this.allCoaches.push({ id: doc.id, ...data })
         })
       })
       .then((this.filteredCoaches = this.allCoaches))
   },
   methods: {
     filter(data) {
-      console.log(data)
       this.filteredCoaches = []
       this.allCoaches.forEach((coach) => {
         let add = true

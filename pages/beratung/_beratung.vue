@@ -2,6 +2,7 @@
   <div v-if="user">
     <v-img :lazy-src="user.avatar" :src="user.avatar"></v-img>
     <h1 class="text-center">{{ user.firstName }} {{ user.lastName }}</h1>
+    <Coaching :coach="user" />
     <v-container fluid>
       <v-textarea
         v-model="message"
