@@ -48,9 +48,7 @@
             <v-card-subtitle> 1,000 miles of wonder </v-card-subtitle>
 
             <v-card-actions>
-              <v-btn color="primary" to="frauen/filter" text>
-                Beratung finden
-              </v-btn>
+              <v-btn color="primary" to="filter" text> Beratung finden </v-btn>
             </v-card-actions>
           </v-card>
         </v-col>
