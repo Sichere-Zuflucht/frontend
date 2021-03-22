@@ -14,21 +14,31 @@
             <v-row class="mb-4">
               <Coaching :coach="response.coach" />
             </v-row>
-            <v-row>
-              <v-col cols="7">
-                <v-select
-                  :items="response.suggestions"
-                  label="Termin"
-                  dense
-                ></v-select>
-              </v-col>
-
-              <v-col cols="5"><v-btn color="green">Zusagen</v-btn></v-col>
-            </v-row>
-            <v-row class="mb-2"
-              ><v-btn color="red" @click="cancle(response)">Absagen</v-btn
-              ><v-spacer /><v-btn>Nachfrage</v-btn>
-            </v-row>
+            <div v-if="!response.acceptedDate">
+              <v-row>
+                <v-col cols="7">
+                  <v-select
+                    v-model="date"
+                    :items="response.suggestions"
+                    label="Termin"
+                    dense
+                  ></v-select>
+                </v-col>
+                <v-col cols="5"
+                  ><v-btn
+                    color="green"
+                    :disabled="!date"
+                    @click="accept(response, date)"
+                    >Zusagen</v-btn
+                  ></v-col
+                >
+              </v-row>
+              <v-row class="mb-2"
+                ><v-btn color="red" @click="cancle(response)">Absagen</v-btn
+                ><v-spacer /><v-btn>Nachfrage</v-btn>
+              </v-row>
+            </div>
+            <div v-else>Zugesagt für {{ response.acceptedDate }}</div>
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
@@ -81,6 +91,7 @@ export default {
     return {
       userData: null,
       responses: [],
+      date: null,
     }
   },
   computed: {
@@ -102,6 +113,7 @@ export default {
               data.coach = a.data()
               data.id = a.id
               this.responses.push(data)
+              console.log(data)
             })
         })
       })
@@ -109,15 +121,23 @@ export default {
   methods: {
     cancle(coaching) {
       const db = window.$nuxt.$fire.firestore
-
       db.collection('users/' + coaching.id + '/requests')
-        .get()
-        .then((snapshot) => {
-          snapshot.docs.forEach((doc) => {
-            console.log(doc)
-          })
-        })
-      console.log(coaching)
+        .doc(this.$store.state.user.uid)
+        .delete()
+      db.collection('users/' + this.$store.state.user.uid + '/response')
+        .doc(coaching.id)
+        .delete()
+    },
+    accept(coaching, date) {
+      const db = window.$nuxt.$fire.firestore
+      db.collection('users/' + coaching.id + '/requests')
+        .doc(this.$store.state.user.uid)
+        .update('acceptedDate', date)
+      db.collection('users/' + this.$store.state.user.uid + '/response')
+        .doc(coaching.id)
+        .update('acceptedDate', date)
+
+      coaching.acceptedDate = date
     },
   },
 }
