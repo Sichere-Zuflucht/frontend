@@ -2,7 +2,7 @@
   <v-expansion-panels v-if="data">
     <v-expansion-panel v-if="!data.info">
       <v-expansion-panel-header
-        color="red"
+        color="error"
         class="white--text"
         expand-icon="mdi-alert"
         disable-icon-rotate
@@ -18,7 +18,7 @@
     </v-expansion-panel>
     <v-expansion-panel v-if="!data.info">
       <v-expansion-panel-header
-        color="red"
+        color="error"
         class="white--text"
         expand-icon="mdi-alert"
         disable-icon-rotate
@@ -34,7 +34,7 @@
     </v-expansion-panel>
     <v-expansion-panel v-if="!data.info">
       <v-expansion-panel-header
-        color="red"
+        color="error"
         class="white--text"
         expand-icon="mdi-alert"
         disable-icon-rotate
