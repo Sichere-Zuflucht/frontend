@@ -4,11 +4,22 @@
     <h1 class="text-center">{{ user.firstName }} {{ user.lastName }}</h1>
     <Coaching :coach="user" />
     <v-container fluid>
-      <v-textarea
-        v-model="message"
-        label="persönliche Anfrage schreiben"
-      ></v-textarea>
-      <v-btn @click="sendRequest">Anfragen</v-btn>
+      <v-expansion-panels flat>
+        <v-expansion-panel>
+          <v-expansion-panel-header class="pl-0">
+            Text hinzufügen
+          </v-expansion-panel-header>
+          <v-expansion-panel-content>
+            <v-textarea
+              v-model="message"
+              value="Jemand möchte mit Ihnen Kontakt aufnehmen."
+              label="persönliche Anfrage schreiben"
+            ></v-textarea>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
+
+      <v-btn @click="sendRequest" color="primary">Anfragen</v-btn>
     </v-container>
   </div>
 </template>
