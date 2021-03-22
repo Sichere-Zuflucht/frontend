@@ -32,9 +32,9 @@ export default {
         .doc(window.$nuxt.$fire.auth.currentUser.uid)
         .update({
           info: {
-            languages: data.lang,
+            languages: data.languages,
             topic: data.topic,
-            types: data.type,
+            types: data.types,
           },
         })
     },
