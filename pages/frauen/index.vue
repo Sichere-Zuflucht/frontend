@@ -2,7 +2,8 @@
   <v-container>
     <h1>Frauen Dashboard</h1>
     <div v-if="responses">
-      <h2>Deine Anfragen</h2>
+      <h2>Deine Termine</h2>
+      <p v-if="responses.length === 0">Noch keine bestätigten Termine</p>
       <v-expansion-panels>
         <v-expansion-panel v-for="(response, i) in responses" :key="i">
           <v-expansion-panel-header>
@@ -42,13 +43,47 @@
         </v-expansion-panel>
       </v-expansion-panels>
     </div>
-    <h2>Suchst du Hilfe?</h2>
-    <v-btn class="my-2" to="filter" append color="primary">
-      Beratung finden
-    </v-btn>
-    <v-divider class="my-6"></v-divider>
-    <h2>Oder sucht du eine Wohnung?</h2>
-    <v-btn class="my-2" to="filter" append> Wohnungssuche anfragen </v-btn>
+    <v-divider class="my-3"></v-divider>
+    <v-container>
+      <v-row dense>
+        <v-col cols="12">
+          <v-card class="mx-auto" max-width="344">
+            <v-img
+              src="https://images.unsplash.com/photo-1604881991664-593b31b88488?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=934&q=80"
+              height="200px"
+            ></v-img>
+
+            <v-card-title>Suchst du Hilfe? </v-card-title>
+
+            <v-card-subtitle> 1,000 miles of wonder </v-card-subtitle>
+
+            <v-card-actions>
+              <v-btn color="primary" to="frauen/filter" text>
+                Beratung finden
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+        <v-col cols="12"
+          ><v-card class="mx-auto" max-width="344">
+            <v-img
+              src="https://images.unsplash.com/photo-1448582649076-3981753123b5?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
+              height="200px"
+            ></v-img>
+
+            <v-card-title>Sucht du eine Wohnung? </v-card-title>
+
+            <v-card-subtitle> 1,000 miles of wonder </v-card-subtitle>
+
+            <v-card-actions>
+              <v-btn color="primary" to="filter" text>
+                Wohnungssuche anfragen
+              </v-btn>
+            </v-card-actions>
+          </v-card></v-col
+        >
+      </v-row>
+    </v-container>
   </v-container>
 </template>
 
