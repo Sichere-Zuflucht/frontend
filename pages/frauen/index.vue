@@ -34,8 +34,8 @@
                 >
               </v-row>
               <v-row class="mb-2"
-                ><v-btn color="red" @click="cancle(response)">Absagen</v-btn
-                ><v-spacer /><v-btn>Nachfrage</v-btn>
+                ><v-btn plain @click="cancle(response)">Absagen</v-btn
+                ><v-spacer /><v-btn plain color="orange">Nachfragen</v-btn>
               </v-row>
             </div>
             <div v-else>Zugesagt für {{ response.acceptedDate }}</div>
@@ -58,7 +58,9 @@
             <v-card-subtitle> 1,000 miles of wonder </v-card-subtitle>
 
             <v-card-actions>
-              <v-btn color="primary" to="filter" text> Beratung finden </v-btn>
+              <v-btn color="primary" to="frauen/filter" text>
+                Beratung finden
+              </v-btn>
             </v-card-actions>
           </v-card>
         </v-col>
@@ -74,7 +76,7 @@
             <v-card-subtitle> 1,000 miles of wonder </v-card-subtitle>
 
             <v-card-actions>
-              <v-btn color="primary" to="filter" text>
+              <v-btn color="primary" to="frauen/wohnungssuche" text>
                 Wohnungssuche anfragen
               </v-btn>
             </v-card-actions>
