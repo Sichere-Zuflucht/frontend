@@ -17,6 +17,7 @@ export default {
   env: {
     baseUrl: process.env.BASE_URL || 'http://localhost:3000',
     base,
+    redAPI: process.env.RED_API,
   },
 
   // Global page headers: https://go.nuxtjs.dev/config-head

@@ -83,6 +83,7 @@
           </v-card></v-col
         >
       </v-row>
+      <v-btn @click="test"></v-btn>
     </v-container>
   </v-container>
 </template>
@@ -115,12 +116,37 @@ export default {
               data.coach = a.data()
               data.id = a.id
               this.responses.push(data)
-              console.log(data)
             })
         })
       })
   },
   methods: {
+    async test() {
+      try {
+        // GET request
+        const response = await fetch(
+          'https://redclient.redmedical.de/service/video',
+          {
+            method: 'POST',
+            // mode: 'no-cors', // It can be no-cors, cors, same-origin
+            credentials: 'same-origin', // It can be include, same-origin, omit
+            body: {
+              method: 'getEntrycodes',
+              date: '2021-03-24',
+              token: process.env.redAPI,
+            },
+          }
+        )
+
+        if (response.status === 200) {
+          console.log('await: ', await response.success)
+        } else {
+          console.log('inside else: ', response.status)
+        }
+      } catch (error) {
+        console.log('err: ', error)
+      }
+    },
     cancle(coaching) {
       const db = window.$nuxt.$fire.firestore
       db.collection('users/' + coaching.id + '/requests')
