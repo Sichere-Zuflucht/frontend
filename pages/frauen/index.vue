@@ -129,8 +129,11 @@ export default {
       }
       fetch('https://redclient.redmedical.de/service/video', {
         method: 'POST',
+        header: {
+          'Access-Control-Allow-Origin': 'https://sichere-zuflucht.github.io/',
+        },
         // mode: 'no-cors', // It can be no-cors, cors, same-origin
-        credentials: 'same-origin', // It can be include, same-origin, omit
+        // credentials: 'same-origin', // It can be include, same-origin, omit
         body: JSON.stringify(data),
       })
         .then((response) => {
