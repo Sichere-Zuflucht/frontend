@@ -121,31 +121,28 @@ export default {
       })
   },
   methods: {
-    async test() {
-      try {
-        // GET request
-        const response = await fetch(
-          'https://redclient.redmedical.de/service/video',
-          {
-            method: 'POST',
-            // mode: 'no-cors', // It can be no-cors, cors, same-origin
-            credentials: 'same-origin', // It can be include, same-origin, omit
-            body: {
-              method: 'getEntrycodes',
-              date: '2021-03-24',
-              token: process.env.redAPI,
-            },
-          }
-        )
-
-        if (response.status === 200) {
-          console.log('await: ', await response.success)
-        } else {
-          console.log('inside else: ', response.status)
-        }
-      } catch (error) {
-        console.log('err: ', error)
+    test() {
+      const data = {
+        method: 'getEntrycodes',
+        date: '2021-06-24',
+        token: process.env.redAPI,
       }
+      fetch('https://redclient.redmedical.de/service/video', {
+        method: 'POST',
+        // mode: 'no-cors', // It can be no-cors, cors, same-origin
+        credentials: 'same-origin', // It can be include, same-origin, omit
+        body: JSON.stringify(data),
+      })
+        .then((response) => {
+          if (response.status === 200) {
+            console.log('await: ', response.json())
+          } else {
+            console.log('inside else: ', response)
+          }
+        })
+        .catch((error) => {
+          console.log('err: ', error)
+        })
     },
     cancle(coaching) {
       const db = window.$nuxt.$fire.firestore
