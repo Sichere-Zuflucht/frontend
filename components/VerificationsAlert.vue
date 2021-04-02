@@ -16,7 +16,7 @@
         </p>
       </v-expansion-panel-content>
     </v-expansion-panel>
-    <v-expansion-panel v-if="!data.info">
+    <v-expansion-panel v-if="!data.strapi">
       <v-expansion-panel-header
         color="error"
         class="white--text"
@@ -28,11 +28,13 @@
       <v-expansion-panel-content color="red" class="white--text">
         Wir nutzen den Anbieter STRIPE, damit Sie Zahlungen erhalten können.
         <p>
-          <v-btn to="registrierung" append class="ma-2 ml-0">zu STRIPE</v-btn>
+          <v-btn href="https://www.stripe.com" append class="ma-2 ml-0"
+            >zu STRIPE</v-btn
+          >
         </p>
       </v-expansion-panel-content>
     </v-expansion-panel>
-    <v-expansion-panel v-if="!data.info">
+    <v-expansion-panel v-if="!data.verified">
       <v-expansion-panel-header
         color="error"
         class="white--text"
@@ -45,7 +47,7 @@
         Melden Sie sich bei uns und führen Sie ein privates Gespräch, damit wir
         sie als Coach verfizieren können.
         <p>
-          <v-btn to="registrierung" append class="ma-2 ml-0"
+          <v-btn to="personenverifizierung" append class="ma-2 ml-0"
             >verifizieren</v-btn
           >
         </p>
