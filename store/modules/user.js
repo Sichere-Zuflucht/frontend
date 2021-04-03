@@ -43,6 +43,8 @@ const actions = {
         .get()
         .then((user) => {
           const userData = user.data()
+          commit('setUserData', userData)
+
           userData.membership.get().then((doc) => {
             commit('setMembership', doc.data())
           })
@@ -52,9 +54,13 @@ const actions = {
 }
 
 const mutations = {
-  saveUID(state, uid) {
-    console.log('[STORE MUTATIONS] - saveUID:', uid)
-    state.uid = uid
+  setUserData(state, userData) {
+    for (const entry of Object.entries(userData)) {
+      // filter out firestore objects (like membership)
+      if (entry[1].firestore === undefined) {
+        state[entry[0]] = entry[1]
+      }
+    }
   },
   setMembership(state, membership) {
     console.log('[STORE MUTATIONS] - setMembership:', membership)
