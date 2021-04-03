@@ -54,7 +54,15 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ['@nuxtjs/firebase'],
+  modules: ['@nuxtjs/firebase', 'nuxtjs-stripe'],
+  stripe: {
+    /* module options */
+    publishableKey:
+      'pk_test_51IbjZeFRsEq5IriEKQifwCzu8LMnx6uMxxhOz7HIELiaYpFCnsfNlVaiTOU72b2uWwQP4B5gI8GwDrsrSNJS0hPP00e8y3RbDo',
+    version: 'v3', // Default
+    defer: true, // Default
+    async: true, // Default
+  },
   firebase: {
     config: {
       apiKey: 'AIzaSyDMjjzgxNWEsDWYETgWbFgaYnwzAmLyzhM',
