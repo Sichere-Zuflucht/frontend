@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>
-      Hallo <span v-if="data">{{ data.firstName }} {{ data.lastName }}</span>
+      Hallo <span v-if="user">{{ user.firstName }} {{ user.lastName }}</span>
     </h1>
     <VerificationsAlert />
     <v-divider class="my-2"></v-divider>
@@ -125,26 +125,15 @@ export default {
   data() {
     return {
       name: '{name}',
-      data: {},
+      user: {},
       women: [],
       endpoint: 'https://formspree.io/f/xknkwgnn',
     }
   },
-  computed: {
-    user() {
-      return this.$store.state.user
-    },
-  },
   mounted() {
-    const uid = this.$store.getters['modules/user/uid']
     const db = window.$nuxt.$fire.firestore
-    db.collection('users')
-      .doc(uid)
-      .get()
-      .then((data) => {
-        this.data = data.data()
-      })
-    db.collection('users/' + uid + '/requests')
+    this.user = this.$store.getters['modules/user/user']
+    db.collection('users/' + this.user.uid + '/requests')
       .get()
       .then((snapshot) => {
         snapshot.forEach((subDoc) => {
@@ -169,7 +158,7 @@ export default {
   },
   methods: {
     saveDates(w) {
-      const uid = this.$fire.auth.currentUser.uid
+      const uid = this.user.uid
       const db = window.$nuxt.$fire.firestore
       w.isAccepted = true
       db.collection('users/' + uid + '/requests')

@@ -55,6 +55,7 @@ const actions = {
 
 const mutations = {
   setUserData(state, userData) {
+    console.log('[STORE MUTATIONS] - setUserData:', userData)
     for (const entry of Object.entries(userData)) {
       // filter out firestore objects (like membership)
       if (entry[1].firestore === undefined) {
