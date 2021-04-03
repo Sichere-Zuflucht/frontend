@@ -64,7 +64,7 @@ export default {
     }
   },
   mounted() {
-    const uid = this.$store.state.user.uid
+    const uid = this.$store.getters['modules/user/uid']
     const db = window.$nuxt.$fire.firestore
     db.collection('users')
       .doc(uid)
