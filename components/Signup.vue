@@ -76,17 +76,18 @@ export default {
           window.localStorage.setItem('emailForSignIn', this.email)
         })
     },
-    async handleEmail() {
+    handleEmail() {
       if (!this.valid) return
       if (!this.requestPassword) {
-        const loginMethods = await window.$nuxt.$fire.auth.fetchSignInMethodsForEmail(
-          this.email
-        )
-        if (loginMethods.length <= 1) {
-          this.signup()
-        } else {
-          this.requestPassword = true
-        }
+        window.$nuxt.$fire.auth
+          .fetchSignInMethodsForEmail(this.email)
+          .then((loginMethods) => {
+            if (loginMethods.length <= 1) {
+              this.signup()
+            } else {
+              this.requestPassword = true
+            }
+          })
       } else {
         this.loading = true
         window.$nuxt.$fire.auth

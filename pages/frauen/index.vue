@@ -99,7 +99,7 @@ export default {
   },
   computed: {
     user() {
-      return this.$store.state.user
+      return this.$store.getters['modules/user/user']
     },
   },
   mounted() {
@@ -152,7 +152,7 @@ export default {
       db.collection('users/' + coaching.id + '/requests')
         .doc(this.$store.state.user.uid)
         .delete()
-      db.collection('users/' + this.$store.state.user.uid + '/response')
+      db.collection('users/' + this.user.uid + '/response')
         .doc(coaching.id)
         .delete()
     },
@@ -161,7 +161,7 @@ export default {
       db.collection('users/' + coaching.id + '/requests')
         .doc(this.$store.state.user.uid)
         .update('acceptedDate', date)
-      db.collection('users/' + this.$store.state.user.uid + '/response')
+      db.collection('users/' + this.user.uid + '/response')
         .doc(coaching.id)
         .update('acceptedDate', date)
 

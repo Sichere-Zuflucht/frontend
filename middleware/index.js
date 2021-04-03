@@ -34,6 +34,6 @@ function redirectProfilePage(store, redirect, route) {
     if (!store.getters['modules/user/isAuthenticated']) {
       return redirect('/login')
     }
-    redirect(store.getters['modules/user/routing'])
+    return redirect(store.getters['modules/user/routing'])
   }
 }

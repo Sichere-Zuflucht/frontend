@@ -20,7 +20,7 @@ export default {
     return {
       select: true,
       profile: {},
-      user: this.$store.state.user,
+      user: this.$store.getters['modules/user/user'],
     }
   },
   methods: {
@@ -29,7 +29,7 @@ export default {
       this.select = false
       window.$nuxt.$fire.firestore
         .collection('users')
-        .doc(window.$nuxt.$fire.auth.currentUser.uid)
+        .doc(this.user.uid)
         .update({
           info: {
             languages: data.languages,
