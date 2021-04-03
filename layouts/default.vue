@@ -12,7 +12,7 @@
           v-for="(item, i) in items"
           :key="i"
           :to="item.to"
-          router
+          nuxt
           exact
         >
           <v-list-item-action>
@@ -78,7 +78,7 @@ export default {
   },
   computed: {
     login: (that) => (!that.loggedIn ? 'Login' : 'Logout'),
-    loggedIn: (that) => that.$store.state.user !== null,
+    loggedIn: (that) => that.$store.getters['modules/user/isAuthenticated'],
   },
   methods: {
     logInOut() {
