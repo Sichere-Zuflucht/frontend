@@ -1,16 +1,25 @@
-export default function ({ store, redirect, route }) {
+export default async function ({ store, redirect, route }) {
+  // this makes sure the cookies are loaded, only first time is blocking,
+  // because for continued calls the promise is already resolved
+  await store.restored
+
+  // /register is responsible for verifying the email address
   if (route.path === '/register' && !isSignInWithEmailLink(route))
     redirect('/login')
 
+  // /update-profile asks the user for additional information
   if (route.path === '/update-profile' && route.query.eMail === undefined) {
     redirect('/login')
   }
 
-  if (route.path === '/login' && store.state.user) {
+  if (
+    route.path === '/login' &&
+    store.getters['modules/user/isAuthenticated']
+  ) {
     redirect('/')
   }
 
-  redirectProfil(store, redirect, route)
+  redirectProfilePage(store, redirect, route)
 }
 
 function isSignInWithEmailLink(route) {
@@ -20,12 +29,11 @@ function isSignInWithEmailLink(route) {
   return false
 }
 
-function redirectProfil(store, redirect, route) {
+function redirectProfilePage(store, redirect, route) {
   if (route.path === '/profile') {
-    if (store.state.user) {
-      redirect(store.state.user.membership.routing)
-    } else {
-      redirect('/')
+    if (!store.getters['modules/user/isAuthenticated']) {
+      return redirect('/login')
     }
+    redirect(store.getters['modules/user/routing'])
   }
 }
