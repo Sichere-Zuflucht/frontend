@@ -40,31 +40,25 @@ export default {
   },
   mounted() {
     this.slug = this.$route.params.beratung
-    this.asyncData()
-    console.log(this.user)
+    this.getCoachUserData()
   },
   methods: {
-    asyncData() {
-      // When calling /abc the slug will be "abc"
+    getCoachUserData() {
       this.$nuxt.$fire.firestore
         .collection('users')
         .doc(this.slug)
         .get()
         .then((e) => {
-          console.log(e.data())
           this.user = e.data()
-          console.log(this.user)
         })
     },
 
     sendRequest() {
-      const uid = this.slug
-      console.log('msg: ', this.message)
       const db = window.$nuxt.$fire.firestore
       db.collection('users')
-        .doc(uid)
+        .doc(this.slug)
         .collection('requests')
-        .doc(window.$nuxt.$fire.auth.currentUser.uid)
+        .doc(this.$store.getters['modules/user/uid'])
         .set({
           subject: `Sichere Zuflucht - Anfrage von Frau`,
           html: `<div style="font-size: 16px;">Hallo ${this.userName},<br><br>
