@@ -156,16 +156,37 @@ export default {
         .doc(coaching.id)
         .delete()
     },
-    accept(coaching, date) {
+    accept(response, date) {
       const db = window.$nuxt.$fire.firestore
-      db.collection('users/' + coaching.id + '/requests')
-        .doc(this.$store.state.user.uid)
-        .update('acceptedDate', date)
+
+      // update the request from woman to coach (html, subject -> send mail)
+      db.collection('users/' + response.id + '/requests')
+        .doc(this.user.uid)
+        .update({
+          acceptedDate: date,
+          subject: `Sichere Zuflucht - Terminzusage`,
+          html: `<div style="font-size: 16px;">Hallo ${
+            response.coach.firstName + ' ' + response.coach.lastName
+          },<br><br>
+             eine Frau hat Ihrem Termin zugesagt:
+        <br>
+        <br>
+        <span style="font-family: monospace; margin-left: 2em">"${date}"</span>
+        <br>
+        <br>
+        Bitte loggen Sie sich auf unserer <a href="sichere-zuflucht.de">Plattform</a> ein, um für den Termin den Videocall aufzusetzen.
+        <br>
+        <br>
+        Grüße von unserem engagierten Team.
+        </div>`,
+        })
+
+      // update also value for woman
       db.collection('users/' + this.user.uid + '/response')
-        .doc(coaching.id)
+        .doc(response.id)
         .update('acceptedDate', date)
 
-      coaching.acceptedDate = date
+      response.acceptedDate = date
     },
   },
 }

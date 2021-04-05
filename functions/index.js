@@ -70,3 +70,24 @@ exports.addRequestOrResponse = functions.firestore
     )
     return sendMail(context.params.userId, notificationObject)
   })
+
+// request or response objects are created
+exports.updateRequest = functions.firestore
+  .document('/users/{userId}/requests/{notificationObjectId}')
+  .onUpdate(function (change, context) {
+    const before = change.before.data()
+    const after = change.after.data()
+
+    if (after.acceptedDate === before.acceptedDate) {
+      functions.logger.log('updateRequest: No update on accepted date')
+      return () => 200
+    }
+
+    functions.logger.log(
+      'updateRequest',
+      context.params.userId,
+      context.params.notificationObjectId,
+      after
+    )
+    return sendMail(context.params.userId, after)
+  })
