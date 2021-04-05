@@ -66,6 +66,7 @@ export default {
       appId: '1:163834643967:web:277673f1c69b5eaf3213ca',
     },
     services: {
+      functions: {},
       auth: {
         persistence: 'local', // default
         initialize: {

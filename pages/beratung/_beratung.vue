@@ -19,7 +19,7 @@
         </v-expansion-panel>
       </v-expansion-panels>
 
-      <v-btn @click="sendRequest" color="primary">Anfragen</v-btn>
+      <v-btn color="primary" @click="sendRequest">Anfragen</v-btn>
     </v-container>
   </div>
 </template>
@@ -32,6 +32,16 @@ export default {
       message: '',
       slug: '',
     }
+  },
+  computed: {
+    userName() {
+      return this.user.firstName + ' ' + this.user.lastName
+    },
+  },
+  mounted() {
+    this.slug = this.$route.params.beratung
+    this.asyncData()
+    console.log(this.user)
   },
   methods: {
     asyncData() {
@@ -46,6 +56,7 @@ export default {
           console.log(this.user)
         })
     },
+
     sendRequest() {
       const uid = this.slug
       console.log('msg: ', this.message)
@@ -55,6 +66,19 @@ export default {
         .collection('requests')
         .doc(window.$nuxt.$fire.auth.currentUser.uid)
         .set({
+          subject: `Sichere Zuflucht - Anfrage von Frau`,
+          html: `<div style="font-size: 16px;">Hallo ${this.userName},<br><br>
+             eine Frau hat Ihnen eine Anfrage gestellt und schickt Ihnen folgende Nachricht:
+        <br>
+        <br>
+        <span style="font-family: monospace; margin-left: 2em">"${this.message}"</span>
+        <br>
+        <br>
+        Bitte loggen Sie sich auf unserer <a href="sichere-zuflucht.de">Plattform</a> ein, um Termine zur Auswahl zu stellen.
+        <br>
+        <br>
+        Grüße von unserem engagierten Team.
+        </div>`,
           isAccepted: false,
           message: this.message,
           from: db
@@ -62,11 +86,6 @@ export default {
             .doc(window.$nuxt.$fire.auth.currentUser.uid),
         })
     },
-  },
-  mounted() {
-    this.slug = this.$route.params.beratung
-    this.asyncData()
-    console.log(this.user)
   },
 }
 </script>

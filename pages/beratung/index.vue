@@ -34,21 +34,21 @@
             Frau {{ item.userName }}
           </v-expansion-panel-header>
           <v-expansion-panel-content>
-            <v-card elevation="0" class="pa-6">
+            <v-card class="pa-6" elevation="0">
               <v-card-title>
                 <v-col class="mr-2 pa-0" cols="8">
                   <p class="ma-0 caption">Frau</p>
                   <p class="ma-0">{{ item.userName }}</p></v-col
                 >
                 <v-col cols="3">
-                  <v-avatar color="primary" size="56"
-                    ><v-img
+                  <v-avatar color="primary" size="56">
+                    <v-img
                       :lazy-src="item.avatar"
+                      :src="item.avatar"
                       max-height="56"
                       max-width="56"
-                      :src="item.avatar"
-                    ></v-img
-                  ></v-avatar>
+                    ></v-img>
+                  </v-avatar>
                 </v-col>
               </v-card-title>
               <v-card-text>{{ item.message }}</v-card-text>
@@ -60,14 +60,14 @@
                     <v-list-item-group>
                       <v-list-item v-for="(d, di) in item.dates" :key="di">
                         <v-list-item-content>
-                          <v-list-item-title class="font-weight-bold">{{
-                            d
-                          }}</v-list-item-title>
+                          <v-list-item-title class="font-weight-bold"
+                            >{{ d }}
+                          </v-list-item-title>
                         </v-list-item-content>
                         <v-list-item-icon>
                           <v-icon @click="eraseDate(di, item.dates)"
-                            >mdi-close</v-icon
-                          >
+                            >mdi-close
+                          </v-icon>
                         </v-list-item-icon>
                       </v-list-item>
                     </v-list-item-group>
@@ -89,29 +89,28 @@
                   <b>{{ item.acceptedDate }} </b>
                   <v-divider></v-divider>
                   <v-btn
-                    color="success"
-                    class="my-2"
                     :href="'https://meet.jit.si/' + item.jitsiRoom"
-                    >zum Jitsi Videocall</v-btn
-                  ><v-btn
-                    color="primary"
                     class="my-2"
-                    outlined
+                    color="success"
+                    >zum Jitsi Videocall
+                  </v-btn>
+                  <v-btn
+                    class="my-2"
+                    color="primary"
                     href="https://arzt.redmedical.de/#/auth/login"
-                    >zum RED Videocall</v-btn
-                  >
+                    outlined
+                    >zum RED Videocall
+                  </v-btn>
                 </div>
 
-                <v-banner v-else
-                  ><v-btn @click="show(item)">{{ item.acceptedDate }} </v-btn>Es
-                  wurde noch kein Termin bestätigt...</v-banner
-                ></v-card-actions
-              >
-              <v-card-actions class="d-inline-flex"
-                ><v-btn plain class="caption"
-                  >Frau absagen</v-btn
-                ></v-card-actions
-              >
+                <v-banner v-else>
+                  <v-btn @click="show(item)">{{ item.acceptedDate }}</v-btn>
+                  Es wurde noch kein Termin bestätigt...
+                </v-banner>
+              </v-card-actions>
+              <v-card-actions class="d-inline-flex">
+                <v-btn class="caption" plain>Frau absagen</v-btn>
+              </v-card-actions>
             </v-card>
           </v-expansion-panel-content>
         </v-expansion-panel>
@@ -129,6 +128,11 @@ export default {
       women: [],
       endpoint: 'https://formspree.io/f/xknkwgnn',
     }
+  },
+  computed: {
+    userName() {
+      return this.user.firstName + ' ' + this.user.lastName
+    },
   },
   mounted() {
     const db = window.$nuxt.$fire.firestore
@@ -180,34 +184,44 @@ export default {
     show(e) {
       console.log(this.women)
     },
+    listToHTML(list) {
+      return (
+        '<ul>' +
+        list
+          .map(function (item) {
+            return '<li>' + item + '</li>'
+          })
+          .join('') +
+        '</ul>'
+      )
+    },
     submitForm(womenUser) {
-      console.log(womenUser)
-      const list = JSON.stringify(womenUser.dates)
-      console.log(list)
       const db = window.$nuxt.$fire.firestore
+
       db.collection('users')
-        .doc(this.$fire.auth.currentUser.uid)
-        .get()
-        .then((e) => {
-          db.collection('users')
-            .doc(womenUser.uid)
-            .collection('response')
-            .doc(window.$nuxt.$fire.auth.currentUser.uid)
-            .set({
-              emailNotification:
-                'Der Coach ' +
-                e.data().firstName +
-                ' ' +
-                e.data().lastName +
-                'hat auf Ihre Anfrage reagiert und schickt ihnen folgende Terminvorschläge: ' +
-                list +
-                '. Bitte loggen Sie sich auf unserer Plattform ein, um einen Termin auszuwählen.',
-              from: db
-                .collection('users')
-                .doc(window.$nuxt.$fire.auth.currentUser.uid),
-              suggestions: womenUser.dates,
-            })
+        .doc(womenUser.uid)
+        .collection('response')
+        .doc(window.$nuxt.$fire.auth.currentUser.uid)
+        .set({
+          subject: `Sichere Zuflucht - Antwort von Coach ${this.userName}`,
+          html: `<div style="font-size: 16px;">Hallo,<br><br>
+             der Coach ${
+               this.userName
+             } hat auf Ihre Anfrage reagiert und schickt Ihnen folgende Terminvorschläge:
+        <br>
+        <span style="font-family: monospace;">${this.listToHTML(
+          womenUser.dates
+        )}</span>
+        <br>
+        Bitte loggen Sie sich auf unserer <a href="sichere-zuflucht.de">Plattform</a> ein, um einen Termin auszuwählen.
+        <br>
+        <br>
+        Grüße von unserem engagierten Team.
+        </div>`,
+          from: db.collection('users').doc(this.user.uid),
+          suggestions: womenUser.dates,
         })
+
       /*
       const data = {
         email: user.email,

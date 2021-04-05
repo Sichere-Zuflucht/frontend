@@ -34,7 +34,7 @@
                 >
               </v-row>
               <v-row class="mb-2"
-                ><v-btn plain @click="cancle(response)">Absagen</v-btn
+                ><v-btn plain @click="cancel(response)">Absagen</v-btn
                 ><v-spacer /><v-btn plain color="orange">Nachfragen</v-btn>
               </v-row>
             </div>
@@ -147,7 +147,7 @@ export default {
           console.log('err: ', error)
         })
     },
-    cancle(coaching) {
+    cancel(coaching) {
       const db = window.$nuxt.$fire.firestore
       db.collection('users/' + coaching.id + '/requests')
         .doc(this.$store.state.user.uid)
