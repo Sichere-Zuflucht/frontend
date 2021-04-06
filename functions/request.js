@@ -1,6 +1,21 @@
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
-const { coachInitialMail } = require('./emailTemplates')
+const { coachInitialMail, womanSuggestedDates } = require('./emailTemplates')
+
+exports.getRequests = functions.https.onCall((data, context) => {
+  return admin
+    .firestore()
+    .collection('requests')
+    .where('ids', 'array-contains', context.auth.uid)
+    .get()
+    .then((snap) => {
+      const data = []
+      snap.forEach((doc) => {
+        data.push({ id: doc.id, ...doc.data() })
+      })
+      return data
+    })
+})
 
 exports.sendRequest = functions.https.onCall(async (data, context) => {
   const womanData = await admin
@@ -20,23 +35,40 @@ exports.sendRequest = functions.https.onCall(async (data, context) => {
       womanId: context.auth.uid,
       ids: [data.coachUID, context.auth.uid],
       message: data.message,
-      dates: [],
+      suggestions: [],
       womanUserName: womanData.userName,
       womanAvatar: womanData.avatar,
     })
 })
 
-exports.getRequests = functions.https.onCall((data, context) => {
-  return admin
+exports.addSuggestions = functions.https.onCall(async (data, context) => {
+  // get the inital request
+  await admin
     .firestore()
     .collection('requests')
-    .where('ids', 'array-contains', context.auth.uid)
+    .doc(data.requestId)
     .get()
-    .then((snap) => {
-      const data = []
-      snap.forEach((doc) => {
-        data.push(doc.data())
-      })
-      return data
+    .then((ref) => {
+      const requestData = ref.data()
+
+      // update request
+      admin
+        .firestore()
+        .collection('requests')
+        .doc(data.requestId)
+        .set(
+          {
+            eMails: [
+              womanSuggestedDates(
+                data.coachName,
+                data.suggestions,
+                requestData.womanId
+              ),
+            ],
+            suggestions: data.suggestions,
+            coachAnswered: true,
+          },
+          { merge: true }
+        )
     })
 })
