@@ -66,7 +66,9 @@ export default {
       appId: '1:163834643967:web:277673f1c69b5eaf3213ca',
     },
     services: {
-      functions: {},
+      functions: {
+        emulatorPort: process.env.NODE_ENV === 'development' ? 5001 : undefined,
+      },
       auth: {
         persistence: 'local', // default
         initialize: {

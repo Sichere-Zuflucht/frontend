@@ -1,8 +1,8 @@
 <template>
-  <div v-if="user">
-    <v-img :lazy-src="user.avatar" :src="user.avatar"></v-img>
-    <h1 class="text-center">{{ user.firstName }} {{ user.lastName }}</h1>
-    <Coaching :coach="user" />
+  <div v-if="coach">
+    <v-img :lazy-src="coach.avatar" :src="coach.avatar"></v-img>
+    <h1 class="text-center">{{ coach.firstName }} {{ coach.lastName }}</h1>
+    <Coaching :coach="coach" />
     <v-container fluid>
       <v-expansion-panels flat>
         <v-expansion-panel>
@@ -28,57 +28,34 @@
 export default {
   data() {
     return {
-      user: null,
+      coach: null,
       message: '',
-      slug: '',
+      coachUID: '',
     }
   },
   computed: {
-    userName() {
-      return this.user.firstName + ' ' + this.user.lastName
+    coachName() {
+      return this.coach.firstName + ' ' + this.coach.lastName
     },
   },
   mounted() {
-    this.slug = this.$route.params.beratung
-    this.getCoachUserData()
+    this.coachUID = this.$route.params.beratung
+    this.$nuxt.$fire.firestore
+      .collection('users')
+      .doc(this.coachUID)
+      .get()
+      .then((e) => {
+        this.coach = e.data()
+      })
   },
   methods: {
-    getCoachUserData() {
-      this.$nuxt.$fire.firestore
-        .collection('users')
-        .doc(this.slug)
-        .get()
-        .then((e) => {
-          this.user = e.data()
-        })
-    },
-
     sendRequest() {
-      const db = window.$nuxt.$fire.firestore
-      db.collection('users')
-        .doc(this.slug)
-        .collection('requests')
-        .doc(this.$store.getters['modules/user/uid'])
-        .set({
-          subject: `Sichere Zuflucht - Anfrage von Frau`,
-          html: `<div style="font-size: 16px;">Hallo ${this.userName},<br><br>
-             eine Frau hat Ihnen eine Anfrage gestellt und schickt Ihnen folgende Nachricht:
-        <br>
-        <br>
-        <span style="font-family: monospace; margin-left: 2em">"${this.message}"</span>
-        <br>
-        <br>
-        Bitte loggen Sie sich auf unserer <a href="sichere-zuflucht.de">Plattform</a> ein, um Termine zur Auswahl zu stellen.
-        <br>
-        <br>
-        Grüße von unserem engagierten Team.
-        </div>`,
-          isAccepted: false,
-          message: this.message,
-          from: db
-            .collection('users')
-            .doc(window.$nuxt.$fire.auth.currentUser.uid),
-        })
+      console.log('send request')
+      this.$nuxt.$fire.functions.httpsCallable('request-sendRequest')({
+        coachName: this.coachName,
+        message: this.message,
+        coachUID: this.coachUID,
+      })
     },
   },
 }
