@@ -8,7 +8,7 @@
     top
     offset-y
   >
-    <template v-slot:activator="{ on, attrs }">
+    <template #activator="{ on, attrs }">
       <v-btn v-bind="attrs" v-on="on">Termin hinzufügen</v-btn>
     </template>
     <v-date-picker
@@ -20,7 +20,9 @@
     >
       <v-spacer></v-spacer>
       <v-btn text color="primary" @click="menu = false"> Schließen </v-btn>
-      <v-btn text color="primary" @click="addDates(item.dates)"> OK </v-btn>
+      <v-btn text color="primary" @click="addDates(item.suggestions)">
+        OK
+      </v-btn>
     </v-date-picker>
   </v-menu>
 </template>

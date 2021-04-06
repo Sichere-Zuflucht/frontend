@@ -103,19 +103,19 @@ export default {
     },
   },
   mounted() {
-    const db = window.$nuxt.$fire.firestore
-    db.collection('users/' + this.user.uid + '/response')
-      .get()
-      .then((snapshot) => {
-        snapshot.forEach((subDoc) => {
-          const data = subDoc.data()
-          subDoc
-            .data()
-            .from.get()
-            .then((a) => {
-              data.coach = a.data()
-              data.id = a.id
-              this.responses.push(data)
+    this.$nuxt.$fire.functions
+      .httpsCallable('request-getRequests')()
+      .then((requests) => {
+        requests.data.forEach((request) => {
+          const db = window.$nuxt.$fire.firestore
+          db.collection('users')
+            .doc(request.coachId)
+            .get()
+            .then((coachSnap) => {
+              this.responses.push({
+                coach: coachSnap.data(),
+                ...request,
+              })
             })
         })
       })
@@ -157,34 +157,11 @@ export default {
         .delete()
     },
     accept(response, date) {
-      const db = window.$nuxt.$fire.firestore
-
-      // update the request from woman to coach (html, subject -> send mail)
-      db.collection('users/' + response.id + '/requests')
-        .doc(this.user.uid)
-        .update({
-          acceptedDate: date,
-          subject: `Sichere Zuflucht - Terminzusage`,
-          html: `<div style="font-size: 16px;">Hallo ${
-            response.coach.firstName + ' ' + response.coach.lastName
-          },<br><br>
-             eine Frau hat Ihrem Termin zugesagt:
-        <br>
-        <br>
-        <span style="font-family: monospace; margin-left: 2em">"${date}"</span>
-        <br>
-        <br>
-        Bitte loggen Sie sich auf unserer <a href="sichere-zuflucht.de">Plattform</a> ein, um für den Termin den Videocall aufzusetzen.
-        <br>
-        <br>
-        Grüße von unserem engagierten Team.
-        </div>`,
-        })
-
-      // update also value for woman
-      db.collection('users/' + this.user.uid + '/response')
-        .doc(response.id)
-        .update('acceptedDate', date)
+      this.$nuxt.$fire.functions.httpsCallable('request-acceptDate')({
+        coachName: response.coach.firstName + ' ' + response.coach.lastName,
+        acceptedDate: date,
+        requestId: response.id,
+      })
 
       response.acceptedDate = date
     },

@@ -47,3 +47,23 @@ exports.womanSuggestedDates = (coachName, dates, womanID) => {
     sent: false,
   }
 }
+
+exports.coachAcceptedDate = (coachName, date, coachID) => {
+  return {
+    subject: `Sichere Zuflucht - Terminzusage`,
+    html: `<div style="font-size: 16px;">Hallo ${coachName},<br><br>
+             eine Frau hat Ihrem Termin zugesagt:
+        <br>
+        <br>
+        <span style="font-family: monospace; margin-left: 2em">"${date}"</span>
+        <br>
+        <br>
+        Bitte loggen Sie sich auf unserer <a href="sichere-zuflucht.de">Plattform</a> ein, um für den Termin den Videocall aufzusetzen.
+        <br>
+        <br>
+        Grüße von unserem engagierten Team.
+        </div>`,
+    uid: coachID,
+    sent: false,
+  }
+}
