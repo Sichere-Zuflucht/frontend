@@ -6,9 +6,9 @@
     <VerificationsAlert />
     <v-divider class="my-2"></v-divider>
     <p class="text-uppercase font-weight-bold">Anfragen:</p>
-    <div v-if="women">
+    <div v-if="requests">
       <v-expansion-panels>
-        <v-expansion-panel v-for="(item, i) in women" :key="i">
+        <v-expansion-panel v-for="(item, i) in requests" :key="i">
           <v-expansion-panel-header>
             <v-chip
               v-if="item.acceptedDate"
@@ -38,13 +38,13 @@
               <v-card-title>
                 <v-col class="mr-2 pa-0" cols="8">
                   <p class="ma-0 caption">Frau</p>
-                  <p class="ma-0">{{ item.userName }}</p></v-col
+                  <p class="ma-0">{{ item.womanUserName }}</p></v-col
                 >
                 <v-col cols="3">
                   <v-avatar color="primary" size="56">
                     <v-img
-                      :lazy-src="item.avatar"
-                      :src="item.avatar"
+                      :lazy-src="item.womanAvatar"
+                      :src="item.womanAvatar"
                       max-height="56"
                       max-width="56"
                     ></v-img>
@@ -125,7 +125,7 @@ export default {
     return {
       name: '{name}',
       user: {},
-      women: [],
+      requests: [],
       endpoint: 'https://formspree.io/f/xknkwgnn',
     }
   },
@@ -135,30 +135,10 @@ export default {
     },
   },
   mounted() {
-    const db = window.$nuxt.$fire.firestore
     this.user = this.$store.getters['modules/user/user']
-    db.collection('users/' + this.user.uid + '/requests')
-      .get()
-      .then((snapshot) => {
-        snapshot.forEach((subDoc) => {
-          db.collection('users')
-            .doc(subDoc.data().from.id)
-            .get()
-            .then((subsubDoc) => {
-              const user = {
-                uid: subDoc.id,
-                jitsiRoom: subDoc.data().jitsiRoom,
-                isAccepted: subDoc.data().isAccepted,
-                avatar: subsubDoc.data().avatar,
-                userName: subsubDoc.data().userName,
-                message: subDoc.data().message,
-                acceptedDate: subDoc.data().acceptedDate,
-                dates: [],
-              }
-              this.women.push(user)
-            })
-        })
-      })
+    this.$nuxt.$fire.functions
+      .httpsCallable('request-getRequests')()
+      .then((requests) => this.requests.push(...requests.data))
   },
   methods: {
     saveDates(w) {
@@ -182,7 +162,7 @@ export default {
       d === 0 ? list.splice(d) : list.splice(d, d2)
     },
     show(e) {
-      console.log(this.women)
+      console.log(this.requests)
     },
     listToHTML(list) {
       return (
