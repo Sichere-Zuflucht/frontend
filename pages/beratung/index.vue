@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>
-      Hallo <span v-if="user">{{ user.firstName }} {{ user.lastName }}</span>
+      Hallo <span v-if="user">{{ coachName }}</span>
     </h1>
     <VerificationsAlert />
     <v-divider class="my-2"></v-divider>
@@ -133,7 +133,7 @@ export default {
     }
   },
   computed: {
-    userName() {
+    coachName() {
       return this.user.firstName + ' ' + this.user.lastName
     },
   },
