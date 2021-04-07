@@ -86,6 +86,7 @@ export default {
         chunkName:
           process.env.NODE_ENV !== 'production' ? 'firebase-auth' : '[id]', // default
         enablePersistence: true,
+        // emulatorPort: process.env.NODE_ENV === 'development' ? 9090 : undefined,
         emulatorPort: undefined,
         settings: {
           // Firestore Settings - currently only works in SPA mode

@@ -6,7 +6,7 @@
     "shell": "firebase functions:shell",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log",
-    "initDBLocal": "FIRESTORE_EMULATOR_HOST=\"localhost:8080\" node fillDB.js",
+    "initDBLocal": "FIRESTORE_EMULATOR_HOST=\"localhost:9090\" node fillDB.js",
     "initDBRemote": "node fillDB.js"
   },
   "engines": {
