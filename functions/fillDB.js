@@ -47,3 +47,22 @@ admin
     area: ['sadfas', 'käoksök'],
     title: 'Psychologische Hilfe',
   })
+
+admin.firestore().collection('users').doc('a').set({
+  email: 'fellnerseb@gmail.com',
+})
+
+admin
+  .firestore()
+  .collection('requests')
+  .doc()
+  .set({
+    eMails: [
+      {
+        html: 'hello2',
+        subject: 'grias di',
+        sent: false,
+        uid: 'a',
+      },
+    ],
+  })
