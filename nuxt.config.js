@@ -18,6 +18,7 @@ export default {
     baseUrl: process.env.BASE_URL || 'http://localhost:3000',
     base,
     redAPI: process.env.RED_API,
+    STRIPE_PK: process.env.STRIPE_PK,
   },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -25,7 +26,7 @@ export default {
     titleTemplate: '%s - sichere-zufluch',
     title: 'sichere-zuflucht',
     htmlAttrs: {
-      lang: 'en',
+      lang: 'de',
     },
     meta: [
       { charset: 'utf-8' },
@@ -39,7 +40,6 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
@@ -54,15 +54,7 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ['@nuxtjs/firebase', 'nuxtjs-stripe'],
-  stripe: {
-    /* module options */
-    publishableKey:
-      'pk_test_51IbjZeFRsEq5IriEKQifwCzu8LMnx6uMxxhOz7HIELiaYpFCnsfNlVaiTOU72b2uWwQP4B5gI8GwDrsrSNJS0hPP00e8y3RbDo',
-    version: 'v3', // Default
-    defer: true, // Default
-    async: true, // Default
-  },
+  modules: ['@nuxtjs/firebase'],
   firebase: {
     config: {
       apiKey: 'AIzaSyDMjjzgxNWEsDWYETgWbFgaYnwzAmLyzhM',

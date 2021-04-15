@@ -1,41 +1,29 @@
-<template>
-  <v-form
-    v-model="valid"
-    id="payment-form"
-    onSubmit="return false;"
-    @submit="handleSubmit"
-  >
-    <v-row>
-      <div id="card-element" @change="handleChange"></div>
-      <!--<CardElement id="card-element" options={cardStyle} onChange={handleChange} />-->
-    </v-row>
-    <v-row>
-      <v-btn
-        :disabled="processing || disabled || succeeded"
-        id="submit"
-        :loading="buttonload"
-        @click="handleSubmit"
-        >Pay now
-      </v-btn>
-    </v-row>
-    <v-row v-if="error">
-      <v-alert type="alert">
-        {{ error }}
-      </v-alert>
-    </v-row>
-    <v-row v-if="succeeded">
-      <v-alert type="success">
-        Payment succeeded, see the result in your
-        <a href="https://dashboard.stripe.com/test/payments">
-          Stripe dashboard.
-        </a>
-        Refresh the page to pay again.
-      </v-alert>
-    </v-row>
-  </v-form>
-</template>
+<template><div></div></template>
 
 <script>
+export default {
+  data() {
+    this.publishableKey = process.env.STRIPE_PK
+    return {
+      loading: false,
+      lineItems: [
+        {
+          price: 'some-price-id', // The id of the one-time price you created in your Stripe dashboard
+          quantity: 1,
+        },
+      ],
+      successURL: 'http://localhost:3000',
+      cancelURL: 'http://localhost:3000',
+    }
+  },
+  methods: {
+    submit() {
+      // You will be redirected to Stripe's secure checkout page
+      this.$refs.checkoutRef.redirectToCheckout()
+    },
+  },
+}
+/*
 export default {
   data() {
     return {
@@ -79,4 +67,5 @@ export default {
     },
   },
 }
+*/
 </script>
