@@ -28,9 +28,7 @@
       <v-expansion-panel-content color="red" class="white--text">
         Wir nutzen den Anbieter STRIPE, damit Sie Zahlungen erhalten können.
         <p>
-          <v-btn href="https://www.stripe.com" append class="ma-2 ml-0"
-            >zu STRIPE</v-btn
-          >
+          <v-btn to="stripe" append class="ma-2 ml-0">zu STRIPE</v-btn>
         </p>
       </v-expansion-panel-content>
     </v-expansion-panel>
