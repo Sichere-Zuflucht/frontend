@@ -51,6 +51,10 @@ const actions = {
         })
     }
   },
+  logout({ commit }) {
+    this.$fire.auth.signOut()
+    commit('setUserData', null)
+  },
 }
 
 const mutations = {

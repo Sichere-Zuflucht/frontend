@@ -54,7 +54,7 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title v-text="title" />
       <v-spacer />
-      <v-btn @click.stop="logInOut"> {{ login }} </v-btn>
+      <v-btn v-if="loggedIn"> Login </v-btn>
     </v-app-bar>
     <v-main>
       <v-container>
@@ -103,18 +103,25 @@ export default {
     }
   },
   computed: {
-    login: (that) => (!that.loggedIn ? 'Login' : 'Logout'),
+    // login: (that) => (!that.loggedIn ? 'Login' : 'Logout'),
     loggedIn: (that) => that.$store.getters['modules/user/isAuthenticated'],
   },
   methods: {
-    logInOut() {
+    login() {
+      this.$router.push('/login')
+    },
+    logout() {
+      this.$store.dispatch('modules/user/logout')
+      this.$router.push('/')
+    },
+    /* logInOut() {
       if (this.loggedIn) {
         this.$fire.auth.signOut()
         this.$router.push('/')
       } else {
         this.$router.push('/login')
       }
-    },
+    }, */
   },
 }
 </script>
