@@ -1,58 +1,102 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-form
-        v-model="valid"
-        style="width: 100%"
-        class="mb-4"
-        onSubmit="return false;"
-        @submit="handleEmail"
-      >
-        <v-row>
+  <v-form
+    ref="form"
+    v-model="valid"
+    lazy-validation
+    style="width: 100%"
+    class="mb-4"
+    @submit="
+      (e) => {
+        e.preventDefault()
+      }
+    "
+  >
+    <v-stepper v-model="e1">
+      <v-stepper-items>
+        <v-stepper-content step="1">
+          <p class="my-4">
+            Füge eine eMail ein, um dich einzuloggen / zu registrieren.
+          </p>
           <v-text-field
+            type="email"
             v-model="email"
             :rules="emailRules"
             label="E-mail"
             required
             append-icon="mdi-arrow-right"
           ></v-text-field>
-        </v-row>
-        <v-row v-if="requestPassword">
+
+          <v-btn
+            color="primary"
+            :loading="loading"
+            :disabled="!valid"
+            @click="next"
+            >Weiter</v-btn
+          >
+        </v-stepper-content>
+
+        <v-stepper-content step="2">
           <v-text-field
+            v-if="requestPassword"
             v-model="password"
             label="Passwort"
             type="password"
             required
           ></v-text-field>
-        </v-row>
-        <v-row
-          ><v-btn :loading="loading" :disabled="!valid" @click="handleEmail"
-            >Next</v-btn
-          ></v-row
-        >
-      </v-form>
-    </v-row>
-    <v-row v-if="showConfirmation" class="text-h4">
-      Dir wurde an {{ email }} eine Bestätigunsmail geschickt. Bitte folge den
-      Anweisungen dort.</v-row
-    >
-  </v-container>
+          <p class="my-4" v-else>
+            Willst du dich mit der eMail <b>{{ email }}</b> bei Sichere Zuflucht
+            zu registrieren?
+          </p>
+          <v-btn
+            v-if="requestPassword"
+            class="inline"
+            color="success"
+            :loading="loading"
+            :disabled="!valid"
+            @click="login"
+            >Einloggen</v-btn
+          >
+          <v-btn
+            v-else
+            color="success"
+            :loading="loading"
+            :disabled="!valid"
+            @click="register"
+            >{{ buttonText }}</v-btn
+          >
+          <v-btn @click="e1 = 1" text class="inline"> Zurück </v-btn>
+          <v-alert
+            v-if="showConfirmation"
+            color="success"
+            class="white--text mt-4"
+            >Dir wurde eine Bestätigunsmail an {{ email }} geschickt. Bitte
+            folge den dort beschriebenen Anweisungen.</v-alert
+          >
+        </v-stepper-content>
+      </v-stepper-items>
+    </v-stepper>
+  </v-form>
 </template>
 
 <script>
 export default {
   data: () => ({
+    e1: 1,
     valid: false,
     email: '',
     password: '',
     emailRules: [
       (v) => !!v || 'E-mail is required',
-      (v) => /.+@.+/.test(v) || 'E-mail must be valid',
+      (v) =>
+        /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/.test(v) ||
+        'E-mail must be valid',
     ],
     loading: false,
     showConfirmation: false,
     baseUrl: '',
     requestPassword: false,
+    showRegister: false,
+    buttonText: 'Registrieren',
   }),
   mounted() {
     this.baseUrl = window.location.origin + process.env.base
@@ -63,40 +107,44 @@ export default {
     }
   },
   methods: {
-    signup() {
+    next() {
+      if (!this.$refs.form.validate()) return
+      this.showConfirmation = false
+      this.$nuxt.$fire.auth
+        .fetchSignInMethodsForEmail(this.email)
+        .then((loginMethods) => {
+          if (loginMethods.length > 1) {
+            this.requestPassword = true
+          } else {
+            this.requestPassword = false
+          }
+          this.e1 = 2
+        })
+    },
+    login() {
       this.loading = true
-      window.$nuxt.$fire.auth
+      this.$nuxt.$fire.auth
+        .signInWithEmailAndPassword(this.email, this.password)
+        .then(() => {
+          this.loading = false
+          this.$router.push('/')
+        })
+    },
+    register() {
+      if (!this.$refs.form.validate()) return
+      this.loading = true
+      this.$nuxt.$fire.auth
         .sendSignInLinkToEmail(this.email, {
           url: this.baseUrl + '/register',
           handleCodeInApp: true,
         })
         .then(() => {
+          this.buttonText = 'Gesendet'
+          this.valid = false
           this.loading = false
           this.showConfirmation = true
           window.localStorage.setItem('emailForSignIn', this.email)
         })
-    },
-    handleEmail() {
-      if (!this.valid) return
-      if (!this.requestPassword) {
-        window.$nuxt.$fire.auth
-          .fetchSignInMethodsForEmail(this.email)
-          .then((loginMethods) => {
-            if (loginMethods.length <= 1) {
-              this.signup()
-            } else {
-              this.requestPassword = true
-            }
-          })
-      } else {
-        this.loading = true
-        window.$nuxt.$fire.auth
-          .signInWithEmailAndPassword(this.email, this.password)
-          .then(() => {
-            this.loading = false
-            this.$router.push('/')
-          })
-      }
     },
   },
 }

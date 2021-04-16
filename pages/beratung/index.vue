@@ -1,12 +1,12 @@
 <template>
-  <div>
-    <h1>
-      Hallo <span v-if="user">{{ user.firstName }} {{ user.lastName }}</span>
-    </h1>
+  <v-container>
+    <h1 class="text-h4">Übersicht</h1>
+    <span v-if="userName">von {{ userName }}</span>
     <VerificationsAlert />
     <v-divider class="my-2"></v-divider>
     <p class="text-uppercase font-weight-bold">Anfragen:</p>
-    <div v-if="women">
+
+    <div v-if="women.length != 0">
       <v-expansion-panels>
         <v-expansion-panel v-for="(item, i) in women" :key="i">
           <v-expansion-panel-header>
@@ -116,17 +116,16 @@
         </v-expansion-panel>
       </v-expansion-panels>
     </div>
-  </div>
+    <p v-else>Noch keine Anfragen vorhanden</p>
+  </v-container>
 </template>
 
 <script>
 export default {
   data() {
     return {
-      name: '{name}',
       user: {},
       women: [],
-      endpoint: 'https://formspree.io/f/xknkwgnn',
     }
   },
   computed: {

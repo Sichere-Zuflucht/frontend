@@ -1,8 +1,8 @@
 <template>
   <v-container>
     <v-form v-model="valid">
-      <v-text-field v-model="name" label="Name" required></v-text-field>
       <v-text-field v-model="surName" label="Vorname" required></v-text-field>
+      <v-text-field v-model="name" label="Nachname" required></v-text-field>
       <v-select
         v-model="membership"
         :items="memberships"
@@ -25,13 +25,9 @@
         required
       ></v-text-field>
       <v-btn :loading="loading" :disabled="!valid" @click="updateProfile"
-        >Update</v-btn
+        >Erstellen</v-btn
       >
     </v-form>
-    <v-row v-if="showError">
-      Irgendetwas ist schief gelaufen. Versuche dich erneut zu registrieren.
-      <v-btn :to="{ path: '/sign-up' }">Erneut registrieren</v-btn>
-    </v-row>
   </v-container>
 </template>
 
