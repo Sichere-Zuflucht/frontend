@@ -51,6 +51,10 @@ const actions = {
         })
     }
   },
+  setInfo({ commit }, { info, uid }) {
+    commit('setInfo', info)
+    this.$fire.firestore.collection('users').doc(uid).update({ info })
+  },
 }
 
 const mutations = {
@@ -62,6 +66,10 @@ const mutations = {
         state[entry[0]] = entry[1]
       }
     }
+  },
+  setInfo(state, info) {
+    console.log('[STORE MUTATIONS] - setInfo:', info)
+    state.info = info
   },
   setMembership(state, membership) {
     console.log('[STORE MUTATIONS] - setMembership:', membership)

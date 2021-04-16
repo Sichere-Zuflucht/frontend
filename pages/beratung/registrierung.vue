@@ -22,16 +22,16 @@ export default {
     updateProfile(data) {
       this.profile = data
       this.select = false
-      window.$nuxt.$fire.firestore
-        .collection('users')
-        .doc(this.user.uid)
-        .update({
-          info: {
-            languages: data.languages,
-            topic: data.topic,
-            types: data.types,
-          },
-        })
+
+      this.$store.dispatch('modules/user/setInfo', {
+        info: {
+          languages: data.languages,
+          topic: data.topic,
+          types: data.types,
+        },
+        uid: this.user.uid,
+      })
+      this.$router.push('/beratung')
     },
   },
 }

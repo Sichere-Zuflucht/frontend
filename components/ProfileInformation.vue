@@ -97,7 +97,7 @@ export default {
         })
         .then(() => {
           this.loading = false
-          this.$router.push('/' + this.membership.routing)
+          this.$router.push('/profile')
         })
     },
   },
