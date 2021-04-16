@@ -1,13 +1,23 @@
 <template>
-  <v-expansion-panels v-if="data">
-    <v-expansion-panel v-if="!data.info">
-      <v-expansion-panel-header
-        color="error"
-        class="white--text"
-        expand-icon="mdi-alert"
-        disable-icon-rotate
+  <div v-if="data">
+    <v-divider class="my-2"></v-divider>
+    <v-alert color="red lighten-4">
+      Schließe folgende Punkte ab, um für die Frauen einsehbar zu werden:
+      <v-btn v-if="!data.info" class="my-2" to="beratung/registrierung">
+        Profil vervollständigen
+      </v-btn>
+      <v-btn v-if="!data.strapi" class="my-2" href="https://www.stripe.com">
+        Bezahlung einrichten
+      </v-btn>
+      <v-btn v-if="!data.verified" class="my-2" to="personenverifizierung">
+        Account verifizieren</v-btn
       >
-        <b>Profil noch nicht vollständig.</b>
+    </v-alert>
+  </div>
+  <!--<v-expansion-panels v-if="data">
+    <v-expansion-panel v-if="!data.info">
+      <v-expansion-panel-header color="secondary" class="white--text">
+        <b>Profil vervollständigen.</b>
       </v-expansion-panel-header>
       <v-expansion-panel-content color="red" class="white--text">
         Sie sind ansonsten nicht für die Frauen einsichtbar.
@@ -53,7 +63,7 @@
         </p>
       </v-expansion-panel-content>
     </v-expansion-panel>
-  </v-expansion-panels>
+  </v-expansion-panels>-->
 </template>
 
 <script>
