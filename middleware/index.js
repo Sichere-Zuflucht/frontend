@@ -34,6 +34,14 @@ function redirectProfilePage(store, redirect, route) {
     if (!store.getters['modules/user/isAuthenticated']) {
       return redirect('/login')
     }
+
+    // coach did not enter info what coaching he wants to do
+    if (
+      store.getters['modules/user/membership'].id === 'Coach' &&
+      !store.getters['modules/user/user'].info
+    ) {
+      return redirect('/beratung/registrierung')
+    }
     return redirect(store.getters['modules/user/routing'])
   }
 }

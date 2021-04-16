@@ -1,9 +1,10 @@
 <template>
   <v-container>
     <h1 class="text-h4">Übersicht</h1>
-    <span v-if="userName">von {{ userName }}</span>
+    <span v-if="coachName">von {{ coachName }}</span>
     <VerificationsAlert />
     <v-divider class="my-2"></v-divider>
+    <!--    <Coaching v-if="user" :coach="user"></Coaching>-->
     <p class="text-uppercase font-weight-bold">Anfragen:</p>
 
     <div v-if="women.length != 0">
@@ -129,6 +130,7 @@ export default {
     return {
       user: {},
       women: [],
+      requests: [],
     }
   },
   computed: {
