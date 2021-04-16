@@ -3,8 +3,8 @@
     ><CoachingSelection @filter="filter" />
     <div
       v-for="(coaching, i) in filteredCoaches"
-      class="mt-5"
       :key="i"
+      class="mt-5"
       :coaching="coaching"
     >
       <Coaching :coach="coaching" /></div
@@ -13,7 +13,7 @@
 
 <script>
 export default {
-  name: 'filter',
+  name: 'FindCoach',
   data() {
     return {
       allCoaches: [],
@@ -49,7 +49,7 @@ export default {
         // types
         add =
           add &&
-          coach.info.types.filter((value) => data.types.includes(value))
+          coach.info.types.findCoach((value) => data.types.includes(value))
             .length >= 1
         if (add) this.filteredCoaches.push(coach)
       })

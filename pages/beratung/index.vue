@@ -8,7 +8,7 @@
 
     <div v-if="women.length != 0">
       <v-expansion-panels>
-        <v-expansion-panel v-for="(item, i) in women" :key="i">
+        <v-expansion-panel v-for="(item, i) in requests" :key="i">
           <v-expansion-panel-header>
             <v-chip
               v-if="item.acceptedDate"
@@ -19,7 +19,7 @@
               bereit
             </v-chip>
             <v-chip
-              v-else-if="item.isAccepted"
+              v-else-if="item.coachAnswered"
               class="ma-2"
               color="orange"
               text-color="white"
@@ -38,13 +38,13 @@
               <v-card-title>
                 <v-col class="mr-2 pa-0" cols="8">
                   <p class="ma-0 caption">Frau</p>
-                  <p class="ma-0">{{ item.userName }}</p></v-col
+                  <p class="ma-0">{{ item.womanUserName }}</p></v-col
                 >
                 <v-col cols="3">
                   <v-avatar color="primary" size="56">
                     <v-img
-                      :lazy-src="item.avatar"
-                      :src="item.avatar"
+                      :lazy-src="item.womanAvatar"
+                      :src="item.womanAvatar"
                       max-height="56"
                       max-width="56"
                     ></v-img>
@@ -53,19 +53,22 @@
               </v-card-title>
               <v-card-text>{{ item.message }}</v-card-text>
               <v-card-actions class="d-inline-flex">
-                <div v-if="!item.isAccepted">
+                <div v-if="!item.coachAnswered">
                   <v-divider></v-divider>
 
                   <v-list>
                     <v-list-item-group>
-                      <v-list-item v-for="(d, di) in item.dates" :key="di">
+                      <v-list-item
+                        v-for="(d, di) in item.suggestions"
+                        :key="di"
+                      >
                         <v-list-item-content>
                           <v-list-item-title class="font-weight-bold"
                             >{{ d }}
                           </v-list-item-title>
                         </v-list-item-content>
                         <v-list-item-icon>
-                          <v-icon @click="eraseDate(di, item.dates)"
+                          <v-icon @click="eraseDate(di, item.suggestions)"
                             >mdi-close
                           </v-icon>
                         </v-list-item-icon>
@@ -77,9 +80,9 @@
                     Bitte füge mind. 3 Termine hinzu.
                   </p>
                   <v-btn
-                    v-if="item.dates.length >= 3"
+                    v-if="item.suggestions.length >= 3"
                     color="success"
-                    @click="saveDates(item)"
+                    @click="addSuggestions(item)"
                     >Zusagen
                   </v-btn>
                 </div>
@@ -129,113 +132,30 @@ export default {
     }
   },
   computed: {
-    userName() {
+    coachName() {
       return this.user.firstName + ' ' + this.user.lastName
     },
   },
   mounted() {
-    const db = window.$nuxt.$fire.firestore
     this.user = this.$store.getters['modules/user/user']
-    db.collection('users/' + this.user.uid + '/requests')
-      .get()
-      .then((snapshot) => {
-        snapshot.forEach((subDoc) => {
-          db.collection('users')
-            .doc(subDoc.data().from.id)
-            .get()
-            .then((subsubDoc) => {
-              const user = {
-                uid: subDoc.id,
-                jitsiRoom: subDoc.data().jitsiRoom,
-                isAccepted: subDoc.data().isAccepted,
-                avatar: subsubDoc.data().avatar,
-                userName: subsubDoc.data().userName,
-                message: subDoc.data().message,
-                acceptedDate: subDoc.data().acceptedDate,
-                dates: [],
-              }
-              this.women.push(user)
-            })
-        })
-      })
+    this.$nuxt.$fire.functions
+      .httpsCallable('request-getRequests')()
+      .then((requests) => this.requests.push(...requests.data))
   },
   methods: {
-    saveDates(w) {
-      const uid = this.user.uid
-      const db = window.$nuxt.$fire.firestore
-      w.isAccepted = true
-      db.collection('users/' + uid + '/requests')
-        .doc(w.uid)
-        .update({
-          dates: w.dates,
-          jitsiRoom: uid.substring(0, 8) + '_' + w.uid.substring(0, 8),
-          isAccepted: true,
-          message: null,
-        })
-        .then(() => {
-          this.submitForm(w)
-        })
+    addSuggestions(request) {
+      this.$nuxt.$fire.functions.httpsCallable('request-addSuggestions')({
+        coachName: this.coachName,
+        suggestions: request.suggestions,
+        requestId: request.id,
+      })
     },
     eraseDate(d, list) {
       const d2 = d + d
       d === 0 ? list.splice(d) : list.splice(d, d2)
     },
-    show(e) {
-      console.log(this.women)
-    },
-    listToHTML(list) {
-      return (
-        '<ul>' +
-        list
-          .map(function (item) {
-            return '<li>' + item + '</li>'
-          })
-          .join('') +
-        '</ul>'
-      )
-    },
-    submitForm(womenUser) {
-      const db = window.$nuxt.$fire.firestore
-
-      db.collection('users')
-        .doc(womenUser.uid)
-        .collection('response')
-        .doc(window.$nuxt.$fire.auth.currentUser.uid)
-        .set({
-          subject: `Sichere Zuflucht - Antwort von Coach ${this.userName}`,
-          html: `<div style="font-size: 16px;">Hallo,<br><br>
-             der Coach ${
-               this.userName
-             } hat auf Ihre Anfrage reagiert und schickt Ihnen folgende Terminvorschläge:
-        <br>
-        <span style="font-family: monospace;">${this.listToHTML(
-          womenUser.dates
-        )}</span>
-        <br>
-        Bitte loggen Sie sich auf unserer <a href="sichere-zuflucht.de">Plattform</a> ein, um einen Termin auszuwählen.
-        <br>
-        <br>
-        Grüße von unserem engagierten Team.
-        </div>`,
-          from: db.collection('users').doc(this.user.uid),
-          suggestions: womenUser.dates,
-        })
-
-      /*
-      const data = {
-        email: user.email,
-        message:
-          'Ihnen stehen folgende Terminvorschläge zur Verfügung: ' + list + '.',
-      }
-      const response = await fetch(this.endpoint, {
-        method: 'POST',
-        body: data,
-        headers: {
-          'Content-Type': 'text/plain',
-        },
-      })
-      console.log('email res: ', response)
-      */
+    show() {
+      console.log(this.requests)
     },
   },
 }
