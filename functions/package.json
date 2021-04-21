@@ -10,7 +10,7 @@
     "initDBRemote": "node fillDB.js"
   },
   "engines": {
-    "node": "12"
+    "node": "10"
   },
   "main": "index.js",
   "dependencies": {
