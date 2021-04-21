@@ -2,8 +2,8 @@ const functions = require('firebase-functions')
 const admin = require('firebase-admin')
 
 exports.getStripeLink = functions.https.onCall(async (data, context) => {
-  functions.logger.log('stripe', functions.config().stripe.STRIPE_SK)
-  const stripe = require('stripe')(functions.config().stripe.STRIPE_SK)
+  functions.logger.log('stripe', functions.config().stripe.sk)
+  const stripe = require('stripe')(functions.config().stripe.sk)
 
   // verify this user is not registered with stripe (look in firebase)
   const userDoc = admin.firestore().collection('users').doc(context.auth.uid)
