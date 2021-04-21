@@ -5,7 +5,11 @@
     <v-row v-if="!select" class="mt-3">
       {{ profile }}
     </v-row>
-    <CoachingSelection v-if="select" @selection="updateProfile" />
+    <CoachingSelection
+      v-if="select"
+      :isCoach="true"
+      @selection="updateProfile"
+    />
   </div>
 </template>
 
@@ -22,7 +26,7 @@ export default {
     updateProfile(data) {
       this.profile = data
       this.select = false
-      window.$nuxt.$fire.firestore
+      this.$fire.firestore
         .collection('users')
         .doc(this.user.uid)
         .update({

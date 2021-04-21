@@ -34,6 +34,7 @@ const actions = {
       // Perform logout operations
       console.log('logg out', authUser)
       commit('setMembership', null)
+      commit('setUserData', false)
     } else {
       // Do something with the authUser and the claims object...
       console.log('logg in', authUser)
@@ -51,19 +52,29 @@ const actions = {
         })
     }
   },
-  logout({ commit }) {
+  logout() {
+    // console.log('logout user: ', state)
     this.$fire.auth.signOut()
-    commit('setUserData', null)
   },
 }
 
 const mutations = {
   setUserData(state, userData) {
-    console.log('[STORE MUTATIONS] - setUserData:', userData)
-    for (const entry of Object.entries(userData)) {
-      // filter out firestore objects (like membership)
-      if (entry[1].firestore === undefined) {
-        state[entry[0]] = entry[1]
+    console.log('incoming: ', state, userData)
+    // console.log('[STORE MUTATIONS] - setUserData:', userData)
+    console.log('Object.entries(userData) ? ', Object.entries(userData))
+    if (userData === false) {
+      for (const entry of Object.entries(state)) {
+        state[entry[0]] = null
+      }
+      console.log(state)
+    } else {
+      for (const entry of Object.entries(userData)) {
+        // filter out firestore objects (like membership)
+        console.log('entry firestore: ', entry[1].firestore)
+        if (entry[1].firestore === undefined) {
+          state[entry[0]] = entry[1]
+        }
       }
     }
   },
@@ -78,11 +89,13 @@ const mutations = {
       state.email = email
       state.emailVerified = emailVerified
       state.uid = uid
-    } else {
-      state.email = null
-      state.emailVerified = null
-      state.uid = null
-    }
+    } /* else {
+      state = {}
+      console.log('state changed, state = ', state)
+      // state.email = null
+      // state.emailVerified = null
+      // state.uid = null
+    } */
   },
 }
 
