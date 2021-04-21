@@ -7,7 +7,7 @@
             <v-row no-gutters>
               <v-col class="text--secondary">
                 <v-fade-transition leave-absolute>
-                  <v-btn @click="open = true" key="0" plain>
+                  <v-btn key="0" plain @click="open = true">
                     Filter anzeigen
                   </v-btn>
                 </v-fade-transition>
@@ -23,7 +23,7 @@
                 <small>{{
                   isCoach ? coach.langSubtitle : women.langSubtitle
                 }}</small>
-              </v-stepper-step> 
+              </v-stepper-step>
               <v-stepper-content step="1">
                 <v-chip-group
                   v-model="languages"
@@ -47,7 +47,7 @@
                 }}</small>
               </v-stepper-step>
               <v-stepper-content step="1">
-                <v-chip-group column mandatory v-model="topic">
+                <v-chip-group v-model="topic" column mandatory>
                   <v-chip
                     v-for="(t, i) in topics"
                     :key="i"
@@ -137,22 +137,13 @@ export default {
       })
   },
   methods: {
-    /* loadPropperTypes(t) {
-      const res = this.topics.filter((top) => {
-        return top.title === t
-      })
-      this.types = res[0].area
-    }, */
     finish() {
       this.open = false
-      // this.update(3)
-      console.log('type: ', this.type)
-      this.$emit('filter', {
-        // 'election'
-        // languages: this.languages,
+      const data = {
         topic: this.topic,
         types: this.type,
-      })
+      }
+      this.$emit('selection', data)
     },
     update(val) {
       this.type = []

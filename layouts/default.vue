@@ -1,54 +1,59 @@
 <template>
   <v-app light>
-    <v-navigation-drawer v-model="drawer" app class="primary" dark right>
-      <v-list v-if="!user">
-        <v-list-item
-          v-for="(none, i) in noUser"
-          :key="i"
-          :to="none.to"
-          nuxt
-          exact
-        >
-          <v-list-item-content>
-            <v-list-item-title v-text="none.title" />
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-      <v-list v-else>
-        <v-list-item
-          v-for="(loggedin, i) in loggedInUser"
-          :key="i"
-          :to="loggedin.to"
-          nuxt
-          exact
-        >
-          <v-list-item-icon>
-            <v-icon>{{ loggedin.icon }}</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title v-text="loggedin.title" />
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-      <template v-slot:append>
-        <div class="pa-2">
-          <v-btn block to="/" @click="test">test</v-btn>
-          <v-btn block to="/" @click="logout">Logout</v-btn>
-        </div>
-      </template>
-    </v-navigation-drawer>
+    <client-only>
+      <v-navigation-drawer v-model="drawer" app class="primary" dark right>
+        <v-list v-if="!loggedIn">
+          <v-list-item
+            v-for="(none, i) in noUser"
+            :key="i"
+            :to="none.to"
+            nuxt
+            exact
+          >
+            <v-list-item-content>
+              <v-list-item-title v-text="none.title" />
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+        <v-list v-else>
+          <v-list-item
+            v-for="(loggedin, i) in loggedInUser"
+            :key="i"
+            :to="loggedin.to"
+            nuxt
+            exact
+          >
+            <v-list-item-icon>
+              <v-icon>{{ loggedin.icon }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title v-text="loggedin.title" />
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+        <template #append>
+          <div class="pa-2">
+            <v-btn block to="/" @click="test">test</v-btn>
+            <v-btn block to="/" @click="logout">Logout</v-btn>
+          </div>
+        </template>
+      </v-navigation-drawer>
+    </client-only>
     <v-app-bar app>
       <v-toolbar-title class="pa-0"
         ><v-img contain width="150" src="Sichere-Zuflucht-Logo.svg"
       /></v-toolbar-title>
       <v-spacer />
       <v-btn @click="test"> t </v-btn>
-      <v-btn v-if="!user" to="login"> Login </v-btn>
-      <v-btn v-else to="profile" icon
-        ><v-avatar color="primary" size="38"
-          ><v-img :src="user.avatar" /></v-avatar
-      ></v-btn>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" right />
+      <client-only>
+        <v-btn v-if="!loggedIn" to="login"> Login </v-btn>
+
+        <v-btn v-else to="profile" icon
+          ><v-avatar color="primary" size="38"
+            ><v-img :src="user.avatar" /></v-avatar
+        ></v-btn>
+      </client-only>
+      <v-app-bar-nav-icon right @click.stop="drawer = !drawer" />
     </v-app-bar>
     <v-main>
       <nuxt class="pb-8" />
@@ -84,12 +89,12 @@ export default {
         {
           icon: 'mdi-view-dashboard',
           title: 'Übersicht',
-          to: '/profile',
+          to: '/',
         },
         {
           icon: 'mdi-account-box',
           title: 'Account',
-          to: '/settings',
+          to: '/profile',
         },
       ],
       noUser: [
@@ -140,7 +145,11 @@ export default {
   },
   computed: {
     // login: (that) => (!that.loggedIn ? 'Login' : 'Logout'),
-    loggedIn: (that) => that.$store.getters['modules/user/isAuthenticated'],
+    loggedIn: (that) => {
+      if (process.client)
+        return that.$store.getters['modules/user/isAuthenticated']
+      return false
+    },
     user: (that) => that.$store.getters['modules/user/user'],
   },
   methods: {
@@ -156,17 +165,9 @@ export default {
       this.$router.push('/login')
     },
     logout() {
-      this.$store.dispatch('modules/user/logout')
+      this.$fire.auth.signOut()
       this.$router.push('/')
     },
-    /* logInOut() {
-      if (this.loggedIn) {
-        this.$fire.auth.signOut()
-        this.$router.push('/')
-      } else {
-        this.$router.push('/login')
-      }
-    }, */
   },
 }
 </script>
