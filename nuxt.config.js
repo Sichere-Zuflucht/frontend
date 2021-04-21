@@ -14,7 +14,7 @@ export default {
     prefix: base,
   },
 
-  env: {
+  publicRuntimeConfig: {
     baseUrl: process.env.BASE_URL || 'http://localhost:3000',
     base,
     redAPI: process.env.RED_API,

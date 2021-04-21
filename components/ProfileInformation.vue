@@ -80,9 +80,9 @@ export default {
           this.showError = true
         })
         .then(() => {
-          db.collection('users/')
-            .doc(window.$nuxt.$fire.auth.currentUser.uid)
-            .set({
+          return this.$store.dispatch('modules/user/createFirebaseUser', {
+            uid: window.$nuxt.$fire.auth.currentUser.uid,
+            userData: {
               firstName: this.surName,
               lastName: this.name,
               avatar:
@@ -93,7 +93,8 @@ export default {
               userName: window.$nuxt.$fire.auth.currentUser.uid.substring(0, 8),
               email: window.$nuxt.$fire.auth.currentUser.email,
               membership: db.collection('memberships').doc(this.membership.id),
-            })
+            },
+          })
         })
         .then(() => {
           this.loading = false

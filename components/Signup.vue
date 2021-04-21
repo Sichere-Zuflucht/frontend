@@ -18,8 +18,8 @@
             Füge eine eMail ein, um dich einzuloggen / zu registrieren.
           </p>
           <v-text-field
-            type="email"
             v-model="email"
+            type="email"
             :rules="emailRules"
             label="E-mail"
             required
@@ -43,7 +43,7 @@
             type="password"
             required
           ></v-text-field>
-          <p class="my-4" v-else>
+          <p v-else class="my-4">
             Willst du dich mit der eMail <b>{{ email }}</b> bei Sichere Zuflucht
             zu registrieren?
           </p>
@@ -64,7 +64,7 @@
             @click="register"
             >{{ buttonText }}</v-btn
           >
-          <v-btn @click="e1 = 1" text class="inline"> Zurück </v-btn>
+          <v-btn text class="inline" @click="e1 = 1"> Zurück </v-btn>
           <v-alert
             v-if="showConfirmation"
             color="success"
@@ -93,13 +93,11 @@ export default {
     ],
     loading: false,
     showConfirmation: false,
-    baseUrl: '',
     requestPassword: false,
     showRegister: false,
     buttonText: 'Registrieren',
   }),
   mounted() {
-    this.baseUrl = window.location.origin + process.env.base
     const email = window.localStorage.getItem('emailForSignIn')
     if (email) {
       this.email = email
@@ -133,9 +131,10 @@ export default {
     register() {
       if (!this.$refs.form.validate()) return
       this.loading = true
+
       this.$nuxt.$fire.auth
         .sendSignInLinkToEmail(this.email, {
-          url: this.baseUrl + '/register',
+          url: this.$config.baseUrl + '/register',
           handleCodeInApp: true,
         })
         .then(() => {

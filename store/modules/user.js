@@ -33,7 +33,7 @@ const actions = {
       // claims = null
       // Perform logout operations
       console.log('logg out', authUser)
-      commit('setMembership', null)
+      commit('setUserData', null)
     } else {
       // Do something with the authUser and the claims object...
       console.log('logg in', authUser)
@@ -43,11 +43,12 @@ const actions = {
         .get()
         .then((user) => {
           const userData = user.data()
-          commit('setUserData', userData)
-
-          userData.membership.get().then((doc) => {
-            commit('setMembership', doc.data())
-          })
+          if (userData) {
+            commit('setUserData', userData)
+            userData.membership.get().then((doc) => {
+              commit('setMembership', doc.data())
+            })
+          }
         })
     }
   },
@@ -55,15 +56,28 @@ const actions = {
     commit('setInfo', info)
     this.$fire.firestore.collection('users').doc(uid).update({ info })
   },
+  async createFirebaseUser({ commit }, { uid, userData }) {
+    commit('setUserData', userData)
+    await userData.membership.get().then((doc) => {
+      commit('setMembership', doc.data())
+    })
+    await this.$fire.firestore.collection('users/').doc(uid).set(userData)
+  },
 }
 
 const mutations = {
   setUserData(state, userData) {
     console.log('[STORE MUTATIONS] - setUserData:', userData)
-    for (const entry of Object.entries(userData)) {
-      // filter out firestore objects (like membership)
-      if (entry[1].firestore === undefined) {
-        state[entry[0]] = entry[1]
+    if (!userData) {
+      for (const key of Object.keys(state)) {
+        state[key] = null
+      }
+    } else {
+      for (const entry of Object.entries(userData)) {
+        // filter out firestore objects (like membership)
+        if (entry[1].firestore === undefined) {
+          state[entry[0]] = entry[1]
+        }
       }
     }
   },
