@@ -7,7 +7,7 @@
     </v-row>
     <CoachingSelection
       v-if="select"
-      :isCoach="true"
+      :is-coach="true"
       @selection="updateProfile"
     />
   </div>
@@ -29,7 +29,6 @@ export default {
 
       this.$store.dispatch('modules/user/setInfo', {
         info: {
-          languages: data.languages,
           topic: data.topic,
           types: data.types,
         },

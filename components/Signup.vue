@@ -41,8 +41,8 @@
             label="Passwort"
             :type="value ? 'password' : 'text'"
             :append-icon="value ? 'mdi-eye' : 'mdi-eye-off'"
-            @click:append="() => (value = !value)"
             required
+            @click:append="() => (value = !value)"
           ></v-text-field>
           <p v-else class="my-4">
             Willst du dich mit der eMail <b>{{ email }}</b> bei Sichere Zuflucht
@@ -131,17 +131,19 @@ export default {
     },
     login() {
       this.loading = true
-      this.$fire.auth
-        .signInWithEmailAndPassword(this.email, this.password)
-        .then(() => {
-          this.loading = false
-          this.$router.push('/profile')
-        })
-        .catch((err) => {
-          this.loading = false
-          this.error.status = true
-          this.error.message = err.message
-        })
+      if (process.client) {
+        this.$fire.auth
+          .signInWithEmailAndPassword(this.email, this.password)
+          .then(() => {
+            this.loading = false
+            this.$router.push('/profile')
+          })
+          .catch((err) => {
+            this.loading = false
+            this.error.status = true
+            this.error.message = err.message
+          })
+      }
     },
     register() {
       if (!this.$refs.form.validate()) return
