@@ -121,6 +121,8 @@
       </v-expansion-panels>
     </div>
     <p v-else>Noch keine Anfragen vorhanden</p>
+    <v-btn @click="addStripe"> add stripe </v-btn>
+    <div v-if="stripeRegisterURL">{{ stripeRegisterURL }}</div>
   </v-container>
 </template>
 
@@ -131,6 +133,7 @@ export default {
       user: {},
       women: [],
       requests: [],
+      stripeRegisterURL: null,
     }
   },
   computed: {
@@ -158,6 +161,13 @@ export default {
     },
     show() {
       console.log(this.requests)
+    },
+    addStripe() {
+      this.$fire.functions
+        .httpsCallable('stripe-getStripeLink')({ email: this.user.email })
+        .then((stripeData) => {
+          this.stripeRegisterURL = stripeData.data.url
+        })
     },
   },
 }
