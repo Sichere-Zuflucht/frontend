@@ -1,14 +1,27 @@
 <template>
   <v-container
-    ><CoachingSelection @filter="filter" />
-    <div
-      v-for="(coaching, i) in filteredCoaches"
-      :key="i"
-      class="mt-5"
-      :coaching="coaching"
-    >
-      <Coaching :coach="coaching" /></div
-  ></v-container>
+    ><CoachingSelection :isCoach="false" @filter="filter" />
+    <div v-if="filteredCoaches.length > 0">
+      <div
+        v-for="(coaching, i) in filteredCoaches"
+        :key="i"
+        class="mt-5"
+        :coaching="coaching"
+      >
+        <Coaching :coach="coaching" />
+      </div>
+    </div>
+    <v-alert v-else color="primary" dark class="mt-8">
+      Keiner unserer Berater erfüllt diese Kriterien. Bitte passe die Kriterien
+      an unter "Filter anzeigen" oder kontaktiere uns unter:
+      <a
+        class="white--text"
+        href="mailto:kontakt@sichere-zuflucht.de"
+        target="_blank"
+        >kontakt@sichere-zuflucht.de</a
+      >
+    </v-alert></v-container
+  >
 </template>
 
 <script>
@@ -29,6 +42,7 @@ export default {
       .then((ref) => {
         ref.docs.forEach((doc) => {
           const data = doc.data()
+          // if (data.info !== false && data.verified && data.strapi)
           if (data.info) this.allCoaches.push({ id: doc.id, ...data })
         })
       })
@@ -40,18 +54,17 @@ export default {
       this.allCoaches.forEach((coach) => {
         let add = true
         // language
-        add =
+        /* add =
           add &&
           coach.info.languages.filter((value) => data.languages.includes(value))
-            .length >= 1
+            .length >= 1 */
         // topic
-        add = add && coach.info.topic === data.topic
+        add = add && coach.info.topic === data.topic.title
         // types
         add =
-          add &&
-          coach.info.types.findCoach((value) => data.types.includes(value))
-            .length >= 1
+          add && coach.info.types.filter((value) => data.types.includes(value))
         if (add) this.filteredCoaches.push(coach)
+        console.log(' --------- ')
       })
     },
   },

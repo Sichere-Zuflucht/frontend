@@ -2,7 +2,6 @@
   <v-form
     ref="form"
     v-model="valid"
-    lazy-validation
     style="width: 100%"
     class="mb-4"
     @submit="
@@ -40,7 +39,9 @@
             v-if="requestPassword"
             v-model="password"
             label="Passwort"
-            type="password"
+            :type="value ? 'password' : 'text'"
+            :append-icon="value ? 'mdi-eye' : 'mdi-eye-off'"
+            @click:append="() => (value = !value)"
             required
           ></v-text-field>
           <p v-else class="my-4">
@@ -69,9 +70,13 @@
             v-if="showConfirmation"
             color="success"
             class="white--text mt-4"
-            >Dir wurde eine Bestätigunsmail an {{ email }} geschickt. Bitte
+            >Eine Bestätigunsmail wurde an {{ email }} geschickt. Überprüfe
+            bitte auch den Spam Ordner, falls keine eMail ankommen sollte. Bitte
             folge den dort beschriebenen Anweisungen.</v-alert
           >
+          <v-alert v-if="error.status" color="error" class="white--text mt-4">{{
+            error.message
+          }}</v-alert>
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
@@ -81,6 +86,7 @@
 <script>
 export default {
   data: () => ({
+    value: String,
     e1: 1,
     valid: false,
     email: '',
@@ -96,6 +102,10 @@ export default {
     requestPassword: false,
     showRegister: false,
     buttonText: 'Registrieren',
+    error: {
+      status: false,
+      message: '',
+    },
   }),
   mounted() {
     const email = window.localStorage.getItem('emailForSignIn')
@@ -121,18 +131,23 @@ export default {
     },
     login() {
       this.loading = true
-      this.$nuxt.$fire.auth
+      this.$fire.auth
         .signInWithEmailAndPassword(this.email, this.password)
         .then(() => {
           this.loading = false
-          this.$router.push('/')
+          this.$router.push('/profile')
+        })
+        .catch((err) => {
+          this.loading = false
+          this.error.status = true
+          this.error.message = err.message
         })
     },
     register() {
       if (!this.$refs.form.validate()) return
       this.loading = true
 
-      this.$nuxt.$fire.auth
+      this.$fire.auth
         .sendSignInLinkToEmail(this.email, {
           url: this.$config.baseUrl + '/register',
           handleCodeInApp: true,
