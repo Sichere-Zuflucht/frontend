@@ -1,36 +1,39 @@
 <template>
-  <v-card
-    outlined
-    @click="coach.id ? $router.push('/beratung/' + coach.id) : ''"
-  >
-    <v-list-item three-line>
-      <v-list-item-content>
-        <div class="overline mb-4">
+  <v-card outlined @click="$router.push('/beratung/' + coach.id)">
+    <v-row>
+      <v-col cols="8">
+        <v-card-title>
           {{ coach.firstName }} {{ coach.lastName }}
-        </div>
-        <v-list-item-title class="mb-1">
-          {{ coach.info.topic }}
-        </v-list-item-title>
-        <v-list-item-subtitle class="mb-1">
-          <v-chip-group column active-class="primary--text"
-            ><v-chip v-for="tag in coach.info.types" :key="tag">
-              {{ tag }}
-            </v-chip>
-          </v-chip-group>
-        </v-list-item-subtitle>
-        <v-list-item-subtitle class="mb-1">
-          <v-chip-group column active-class="primary--text"
-            ><v-chip v-for="tag in coach.info.languages" :key="tag">
-              {{ tag }}
-            </v-chip>
-          </v-chip-group>
-        </v-list-item-subtitle>
-      </v-list-item-content>
-
-      <v-list-item-avatar size="80" color="grey"
-        ><v-img :src="coach.avatar"></v-img
-      ></v-list-item-avatar>
-    </v-list-item>
+        </v-card-title>
+        <v-card-subtitle>{{ coach.info.topic }}</v-card-subtitle>
+      </v-col>
+      <v-col cols="4"
+        ><v-card-title style="float: right"
+          ><v-avatar color="primary" size="56"
+            ><v-img :src="coach.avatar" /></v-avatar></v-card-title></v-col
+    ></v-row>
+    <v-card-text>
+      <v-chip-group label column
+        ><v-chip
+          v-for="tag in coach.info.types"
+          :key="tag"
+          label
+          color="primary"
+        >
+          <v-icon left> mdi-message </v-icon>{{ tag }}
+        </v-chip>
+      </v-chip-group>
+      <v-chip-group column
+        ><v-chip
+          v-for="tag in coach.info.languages"
+          :key="tag"
+          label
+          color="secondary"
+        >
+          <v-icon left> mdi-translate </v-icon>{{ tag }}
+        </v-chip>
+      </v-chip-group>
+    </v-card-text>
   </v-card>
 </template>
 

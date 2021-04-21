@@ -2,15 +2,20 @@
   <div v-if="data">
     <v-divider class="my-2"></v-divider>
     <v-alert color="red lighten-4">
-      Schließe folgende Punkte ab, um für die Frauen einsehbar zu werden:
-      <v-btn v-if="!data.info" class="my-2" to="beratung/registrierung">
-        Profil vervollständigen
+      <p>
+        Schließe folgende Punkte vollständig ab, um für die Frauen einsehbar zu
+        werden:
+      </p>
+      <v-btn v-if="!data.info" class="mr-2 mb-2" to="beratung/registrierung">
+        <v-icon small class="pr-2">mdi-account</v-icon> Profil
       </v-btn>
-      <v-btn v-if="!data.strapi" class="my-2" href="https://www.stripe.com">
-        Bezahlung einrichten
+      <v-btn v-if="!data.strapi" class="mr-2 mb-2" href="https://www.stripe.com"
+        ><v-icon small class="pr-2">mdi-credit-card-outline</v-icon>
+        Bezahlung
       </v-btn>
-      <v-btn v-if="!data.verified" class="my-2" to="personenverifizierung">
-        Account verifizieren</v-btn
+      <v-btn v-if="!data.verified" class="mr-2 mb-2" to="personenverifizierung">
+        <v-icon small class="pr-2">mdi-shield-check</v-icon>
+        Verifizierung</v-btn
       >
     </v-alert>
   </div>

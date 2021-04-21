@@ -14,7 +14,9 @@
         v-model="password"
         label="Passwort"
         :rules="passwordRules"
-        type="password"
+        :type="value ? 'password' : 'text'"
+        :append-icon="value ? 'mdi-eye' : 'mdi-eye-off'"
+        @click:append="() => (value = !value)"
         required
       ></v-text-field>
       <v-text-field
@@ -36,6 +38,7 @@ export default {
   name: 'ProfileInformation',
   data() {
     return {
+      value: String,
       valid: false,
       name: '',
       surName: '',
