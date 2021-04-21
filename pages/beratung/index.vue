@@ -1,7 +1,6 @@
 <template>
   <v-container>
-    <h1 class="text-h4">Übersicht</h1>
-    <span v-if="coachName">von {{ coachName }}</span>
+    <div v-if="coachName" class="text-h4">Hallo {{ coachName }}</div>
     <VerificationsAlert />
     <v-divider class="my-2"></v-divider>
     <!--    <Coaching v-if="user" :coach="user"></Coaching>-->
@@ -120,7 +119,9 @@
         </v-expansion-panel>
       </v-expansion-panels>
     </div>
-    <p v-else>Noch keine Anfragen vorhanden</p>
+    <p v-else>
+      Sobald eine Frau eine Anfrage stellt, wird dies hier aufgelistet.
+    </p>
     <v-btn @click="addStripe"> add stripe </v-btn>
     <div v-if="stripeRegisterURL">{{ stripeRegisterURL }}</div>
   </v-container>
