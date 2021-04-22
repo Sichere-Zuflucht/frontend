@@ -58,11 +58,14 @@ export default {
           add &&
           coach.info.languages.filter((value) => data.languages.includes(value))
             .length >= 1 */
-        // topic
-        add = add && coach.info.topic === data.topic.title
-        // types
+        // topicArea
+        add = add && coach.info.topicArea === data.topicArea.title
+        // topicPoints
         add =
-          add && coach.info.types.filter((value) => data.types.includes(value))
+          add &&
+          coach.info.topicPoints.filter((value) =>
+            data.topicPoints.includes(value)
+          )
         if (add) this.filteredCoaches.push(coach)
         console.log(' --------- ')
       })

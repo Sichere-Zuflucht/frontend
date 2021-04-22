@@ -1,11 +1,14 @@
 <template>
-  <v-card outlined @click="$router.push('/beratung/' + coach.id)">
+  <v-card
+    outlined
+    @click="clickable ? $router.push('/beratung/' + coach.id) : null"
+  >
     <v-row>
       <v-col cols="8">
         <v-card-title>
           {{ coach.firstName }} {{ coach.lastName }}
         </v-card-title>
-        <v-card-subtitle>{{ coach.info.topic }}</v-card-subtitle>
+        <v-card-subtitle>{{ coach.info.topicArea }}</v-card-subtitle>
       </v-col>
       <v-col cols="4"
         ><v-card-title style="float: right"
@@ -15,7 +18,7 @@
     <v-card-text>
       <v-chip-group label column
         ><v-chip
-          v-for="tag in coach.info.types"
+          v-for="tag in coach.info.topicPoints"
           :key="tag"
           label
           color="primary"
@@ -44,6 +47,10 @@ export default {
     coach: {
       type: Object,
       default: () => {},
+    },
+    clickable: {
+      type: Boolean,
+      default: true,
     },
   },
 }

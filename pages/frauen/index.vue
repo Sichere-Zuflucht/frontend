@@ -1,9 +1,12 @@
 <template>
   <v-container>
-    <h1>Frauen Dashboard</h1>
+    <h1>Deine Übersicht</h1>
     <div v-if="responses">
-      <h2>Deine Termine</h2>
-      <p v-if="responses.length === 0">Noch keine bestätigten Termine</p>
+      <h2>Deine Beratungstermine</h2>
+      <div v-if="responses.length === 0">
+        <p>Du hast noch keine Beratung gebucht</p>
+        <v-btn>Beratungsangebote ansehen</v-btn>
+      </div>
       <v-expansion-panels>
         <v-expansion-panel v-for="(response, i) in responses" :key="i">
           <v-expansion-panel-header>
@@ -12,7 +15,7 @@
           >
           <v-expansion-panel-content>
             <v-row class="mb-4">
-              <Coaching :coach="response.coach" />
+              <Coaching :coach="response.coach" :clickable="false" />
             </v-row>
             <div v-if="!response.acceptedDate">
               <v-row>

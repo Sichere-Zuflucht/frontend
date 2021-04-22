@@ -1,8 +1,8 @@
 <template>
   <v-container>
     <v-form v-model="valid">
-      <v-text-field v-model="surName" label="Vorname" required></v-text-field>
-      <v-text-field v-model="name" label="Nachname" required></v-text-field>
+      <v-text-field v-model="firstName" label="Vorname" required></v-text-field>
+      <v-text-field v-model="lastName" label="Nachname" required></v-text-field>
       <v-select
         v-model="membership"
         :items="memberships"
@@ -40,8 +40,8 @@ export default {
     return {
       value: String,
       valid: false,
-      name: '',
-      surName: '',
+      lastName: '',
+      firstName: '',
       password: '',
       password2: '',
       passwordRules: [
@@ -62,7 +62,7 @@ export default {
     }
   },
   mounted() {
-    window.$nuxt.$fire.firestore
+    this.$fire.firestore
       .collection('memberships')
       .get()
       .then((querySnapshot) => {
@@ -75,8 +75,8 @@ export default {
   methods: {
     updateProfile() {
       this.loading = true
-      const db = window.$nuxt.$fire.firestore
-      window.$nuxt.$fire.auth.currentUser
+      const db = this.$fire.firestore
+      this.$fire.auth.currentUser
         .updatePassword(this.password)
         .catch((e) => {
           console.error(e)
@@ -84,18 +84,20 @@ export default {
         })
         .then(() => {
           return this.$store.dispatch('modules/user/createFirebaseUser', {
-            uid: window.$nuxt.$fire.auth.currentUser.uid,
+            uid: this.$fire.auth.currentUser.uid,
             userData: {
-              firstName: this.surName,
-              lastName: this.name,
+              firstName: this.firstName,
+              lastName: this.lastName,
               avatar:
                 'https://picsum.photos/seed/' +
-                window.$nuxt.$fire.auth.currentUser.uid.substring(0, 8) +
+                this.$fire.auth.currentUser.uid.substring(0, 8) +
                 '/200',
               createdAt: new Date(),
-              userName: window.$nuxt.$fire.auth.currentUser.uid.substring(0, 8),
-              email: window.$nuxt.$fire.auth.currentUser.email,
+              userName: this.$fire.auth.currentUser.uid.substring(0, 8),
+              email: this.$fire.auth.currentUser.email,
               membership: db.collection('memberships').doc(this.membership.id),
+              stripe: false,
+              verified: false,
             },
           })
         })

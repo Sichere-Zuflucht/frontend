@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-container>
     <p>Fülle dein Profil aus</p>
     <v-divider></v-divider>
     <v-row v-if="!select" class="mt-3">
@@ -10,7 +10,7 @@
       :is-coach="true"
       @selection="updateProfile"
     />
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -26,11 +26,10 @@ export default {
     updateProfile(data) {
       this.profile = data
       this.select = false
-
       this.$store.dispatch('modules/user/setInfo', {
         info: {
-          topic: data.topic,
-          types: data.types,
+          topicArea: data.topicArea, // topic
+          topicPoints: data.topicPoints, // types
         },
         uid: this.user.uid,
       })

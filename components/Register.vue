@@ -28,7 +28,7 @@ export default {
   methods: {
     register() {
       // Confirm the link is a sign-in with email link.
-      if (window.$nuxt.$fire.auth.isSignInWithEmailLink(window.location.href)) {
+      if (this.$fire.auth.isSignInWithEmailLink(window.location.href)) {
         const email = window.localStorage.getItem('emailForSignIn')
         if (email) {
           this.email = email
@@ -38,7 +38,7 @@ export default {
     },
     login() {
       // The client SDK will parse the code from the link for you.
-      window.$nuxt.$fire.auth
+      this.$fire.auth
         .signInWithEmailLink(this.email, window.location.href)
         .then((result) => {
           window.localStorage.removeItem('emailForSignIn')

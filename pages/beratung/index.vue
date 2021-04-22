@@ -3,10 +3,10 @@
     <div v-if="coachName" class="text-h4">Hallo {{ coachName }}</div>
     <VerificationsAlert />
     <v-divider class="my-2"></v-divider>
-    <!--    <Coaching v-if="user" :coach="user"></Coaching>-->
+    <!--    <Coaching v-if="user" :coach="user"></Coaching> -->
     <p class="text-uppercase font-weight-bold">Anfragen:</p>
 
-    <div v-if="women.length != 0">
+    <div v-if="requests.length != 0">
       <v-expansion-panels>
         <v-expansion-panel v-for="(item, i) in requests" :key="i">
           <v-expansion-panel-header>
@@ -132,7 +132,6 @@ export default {
   data() {
     return {
       user: {},
-      women: [],
       requests: [],
       stripeRegisterURL: null,
     }
@@ -146,7 +145,9 @@ export default {
     this.user = this.$store.getters['modules/user/user']
     this.$nuxt.$fire.functions
       .httpsCallable('request-getRequests')()
-      .then((requests) => this.requests.push(...requests.data))
+      .then((requests) => {
+        this.requests.push(...requests.data)
+      })
   },
   methods: {
     addSuggestions(request) {
