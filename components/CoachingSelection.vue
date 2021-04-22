@@ -47,13 +47,13 @@
                 }}</small>
               </v-stepper-step>
               <v-stepper-content step="1">
-                <v-chip-group v-model="topic" column mandatory>
+                <v-chip-group v-model="selectedTopic" column mandatory>
                   <v-chip
                     v-for="(t, i) in topics"
                     :key="i"
                     :value="t"
                     active-class="primary"
-                    >{{ t.title }}</v-chip
+                    >{{ t.topicArea }}</v-chip
                   >
                 </v-chip-group>
                 <v-btn color="primary" @click="update(2)"> Weiter</v-btn>
@@ -65,9 +65,14 @@
                 }}</small>
               </v-stepper-step>
               <v-stepper-content step="2">
-                <v-chip-group v-model="type" column mandatory multiple>
+                <v-chip-group
+                  v-model="selectedTopicPoints"
+                  column
+                  mandatory
+                  multiple
+                >
                   <v-chip
-                    v-for="(t, i) in topic.area"
+                    v-for="(t, i) in selectedTopic.topicPoints"
                     :key="i"
                     :value="t"
                     active-class="primary"
@@ -96,7 +101,6 @@ export default {
   },
   data() {
     return {
-      radioGroup: 1,
       coach: {
         langTitle: 'Sprachen',
         langSubtitle: 'In welchen Sprachen bietest du Kurse an',
@@ -115,11 +119,9 @@ export default {
       },
       possibleLangs: [{ title: 'deutsch', value: 'german' }],
       languages: ['german'],
-      topic: '',
-      type: [],
-      collection: [],
       topics: [],
-      types: [],
+      selectedTopic: '',
+      selectedTopicPoints: [],
       e6: 1,
       panel: [0],
       open: true,
@@ -133,25 +135,25 @@ export default {
         querySnapshot.forEach((doc) => {
           this.topics.push(doc.data())
         })
-        this.topic = this.topics[0].title
+        // this.selectedTopic = this.topics[0]
       })
   },
   methods: {
     finish() {
       this.open = false
       const data = {
-        topic: this.topic,
-        types: this.type,
+        topicArea: this.selectedTopic.topicArea,
+        topicPoints: this.selectedTopicPoints,
       }
       this.$emit('selection', data)
     },
     update(val) {
-      this.type = []
+      this.selectedTopicPoints = []
       this.e6 = val
       this.$emit('filter', {
         // languages: this.languages,
-        topic: this.topic,
-        types: this.type,
+        topicArea: this.selectedTopic.topicArea,
+        topicPoints: this.selectedTopicPoints,
       })
     },
   },

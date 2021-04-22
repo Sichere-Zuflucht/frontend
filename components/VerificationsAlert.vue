@@ -1,5 +1,5 @@
 <template>
-  <div v-if="data">
+  <div v-if="data && !data.info && !data.stripe && !data.verified">
     <v-divider class="my-2"></v-divider>
     <v-alert color="red lighten-4">
       <p>
@@ -9,7 +9,7 @@
       <v-btn v-if="!data.info" class="mr-2 mb-2" to="beratung/registrierung">
         <v-icon small class="pr-2">mdi-account</v-icon> Profil
       </v-btn>
-      <v-btn v-if="!data.strapi" class="mr-2 mb-2" href="https://www.stripe.com"
+      <v-btn v-if="!data.stripe" class="mr-2 mb-2" href="https://www.stripe.com"
         ><v-icon small class="pr-2">mdi-credit-card-outline</v-icon>
         Bezahlung
       </v-btn>
@@ -19,7 +19,7 @@
       >
     </v-alert>
   </div>
-  <!--<v-expansion-panels v-if="data">
+  <!-- <v-expansion-panels v-if="data">
     <v-expansion-panel v-if="!data.info">
       <v-expansion-panel-header color="secondary" class="white--text">
         <b>Profil vervollständigen.</b>
@@ -68,7 +68,7 @@
         </p>
       </v-expansion-panel-content>
     </v-expansion-panel>
-  </v-expansion-panels>-->
+  </v-expansion-panels> -->
 </template>
 
 <script>
@@ -80,7 +80,7 @@ export default {
   },
   mounted() {
     const uid = this.$store.getters['modules/user/uid']
-    const db = window.$nuxt.$fire.firestore
+    const db = this.$fire.firestore
     db.collection('users')
       .doc(uid)
       .get()

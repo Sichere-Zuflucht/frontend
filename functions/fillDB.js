@@ -48,10 +48,6 @@ admin
     title: 'Psychologische Hilfe',
   })
 
-admin.firestore().collection('users').doc('a').set({
-  email: 'fellnerseb@gmail.com',
-})
-
 admin
   .firestore()
   .collection('requests')

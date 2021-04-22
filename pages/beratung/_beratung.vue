@@ -3,9 +3,10 @@
     <v-img :lazy-src="coach.avatar" :src="coach.avatar"></v-img>
     <v-container>
       <h1 class="text-center">{{ coach.firstName }} {{ coach.lastName }}</h1>
+      {{ coach.info.topicArea }}
       <div class="d-flex flex-wrap">
         <v-chip
-          v-for="tag in coach.info.types"
+          v-for="tag in coach.info.topicPoints"
           :key="tag"
           label
           color="primary"
@@ -118,7 +119,7 @@ export default {
       .doc(this.coachUID)
       .get()
       .then((e) => {
-        e.data().verified && e.data().strapi && e.data().info !== false
+        e.data().verified && e.data().stripe && e.data().info !== false
           ? (this.coach = e.data())
           : this.$router.push('/')
       })
@@ -132,6 +133,7 @@ export default {
           coachName: this.coachName,
           message: this.message,
           coachUID: this.coachUID,
+          createdAt: new Date(),
         })
         .then(() => {
           this.buttonText = 'versendet'

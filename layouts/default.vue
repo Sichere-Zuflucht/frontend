@@ -1,59 +1,54 @@
 <template>
   <v-app light>
     <client-only>
-      <v-navigation-drawer v-model="drawer" app class="primary" dark right>
-        <v-list v-if="!loggedIn">
+      <v-navigation-drawer v-model="drawer" app class="primary" dark>
+        <v-list v-if="loggedIn">
           <v-list-item
-            v-for="(none, i) in noUser"
+            v-for="(item, i) in loggedInUser"
             :key="i"
-            :to="none.to"
-            nuxt
-            exact
-          >
-            <v-list-item-content>
-              <v-list-item-title v-text="none.title" />
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-        <v-list v-else>
-          <v-list-item
-            v-for="(loggedin, i) in loggedInUser"
-            :key="i"
-            :to="loggedin.to"
+            :to="item.to"
             nuxt
             exact
           >
             <v-list-item-icon>
-              <v-icon>{{ loggedin.icon }}</v-icon>
+              <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title v-text="loggedin.title" />
+              <v-list-item-title v-text="item.title" />
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item>
+            <v-btn block to="/" @click="logout">Abmelden</v-btn>
+          </v-list-item>
+        </v-list>
+        <v-list v-else>
+          <v-list-item
+            v-for="(item, i) in noUser"
+            :key="i"
+            :to="item.to"
+            nuxt
+            exact
+          >
+            <v-list-item-content>
+              <v-list-item-title v-text="item.title" />
             </v-list-item-content>
           </v-list-item>
         </v-list>
-        <template #append>
-          <div class="pa-2">
-            <v-btn block to="/" @click="test">test</v-btn>
-            <v-btn block to="/" @click="logout">Logout</v-btn>
-          </div>
-        </template>
       </v-navigation-drawer>
     </client-only>
     <v-app-bar app>
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      <v-spacer />
       <v-toolbar-title class="pa-0"
         ><v-img contain width="150" src="Sichere-Zuflucht-Logo.svg"
       /></v-toolbar-title>
       <v-spacer />
-      <v-btn @click="test"> t </v-btn>
       <client-only>
-        <v-btn v-if="!loggedIn" to="login"> Login </v-btn>
-
-        <v-btn v-else to="profile" icon
+        <v-btn v-if="loggedIn" to="profile" icon
           ><v-avatar color="primary" size="38"
             ><v-img :src="user.avatar" /></v-avatar
         ></v-btn>
       </client-only>
-      <v-app-bar-nav-icon right @click.stop="drawer = !drawer" />
     </v-app-bar>
     <v-main>
       <nuxt class="pb-8" />
@@ -93,7 +88,22 @@ export default {
         },
         {
           icon: 'mdi-account-box',
-          title: 'Account',
+          title: 'Mein Profil',
+          to: '/profile',
+        },
+        {
+          icon: 'mdi-email',
+          title: 'Mein Postfach',
+          to: '/profile',
+        },
+        {
+          icon: 'mdi-comment-account',
+          title: 'Meine Beratungen',
+          to: '/profile',
+        },
+        {
+          icon: 'mdi-credit-card',
+          title: 'Zahlungsanbieter',
           to: '/profile',
         },
       ],
@@ -144,7 +154,7 @@ export default {
     }
   },
   computed: {
-    // login: (that) => (!that.loggedIn ? 'Login' : 'Logout'),
+    loginText: (that) => (!that.loggedIn ? 'Login' : 'Logout'),
     loggedIn: (that) => {
       if (process.client)
         return that.$store.getters['modules/user/isAuthenticated']
@@ -153,14 +163,6 @@ export default {
     user: (that) => that.$store.getters['modules/user/user'],
   },
   methods: {
-    test() {
-      console.log(
-        'user: ',
-        this.user,
-        ' | state: ',
-        this.$store.state.modules.user
-      )
-    },
     login() {
       this.$router.push('/login')
     },

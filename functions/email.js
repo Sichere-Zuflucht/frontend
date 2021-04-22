@@ -22,7 +22,7 @@ async function sendMail(emailData) {
     .then((snap) => snap.data())
 
   const mailOptions = {
-    from: 's.fellner@sichere-zuflucht.de',
+    from: 'no-reply@sichere-zuflucht.de',
     to: email,
     subject: emailData.subject,
     html: emailData.html,
