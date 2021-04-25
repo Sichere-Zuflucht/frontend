@@ -3,6 +3,10 @@ const state = () => ({
   email: null,
   emailVerified: null,
   membership: null,
+  verifySetting: {
+    isVerifying: null,
+    verified: null,
+  },
 })
 
 const getters = {
@@ -20,6 +24,12 @@ const getters = {
   },
   membership(state) {
     return state.membership
+  },
+  isVerifying(state) {
+    return state.verifySetting.isVerifying
+  },
+  verified(state) {
+    return state.verifySetting.verified
   },
   routing(state) {
     if (state.membership) return state.membership.routing
@@ -56,6 +66,10 @@ const actions = {
     commit('setInfo', info)
     this.$fire.firestore.collection('users').doc(uid).update({ info })
   },
+  setVerify({ commit }, { uid, verifySetting }) {
+    commit('setVerify', verifySetting)
+    this.$fire.firestore.collection('users').doc(uid).update({ verifySetting })
+  },
   async createFirebaseUser({ commit }, { uid, userData }) {
     commit('setUserData', userData)
     await userData.membership.get().then((doc) => {
@@ -84,6 +98,10 @@ const mutations = {
   setInfo(state, info) {
     console.log('[STORE MUTATIONS] - setInfo:', info)
     state.info = info
+  },
+  setVerify(state, verifySetting) {
+    console.log('[STORE MUTATIONS] - setVerify:', state, verifySetting)
+    state.verifySetting = verifySetting
   },
   setMembership(state, membership) {
     console.log('[STORE MUTATIONS] - setMembership:', membership)

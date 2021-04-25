@@ -44,7 +44,7 @@
       /></v-toolbar-title>
       <v-spacer />
       <client-only>
-        <v-btn v-if="loggedIn" to="profile" icon
+        <v-btn v-if="loggedIn" to="profile" nuxt icon
           ><v-avatar color="primary" size="38"
             ><v-img :src="user.avatar" /></v-avatar
         ></v-btn>
@@ -161,6 +161,9 @@ export default {
       return false
     },
     user: (that) => that.$store.getters['modules/user/user'],
+    membership() {
+      return this.$store.getters['modules/user/membership']
+    },
   },
   methods: {
     login() {

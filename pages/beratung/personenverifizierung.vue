@@ -2,7 +2,8 @@
   <v-container>
     <div class="text-h4">Verifizieren</div>
     <p class="caption mt-2 mb-0">Status</p>
-    <v-card v-if="!isVerifying && !isVerified" elevation="2" class="pa-3">
+    <v-btn @click="test">t</v-btn>
+    <v-card v-if="!isVerifying && !verified" elevation="2" class="pa-3">
       <v-chip color="error" class="mt-2" text-color="white"
         >keine Verifizierung</v-chip
       >
@@ -13,8 +14,9 @@
       <div>
         <v-btn
           v-if="user"
+          @click="updateVerify"
           :href="
-            'mailto:kontakt@sichere-zuflucht.de?subject=Neue%20Anfrage%20con%20' +
+            'mailto:b.ulrich@sichere-zuflucht.de?subject=Neue%20Anfrage%20von%20' +
             user.uid
           "
           color="primary"
@@ -22,7 +24,7 @@
         >
       </div>
     </v-card>
-    <v-card v-else-if="isVerifying && !isVerified" elevation="2" class="pa-3">
+    <v-card v-else-if="isVerifying && !verified" elevation="2" class="pa-3">
       <v-chip color="orange" class="mt-2" text-color="white"
         >wird verifiziert...</v-chip
       >
@@ -35,7 +37,7 @@
         <v-btn
           v-if="user"
           :href="
-            'mailto:kontakt@sichere-zuflucht.de?subject=Hilfe%20bei%20der%20Verifizierung%20von%20' +
+            'mailto:b.ulrich@sichere-zuflucht.de?subject=Hilfe%20bei%20der%20Verifizierung%20von%20' +
             user.uid
           "
           color="primary"
@@ -47,22 +49,39 @@
       <v-chip color="success" class="mt-2" text-color="white"
         >verifiziert</v-chip
       >
-      <div class="text py-3">Sie sind erfolgreich Verifiziert</div>
+      <div class="text py-3">Sie sind erfolgreich verifiziert</div>
     </v-card>
   </v-container>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      isVerifying: true,
-      isVerified: false,
-    }
-  },
   computed: {
+    isVerifying() {
+      return this.$store.getters['modules/user/isVerifying']
+    },
+    verified() {
+      return this.$store.getters['modules/user/verified']
+    },
     user() {
       return this.$store.getters['modules/user/user']
+    },
+  },
+  methods: {
+    updateVerify() {
+      console.log(this.user.uid)
+      const uid = this.user.uid
+      const verifySetting = {
+        isVerifying: true,
+        verified: false,
+      }
+      this.$store.dispatch('modules/user/setVerify', {
+        uid,
+        verifySetting,
+      })
+    },
+    test() {
+      console.log(this.isVerifying, this.verified)
     },
   },
 }

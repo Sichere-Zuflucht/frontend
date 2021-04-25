@@ -42,8 +42,10 @@ export default {
       .then((ref) => {
         ref.docs.forEach((doc) => {
           const data = doc.data()
-          // if (data.info !== false && data.verified && data.strapi)
-          if (data.info) this.allCoaches.push({ id: doc.id, ...data })
+          console.log(data.info && data.verifySetting.verified && data.stripe)
+          if (data.info && data.verifySetting.verified && data.stripe)
+            this.allCoaches.push({ id: doc.id, ...data })
+          // if (data.info) this.allCoaches.push({ id: doc.id, ...data })
         })
       })
       .then((this.filteredCoaches = this.allCoaches))
