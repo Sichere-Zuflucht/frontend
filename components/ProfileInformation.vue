@@ -97,7 +97,10 @@ export default {
               email: this.$fire.auth.currentUser.email,
               membership: db.collection('memberships').doc(this.membership.id),
               stripe: false,
-              verified: false,
+              verifySetting: {
+                isVerifying: false,
+                verified: false,
+              },
             },
           })
         })

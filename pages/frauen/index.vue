@@ -5,7 +5,7 @@
       <h2>Deine Beratungstermine</h2>
       <div v-if="responses.length === 0">
         <p>Du hast noch keine Beratung gebucht</p>
-        <v-btn>Beratungsangebote ansehen</v-btn>
+        <v-btn to="findCoach" append>Beratungsangebote ansehen</v-btn>
       </div>
       <v-expansion-panels>
         <v-expansion-panel v-for="(response, i) in responses" :key="i">
