@@ -1,6 +1,9 @@
 <template>
-  <v-container
-    ><CoachingSelection :isCoach="false" @filter="filter" />
+  <v-container>
+    <h1 class="text-h1 primary--text mb-6">
+      Diese Berater*innen können dir helfen
+    </h1>
+    <CoachingSelection :isCoach="false" @filter="filter" />
     <div v-if="filteredCoaches.length > 0">
       <div
         v-for="(coaching, i) in filteredCoaches"
@@ -54,6 +57,7 @@ export default {
     filter(data) {
       this.filteredCoaches = []
       this.allCoaches.forEach((coach) => {
+        console.log()
         let add = true
         // language
         /* add =
@@ -61,7 +65,7 @@ export default {
           coach.info.languages.filter((value) => data.languages.includes(value))
             .length >= 1 */
         // topicArea
-        add = add && coach.info.topicArea === data.topicArea.title
+        add = add && coach.info.topicArea === data.topicArea
         // topicPoints
         add =
           add &&
@@ -69,7 +73,6 @@ export default {
             data.topicPoints.includes(value)
           )
         if (add) this.filteredCoaches.push(coach)
-        console.log(' --------- ')
       })
     },
   },

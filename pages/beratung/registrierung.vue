@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <p>Fülle dein Profil aus</p>
+    <h1>Bitte vervollständige dein Profil</h1>
     <v-divider></v-divider>
     <v-row v-if="!select" class="mt-3">
       {{ profile }}

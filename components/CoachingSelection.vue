@@ -1,24 +1,12 @@
 <template>
   <div>
-    <v-expansion-panels v-model="panel" multiple flat>
-      <v-expansion-panel>
-        <v-expand-transition>
-          <v-expansion-panel-header v-if="!open" class="mx-auto" hide-actions>
-            <v-row no-gutters>
-              <v-col class="text--secondary">
-                <v-fade-transition leave-absolute>
-                  <v-btn key="0" plain @click="open = true">
-                    Filter anzeigen
-                  </v-btn>
-                </v-fade-transition>
-              </v-col>
-            </v-row>
-          </v-expansion-panel-header>
-        </v-expand-transition>
-        <v-expand-transition>
-          <v-expansion-panel-content v-if="open">
-            <v-stepper v-model="e6" vertical>
-              <!--<v-stepper-step :complete="e6 > 1" editable step="1"
+    <div>
+      <v-btn plain @click="open = !open">
+        {{ open ? 'Filter verbergen' : 'Filter anzeigen' }}
+      </v-btn>
+    </div>
+    <v-stepper v-if="open" v-model="e6" vertical>
+      <!--<v-stepper-step :complete="e6 > 1" editable step="1"
                 >{{ isCoach ? coach.langTitle : women.langTitle }}
                 <small>{{
                   isCoach ? coach.langSubtitle : women.langSubtitle
@@ -40,52 +28,59 @@
                 </v-chip-group>
                 <v-btn color="primary" @click="update(2)"> Weiter</v-btn>
               </v-stepper-content>-->
-              <v-stepper-step :complete="e6 > 1" :editable="e6 > 1" step="1"
-                >{{ isCoach ? coach.helpTitle : women.helpTitle }}
-                <small>{{
-                  isCoach ? coach.helpSubtitle : women.helpSubtitle
-                }}</small>
-              </v-stepper-step>
-              <v-stepper-content step="1">
-                <v-chip-group v-model="selectedTopic" column mandatory>
-                  <v-chip
-                    v-for="(t, i) in topics"
-                    :key="i"
-                    :value="t"
-                    active-class="primary"
-                    >{{ t.topicArea }}</v-chip
-                  >
-                </v-chip-group>
-                <v-btn color="primary" @click="update(2)"> Weiter</v-btn>
-              </v-stepper-content>
-              <v-stepper-step :complete="e6 > 2" step="2"
-                >{{ isCoach ? coach.areaTitle : women.areaTitle }}
-                <small>{{
-                  isCoach ? coach.areaSubtitle : women.areaSubtitle
-                }}</small>
-              </v-stepper-step>
-              <v-stepper-content step="2">
-                <v-chip-group
-                  v-model="selectedTopicPoints"
-                  column
-                  mandatory
-                  multiple
-                >
-                  <v-chip
-                    v-for="(t, i) in selectedTopic.topicPoints"
-                    :key="i"
-                    :value="t"
-                    active-class="primary"
-                    >{{ t }}</v-chip
-                  >
-                </v-chip-group>
-                <v-btn color="primary" @click="finish"> Weiter</v-btn>
-              </v-stepper-content>
-            </v-stepper>
-          </v-expansion-panel-content>
-        </v-expand-transition>
-      </v-expansion-panel>
-    </v-expansion-panels>
+      <v-stepper-step
+        :complete="e6 > 1"
+        :editable="e6 > 1"
+        step="1"
+        color="secondary"
+        ><h2
+          class="text-h5 text-uppercase secondary--text"
+          style="text-shadow: none"
+        >
+          {{ isCoach ? coach.helpTitle : women.helpTitle }}
+        </h2>
+        <small>{{ isCoach ? coach.helpSubtitle : women.helpSubtitle }}</small>
+      </v-stepper-step>
+      <v-stepper-content step="1">
+        <v-chip-group v-model="selectedTopic" column mandatory>
+          <v-chip
+            v-for="(t, i) in topics"
+            :key="i"
+            :value="t"
+            active-class="primary primary--text"
+            outlined
+            >{{ t.topicArea }}</v-chip
+          >
+        </v-chip-group>
+        <v-btn color="primary" block @click="update(2)"
+          ><v-icon>mdi-check</v-icon></v-btn
+        >
+      </v-stepper-content>
+      <v-stepper-step :complete="e6 > 2" step="2" color="secondary"
+        ><h2
+          class="text-h5 text-uppercase secondary--text"
+          style="text-shadow: none"
+        >
+          {{ isCoach ? coach.areaTitle : women.areaTitle }}
+        </h2>
+        <small>{{ isCoach ? coach.areaSubtitle : women.areaSubtitle }}</small>
+      </v-stepper-step>
+      <v-stepper-content step="2">
+        <v-chip-group v-model="selectedTopicPoints" column mandatory multiple>
+          <v-chip
+            v-for="(t, i) in selectedTopic.topicPoints"
+            :key="i"
+            :value="t"
+            active-class="primary primary--text"
+            outlined
+            >{{ t }}</v-chip
+          >
+        </v-chip-group>
+        <v-btn color="primary" block @click="finish">
+          <v-icon>mdi-check</v-icon></v-btn
+        >
+      </v-stepper-content>
+    </v-stepper>
   </div>
 </template>
 <style>
@@ -112,10 +107,10 @@ export default {
       women: {
         langTitle: 'Sprache',
         langSubtitle: 'In welcher Sprache möchtest du beraten werden',
-        helpTitle: 'In welchem Themengebiet suchst du Hilfe',
-        helpSubtitle: 'Bitte wähle ein Themengebiet aus',
-        areaTitle: 'Worin genau suchst du Hilfe',
-        areaSubtitle: 'Bitte wähle ein Spezialgebiete aus',
+        helpTitle: 'Fachgebiet',
+        helpSubtitle: 'Bitte wähle ein Thema aus',
+        areaTitle: 'Themen',
+        areaSubtitle: 'Bitte wähle ein oder mehrere Themen aus',
       },
       possibleLangs: [{ title: 'deutsch', value: 'german' }],
       languages: ['german'],
@@ -145,6 +140,8 @@ export default {
         topicArea: this.selectedTopic.topicArea,
         topicPoints: this.selectedTopicPoints,
       }
+      console.log('transfer data: ', data)
+      this.$emit('filter', data)
       this.$emit('selection', data)
     },
     update(val) {

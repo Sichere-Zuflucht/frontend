@@ -10,7 +10,7 @@
           :key="tag"
           label
           color="primary"
-          class="ma-1"
+          class="mr-1 mb-1"
         >
           <v-icon left> mdi-message </v-icon>{{ tag }}
         </v-chip>
@@ -21,7 +21,7 @@
           :key="tag"
           label
           color="secondary"
-          class="ma-1"
+          class="mr-1 mb-1"
         >
           <v-icon left> mdi-translate </v-icon>{{ tag }}
         </v-chip>
@@ -119,7 +119,9 @@ export default {
       .doc(this.coachUID)
       .get()
       .then((e) => {
-        e.data().verified && e.data().stripe && e.data().info !== false
+        e.data().verifySetting.verified &&
+        e.data().stripe &&
+        e.data().info !== false
           ? (this.coach = e.data())
           : this.$router.push('/')
       })
