@@ -1,13 +1,25 @@
 <template>
   <v-container>
-    <h1>Deine Übersicht</h1>
+    <h1 class="text-h1 primary--text">Deine Übersicht</h1>
     <div v-if="responses">
-      <h2>Deine Beratungstermine</h2>
+      <h2 class="text-h2 secondary--text mt-6">Deine Beratungstermine</h2>
       <div v-if="responses.length === 0">
         <p>Du hast noch keine Beratung gebucht</p>
         <v-btn to="findCoach" append>Beratungsangebote ansehen</v-btn>
       </div>
-      <v-expansion-panels>
+      <v-slide-group class="py-4" show-arrows>
+        <v-slide-item v-for="(response, i) in responses" :key="i">
+          <v-card elevation="0" width="270" class="pa-1">
+            <Coaching
+              :coach="response.coach"
+              :response="response"
+              :clickable="false"
+              :small="true"
+            />
+          </v-card>
+        </v-slide-item>
+      </v-slide-group>
+      <!--<v-expansion-panels>
         <v-expansion-panel v-for="(response, i) in responses" :key="i">
           <v-expansion-panel-header>
             {{ response.coach.firstName }}
@@ -29,10 +41,12 @@
                 </v-col>
                 <v-col cols="5"
                   ><v-btn
-                    color="green"
+                    color="success"
                     :disabled="!date"
                     @click="accept(response, date)"
-                    >Zusagen</v-btn
+                    :loading="acceptLoading"
+                    :disable="acceptDisable"
+                    >{{ acceptText }}</v-btn
                   ></v-col
                 >
               </v-row>
@@ -44,50 +58,48 @@
             <div v-else>Zugesagt für {{ response.acceptedDate }}</div>
           </v-expansion-panel-content>
         </v-expansion-panel>
-      </v-expansion-panels>
+      </v-expansion-panels> -->
     </div>
     <v-divider class="my-3"></v-divider>
-    <v-container>
-      <v-row dense>
-        <v-col cols="12">
-          <v-card class="mx-auto" max-width="344">
-            <v-img
-              src="https://images.unsplash.com/photo-1604881991664-593b31b88488?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=934&q=80"
-              height="200px"
-            ></v-img>
+    <v-row dense>
+      <v-col cols="12">
+        <v-card class="mx-auto" max-width="344">
+          <v-img
+            src="https://images.unsplash.com/photo-1604881991664-593b31b88488?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=934&q=80"
+            height="200px"
+          ></v-img>
 
-            <v-card-title>Suchst du Hilfe? </v-card-title>
+          <v-card-title>Suchst du Hilfe? </v-card-title>
 
-            <v-card-subtitle> 1,000 miles of wonder </v-card-subtitle>
+          <v-card-subtitle> 1,000 miles of wonder </v-card-subtitle>
 
-            <v-card-actions>
-              <v-btn color="primary" to="findCoach" append text>
-                Beratung finden
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-col>
-        <v-col cols="12"
-          ><v-card class="mx-auto" max-width="344">
-            <v-img
-              src="https://images.unsplash.com/photo-1448582649076-3981753123b5?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
-              height="200px"
-            ></v-img>
+          <v-card-actions>
+            <v-btn color="primary" to="findCoach" append text>
+              Beratung finden
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+      <v-col cols="12"
+        ><v-card class="mx-auto" max-width="344">
+          <v-img
+            src="https://images.unsplash.com/photo-1448582649076-3981753123b5?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
+            height="200px"
+          ></v-img>
 
-            <v-card-title>Sucht du eine Wohnung? </v-card-title>
+          <v-card-title>Sucht du eine Wohnung? </v-card-title>
 
-            <v-card-subtitle> 1,000 miles of wonder </v-card-subtitle>
+          <v-card-subtitle> 1,000 miles of wonder </v-card-subtitle>
 
-            <v-card-actions>
-              <v-btn color="primary" to="wohnungssuche" append text>
-                Wohnungssuche anfragen
-              </v-btn>
-            </v-card-actions>
-          </v-card></v-col
-        >
-      </v-row>
-      <v-btn @click="test"></v-btn>
-    </v-container>
+          <v-card-actions>
+            <v-btn color="primary" to="wohnungssuche" append text>
+              Wohnungssuche anfragen
+            </v-btn>
+          </v-card-actions>
+        </v-card></v-col
+      >
+    </v-row>
+    <v-btn @click="test"></v-btn>
   </v-container>
 </template>
 
@@ -98,6 +110,9 @@ export default {
       userData: null,
       responses: [],
       date: null,
+      acceptText: 'Zusagen',
+      acceptLoading: false,
+      acceptDisable: false,
     }
   },
   computed: {
@@ -151,7 +166,7 @@ export default {
         })
     },
     cancel(coaching) {
-      const db = window.$nuxt.$fire.firestore
+      const db = this.$fire.firestore
       db.collection('users/' + coaching.id + '/requests')
         .doc(this.$store.state.user.uid)
         .delete()
@@ -160,11 +175,17 @@ export default {
         .delete()
     },
     accept(response, date) {
-      this.$nuxt.$fire.functions.httpsCallable('request-acceptDate')({
-        coachName: response.coach.firstName + ' ' + response.coach.lastName,
-        acceptedDate: date,
-        requestId: response.id,
-      })
+      this.acceptLoading = true
+      this.$fire.functions
+        .httpsCallable('request-acceptDate')({
+          coachName: response.coach.firstName + ' ' + response.coach.lastName,
+          acceptedDate: date,
+          requestId: response.id,
+        })
+        .then(() => {
+          this.acceptText = 'Zugesagt'
+          this.acceptDisable = true
+        })
 
       response.acceptedDate = date
     },

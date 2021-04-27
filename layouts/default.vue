@@ -33,6 +33,10 @@
               <v-list-item-title v-text="item.title" />
             </v-list-item-content>
           </v-list-item>
+          <v-spacer />
+          <v-list-item>
+            <v-btn block to="signup">Anmelden</v-btn>
+          </v-list-item>
         </v-list>
       </v-navigation-drawer>
     </client-only>
@@ -44,7 +48,7 @@
       /></v-toolbar-title>
       <v-spacer />
       <client-only>
-        <v-btn v-if="loggedIn" to="profile" nuxt icon
+        <v-btn v-if="loggedIn" to="/profile" nuxt exact icon
           ><v-avatar color="primary" size="38"
             ><v-img :src="user.avatar" /></v-avatar
         ></v-btn>

@@ -32,7 +32,15 @@ export default {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: '' },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: base + '/favicon.ico' }],
+    link: [
+      { rel: 'icon', type: 'image/x-icon', href: base + '/favicon.ico' },
+      { rel: 'preconnect', href: 'https://fonts.gstatic.com' },
+      {
+        href:
+          'https://fonts.googleapis.com/css2?family=Exo:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap',
+        rel: 'stylesheet',
+      },
+    ],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -99,13 +107,17 @@ export default {
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
+    treeShake: true,
+    options: {
+      customProperties: true,
+    },
     theme: {
       dark: false,
       themes: {
         light: {
-          primary: colors.purple.lighten3,
-          accent: colors.grey.darken3,
-          secondary: colors.amber.darken3,
+          primary: colors.pink.lighten3, // purple.lighten3,
+          accent: colors.pink.darken4, // grey.darken3,
+          secondary: colors.yellow.darken3, // amber.darken3,
           info: colors.teal.lighten1,
           warning: colors.amber.base,
           error: colors.deepOrange.accent4,

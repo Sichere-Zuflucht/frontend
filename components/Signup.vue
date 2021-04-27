@@ -13,9 +13,7 @@
     <v-stepper v-model="e1">
       <v-stepper-items>
         <v-stepper-content step="1">
-          <p class="my-4">
-            Füge eine eMail ein, um dich einzuloggen / zu registrieren.
-          </p>
+          <p class="my-4">Füge eine eMail ein, um dich bei uns anzumelden.</p>
           <v-text-field
             v-model="email"
             type="email"
@@ -46,7 +44,7 @@
           ></v-text-field>
           <p v-else class="my-4">
             Willst du dich mit der eMail <b>{{ email }}</b> bei Sichere Zuflucht
-            zu registrieren?
+            registrieren?
           </p>
           <v-btn
             v-if="requestPassword"
@@ -66,6 +64,15 @@
             >{{ buttonText }}</v-btn
           >
           <v-btn text class="inline" @click="e1 = 1"> Zurück </v-btn>
+          <p
+            v-if="!showConfirmation && !requestPassword"
+            class="text--disabled caption mt-4"
+          >
+            Mit dem Absenden dieser Daten stimmen Sie unseren
+            Nutzungsbedingungen zu. Sie können sich jederzeit, ohne Angaben von
+            Gründen und ohne zeitliche Bindung, vom Portal Sichere Zuflucht
+            abmelden.
+          </p>
           <v-alert
             v-if="showConfirmation"
             color="success"
