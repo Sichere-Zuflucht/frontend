@@ -20,13 +20,15 @@
       </div>
     </div>
     <v-card-text class="pt-0">
-      <p class="text-uppercase font-weight-bold mb-1">Fachgebiet</p>
+      <p class="text-uppercase font-weight-bold mb-1 mt-2 caption">
+        Fachgebiet
+      </p>
       <div class="d-flex flex-wrap">
         <v-chip label outlined color="primary" class="mr-1 mb-1">
           {{ coach.info.topicArea }}
         </v-chip>
       </div>
-      <p class="text-uppercase font-weight-bold mb-1">Themen</p>
+      <p class="text-uppercase font-weight-bold mb-1 mt-2 caption">Themen</p>
       <div class="d-flex flex-wrap">
         <v-chip
           v-for="tag in coach.info.topicPoints"
@@ -58,7 +60,7 @@
             <v-select
               v-model="date"
               :items="response.suggestions"
-              label="Termin"
+              label="vorg. Termine"
               dense
             ></v-select>
           </v-col>
@@ -74,8 +76,19 @@
           >
         </v-row>
         <v-row class="mb-2"
-          ><v-btn plain @click="cancel(response)">Absagen</v-btn
-          ><v-spacer /><v-btn plain color="orange">Nachfragen</v-btn>
+          ><v-btn
+            color="success"
+            :disabled="!date"
+            @click="getRedLink(response, date)"
+            :loading="acceptLoading"
+            :disable="acceptDisable"
+            >{{ acceptText }}</v-btn
+          ><v-btn plain color="orange">Nachfragen</v-btn><spacer /><v-btn
+            plain
+            @click="cancel(response)"
+            class="pa-0"
+            >Absagen</v-btn
+          >
         </v-row>
       </div>
       <div v-else>

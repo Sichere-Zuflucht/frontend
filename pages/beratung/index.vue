@@ -1,10 +1,11 @@
 <template>
   <v-container>
-    <div v-if="coachName" class="text-h4">Hallo {{ coachName }}</div>
+    <p class="caption mb-0 font-weight-bold">Hallo</p>
+    <h1 v-if="coachName" class="text-h1 secondary--text">{{ coachName }}</h1>
     <VerificationsAlert />
     <v-divider class="my-2"></v-divider>
     <!--    <Coaching v-if="user" :coach="user"></Coaching> -->
-    <p class="text-uppercase font-weight-bold">Anfragen:</p>
+    <h2 class="primary--text">Anfragen:</h2>
 
     <div v-if="requests.length != 0">
       <v-expansion-panels>
@@ -114,7 +115,6 @@
                 </div>
 
                 <v-banner v-else>
-                  <v-btn @click="show(item)">{{ item.acceptedDate }}</v-btn>
                   Es wurde noch kein Termin bestätigt...
                 </v-banner>
               </v-card-actions>
@@ -126,11 +126,10 @@
         </v-expansion-panel>
       </v-expansion-panels>
     </div>
-    <p v-else>
-      Sobald eine Frau eine Anfrage stellt, wird dies hier aufgelistet.
+    <p v-else class="caption">
+      <b>Noch keine existierenden Anfragen.</b><br />
+      Sobald eine Frau eine Anfrage an Sie stellt, wird diese hier angezeigt.
     </p>
-    <v-btn @click="addStripe"> add stripe </v-btn>
-    <div v-if="stripeRegisterURL">{{ stripeRegisterURL }}</div>
   </v-container>
 </template>
 
@@ -140,7 +139,6 @@ export default {
     return {
       user: {},
       requests: [],
-      stripeRegisterURL: null,
       videoTypes: ['Jitsi', 'RED'],
       selectedVideoType: 'Jitsi',
     }
@@ -171,16 +169,6 @@ export default {
     eraseDate(d, list) {
       const d2 = d + d
       d === 0 ? list.splice(d) : list.splice(d, d2)
-    },
-    show() {
-      console.log(this.requests)
-    },
-    addStripe() {
-      this.$fire.functions
-        .httpsCallable('stripe-getStripeLink')({ email: this.user.email })
-        .then((stripeData) => {
-          this.stripeRegisterURL = stripeData.data.url
-        })
     },
   },
 }
