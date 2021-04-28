@@ -74,6 +74,7 @@ exports.addSuggestions = functions.https.onCall(async (data, context) => {
             ),
             suggestions: data.suggestions,
             coachAnswered: true,
+            videoType: data.videoType,
             updatedAt: new Date(),
           },
           { merge: true }
@@ -107,6 +108,8 @@ exports.acceptDate = functions.https.onCall(async (data, context) => {
             ),
             acceptedDate: data.acceptedDate,
             updatedAt: new Date(),
+            jitsiLink: data.jitsiLink,
+            redLink: data.redLink,
           },
           { merge: true }
         )

@@ -55,7 +55,14 @@
               <v-card-actions class="d-inline-flex">
                 <div v-if="!item.coachAnswered">
                   <v-divider></v-divider>
-
+                  <v-select
+                    v-model="selectedVideoType"
+                    :items="videoTypes"
+                    single-line
+                    persistent-hint
+                    hint="Wähle einen Video Anbieter"
+                    class="mb-4"
+                  ></v-select>
                   <v-list>
                     <v-list-item-group>
                       <v-list-item
@@ -75,12 +82,14 @@
                       </v-list-item>
                     </v-list-item-group>
                   </v-list>
+
                   <DatePicker :item="item" />
                   <p class="mt-2 pa-2 caption">
                     Bitte füge mind. 3 Termine hinzu.
                   </p>
+
                   <v-btn
-                    v-if="item.suggestions.length >= 3"
+                    :disabled="item.suggestions.length < 3"
                     color="success"
                     @click="addSuggestions(item)"
                     >Zusagen
@@ -92,17 +101,15 @@
                   <b>{{ item.acceptedDate }} </b>
                   <v-divider></v-divider>
                   <v-btn
-                    :href="'https://meet.jit.si/' + item.jitsiRoom"
                     class="my-2"
                     color="success"
-                    >zum Jitsi Videocall
-                  </v-btn>
-                  <v-btn
-                    class="my-2"
-                    color="primary"
-                    href="https://arzt.redmedical.de/#/auth/login"
-                    outlined
-                    >zum RED Videocall
+                    target="_blank"
+                    :href="
+                      item.videoType === 'Jitsi'
+                        ? item.jitsiLink
+                        : item.redLink.codeArzt
+                    "
+                    >zum Videocall
                   </v-btn>
                 </div>
 
@@ -134,6 +141,8 @@ export default {
       user: {},
       requests: [],
       stripeRegisterURL: null,
+      videoTypes: ['Jitsi', 'RED'],
+      selectedVideoType: 'Jitsi',
     }
   },
   computed: {
@@ -143,18 +152,20 @@ export default {
   },
   mounted() {
     this.user = this.$store.getters['modules/user/user']
-    this.$nuxt.$fire.functions
+    this.$fire.functions
       .httpsCallable('request-getRequests')()
       .then((requests) => {
         this.requests.push(...requests.data)
+        console.log('requests: ', this.requests)
       })
   },
   methods: {
     addSuggestions(request) {
-      this.$nuxt.$fire.functions.httpsCallable('request-addSuggestions')({
+      this.$fire.functions.httpsCallable('request-addSuggestions')({
         coachName: this.coachName,
         suggestions: request.suggestions,
         requestId: request.id,
+        videoType: this.selectedVideoType,
       })
     },
     eraseDate(d, list) {
