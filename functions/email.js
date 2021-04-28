@@ -3,6 +3,8 @@ const admin = require('firebase-admin')
 const nodemailer = require('nodemailer')
 admin.initializeApp()
 
+const { verificationNotificationMail } = require('./emailTemplates')
+
 const transporter = nodemailer.createTransport({
   host: 'smtp.sendgrid.net',
   port: 465,
@@ -22,8 +24,19 @@ async function sendMail(emailData) {
     .then((snap) => snap.data())
 
   const mailOptions = {
-    from: 'no-reply@sichere-zuflucht.de',
+    from: 's.fellner@sichere-zuflucht.de',
     to: email,
+    subject: emailData.subject,
+    html: emailData.html,
+  }
+
+  return transporter.sendMail(mailOptions)
+}
+
+function sendNotificationMailToSZ(emailData) {
+  const mailOptions = {
+    from: 's.fellner@sichere-zuflucht.de',
+    to: 'kontakt@sichere-zuflucht.de',
     subject: emailData.subject,
     html: emailData.html,
   }
@@ -59,3 +72,13 @@ exports.sendMail = functions.firestore
     // now update all emails
     return change.after.ref.set({ eMails }, { merge: true })
   })
+
+exports.sendVerifyAccMail = functions.https.onCall(async (data, context) => {
+  const { email } = await admin
+    .firestore()
+    .collection('users')
+    .doc(context.auth.uid)
+    .get()
+    .then((snap) => snap.data())
+  return sendNotificationMailToSZ(verificationNotificationMail(email))
+})

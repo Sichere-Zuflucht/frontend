@@ -64,16 +64,7 @@
               dense
             ></v-select>
           </v-col>
-          <v-col cols="5"
-            ><v-btn
-              color="success"
-              :disabled="!date"
-              @click="getRedLink(response, date)"
-              :loading="acceptLoading"
-              :disable="acceptDisable"
-              >{{ acceptText }}</v-btn
-            ></v-col
-          >
+          <v-col cols="5">Preis: 60€</v-col>
         </v-row>
         <v-row class="mb-2"
           ><v-btn
@@ -144,7 +135,7 @@ export default {
       const data = {
         method: 'getEntrycodes',
         date: dateInput,
-        token: this.$config.redAPI,
+        token: this.$config.RED_API,
       }
       const response = await fetch(
         'https://redclient.redmedical.de/service/video',

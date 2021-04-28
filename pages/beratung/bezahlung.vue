@@ -83,17 +83,9 @@ export default {
         })
     },
     run() {
-      /* fetch('https://api.stripe.com/v1/accounts/' + this.user.stripe.id, {
-        headers: {
-          Authorization:
-            'Bearer sk_test_51IbjZeFRsEq5IriE4dP2xjLM2WP3lu3Nmqe7DBze4XDXSLUroQdXZW2jwKuG4WtmQVLCXMktsuNuU7N1h6AD8LxH00Avd7UeQy',
-        },
-      }) */
-
       fetch('https://api.stripe.com/v1/payment_intents', {
         headers: {
-          Authorization:
-            'Bearer sk_test_51IbjZeFRsEq5IriE4dP2xjLM2WP3lu3Nmqe7DBze4XDXSLUroQdXZW2jwKuG4WtmQVLCXMktsuNuU7N1h6AD8LxH00Avd7UeQy',
+          Authorization: 'Bearer ' + this.$config.STRIPE_SK,
         },
       })
         .then((response) => response.json())
@@ -105,8 +97,7 @@ export default {
     more(pi) {
       fetch('https://api.stripe.com/v1/payment_intents/' + pi, {
         headers: {
-          Authorization:
-            'Bearer sk_test_51IbjZeFRsEq5IriE4dP2xjLM2WP3lu3Nmqe7DBze4XDXSLUroQdXZW2jwKuG4WtmQVLCXMktsuNuU7N1h6AD8LxH00Avd7UeQy',
+          Authorization: 'Bearer ' + this.$config.STRIPE_SK,
         },
       })
         .then((response) => response.json())

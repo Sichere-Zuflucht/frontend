@@ -67,3 +67,14 @@ exports.coachAcceptedDate = (coachName, date, coachID) => {
     sent: false,
   }
 }
+
+exports.verificationNotificationMail = (email) => {
+  return {
+    subject: 'Sichere Zuflucht - Verifizierungsanfrage',
+    html: `<div style="font-size: 16px;">Verifizierung Anfrage<br><br>
+    eine Person möchte sich von uns Verifizieren lassen.
+    <br>
+    <span style="font-family: monospace; margin-left: 2em">"${email}"</span>
+    </div>`,
+  }
+}
