@@ -6,8 +6,8 @@
       <h2 class="text-h2 secondary--text">Was möchtest du?</h2>
       <v-radio-group mandatory v-model="membership">
         <v-radio
-          v-for="n in memberships"
-          :key="n"
+          v-for="(n, i) in memberships"
+          :key="i"
           :label="n.description"
           :value="n"
           class="align-start"
@@ -147,9 +147,9 @@ export default {
           this.showError = true
         })
         .then(() => {
-          return this.$store.dispatch('modules/user/createFirebaseUser', {
-            uid: this.$fire.auth.currentUser.uid,
-            userData: {
+          let createdUserData = {}
+          if (this.membership.id === 'Coach') {
+            createdUserData = {
               firstName: this.firstName,
               lastName: this.lastName,
               avatar:
@@ -167,7 +167,28 @@ export default {
                 isVerifying: false,
                 verified: false,
               },
-            },
+            }
+          } else {
+            createdUserData = {
+              firstName: this.firstName,
+              lastName: this.lastName,
+              avatar:
+                'https://picsum.photos/seed/' +
+                this.$fire.auth.currentUser.uid.substring(0, 8) +
+                '/200',
+              createdAt: new Date(),
+              userName: this.$fire.auth.currentUser.uid.substring(0, 8),
+              email: this.$fire.auth.currentUser.email,
+              membership: db.collection('memberships').doc(this.membership.id),
+              verifySetting: {
+                isVerifying: false,
+                verified: false,
+              },
+            }
+          }
+          return this.$store.dispatch('modules/user/createFirebaseUser', {
+            uid: this.$fire.auth.currentUser.uid,
+            userData: createdUserData,
           })
         })
         .then(() => {

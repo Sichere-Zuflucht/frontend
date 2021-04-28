@@ -44,9 +44,11 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-spacer />
       <v-toolbar-title class="pa-0"
-        ><v-img contain width="150" src="Sichere-Zuflucht-Logo.svg"
-      /></v-toolbar-title>
+        ><v-btn to="/" nuxt exact text plain :ripple="false"
+          ><v-img contain width="150" src="Sichere-Zuflucht-Logo.svg" /></v-btn
+      ></v-toolbar-title>
       <v-spacer />
+      <div v-if="!loggedIn" style="width: 48px"></div>
       <client-only>
         <v-btn v-if="loggedIn" to="/profile" nuxt exact icon
           ><v-avatar color="primary" size="38"

@@ -5,7 +5,9 @@
       <h2 class="text-h2 secondary--text mt-6">Deine Beratungstermine</h2>
       <div v-if="responses.length === 0">
         <p>Du hast noch keine Beratung gebucht</p>
-        <v-btn to="findCoach" append>Beratungsangebote ansehen</v-btn>
+        <v-btn to="findCoach" color="secondary" append
+          >Beratungsangebote ansehen</v-btn
+        >
       </div>
       <v-slide-group class="py-4" show-arrows>
         <v-slide-item v-for="(response, i) in responses" :key="i">
@@ -61,7 +63,7 @@
       </v-expansion-panels> -->
     </div>
     <v-divider class="my-3"></v-divider>
-    <v-row dense>
+    <v-row>
       <v-col cols="12">
         <v-card class="mx-auto" max-width="344">
           <v-img
@@ -69,15 +71,18 @@
             height="200px"
           ></v-img>
 
-          <v-card-title>Suchst du Hilfe? </v-card-title>
+          <v-card-title class="text-h3 secondary--text font-weight-bold mb-2"
+            >Suchst du Hilfe?
+          </v-card-title>
 
-          <v-card-subtitle> 1,000 miles of wonder </v-card-subtitle>
-
-          <v-card-actions>
-            <v-btn color="primary" to="findCoach" append text>
-              Beratung finden
+          <v-card-subtitle>
+            Wir arbeiten mit vielen Berater*innen und Coaches aus vielen
+            Fachbereichen zusammen. Wähle dein Thema und finde das passende
+            Hilfsangebot für dich.
+            <v-btn color="secondary my-4" to="findCoach" append>
+              Wobei brauchst du Hilfe?
             </v-btn>
-          </v-card-actions>
+          </v-card-subtitle>
         </v-card>
       </v-col>
       <v-col cols="12"
@@ -87,19 +92,21 @@
             height="200px"
           ></v-img>
 
-          <v-card-title>Sucht du eine Wohnung? </v-card-title>
+          <v-card-title class="text-h3 secondary--text font-weight-bold mb-2"
+            >Brauchst du eine Wohnung als sichere Zuflucht?
+          </v-card-title>
 
-          <v-card-subtitle> 1,000 miles of wonder </v-card-subtitle>
-
-          <v-card-actions>
-            <v-btn color="primary" to="wohnungssuche" append text>
-              Wohnungssuche anfragen
+          <v-card-subtitle>
+            In Deutschland gibt es viele Wohnungsbesitzer*innen, die Frauen wie
+            dir helfen wollen. Wir haben Kontakt zu ihnen aufgenommen und wollen
+            euch zusammen bringen.
+            <v-btn color="secondary my-4" to="wohnungssuche" append>
+              Gib hier dein Wohnungsgesucht auf
             </v-btn>
-          </v-card-actions>
+          </v-card-subtitle>
         </v-card></v-col
       >
     </v-row>
-    <v-btn @click="test"></v-btn>
   </v-container>
 </template>
 
@@ -109,10 +116,6 @@ export default {
     return {
       userData: null,
       responses: [],
-      date: null,
-      acceptText: 'Zusagen',
-      acceptLoading: false,
-      acceptDisable: false,
     }
   },
   computed: {
@@ -121,7 +124,7 @@ export default {
     },
   },
   mounted() {
-    this.$nuxt.$fire.functions
+    this.$fire.functions
       .httpsCallable('request-getRequests')()
       .then((requests) => {
         requests.data.forEach((request) => {
@@ -134,61 +137,10 @@ export default {
                 coach: coachSnap.data(),
                 ...request,
               })
+              console.log('responses: ', this.responses)
             })
         })
       })
-  },
-  methods: {
-    test() {
-      const data = {
-        method: 'getEntrycodes',
-        date: '2021-06-24',
-        token: process.env.redAPI,
-      }
-      fetch('https://redclient.redmedical.de/service/video', {
-        method: 'POST',
-        header: {
-          'Access-Control-Allow-Origin': 'https://sichere-zuflucht.github.io/',
-        },
-        // mode: 'no-cors', // It can be no-cors, cors, same-origin
-        // credentials: 'same-origin', // It can be include, same-origin, omit
-        body: JSON.stringify(data),
-      })
-        .then((response) => {
-          if (response.status === 200) {
-            console.log('await: ', response.json())
-          } else {
-            console.log('inside else: ', response)
-          }
-        })
-        .catch((error) => {
-          console.log('err: ', error)
-        })
-    },
-    cancel(coaching) {
-      const db = this.$fire.firestore
-      db.collection('users/' + coaching.id + '/requests')
-        .doc(this.$store.state.user.uid)
-        .delete()
-      db.collection('users/' + this.user.uid + '/response')
-        .doc(coaching.id)
-        .delete()
-    },
-    accept(response, date) {
-      this.acceptLoading = true
-      this.$fire.functions
-        .httpsCallable('request-acceptDate')({
-          coachName: response.coach.firstName + ' ' + response.coach.lastName,
-          acceptedDate: date,
-          requestId: response.id,
-        })
-        .then(() => {
-          this.acceptText = 'Zugesagt'
-          this.acceptDisable = true
-        })
-
-      response.acceptedDate = date
-    },
   },
 }
 </script>
