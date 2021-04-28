@@ -1,55 +1,49 @@
 <template>
   <div>
-    <div class="text-h4">Verifizieren</div>
-    <p class="caption mt-2 mb-0">Status</p>
-    <v-card v-if="!isVerifying && !verified" elevation="2" class="pa-3">
-      <v-chip color="error" class="mt-2" text-color="white"
-        >Nicht Verifizierung</v-chip
+    <h2 class="text-h2 secondary--text">Verifizierungsprozess</h2>
+
+    <div v-if="!isVerifying && !verified">
+      <v-chip small color="error" class="my-2" dark>Nicht Verifiziert</v-chip>
+      <p class="caption my-4">
+        Sie sind noch nicht von uns verifiziert worden, bitte nehmen Sie daher
+        mit uns Kontakt auf. Wir werden uns per eMail bei ihnen melden, um ein
+        Gespräch zu vereinbaren.
+      </p>
+      <v-btn
+        v-if="user"
+        @click="updateVerify"
+        :href="
+          'mailto:b.ulrich@sichere-zuflucht.de?subject=Anfrage%20Verifizierung%20von%20Nutzer%20Nr%20' +
+          user.uid
+        "
+        color="primary"
+        >Kontakt aufnehmen</v-btn
       >
-      <div class="text py-3">
-        Klicken Sie auf den Button, um mit uns Kontakt aufzunehmen. Wir werden
-        uns per eMail bei ihnen melden, um ein Gespräch zu vereinbaren.
-      </div>
-      <div>
-        <v-btn
-          v-if="user"
-          @click="updateVerify"
-          :href="
-            'mailto:b.ulrich@sichere-zuflucht.de?subject=Neue%20Anfrage%20von%20' +
-            user.uid
-          "
-          color="primary"
-          >Kontakt aufnehmen</v-btn
-        >
-      </div>
-    </v-card>
-    <v-card v-else-if="isVerifying && !verified" elevation="2" class="pa-3">
-      <v-chip color="orange" class="mt-2" text-color="white"
+    </div>
+    <div v-else-if="isVerifying && !verified">
+      <v-chip color="secondary" small class="my-2" dark
         >wird verifiziert...</v-chip
       >
-      <div class="text py-3">
+      <p class="caption my-4">
         Sie haben nach 48 Stunden noch keine eMail von uns erhalten? Bitte
-        prüfen Sie Ihren Spam Ordner und nehmen Sie dann erst noch einmal
-        Kontakt mit uns auf.
-      </div>
+        prüfen Sie zuerst Ihren Spam Ordner, bevor Sie uns erneut kontaktieren.
+      </p>
       <div>
         <v-btn
           v-if="user"
           :href="
-            'mailto:b.ulrich@sichere-zuflucht.de?subject=Hilfe%20bei%20der%20Verifizierung%20von%20' +
+            'mailto:b.ulrich@sichere-zuflucht.de?subject=Erneute%20Anfrage%20Verifizierung%20von%20Nutzer%20Nr%20' +
             user.uid
           "
           color="primary"
           >Erneut Kontaktieren</v-btn
         >
       </div>
-    </v-card>
-    <v-card v-else elevation="2" class="pa-3">
-      <v-chip color="success" class="mt-2" text-color="white"
-        >verifiziert</v-chip
-      >
-      <div class="text py-3">Sie sind erfolgreich verifiziert</div>
-    </v-card>
+    </div>
+    <div v-else>
+      <v-chip small color="success" class="my-2" dark>verifiziert</v-chip>
+      <p class="caption my-4">Sie sind erfolgreich verifiziert</p>
+    </div>
   </div>
 </template>
 

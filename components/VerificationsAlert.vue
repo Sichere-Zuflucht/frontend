@@ -14,17 +14,15 @@
         <v-btn v-if="!data.info" class="mr-2 mb-2" to="beratung/registrierung">
           <v-icon small class="pr-2">mdi-account</v-icon> Profil
         </v-btn>
-        <v-btn
-          v-if="!data.stripe"
-          class="mr-2 mb-2"
-          href="https://www.stripe.com"
+        <v-btn v-if="!data.stripe" class="mr-2 mb-2" append to="bezahlung"
           ><v-icon small class="pr-2">mdi-credit-card-outline</v-icon>
           Bezahlung
         </v-btn>
         <v-btn
           v-if="!data.verifySetting.verified"
           class="mr-2 mb-2"
-          to="beratung/personenverifizierung"
+          append
+          to="personenverifizierung"
         >
           <v-icon small class="pr-2">mdi-shield-check</v-icon>
           Verifizierung</v-btn

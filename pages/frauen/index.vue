@@ -2,25 +2,34 @@
   <v-container>
     <h1 class="text-h1 primary--text">Deine Übersicht</h1>
     <div v-if="responses">
-      <h2 class="text-h2 secondary--text mt-6">Deine Beratungstermine</h2>
+      <h2 class="text-h2 secondary--text mt-6 mb-3">Deine Beratungstermine</h2>
       <div v-if="responses.length === 0">
         <p>Du hast noch keine Beratung gebucht</p>
         <v-btn to="findCoach" color="secondary" append
           >Beratungsangebote ansehen</v-btn
         >
       </div>
-      <v-slide-group class="py-4" show-arrows>
+      <v-slide-group v-if="responses.length > 1" show-arrows>
         <v-slide-item v-for="(response, i) in responses" :key="i">
-          <v-card elevation="0" width="270" class="pa-1">
+          <div style="width: 310px; padding: 5px">
             <Coaching
               :coach="response.coach"
               :response="response"
               :clickable="false"
               :small="true"
             />
-          </v-card>
+          </div>
         </v-slide-item>
       </v-slide-group>
+      <div v-else v-for="(response, i) in responses" :key="i">
+        <Coaching
+          :coach="response.coach"
+          :response="response"
+          :clickable="false"
+          :small="true"
+        />
+      </div>
+
       <!--<v-expansion-panels>
         <v-expansion-panel v-for="(response, i) in responses" :key="i">
           <v-expansion-panel-header>
@@ -63,6 +72,7 @@
       </v-expansion-panels> -->
     </div>
     <v-divider class="my-3"></v-divider>
+    <h2 class="text-h2 secondary--text mt-6 mb-3">Angebote</h2>
     <v-row>
       <v-col cols="12">
         <v-card class="mx-auto" max-width="344">
