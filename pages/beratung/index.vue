@@ -110,7 +110,7 @@
                         ? item.jitsiLink
                         : item.redLink.codeArzt
                     "
-                    >zum Videocall
+                    >zum {{ item.videoType }} Videocall
                   </v-btn>
                 </div>
 

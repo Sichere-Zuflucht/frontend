@@ -9,14 +9,7 @@
         mit uns Kontakt auf. Wir werden uns per eMail bei ihnen melden, um ein
         Gespräch zu vereinbaren.
       </p>
-      <v-btn
-        v-if="user"
-        @click="updateVerify"
-        :href="
-          'mailto:b.ulrich@sichere-zuflucht.de?subject=Anfrage%20Verifizierung%20von%20Nutzer%20Nr%20' +
-          user.uid
-        "
-        color="primary"
+      <v-btn v-if="user" @click="updateVerify" color="primary"
         >Kontakt aufnehmen</v-btn
       >
     </div>
@@ -29,13 +22,10 @@
         prüfen Sie zuerst Ihren Spam Ordner, bevor Sie uns erneut kontaktieren.
       </p>
       <div>
-        <v-btn
-          v-if="user"
-          :href="
-            'mailto:b.ulrich@sichere-zuflucht.de?subject=Erneute%20Anfrage%20Verifizierung%20von%20Nutzer%20Nr%20' +
-            user.uid
-          "
-          color="primary"
+        <v-btn v-if="user" @click="updateVerify" color="primary"
+          >Kontakt aufnehmen</v-btn
+        >
+        <v-btn v-if="user" @click="updateVerify" color="primary"
           >Erneut Kontaktieren</v-btn
         >
       </div>
@@ -63,6 +53,7 @@ export default {
   methods: {
     updateVerify() {
       console.log(this.user.uid)
+      this.$fire.functions.httpsCallable('email-sendVerifyAccMail')()
       const uid = this.user.uid
       const verifySetting = {
         isVerifying: true,
