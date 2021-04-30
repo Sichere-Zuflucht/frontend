@@ -2,7 +2,12 @@
   <div v-if="data">
     <div
       v-if="
-        data.info && data.stripe && data.verifySetting.verified ? false : true
+        !(
+          data.info &&
+          data.stripe &&
+          data.stripe.verified &&
+          data.verifySetting.verified
+        )
       "
     >
       <v-divider class="my-2"></v-divider>
@@ -14,7 +19,11 @@
         <v-btn v-if="!data.info" class="mr-2 mb-2" to="beratung/registrierung">
           <v-icon small class="pr-2">mdi-account</v-icon> Profil
         </v-btn>
-        <v-btn v-if="!data.stripe" class="mr-2 mb-2" append to="bezahlung"
+        <v-btn
+          v-if="!(data.stripe && data.stripe.verified)"
+          class="mr-2 mb-2"
+          append
+          to="bezahlung"
           ><v-icon small class="pr-2">mdi-credit-card-outline</v-icon>
           Bezahlung
         </v-btn>

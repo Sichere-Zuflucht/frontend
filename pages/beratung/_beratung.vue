@@ -140,6 +140,7 @@ export default {
           message: this.message,
           coachUID: this.coachUID,
           createdAt: new Date(),
+          isDev: this.$config.isDev,
         })
         .then(() => {
           this.buttonText = 'versendet'

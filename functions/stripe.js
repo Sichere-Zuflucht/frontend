@@ -1,10 +1,8 @@
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
+const stripe = require('stripe')(functions.config().stripe.sk)
 
 exports.getStripeLink = functions.https.onCall(async (data, context) => {
-  functions.logger.log('stripe', functions.config().stripe.sk)
-  const stripe = require('stripe')(functions.config().stripe.sk)
-
   // verify this user is not registered with stripe (look in firebase)
   const userDoc = admin.firestore().collection('users').doc(context.auth.uid)
   const userData = await userDoc.get().then((doc) => doc.data())
@@ -23,30 +21,132 @@ exports.getStripeLink = functions.https.onCall(async (data, context) => {
     })
     stripeId = customer.id
     // save result in firebase
-    userDoc.set({ stripe: { id: stripeId } }, { merge: true })
+    userDoc.set({ stripe: { id: stripeId, verified: false } }, { merge: true })
     userData.stripe = { id: stripeId }
   } else {
     stripeId = userData.stripe.id
   }
+  const base = data.isDev
+    ? 'http://localhost:3000'
+    : 'https://sichere-zuflucht.github.io/frontend'
 
-  let accountLink
-  // verify accountlink does not exist already in firebase
-  if (
-    !userData.stripe.accountLink ||
-    // generate only new link when old one is expired
-    new Date(userData.stripe.accountLink.expires_at * 1000) <= new Date()
-  ) {
-    // create new accountlink if not existing
-    accountLink = await stripe.accountLinks.create({
-      account: stripeId,
-      refresh_url: 'https://sichere-zuflucht.de',
-      return_url: 'https://sichere-zuflucht.de',
-      type: 'account_onboarding',
-    })
-    userDoc.set({ stripe: { accountLink } }, { merge: true })
-  } else {
-    accountLink = userData.stripe.accountLink
-  }
+  const accountLink = await stripe.accountLinks.create({
+    account: stripeId,
+    refresh_url: base + '/bezahlung/error',
+    return_url: base + '/bezahlung/approved',
+    type: 'account_onboarding',
+  })
+  userDoc.set({ stripe: { accountLink } }, { merge: true })
+
   // save in firebase
   return accountLink
+})
+
+exports.checkStripeAccount = functions.https.onCall(async (data, context) => {
+  // verify this user is not registered with stripe (look in firebase)
+  const userDoc = admin.firestore().collection('users').doc(context.auth.uid)
+  const userData = await userDoc.get().then((doc) => doc.data())
+  if (userData.stripe) {
+    return await stripe.account.retrieve(userData.stripe.id)
+  }
+  return {}
+})
+
+exports.createPaymentForCoaching = async (coachID, requestID, isDev) => {
+  const coach = await admin
+    .firestore()
+    .collection('users')
+    .doc(coachID)
+    .get()
+    .then((doc) => doc.data())
+
+  const base = isDev
+    ? 'http://localhost:3000'
+    : 'https://sichere-zuflucht.github.io/frontend'
+
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ['card'],
+    client_reference_id: requestID,
+    line_items: [
+      {
+        name: 'Coaching',
+        amount: 6000,
+        currency: 'eur',
+        quantity: 1,
+      },
+    ],
+    payment_intent_data: {
+      application_fee_amount: 1000,
+      on_behalf_of: coach.stripe.id,
+      transfer_data: {
+        destination: coach.stripe.id,
+      },
+    },
+    mode: 'payment',
+    success_url: base + '/bezahlung/approved',
+    cancel_url: base + '/bezahlung/error',
+  })
+
+  return session.id
+}
+
+exports.payCoaching = functions.https.onCall(async (data, context) => {
+  functions.logger.log('payCoach', data)
+
+  const responseDoc = admin
+    .firestore()
+    .collection('requests')
+    .doc(data.responseID)
+  const responseData = await responseDoc.get().then((doc) => doc.data())
+
+  return this.createPaymentForCoaching(
+    responseData.coachId,
+    data.responseID,
+    data.isDev
+  )
+})
+
+exports.stripeWebhook = functions.https.onRequest((req, res) => {
+  const requestID = req.body.data.object.client_reference_id
+
+  const request = admin.firestore().collection('requests').doc(requestID)
+  request
+    .set({ payed: true }, { merge: true })
+    .then(res.send('seemed to work'))
+    .catch(() => res.status(400).send('oh no did not work'))
+})
+
+exports.accountUpdated = functions.https.onRequest(async (req, res) => {
+  functions.logger.log('accountupdated', req.body)
+
+  const email = req.body.data.object.email
+  const chargesEnabled = req.body.data.object.charges_enabled
+  const payoutsEnabled = req.body.data.object.payouts_enabled
+
+  const snapshot = await admin
+    .firestore()
+    .collection('users')
+    .where('email', '==', email)
+    .get()
+  if (snapshot.empty) {
+    res.status(400).send('User with email not found')
+    return
+  }
+  functions.logger.log('accountupdated', snapshot)
+  admin
+    .firestore()
+    .collection('users')
+    .doc(snapshot.docs[0].id)
+    .set(
+      {
+        stripe: {
+          chargesEnabled,
+          payoutsEnabled,
+          verified: chargesEnabled && payoutsEnabled,
+        },
+      },
+      { merge: true }
+    )
+
+  res.send('yes')
 })

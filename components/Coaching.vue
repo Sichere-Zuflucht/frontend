@@ -54,7 +54,10 @@
       </div>
     </v-card-text>
     <v-card-text v-if="response">
-      <div v-if="!response.acceptedDate">
+      <div v-if="!response.coachAnswered">
+        Der Coach hat auf deine Anfrage noch nicht reagiert.
+      </div>
+      <div v-else-if="!response.acceptedDate">
         <v-row>
           <v-col cols="7">
             <v-select
@@ -69,11 +72,16 @@
         <v-row class="mb-2"
           ><v-btn
             color="success"
+            :loading="payButtonLoading"
+            :disabled="acceptDisable"
+            @click="pay"
+            >{{ acceptText }}</v-btn
+          ><v-btn
+            color="success"
             :disabled="!date"
             :loading="acceptLoading"
-            :disable="acceptDisable"
             @click="getRedLink(response, date)"
-            >{{ acceptText }}</v-btn
+            >Datum wählen</v-btn
           ><v-btn plain color="orange">Nachfragen</v-btn><v-spacer /><v-btn
             plain
             class="pa-0"
@@ -122,10 +130,11 @@ export default {
   },
   data() {
     return {
-      acceptText: 'Bezahlen',
+      acceptText: this.response && this.response.payed ? 'Bezahlt' : 'Bezahlen',
       acceptLoading: false,
-      acceptDisable: false,
+      acceptDisable: this.response && this.response.payed,
       date: null,
+      payButtonLoading: false,
     }
   },
   methods: {
@@ -180,7 +189,6 @@ export default {
                 },
               })
               .then(() => {
-                this.acceptText = 'Bezahlt'
                 this.acceptDisable = true
               })
           }
@@ -198,6 +206,22 @@ export default {
       db.collection('users/' + this.user.uid + '/response')
         .doc(coaching.id)
         .delete()
+    },
+    async pay() {
+      this.payButtonLoading = true
+      const paymentID = (
+        await this.$fire.functions.httpsCallable('stripe-payCoaching')({
+          responseID: this.response.id,
+          isDev: this.$config.isDev,
+        })
+      ).data
+
+      this.$stripe.redirectToCheckout({
+        // Make the id field from the Checkout Session creation API response
+        // available to this file, so you can provide it as argument here
+        // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
+        sessionId: paymentID,
+      })
     },
   },
 }
