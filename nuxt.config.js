@@ -17,6 +17,11 @@ export default {
   publicRuntimeConfig: {
     baseUrl: process.env.BASE_URL || 'http://localhost:3000',
     base,
+    stripe: {
+      publishableKey:
+        'pk_test_51IbjZeFRsEq5IriEKQifwCzu8LMnx6uMxxhOz7HIELiaYpFCnsfNlVaiTOU72b2uWwQP4B5gI8GwDrsrSNJS0hPP00e8y3RbDo',
+    },
+    isDev: process.env.NODE_ENV !== 'production',
   },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -62,7 +67,7 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ['@nuxtjs/firebase'],
+  modules: ['@nuxtjs/firebase', 'nuxt-stripe-module'],
   firebase: {
     config: {
       apiKey: 'AIzaSyDMjjzgxNWEsDWYETgWbFgaYnwzAmLyzhM',
@@ -74,8 +79,8 @@ export default {
     },
     services: {
       functions: {
-        // emulatorPort: process.env.NODE_ENV === 'development' ? 5001 : undefined,
-        emulatorPort: undefined,
+        emulatorPort: process.env.NODE_ENV === 'development' ? 5001 : undefined,
+        // emulatorPort: undefined,
       },
       auth: {
         persistence: 'local', // default

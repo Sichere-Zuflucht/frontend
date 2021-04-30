@@ -5,11 +5,18 @@
       Wir nutzen als Zahlungssystem den Anbieter
       <a href="https://stripe.com" target="_blank">Stripe</a>.
     </p>
-    <div v-if="!user.stripe">
-      <p class="caption">
-        Bitte registrieren Sie sich, damit die Frauen Ihre Angebote bezahlen
-        können.
+    <div v-if="!(user.stripe && user.stripe.verified)">
+      <p v-if="!user.stripe" class="caption">
+        Bitte registrieren Sie sich, damit Frauen Ihre Angebote bezahlen können.
       </p>
+      <div v-else>
+        <div v-if="!user.stripe.chargesEnabled">
+          Aktuell können Sie keine Zahlungen entgegennehmen.
+        </div>
+        <div v-if="!user.stripe.payoutsEnabled">
+          Aktuell können Sie sich kein Geld auszahlen lassen.
+        </div>
+      </div>
       <v-btn
         :loading="loading"
         :disabled="disabled"
@@ -18,6 +25,10 @@
         @click="addStripe"
         >bei Stripe registrieren</v-btn
       >
+      <!--      somehow make sure this button is shown until this is returning that payments are approved maybe even update firebase and return -->
+      <!--      charges_enabled-->
+      <!--      payouts_enabled-->
+      <v-btn @click="getStripeData"></v-btn>
       <p class="caption">
         Sie werden zur Stripes Registrierungsseite weitergeleitet.
       </p>
@@ -61,13 +72,17 @@ export default {
   },
   mounted() {
     this.user = this.$store.getters['modules/user/user']
-    this.run()
+    console.log(this.user)
+    // this.run()
   },
   methods: {
     addStripe() {
       this.loading = true
       this.$fire.functions
-        .httpsCallable('stripe-getStripeLink')({ email: this.user.email })
+        .httpsCallable('stripe-getStripeLink')({
+          email: this.user.email,
+          isDev: this.$config.isDev,
+        })
         .then((stripeData) => {
           this.stripeRegisterURL = stripeData.data.url
           this.loading = false
@@ -78,29 +93,14 @@ export default {
                 stripeData.data.url
             )
           ) {
-            window.open(stripeData.data.url, '_blank').focus()
+            location.replace(this.stripeRegisterURL)
           }
         })
     },
-    run() {
-      fetch('https://api.stripe.com/v1/payment_intents', {
-        headers: {
-          Authorization: 'Bearer ' + this.$config.STRIPE_SK,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          this.stripeData = data.data
-        })
-    },
-    more(pi) {
-      fetch('https://api.stripe.com/v1/payment_intents/' + pi, {
-        headers: {
-          Authorization: 'Bearer ' + this.$config.STRIPE_SK,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {})
+    getStripeData() {
+      this.$fire.functions
+        .httpsCallable('stripe-checkStripeAccount')()
+        .then((a) => console.log(a))
     },
   },
 }

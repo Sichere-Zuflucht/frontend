@@ -9,7 +9,15 @@
           >Beratungsangebote ansehen</v-btn
         >
       </div>
-      <v-slide-group v-if="responses.length > 1" show-arrows>
+
+      <Coaching
+        v-else-if="responses.length === 1"
+        :coach="responses[0].coach"
+        :response="responses[0]"
+        :clickable="false"
+        :small="true"
+      />
+      <v-slide-group v-else show-arrows>
         <v-slide-item v-for="(response, i) in responses" :key="i">
           <div style="width: 310px; padding: 5px">
             <Coaching
@@ -21,14 +29,6 @@
           </div>
         </v-slide-item>
       </v-slide-group>
-      <div v-for="(response, i) in responses" v-else :key="i">
-        <Coaching
-          :coach="response.coach"
-          :response="response"
-          :clickable="false"
-          :small="true"
-        />
-      </div>
 
       <!--<v-expansion-panels>
         <v-expansion-panel v-for="(response, i) in responses" :key="i">
