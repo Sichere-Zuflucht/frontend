@@ -1,8 +1,8 @@
 <template>
   <v-app light>
-    <client-only>
-      <v-navigation-drawer v-model="drawer" app class="primary" dark>
-        <v-list v-if="loggedIn">
+    <v-navigation-drawer v-model="drawer" app class="primary" dark fixed>
+      <client-only v-if="loggedIn">
+        <v-list>
           <v-list-item
             v-for="(item, i) in loggedInUser"
             :key="i"
@@ -17,29 +17,61 @@
               <v-list-item-title v-text="item.title" />
             </v-list-item-content>
           </v-list-item>
+          <div v-if="user ? user.membership.id === 'Woman' : false">
+            <v-list-item
+              v-for="(item, i) in loggedInWoman"
+              :key="i"
+              :to="item.to"
+              nuxt
+              exact
+            >
+              <v-list-item-icon>
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title v-text="item.title" />
+              </v-list-item-content>
+            </v-list-item>
+          </div>
+          <div v-else>
+            <v-list-item
+              v-for="(item, i) in loggedInCoach"
+              :key="i"
+              :to="item.to"
+              nuxt
+              exact
+            >
+              <v-list-item-icon>
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title v-text="item.title" />
+              </v-list-item-content>
+            </v-list-item>
+          </div>
           <v-list-item>
             <v-btn block to="/" @click="logout">Abmelden</v-btn>
           </v-list-item>
         </v-list>
-        <v-list v-else>
-          <v-list-item
-            v-for="(item, i) in noUser"
-            :key="i"
-            :to="item.to"
-            nuxt
-            exact
-          >
-            <v-list-item-content>
-              <v-list-item-title v-text="item.title" />
-            </v-list-item-content>
-          </v-list-item>
-          <v-spacer />
-          <v-list-item>
-            <v-btn block to="signup">Anmelden</v-btn>
-          </v-list-item>
-        </v-list>
-      </v-navigation-drawer>
-    </client-only>
+      </client-only>
+      <v-list v-else>
+        <v-list-item
+          v-for="(item, i) in noUser"
+          :key="i"
+          :to="item.to"
+          nuxt
+          exact
+        >
+          <v-list-item-content>
+            <v-list-item-title v-text="item.title" />
+          </v-list-item-content>
+        </v-list-item>
+        <v-spacer />
+        <v-list-item>
+          <v-btn block to="signup">Anmelden</v-btn>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
     <v-app-bar app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-spacer />
@@ -59,11 +91,7 @@
     <v-main>
       <nuxt class="pb-8" />
     </v-main>
-    <v-footer
-      :absolute="true"
-      app
-      class="d-flex flex-column justify-center mt-6"
-    >
+    <v-footer inset absolute app class="d-flex flex-column justify-center mt-6">
       <span class="mt-4"
         >&copy; {{ new Date().getFullYear() }} Sichere Zuflucht gGmbH</span
       >
@@ -90,27 +118,36 @@ export default {
         {
           icon: 'mdi-view-dashboard',
           title: 'Übersicht',
-          to: '/',
+          to: '/profile',
         },
+      ],
+      loggedInWoman: [
         {
           icon: 'mdi-account-box',
-          title: 'Mein Profil',
-          to: '/profile',
+          title: 'Beratungen',
+          to: '/frauen/findCoach',
         },
         {
-          icon: 'mdi-email',
-          title: 'Mein Postfach',
-          to: '/profile',
+          icon: 'mdi-shield-home',
+          title: 'Wohnungen',
+          to: '/frauen/wohnungssuche',
         },
-        {
-          icon: 'mdi-comment-account',
-          title: 'Meine Beratungen',
-          to: '/profile',
-        },
+      ],
+      loggedInCoach: [
         {
           icon: 'mdi-credit-card',
-          title: 'Zahlungsanbieter',
-          to: '/profile',
+          title: 'Bezahlung',
+          to: '/beratung/bezahlung',
+        },
+        {
+          icon: 'mdi-shield-check',
+          title: 'Verifizierung',
+          to: '/beratung/personenverifizierung',
+        },
+        {
+          icon: 'mdi-account-edit',
+          title: 'Profil bearbeiten',
+          to: '/beratung/registrierung',
         },
       ],
       noUser: [
