@@ -74,7 +74,7 @@
             :disable="acceptDisable"
             @click="getRedLink(response, date)"
             >{{ acceptText }}</v-btn
-          ><v-btn plain color="orange">Nachfragen</v-btn><spacer /><v-btn
+          ><v-btn plain color="orange">Nachfragen</v-btn><v-spacer /><v-btn
             plain
             class="pa-0"
             @click="cancel(response)"
