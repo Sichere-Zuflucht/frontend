@@ -12,7 +12,8 @@
           color="primary"
           class="mr-1 mb-1"
         >
-          <v-icon left> mdi-message </v-icon>{{ tag }}
+          <v-icon left> mdi-message</v-icon>
+          {{ tag }}
         </v-chip>
       </div>
       <div class="d-flex flex-wrap">
@@ -23,7 +24,8 @@
           color="secondary"
           class="mr-1 mb-1"
         >
-          <v-icon left> mdi-translate </v-icon>{{ tag }}
+          <v-icon left> mdi-translate</v-icon>
+          {{ tag }}
         </v-chip>
       </div>
       <v-divider class="my-4"></v-divider>
@@ -56,8 +58,8 @@
                   showAddInfo = true
                 }
               "
-              >Text hinzufügen</v-btn
-            >
+              >Text hinzufügen
+            </v-btn>
 
             <v-btn
               color="primary"
@@ -65,21 +67,22 @@
               :loading="loading"
               :disabled="isDisabled"
               @click="sendRequest"
-              >{{ buttonText }}</v-btn
-            >
+              >{{ buttonText }}
+            </v-btn>
           </div>
           <v-alert v-if="showConfirmation" color="success" dark class="mt-4"
             >Deine Nachricht wurde versendet, {{ coachName }} wird sich bei dir
-            melden.<v-btn
+            melden.
+            <v-btn
               color="white"
               class="mt-2 black--text"
               @click="$router.go(-1)"
-              >Zurück zu den Beratungen</v-btn
-            ></v-alert
-          >
-          <v-alert v-if="error.status" color="error" class="white--text mt-4">{{
-            error.message
-          }}</v-alert>
+              >Zurück zu den Beratungen
+            </v-btn>
+          </v-alert>
+          <v-alert v-if="error.status" color="error" class="white--text mt-4"
+            >{{ error.message }}
+          </v-alert>
         </v-form>
       </div>
     </v-container>

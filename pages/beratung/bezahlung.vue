@@ -23,8 +23,8 @@
         color="secondary"
         target="_blank"
         @click="addStripe"
-        >bei Stripe registrieren</v-btn
-      >
+        >bei Stripe registrieren
+      </v-btn>
       <!--      somehow make sure this button is shown until this is returning that payments are approved maybe even update firebase and return -->
       <!--      charges_enabled-->
       <!--      payouts_enabled-->

@@ -13,9 +13,10 @@
               e.preventDefault()
             }
           "
-          ><v-text-field
-            type="email"
+        >
+          <v-text-field
             v-model="email"
+            type="email"
             :rules="emailRules"
             label="E-mail"
             required
@@ -26,8 +27,8 @@
             :loading="loading"
             :disabled="!valid"
             @click="resetPassword"
-            >{{ buttonText }}</v-btn
-          >
+            >{{ buttonText }}
+          </v-btn>
         </v-form>
         <v-alert
           v-if="showConfirmation"
@@ -35,11 +36,11 @@
           class="white--text mt-4"
           >Wenn ein Account mit der eMail {{ email }} bei uns hinterlegt ist,
           wird eine eMail an diese Adresse geschickt. Bitte folge den dort
-          beschriebenen Anweisungen.</v-alert
-        >
-        <v-alert v-if="error.status" color="error" class="white--text mt-4">{{
-          error.message
-        }}</v-alert>
+          beschriebenen Anweisungen.
+        </v-alert>
+        <v-alert v-if="error.status" color="error" class="white--text mt-4"
+          >{{ error.message }}
+        </v-alert>
       </v-card-text>
     </v-card>
 

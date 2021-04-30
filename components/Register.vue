@@ -1,16 +1,30 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-form>
-        <v-text-field v-model="email" label="E-mail" required></v-text-field
-      ></v-form>
-      <v-btn @click="login">Registrierung abschließen</v-btn>
-    </v-row>
-    <v-row v-if="showError">
-      Irgendetwas ist schief gelaufen. Versuche dich erneut zu registrieren.
-      <v-btn :to="{ path: '/sign-up' }">Erneut registrieren</v-btn>
-    </v-row>
-  </v-container>
+  <div>
+    <h1 class="text-h1 primary--text mb-4">Registrierung</h1>
+    <v-card>
+      <v-card-text>
+        <v-form>
+          <v-text-field
+            v-model="email"
+            label="Registrierte E-mail"
+            persistent-hint
+            hint="Füge die E-mail ein, mit der du eine Registrierung angefordert hattest."
+            required
+          ></v-text-field
+        ></v-form>
+        <v-btn @click="login" class="my-4" color="secondary"
+          >Registrierung abschließen</v-btn
+        >
+        <v-alert v-if="showError" color="error" dark>
+          <p>
+            Irgendetwas ist schief gelaufen. Versuche dich erneut zu
+            registrieren.
+          </p>
+          <v-btn nuxt to="/signup">Erneut registrieren</v-btn>
+        </v-alert>
+      </v-card-text>
+    </v-card>
+  </div>
 </template>
 
 <script>

@@ -82,12 +82,8 @@
             :loading="acceptLoading"
             @click="getRedLink(response, date)"
             >Datum wählen</v-btn
-          ><v-btn plain color="orange">Nachfragen</v-btn><v-spacer /><v-btn
-            plain
-            class="pa-0"
-            @click="cancel(response)"
-            >Absagen</v-btn
-          >
+          ><v-btn plain color="orange">Nachfragen</v-btn>
+          <v-btn plain @click="cancel(response)">Absagen</v-btn>
         </v-row>
       </div>
       <div v-else>

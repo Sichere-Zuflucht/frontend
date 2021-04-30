@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div>
-      <v-btn plain @click="open = !open">
+    <div v-if="filter">
+      <v-btn plain :v-ripple="false" @click="open = !open">
         {{ open ? 'Filter verbergen' : 'Filter anzeigen' }}
       </v-btn>
     </div>
@@ -81,6 +81,11 @@
         >
       </v-stepper-content>
     </v-stepper>
+    <div v-if="!filter && closable" class="mt-2">
+      <v-btn :v-ripple="false" @click="open = !open">
+        {{ open ? 'schließen' : 'Profil ändern' }}
+      </v-btn>
+    </div>
   </div>
 </template>
 <style>
@@ -92,7 +97,22 @@
 export default {
   name: 'CoachingSelection',
   props: {
-    isCoach: Boolean,
+    isCoach: {
+      type: Boolean,
+      default: false,
+    },
+    isOpen: {
+      type: Boolean,
+      default: true,
+    },
+    filter: {
+      type: Boolean,
+      default: true,
+    },
+    closable: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -119,7 +139,7 @@ export default {
       selectedTopicPoints: [],
       e6: 1,
       panel: [0],
-      open: true,
+      open: this.isOpen,
     }
   },
   mounted() {
