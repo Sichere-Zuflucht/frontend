@@ -154,7 +154,6 @@ export default {
       .httpsCallable('request-getRequests')()
       .then((requests) => {
         this.requests.push(...requests.data)
-        console.log('requests: ', this.requests)
       })
   },
   methods: {

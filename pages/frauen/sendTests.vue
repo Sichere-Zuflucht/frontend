@@ -21,7 +21,6 @@ export default {
   methods: {
     sendRequest() {
       const uid = 'N4zxgeoDPEWYHiBPQ6EECSDrOSk1'
-      console.log('msg: ', this.message)
       const db = window.$nuxt.$fire.firestore
       db.collection('users')
         .doc(uid)
