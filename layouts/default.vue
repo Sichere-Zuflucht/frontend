@@ -48,7 +48,6 @@
           ><v-img contain width="150" src="Sichere-Zuflucht-Logo.svg" /></v-btn
       ></v-toolbar-title>
       <v-spacer />
-      <div v-if="!loggedIn" style="width: 48px"></div>
       <client-only>
         <v-btn v-if="loggedIn" to="/profile" nuxt exact icon
           ><v-avatar color="primary" size="38"

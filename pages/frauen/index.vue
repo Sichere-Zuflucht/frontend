@@ -21,7 +21,7 @@
           </div>
         </v-slide-item>
       </v-slide-group>
-      <div v-else v-for="(response, i) in responses" :key="i">
+      <div v-for="(response, i) in responses" v-else :key="i">
         <Coaching
           :coach="response.coach"
           :response="response"
@@ -147,7 +147,6 @@ export default {
                 coach: coachSnap.data(),
                 ...request,
               })
-              console.log('responses: ', this.responses)
             })
         })
       })

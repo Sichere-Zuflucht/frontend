@@ -140,7 +140,6 @@ export default {
         topicArea: this.selectedTopic.topicArea,
         topicPoints: this.selectedTopicPoints,
       }
-      console.log('transfer data: ', data)
       this.$emit('filter', data)
       this.$emit('selection', data)
     },

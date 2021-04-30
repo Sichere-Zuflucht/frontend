@@ -14,7 +14,7 @@ export default {
         date: '2019-11-27',
         token: 'i am a key',
       }).then((e) => {
-        console.log(e)
+        console.log('err', e)
       })
     },
   },

@@ -71,9 +71,9 @@
           <v-alert v-if="showConfirmation" color="success" dark class="mt-4"
             >Deine Nachricht wurde versendet, {{ coachName }} wird sich bei dir
             melden.<v-btn
-              @click="$router.go(-1)"
               color="white"
               class="mt-2 black--text"
+              @click="$router.go(-1)"
               >Zurück zu den Beratungen</v-btn
             ></v-alert
           >
@@ -134,7 +134,6 @@ export default {
   methods: {
     sendRequest() {
       this.loading = true
-      console.log('send request')
       this.$fire.functions
         .httpsCallable('request-sendRequest')({
           coachName: this.coachName,

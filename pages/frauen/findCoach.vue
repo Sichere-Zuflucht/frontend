@@ -3,7 +3,7 @@
     <h1 class="text-h1 primary--text mb-6">
       Diese Berater*innen können dir helfen
     </h1>
-    <CoachingSelection :isCoach="false" @filter="filter" />
+    <CoachingSelection :is-coach="false" @filter="filter" />
     <div v-if="filteredCoaches.length > 0">
       <div
         v-for="(coaching, i) in filteredCoaches"
@@ -45,7 +45,6 @@ export default {
       .then((ref) => {
         ref.docs.forEach((doc) => {
           const data = doc.data()
-          console.log(data.info && data.verifySetting.verified && data.stripe)
           if (data.info && data.verifySetting.verified && data.stripe)
             this.allCoaches.push({ id: doc.id, ...data })
           // if (data.info) this.allCoaches.push({ id: doc.id, ...data })
@@ -57,7 +56,6 @@ export default {
     filter(data) {
       this.filteredCoaches = []
       this.allCoaches.forEach((coach) => {
-        console.log()
         let add = true
         // language
         /* add =

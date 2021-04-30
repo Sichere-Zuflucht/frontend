@@ -11,11 +11,11 @@
         können.
       </p>
       <v-btn
-        @click="addStripe"
         :loading="loading"
         :disabled="disabled"
         color="secondary"
         target="_blank"
+        @click="addStripe"
         >bei Stripe registrieren</v-btn
       >
       <p class="caption">
@@ -90,7 +90,6 @@ export default {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data)
           this.stripeData = data.data
         })
     },
@@ -101,9 +100,7 @@ export default {
         },
       })
         .then((response) => response.json())
-        .then((data) => {
-          console.log(data)
-        })
+        .then((data) => {})
     },
   },
 }

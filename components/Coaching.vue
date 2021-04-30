@@ -70,14 +70,14 @@
           ><v-btn
             color="success"
             :disabled="!date"
-            @click="getRedLink(response, date)"
             :loading="acceptLoading"
             :disable="acceptDisable"
+            @click="getRedLink(response, date)"
             >{{ acceptText }}</v-btn
           ><v-btn plain color="orange">Nachfragen</v-btn><spacer /><v-btn
             plain
-            @click="cancel(response)"
             class="pa-0"
+            @click="cancel(response)"
             >Absagen</v-btn
           >
         </v-row>
@@ -131,7 +131,6 @@ export default {
   methods: {
     async getRedLink(humanResponse, dateInput) {
       this.acceptLoading = true
-      console.log('date: ', humanResponse.acceptedDate, dateInput)
       const data = {
         method: 'getEntrycodes',
         date: dateInput,
@@ -150,7 +149,6 @@ export default {
       await response
         .json()
         .then((redRes) => {
-          console.log('redRes: ', redRes)
           if (redRes.success) {
             const jitsi =
               'https://meet.jit.si/' +
@@ -159,7 +157,6 @@ export default {
               humanResponse.coach.lastName.toLowerCase() +
               '&?' +
               humanResponse.id
-            console.log('jitsi: ', jitsi)
             this.$fire.functions
               .httpsCallable('request-acceptDate')({
                 coachName:
@@ -186,8 +183,6 @@ export default {
                 this.acceptText = 'Bezahlt'
                 this.acceptDisable = true
               })
-          } else {
-            console.log('inside else: ', redRes)
           }
         })
         .catch((error) => {
