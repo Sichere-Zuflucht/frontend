@@ -23,8 +23,8 @@
         target="_blank"
         >kontakt@sichere-zuflucht.de</a
       >
-    </v-alert></v-container
-  >
+    </v-alert>
+  </v-container>
 </template>
 
 <script>

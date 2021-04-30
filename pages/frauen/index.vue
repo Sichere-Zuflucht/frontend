@@ -6,8 +6,8 @@
       <div v-if="responses.length === 0">
         <p>Du hast noch keine Beratung gebucht</p>
         <v-btn to="findCoach" color="secondary" append
-          >Beratungsangebote ansehen</v-btn
-        >
+          >Beratungsangebote ansehen
+        </v-btn>
       </div>
 
       <Coaching
@@ -74,8 +74,8 @@
     <v-divider class="my-3"></v-divider>
     <h2 class="text-h2 secondary--text mt-6 mb-3">Angebote</h2>
     <v-row>
-      <v-col cols="12">
-        <v-card class="mx-auto" max-width="344">
+      <v-col cols="12" md="6">
+        <v-card class="mx-auto" max-width="320">
           <v-img
             src="https://images.unsplash.com/photo-1604881991664-593b31b88488?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=934&q=80"
             height="200px"
@@ -95,8 +95,8 @@
           </v-card-subtitle>
         </v-card>
       </v-col>
-      <v-col cols="12"
-        ><v-card class="mx-auto" max-width="344">
+      <v-col cols="12" md="6">
+        <v-card class="mx-auto" max-width="320">
           <v-img
             src="https://images.unsplash.com/photo-1448582649076-3981753123b5?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
             height="200px"
@@ -114,8 +114,8 @@
               Gib hier dein Wohnungsgesucht auf
             </v-btn>
           </v-card-subtitle>
-        </v-card></v-col
-      >
+        </v-card>
+      </v-col>
     </v-row>
   </v-container>
 </template>
