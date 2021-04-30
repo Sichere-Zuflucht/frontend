@@ -28,6 +28,7 @@
           Verifizierung</v-btn
         >
       </v-alert>
+      <v-divider class="my-2"></v-divider>
     </div>
   </div>
   <!-- <v-expansion-panels v-if="data">

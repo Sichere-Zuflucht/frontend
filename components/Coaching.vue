@@ -74,12 +74,8 @@
             :loading="acceptLoading"
             :disable="acceptDisable"
             >{{ acceptText }}</v-btn
-          ><v-btn plain color="orange">Nachfragen</v-btn><spacer /><v-btn
-            plain
-            @click="cancel(response)"
-            class="pa-0"
-            >Absagen</v-btn
-          >
+          ><v-btn plain color="orange">Nachfragen</v-btn
+          ><v-btn plain @click="cancel(response)" class="pa-0">Absagen</v-btn>
         </v-row>
       </div>
       <div v-else>

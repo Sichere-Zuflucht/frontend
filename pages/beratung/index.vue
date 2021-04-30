@@ -1,11 +1,12 @@
 <template>
   <v-container>
     <p class="caption mb-0 font-weight-bold">Hallo</p>
-    <h1 v-if="coachName" class="text-h1 secondary--text">{{ coachName }}</h1>
+    <h1 v-if="user.firstName" class="text-h1 secondary--text">
+      {{ user.firstName }} {{ user.lastName }}
+    </h1>
     <VerificationsAlert />
-    <v-divider class="my-2"></v-divider>
     <!--    <Coaching v-if="user" :coach="user"></Coaching> -->
-    <h2 class="primary--text">Anfragen:</h2>
+    <h2 class="primary--text mb-2">Anfragen</h2>
 
     <div v-if="requests.length != 0">
       <v-expansion-panels>

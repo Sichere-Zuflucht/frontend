@@ -1,3 +1,5 @@
 <template>
-  <Register></Register>
+  <v-container>
+    <Register></Register>
+  </v-container>
 </template>
