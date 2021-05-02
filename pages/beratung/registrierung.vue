@@ -22,7 +22,7 @@
       </div>
       <h2 v-else class="text-h2 secondary--text">Vervollständigen</h2>
       <CoachingSelection
-        v-if="user.info"
+        v-if="!user.info"
         :is-open="user.info ? false : true"
         :filter="false"
         :closable="user.info ? true : false"
