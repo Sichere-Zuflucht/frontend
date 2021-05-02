@@ -17,7 +17,11 @@
               <v-list-item-title v-text="item.title" />
             </v-list-item-content>
           </v-list-item>
-          <div v-if="user ? user.membership.id === 'Woman' : false">
+          <div
+            v-if="
+              user && user.membership ? user.membership.id === 'Woman' : false
+            "
+          >
             <v-list-item
               v-for="(item, i) in loggedInWoman"
               :key="i"
