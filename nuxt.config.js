@@ -1,7 +1,7 @@
 import colors from 'vuetify/es5/util/colors'
 
 const base = '/frontend'
-
+const hostURL = 'https://sichere-zuflucht.github.io'
 export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
@@ -15,13 +15,13 @@ export default {
   },
 
   publicRuntimeConfig: {
-    baseUrl: process.env.BASE_URL || 'http://localhost:3000',
     base,
     stripe: {
       publishableKey:
         'pk_test_51IbjZeFRsEq5IriEKQifwCzu8LMnx6uMxxhOz7HIELiaYpFCnsfNlVaiTOU72b2uWwQP4B5gI8GwDrsrSNJS0hPP00e8y3RbDo',
     },
     isDev: process.env.NODE_ENV !== 'production',
+    baseUrl: this.isDev ? 'http://localhost:3000' : hostURL,
   },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
