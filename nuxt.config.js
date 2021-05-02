@@ -23,7 +23,7 @@ export default {
         'pk_test_51IbjZeFRsEq5IriEKQifwCzu8LMnx6uMxxhOz7HIELiaYpFCnsfNlVaiTOU72b2uWwQP4B5gI8GwDrsrSNJS0hPP00e8y3RbDo',
     },
     isDev,
-    baseUrl: isDev ? 'http://localhost:3000' : hostURL,
+    baseUrl: isDev ? 'http://localhost:3000' + base : hostURL + base,
   },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
