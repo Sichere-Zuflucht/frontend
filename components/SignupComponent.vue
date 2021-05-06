@@ -53,7 +53,6 @@
             :loading="loading"
             :disabled="!valid"
             @click="login"
-            to="/profile"
             nuxt
             >Einloggen</v-btn
           >
@@ -141,8 +140,11 @@ export default {
     login() {
       this.loading = true
       if (process.client) {
-        this.$fire.auth
-          .signInWithEmailAndPassword(this.email, this.password)
+        this.$store
+          .dispatch('modules/user/login', {
+            email: this.email,
+            password: this.password,
+          })
           .then((e) => {
             this.loading = false
           })
@@ -153,6 +155,22 @@ export default {
           })
       }
     },
+    /* login() {
+      this.loading = true
+      if (process.client) {
+        this.$fire.auth
+          .signInWithEmailAndPassword(this.email, this.password)
+          .then((e) => {
+            this.loading = false
+            this.$router.push({ path: '/profile' })
+          })
+          .catch((err) => {
+            this.loading = false
+            this.error.status = true
+            this.error.message = err.message
+          })
+      }
+    }, */
     register() {
       if (!this.$refs.form.validate()) return
       this.loading = true

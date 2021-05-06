@@ -1,10 +1,27 @@
 <template>
   <v-app light>
     <v-navigation-drawer v-model="drawer" app class="primary" dark fixed>
-      <client-only v-if="loggedIn">
-        <v-list>
+      <v-list v-if="loggedIn">
+        <v-list-item
+          v-for="(item, i) in loggedInUser"
+          :key="i"
+          :to="item.to"
+          nuxt
+          exact
+        >
+          <v-list-item-icon>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title v-text="item.title" />
+          </v-list-item-content>
+        </v-list-item>
+        <p class="caption ml-4 mb-0">
+          {{ user.membership ? user.membership.name : null }}
+        </p>
+        <div v-if="user.membership ? user.membership.id === 'Woman' : false">
           <v-list-item
-            v-for="(item, i) in loggedInUser"
+            v-for="(item, i) in loggedInWoman"
             :key="i"
             :to="item.to"
             nuxt
@@ -17,43 +34,27 @@
               <v-list-item-title v-text="item.title" />
             </v-list-item-content>
           </v-list-item>
-          <div v-if="user ? user.membership.id === 'Woman' : false">
-            <v-list-item
-              v-for="(item, i) in loggedInWoman"
-              :key="i"
-              :to="item.to"
-              nuxt
-              exact
-            >
-              <v-list-item-icon>
-                <v-icon>{{ item.icon }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title v-text="item.title" />
-              </v-list-item-content>
-            </v-list-item>
-          </div>
-          <div v-else>
-            <v-list-item
-              v-for="(item, i) in loggedInCoach"
-              :key="i"
-              :to="item.to"
-              nuxt
-              exact
-            >
-              <v-list-item-icon>
-                <v-icon>{{ item.icon }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title v-text="item.title" />
-              </v-list-item-content>
-            </v-list-item>
-          </div>
-          <v-list-item>
-            <v-btn block to="/" @click="logout">Abmelden</v-btn>
+        </div>
+        <div v-else>
+          <v-list-item
+            v-for="(item, i) in loggedInCoach"
+            :key="i"
+            :to="item.to"
+            nuxt
+            exact
+          >
+            <v-list-item-icon>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title v-text="item.title" />
+            </v-list-item-content>
           </v-list-item>
-        </v-list>
-      </client-only>
+        </div>
+        <v-list-item>
+          <v-btn block to="/" @click="logout">Abmelden</v-btn>
+        </v-list-item>
+      </v-list>
       <v-list v-else>
         <v-list-item
           v-for="(item, i) in noUser"
@@ -209,7 +210,7 @@ export default {
   },
   methods: {
     login() {
-      this.$router.push('/login')
+      this.$router.push('/signup')
     },
     logout() {
       this.$fire.auth.signOut()

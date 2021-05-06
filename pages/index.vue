@@ -9,7 +9,7 @@
           <h4 class="subheading">
             für Frauen und deren Kindern, die zuhause Gewalt erleiden!
           </h4>
-          <v-btn to="/login" color="primary">Hilfe erhalten</v-btn>
+          <v-btn to="/signup" color="primary">Hilfe erhalten</v-btn>
         </v-col>
       </v-row>
     </v-parallax>
@@ -28,7 +28,7 @@
           </v-sheet>
         </v-row>
         <v-row align="center" justify="center">
-          <v-btn to="/login" color="secondary"> Frauen unterstützen</v-btn>
+          <v-btn to="/signup" color="secondary"> Frauen unterstützen</v-btn>
         </v-row>
       </v-col>
     </v-container>

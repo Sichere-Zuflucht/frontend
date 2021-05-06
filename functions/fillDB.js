@@ -4,7 +4,7 @@ admin.initializeApp({ projectId: 'sicherezuflucht' })
 admin.firestore().collection('memberships').doc('Coach').set({
   description: 'Ich möchte beratend tätig werden.',
   id: 'Coach',
-  name: 'Berater',
+  name: 'Beratung',
   routing: 'beratung',
 })
 
