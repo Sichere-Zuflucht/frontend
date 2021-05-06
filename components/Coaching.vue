@@ -58,6 +58,10 @@
         Der Coach hat auf deine Anfrage noch nicht reagiert.
       </div>
       <div v-else-if="!response.acceptedDate">
+        <p class="caption">
+          Wähle einen der Termine aus, welche dein/e Berater*in die
+          vorgeschlagen hat:
+        </p>
         <v-row>
           <v-col cols="7">
             <v-select
@@ -67,23 +71,19 @@
               dense
             ></v-select>
           </v-col>
-          <v-col cols="5">Preis: 60€</v-col>
+          <v-col cols="5" class="pt-5 success--text font-weight-bold"
+            >Preis: 60€</v-col
+          >
         </v-row>
-        <v-row class="mb-2"
-          ><v-btn
+        <v-row class="mb-2">
+          <v-btn
             color="success"
             :loading="payButtonLoading"
-            :disabled="acceptDisable"
+            :disabled="!date"
             @click="pay"
             >{{ acceptText }}</v-btn
-          ><v-btn
-            color="success"
-            :disabled="!date"
-            :loading="acceptLoading"
-            @click="getRedLink(response, date)"
-            >Datum wählen</v-btn
           ><v-btn plain color="orange">Nachfragen</v-btn>
-          <v-btn plain @click="cancel(response)">Absagen</v-btn>
+          <v-btn plain @click="cancel(response)" class="pa-0">Absagen</v-btn>
         </v-row>
       </div>
       <div v-else>
@@ -126,9 +126,9 @@ export default {
   },
   data() {
     return {
-      acceptText: this.response && this.response.payed ? 'Bezahlt' : 'Bezahlen',
+      acceptText: this.response.payed ? 'Bezahlt' : 'Bezahlen',
       acceptLoading: false,
-      acceptDisable: this.response && this.response.payed,
+      acceptDisable: true,
       date: null,
       payButtonLoading: false,
     }
@@ -218,6 +218,11 @@ export default {
         // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
         sessionId: paymentID,
       })
+    },
+  },
+  watch: {
+    response(res) {
+      console.log(res)
     },
   },
 }

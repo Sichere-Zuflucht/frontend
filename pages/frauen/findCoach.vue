@@ -15,8 +15,8 @@
       </div>
     </div>
     <v-alert v-else color="primary" dark class="mt-8">
-      Keiner unserer Berater erfüllt diese Kriterien. Bitte passe die Kriterien
-      an unter "Filter anzeigen" oder kontaktiere uns unter:
+      Keiner unserer Berater*innen erfüllt diese Kriterien. Bitte passe die
+      Kriterien an unter "Filter anzeigen" oder kontaktiere uns unter:
       <a
         class="white--text"
         href="mailto:kontakt@sichere-zuflucht.de"
