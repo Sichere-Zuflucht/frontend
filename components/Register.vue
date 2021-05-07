@@ -42,7 +42,11 @@ export default {
   methods: {
     register() {
       // Confirm the link is a sign-in with email link.
-      if (window.$nuxt.$fire.auth.isSignInWithEmailLink(window.location.href)) {
+      console.log(
+        'emaillink: ',
+        this.$fire.auth.isSignInWithEmailLink(window.location.href)
+      )
+      if (this.$fire.auth.isSignInWithEmailLink(window.location.href)) {
         const email = window.localStorage.getItem('emailForSignIn')
         if (email) {
           this.email = email

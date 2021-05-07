@@ -4,14 +4,12 @@ export default async function ({ store, redirect, route }) {
   await store.restored
 
   // /register is responsible for verifying the email address
-  if (route.path === '/register' && !isSignInWithEmailLink(route))
-    redirect('/signup')
+  if (route.path === '/register' && !isSignInWithEmailLink(route)) redirect('/')
 
   // /update-profile asks the user for additional information
   if (route.path === '/update-profile' && route.query.eMail === undefined) {
     redirect('/signup')
   }
-  console.log('isAuth? ', store.getters['modules/user/isAuthenticated'])
   if (
     route.path === '/signup' &&
     store.getters['modules/user/isAuthenticated']
@@ -24,7 +22,8 @@ export default async function ({ store, redirect, route }) {
 
 function isSignInWithEmailLink(route) {
   if (process.client) {
-    return this.$fire.auth.isSignInWithEmailLink(route.fullPath)
+    // window.$nuxt.$fire is important here
+    return window.$nuxt.$fire.auth.isSignInWithEmailLink(route.fullPath)
   }
   return false
 }

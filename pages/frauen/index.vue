@@ -1,8 +1,8 @@
 <template>
   <v-container>
     <h1 class="text-h1 primary--text">Deine Übersicht</h1>
+    <h2 class="text-h2 secondary--text mt-6 mb-3">Deine Beratungstermine</h2>
     <div v-if="responses">
-      <h2 class="text-h2 secondary--text mt-6 mb-3">Deine Beratungstermine</h2>
       <div v-if="responses.length === 0">
         <p>Du hast noch keine Beratung gebucht</p>
         <v-btn to="findCoach" color="secondary" append
@@ -29,48 +29,14 @@
           </div>
         </v-slide-item>
       </v-slide-group>
-
-      <!--<v-expansion-panels>
-        <v-expansion-panel v-for="(response, i) in responses" :key="i">
-          <v-expansion-panel-header>
-            {{ response.coach.firstName }}
-            {{ response.coach.lastName }}</v-expansion-panel-header
-          >
-          <v-expansion-panel-content>
-            <v-row class="mb-4">
-              <Coaching :coach="response.coach" :clickable="false" />
-            </v-row>
-            <div v-if="!response.acceptedDate">
-              <v-row>
-                <v-col cols="7">
-                  <v-select
-                    v-model="date"
-                    :items="response.suggestions"
-                    label="Termin"
-                    dense
-                  ></v-select>
-                </v-col>
-                <v-col cols="5"
-                  ><v-btn
-                    color="success"
-                    :disabled="!date"
-                    @click="accept(response, date)"
-                    :loading="acceptLoading"
-                    :disable="acceptDisable"
-                    >{{ acceptText }}</v-btn
-                  ></v-col
-                >
-              </v-row>
-              <v-row class="mb-2"
-                ><v-btn plain @click="cancel(response)">Absagen</v-btn
-                ><v-spacer /><v-btn plain color="orange">Nachfragen</v-btn>
-              </v-row>
-            </div>
-            <div v-else>Zugesagt für {{ response.acceptedDate }}</div>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels> -->
     </div>
+    <v-sheet v-else elevation="2" class="pa-2"
+      ><v-skeleton-loader
+        class="mx-auto"
+        max-width="300"
+        type="list-item-avatar, list-item-three-line, list-item-three-line, actions"
+      ></v-skeleton-loader
+    ></v-sheet>
     <v-divider class="my-3"></v-divider>
     <h2 class="text-h2 secondary--text mt-6 mb-3">Angebote</h2>
     <v-row>
@@ -125,7 +91,7 @@ export default {
   data() {
     return {
       userData: null,
-      responses: [],
+      responses: null,
     }
   },
   computed: {
@@ -134,22 +100,23 @@ export default {
     },
   },
   mounted() {
-    this.$fire.functions
-      .httpsCallable('request-getRequests')()
-      .then((requests) => {
-        requests.data.forEach((request) => {
-          const db = window.$nuxt.$fire.firestore
-          db.collection('users')
-            .doc(request.coachId)
+    this.$fire.firestore.collection('requests').onSnapshot((snap) => {
+      this.responses = []
+      snap.docs.forEach((req) => {
+        if (req.data().ids.includes(this.user.uid))
+          this.$fire.firestore
+            .collection('users')
+            .doc(req.data().coachId)
             .get()
             .then((coachSnap) => {
               this.responses.push({
                 coach: coachSnap.data(),
-                ...request,
+                id: req.id,
+                ...req.data(),
               })
             })
-        })
       })
+    })
   },
 }
 </script>
