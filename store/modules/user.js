@@ -63,7 +63,6 @@ const actions = {
   },
   async login({ dispatch }, form) {
     // sign user in
-    console.log('form email: ', form.email)
     const { user } = await this.$fire.auth.signInWithEmailAndPassword(
       form.email,
       form.password
@@ -124,12 +123,10 @@ const mutations = {
         state[entry[0]] = entry[1]
       }
     }
-    console.log('state: ', state)
   },
   setMembershipAndRedirect(state, membership) {
     console.log('[STORE MUTATIONS] - setMembershipAndRedirect:', membership)
     state.membership = membership
-    console.log('start redirect')
     this.$router.push({ path: '/profile' })
   },
   setUserData(state, userData) {

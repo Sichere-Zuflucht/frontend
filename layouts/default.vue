@@ -91,6 +91,21 @@
     <v-main>
       <nuxt class="pb-8" />
     </v-main>
+    <v-card
+      dark
+      color="red"
+      width="70"
+      style="position: fixed; bottom: 30%; right: 0; z-index: 100"
+      href="https://www.chefkoch.de/rs/s0/was+kochen/Rezepte.html"
+      tile
+    >
+      <v-card-text class="pa-1 d-flex flex-column align-center">
+        <v-icon small>mdi-eye-off</v-icon>
+        <p style="font-size: 10px; line-height: 10px" class="text-center mb-0">
+          Seite verstecken
+        </p>
+      </v-card-text>
+    </v-card>
     <v-footer inset absolute app class="d-flex flex-column justify-center mt-6">
       <span class="mt-4"
         >&copy; {{ new Date().getFullYear() }} Sichere Zuflucht gGmbH</span

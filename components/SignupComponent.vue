@@ -28,6 +28,7 @@
             :loading="loading"
             :disabled="!valid"
             @click="next"
+            style="float: right"
             >Weiter</v-btn
           >
         </v-stepper-content>
@@ -85,6 +86,27 @@
           <v-alert v-if="error.status" color="error" class="white--text mt-4">{{
             error.message
           }}</v-alert>
+        </v-stepper-content>
+        <v-stepper-content step="3">
+          <h2 class="text-h1 primary--text mb-4">Danke für deine Anmeldung!</h2>
+          <h3 class="text-h2 secondary--text mb-8">
+            Wir haben dir eine Bestätigungsmail gesendet.
+          </h3>
+          <p class="caption">
+            Bitte schau in dein Mail-Postfach. Kontrolliere ggf. auch den Spam
+            Ordner.
+          </p>
+          <p class="caption">
+            Sollte nichts angekommen sein, kannst du dir die Email noch einmal
+            zusenden lassen.
+          </p>
+          <v-btn
+            color="primary"
+            :loading="loading"
+            @click="register"
+            class="mb-4"
+            >Erneut senden</v-btn
+          >
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
@@ -173,6 +195,7 @@ export default {
     }, */
     register() {
       if (!this.$refs.form.validate()) return
+      this.e1 = 3
       this.loading = true
 
       this.$fire.auth

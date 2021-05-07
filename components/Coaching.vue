@@ -83,7 +83,11 @@
             @click="pay"
             >{{ acceptText }}</v-btn
           ><v-btn plain color="orange">Nachfragen</v-btn>
-          <v-btn plain @click="cancel(response)" class="pa-0">Absagen</v-btn>
+          <v-btn plain @click="isDelete = true" class="pa-0">Absagen</v-btn>
+          <v-alert v-if="isDelete" type="warning" class="mt-2"
+            >Anfrage wirklich absagen?
+            <v-btn @click="cancel(response.id)">Ja, absagen</v-btn></v-alert
+          >
         </v-row>
       </div>
       <div v-else>
@@ -126,11 +130,16 @@ export default {
   },
   data() {
     return {
-      acceptText: this.response.payed ? 'Bezahlt' : 'Bezahlen',
+      acceptText: this.response
+        ? this.response.payed
+          ? 'Bezahlt'
+          : 'Bezahlen'
+        : null,
       acceptLoading: false,
       acceptDisable: true,
       date: null,
       payButtonLoading: false,
+      isDelete: false,
     }
   },
   methods: {
@@ -194,14 +203,10 @@ export default {
         })
       humanResponse.acceptedDate = dateInput
     },
-    cancel(coaching) {
+    cancel(doc) {
+      console.log('delete: ', doc, doc)
       const db = this.$fire.firestore
-      db.collection('users/' + coaching.id + '/requests')
-        .doc(this.$store.state.user.uid)
-        .delete()
-      db.collection('users/' + this.user.uid + '/response')
-        .doc(coaching.id)
-        .delete()
+      db.collection('requests').doc(doc).delete()
     },
     async pay() {
       this.payButtonLoading = true
@@ -218,11 +223,6 @@ export default {
         // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
         sessionId: paymentID,
       })
-    },
-  },
-  watch: {
-    response(res) {
-      console.log(res)
     },
   },
 }
