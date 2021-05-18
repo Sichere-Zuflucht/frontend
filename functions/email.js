@@ -3,7 +3,10 @@ const admin = require('firebase-admin')
 const nodemailer = require('nodemailer')
 admin.initializeApp()
 
-const { verificationNotificationMail } = require('./emailTemplates')
+const {
+  verificationNotificationMail,
+  reqDeletedNotificationMail,
+} = require('./emailTemplates')
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.sendgrid.net',
@@ -34,6 +37,16 @@ async function sendMail(emailData) {
 }
 
 function sendNotificationMailToSZ(emailData) {
+  const mailOptions = {
+    from: 's.fellner@sichere-zuflucht.de',
+    to: 'kontakt@sichere-zuflucht.de',
+    subject: emailData.subject,
+    html: emailData.html,
+  }
+
+  return transporter.sendMail(mailOptions)
+}
+function sendNotificationReqDeleted(emailData) {
   const mailOptions = {
     from: 's.fellner@sichere-zuflucht.de',
     to: 'kontakt@sichere-zuflucht.de',
@@ -81,4 +94,8 @@ exports.sendVerifyAccMail = functions.https.onCall(async (data, context) => {
     .get()
     .then((snap) => snap.data())
   return sendNotificationMailToSZ(verificationNotificationMail(email))
+})
+
+exports.sendRequestDeleted = functions.https.onCall((date) => {
+  return sendNotificationReqDeleted(reqDeletedNotificationMail(date))
 })

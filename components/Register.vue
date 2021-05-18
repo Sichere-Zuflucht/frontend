@@ -20,7 +20,7 @@
             Irgendetwas ist schief gelaufen. Versuche dich erneut zu
             registrieren.
           </p>
-          <v-btn nuxt to="/signup">Erneut registrieren</v-btn>
+          <v-btn to="/signup" exact nuxt>Erneut registrieren</v-btn>
         </v-alert>
       </v-card-text>
     </v-card>

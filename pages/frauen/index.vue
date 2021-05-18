@@ -100,7 +100,9 @@ export default {
     },
   },
   mounted() {
-    this.$fire.firestore.collection('requests').onSnapshot((snap) => {
+    this.getRealtimeData()
+
+    /* this.$fire.firestore.collection('requests').onSnapshot((snap) => {
       this.responses = []
       snap.docs.forEach((req) => {
         if (req.data().ids.includes(this.user.uid))
@@ -116,7 +118,43 @@ export default {
               })
             })
       })
-    })
+    }) */
+  },
+  methods: {
+    getRealtimeData() {
+      this.responses = []
+      this.$fire.functions
+        .httpsCallable('request-getRequestsRealtime')()
+        .then(async (req) => {
+          const data = await req.data
+          console.log('data: ', data)
+          data.forEach((r) => {
+            if (r.ids.includes(this.user.uid))
+              this.$fire.firestore
+                .collection('users')
+                .doc(r.coachId)
+                .get()
+                .then((coachSnap) => {
+                  console.log('coachSnap: ', coachSnap.data())
+                  this.responses.push({
+                    coach: coachSnap.data(),
+                    ...data,
+                  })
+                })
+          })
+          /* this.$fire.firestore
+            .collection('users')
+            .doc(req.data.coachId)
+            .get()
+            .then((coachSnap) => {
+              this.coach.push({
+                coach: coachSnap.data(),
+                id: req.id,
+                ...req.data(),
+              })
+            }) */
+        })
+    },
   },
 }
 </script>

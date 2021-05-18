@@ -69,7 +69,7 @@
         </v-list-item>
         <v-spacer />
         <v-list-item>
-          <v-btn block to="signup">Anmelden</v-btn>
+          <v-btn to="/signup" exact nuxt block>Anmelden</v-btn>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -172,19 +172,19 @@ export default {
         },
         {
           title: 'Über uns',
-          to: '/a',
+          to: '/',
         },
         {
           title: 'Wie wir helfen',
-          to: '/a',
+          to: '/',
         },
         {
           title: 'Wie du helfen kannst',
-          to: '/a',
+          to: '/',
         },
         {
           title: 'Aktuelles',
-          to: '/a',
+          to: '/',
         },
       ],
       footer: [

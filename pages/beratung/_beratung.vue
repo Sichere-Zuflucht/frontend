@@ -73,16 +73,13 @@
           <v-alert v-if="showConfirmation" color="success" dark class="mt-4"
             >Deine Nachricht wurde versendet, {{ coachName }} wird sich bei dir
             melden.
-            <v-btn
-              color="white"
-              class="mt-2 black--text"
-              @click="$router.go(-1)"
-              >Zurück zu den Beratungen
-            </v-btn>
           </v-alert>
           <v-alert v-if="error.status" color="error" class="white--text mt-4"
             >{{ error.message }}
           </v-alert>
+          <v-btn class="mt-16" @click="$router.go(-1)">
+            <v-icon>mdi-arrow-left</v-icon> Zurück zu den Beratungen
+          </v-btn>
         </v-form>
       </div>
     </v-container>

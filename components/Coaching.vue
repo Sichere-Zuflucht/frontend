@@ -83,7 +83,7 @@
             @click="pay"
             >{{ acceptText }}</v-btn
           ><v-btn plain color="orange">Nachfragen</v-btn>
-          <v-btn plain @click="isDelete = true" class="pa-0">Absagen</v-btn>
+          <v-btn plain class="pa-0" @click="isDelete = true">Absagen</v-btn>
           <v-alert v-if="isDelete" type="warning" class="mt-2"
             >Anfrage wirklich absagen?
             <v-btn @click="cancel(response.id)">Ja, absagen</v-btn></v-alert
@@ -118,7 +118,10 @@ export default {
       type: Object,
       default: () => {},
     },
-    response: null,
+    response: {
+      type: Object,
+      default: () => {},
+    },
     clickable: {
       type: Boolean,
       default: true,
@@ -204,9 +207,11 @@ export default {
       humanResponse.acceptedDate = dateInput
     },
     cancel(doc) {
-      console.log('delete: ', doc, doc)
       const db = this.$fire.firestore
       db.collection('requests').doc(doc).delete()
+      this.$fire.functions.httpsCallable('email-sendRequestDeleted')(
+        this.response.acceptedDate
+      )
     },
     async pay() {
       this.payButtonLoading = true
