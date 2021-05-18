@@ -7,7 +7,7 @@
     <VerificationsAlert />
     <!--    <Coaching v-if="user" :coach="user"></Coaching> -->
     <h2 class="primary--text mb-2">Anfragen</h2>
-    <div v-if="requests">
+    <div v-if="requests != null">
       <div v-if="requests.length != 0">
         <v-expansion-panels>
           <v-expansion-panel v-for="(item, i) in requests" :key="i">
@@ -161,6 +161,21 @@ export default {
   },
   mounted() {
     this.user = this.$store.getters['modules/user/user']
+    this.getRealtimeData()
+
+    /* this.$fire.firestore
+      .collection('requests')
+      .where('ids', 'array-contains', this.user.uid)
+      .onSnapshot((snap) => {
+        this.requests = []
+        snap.docs.forEach((u) => {
+          this.requests.push({
+            id: u.id,
+            ...u.data(),
+          })
+        })
+      })
+    /*
     this.$fire.firestore.collection('requests').onSnapshot((snap) => {
       this.requests = []
       snap.docs.forEach((u) => {
@@ -170,9 +185,17 @@ export default {
             ...u.data(),
           })
       })
-    })
+    }) */
   },
   methods: {
+    getRealtimeData() {
+      this.requests = []
+      this.$fire.functions
+        .httpsCallable('request-getRequestsRealtime')()
+        .then(async (req) => {
+          this.requests = await req.data
+        })
+    },
     addSuggestions(request) {
       this.loading = true
       this.$fire.functions

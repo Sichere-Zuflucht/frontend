@@ -78,3 +78,11 @@ exports.verificationNotificationMail = (email) => {
     </div>`,
   }
 }
+exports.reqDeletedNotificationMail = (date) => {
+  return {
+    subject: 'Sichere Zuflucht - Anfrage abgesagt',
+    html: `<div style="font-size: 16px;">Anfrage wurde abgesagt<br><br>
+    Eine Frau hat Ihre Anfrage für den ${date} abgesagt.
+    </div>`,
+  }
+}

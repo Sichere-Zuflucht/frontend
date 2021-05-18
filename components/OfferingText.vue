@@ -21,7 +21,9 @@
       </v-list-item>
     </v-list>
     <v-sheet v-if="buttons" class="d-flex align-center">
-      <v-btn to="/signup" color="secondary mx-auto">Anmeldung für Frauen</v-btn>
+      <v-btn to="/signup" exact nuxt color="secondary mx-auto"
+        >Anmeldung für Frauen</v-btn
+      >
     </v-sheet>
     <p v-if="price" class="my-12">[Preisinfo]</p>
     <p class="caption font-weight-bold mb-0 pb-0">Berater*innen können hier:</p>
@@ -36,7 +38,7 @@
       </v-list-item>
     </v-list>
     <v-sheet v-if="buttons" class="d-flex align-center">
-      <v-btn to="/signup" color="secondary mx-auto"
+      <v-btn to="/signup" exact nuxt color="secondary mx-auto"
         >Anmeldung für Berater*innen</v-btn
       >
     </v-sheet>
