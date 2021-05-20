@@ -42,7 +42,12 @@ exports.getRequestsRealtime = functions.https.onCall((data, context) => {
       })
   })
   p.then((res) => {
-    return res
+    function sortRequests(a, b) {
+      return b.coachAnswered - a.coachAnswered
+    }
+    const order = res.sort(sortRequests)
+    console.log('order: ', order)
+    return order
   })
   return p
 })

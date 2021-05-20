@@ -89,7 +89,7 @@
       </client-only>
     </v-app-bar>
     <v-main>
-      <nuxt class="pb-8" />
+      <nuxt />
     </v-main>
     <v-card
       dark
