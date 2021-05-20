@@ -5,12 +5,7 @@
     </h1>
     <CoachingSelection :is-coach="false" @filter="filter" />
     <div v-if="filteredCoaches.length > 0">
-      <div
-        v-for="(coaching, i) in filteredCoaches"
-        :key="i"
-        class="mt-5"
-        :coaching="coaching"
-      >
+      <div v-for="(coaching, i) in filteredCoaches" :key="i" class="mt-5">
         <Coaching :coach="coaching" />
       </div>
     </div>

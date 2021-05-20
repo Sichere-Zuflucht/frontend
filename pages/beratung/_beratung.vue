@@ -1,86 +1,128 @@
 <template>
   <div v-if="coach">
-    <v-img :lazy-src="coach.avatar" :src="coach.avatar"></v-img>
+    <v-sheet class="d-flex justify-center pt-8"
+      ><v-avatar :lazy-src="coach.avatar" :src="coach.avatar" size="162">
+        <v-img :lazy-src="coach.avatar" :src="coach.avatar"></v-img
+      ></v-avatar>
+    </v-sheet>
     <v-container>
-      <h1 class="text-center">{{ coach.firstName }} {{ coach.lastName }}</h1>
-      {{ coach.info.topicArea }}
+      <h1 class="text-center text-h1 primary--text text-uppercase">
+        {{ coach.firstName }} {{ coach.lastName }}
+      </h1>
+      <h2 class="text-center text-h5 mb-8">
+        {{ coach.profession }}
+      </h2>
+
+      <p class="font-weight-bold mb-1 mt-2 caption">Fachgebiet</p>
+      <div class="d-flex flex-wrap">
+        <v-chip outlined color="primary" class="mr-1 mb-1 caption">
+          <p class="black--text ma-0 pa-0">{{ coach.info.topicArea }}</p>
+        </v-chip>
+      </div>
+      <p class="font-weight-bold mb-1 mt-2 caption">Themen</p>
       <div class="d-flex flex-wrap">
         <v-chip
           v-for="tag in coach.info.topicPoints"
           :key="tag"
-          label
+          outlined
           color="primary"
-          class="mr-1 mb-1"
+          class="mr-1 mb-1 caption"
         >
-          <v-icon left> mdi-message</v-icon>
-          {{ tag }}
+          <p class="black--text ma-0 pa-0">{{ tag }}</p>
         </v-chip>
       </div>
+      <p class="font-weight-bold mb-1 mt-2 caption">Wer bin ich?</p>
       <div class="d-flex flex-wrap">
-        <v-chip
-          v-for="tag in coach.info.languages"
-          :key="tag"
-          label
-          color="secondary"
-          class="mr-1 mb-1"
-        >
-          <v-icon left> mdi-translate</v-icon>
-          {{ tag }}
-        </v-chip>
+        Hier kann ein kleiner Text stehen, der auf der Profilseite des Coaches
+        eingegeben wird. Wir müssen dann leider darauf achten, dass die
+        Profiltexte nicht missbraucht werden, z.B. mit Kontaktdaten und
+        Weiterleitungen zur eigenen Homepage oder so …
       </div>
-      <v-divider class="my-4"></v-divider>
-      <div>
-        <h2 class="text-center">Anfrage senden</h2>
-        <v-form
-          ref="form"
-          class="pt-4"
-          style="width: 100%"
-          @submit="
-            (e) => {
-              e.preventDefault()
-            }
-          "
+
+      <v-card
+        outlined
+        class="mt-8"
+        :style="'border: 1px solid ' + $vuetify.theme.themes.light.secondary"
+        elevation="2"
+      >
+        <v-card-title class="text-h2 secondary--text"
+          >online-<br />Beratungstermin<br />anfragen</v-card-title
         >
-          <v-textarea
-            v-if="showAddInfo"
-            v-model="message"
-            value="Jemand möchte mit Ihnen Kontakt aufnehmen."
-            label="persönliche Anfrage schreiben"
-          ></v-textarea>
-          <div class="d-flex justify-center">
-            <v-btn
-              v-if="!showAddInfo"
-              text
-              color="grey"
-              class="mx-auto"
-              @click="
-                () => {
-                  showAddInfo = true
-                }
-              "
-              >Text hinzufügen
-            </v-btn>
+        <v-card-text>
+          <p class="font-weight-bold mb-1 mt-2 caption">
+            Deine Terminvorschläge
+          </p>
+          <p>Deine Vorschläge sollten mind. 48h in der Zukunft liegen.</p>
+
+          <v-form
+            ref="form"
+            class="pb-8 pt-4"
+            @submit="
+              (e) => {
+                e.preventDefault()
+              }
+            "
+          >
+            <v-textarea
+              v-if="showAddInfo"
+              v-model="message"
+              outlined
+              color="secondary"
+              placeholder="Schlage hier Termine vor (Tag, Monat, Jahr, Uhrzeit) und am besten auch dein Thema:"
+              value="Jemand möchte mit Ihnen Kontakt aufnehmen."
+              label="persönliche Anfrage schreiben"
+            ></v-textarea>
+            <div class="d-flex justify-center mb-4">
+              <v-btn
+                v-if="!showAddInfo"
+                text
+                color="grey"
+                class="mx-auto mb-8"
+                @click="
+                  () => {
+                    showAddInfo = true
+                  }
+                "
+                >Text hinzufügen
+              </v-btn>
+            </div>
 
             <v-btn
-              color="primary"
-              class="mx-auto"
+              color="secondary"
+              class="mx-auto mb-8"
+              absolute
+              right
               :loading="loading"
               :disabled="isDisabled"
               @click="sendRequest"
               >{{ buttonText }}
             </v-btn>
-          </div>
-          <v-alert v-if="showConfirmation" color="success" dark class="mt-4"
-            >Deine Nachricht wurde versendet, {{ coachName }} wird sich bei dir
-            melden.
-          </v-alert>
-          <v-alert v-if="error.status" color="error" class="white--text mt-4"
-            >{{ error.message }}
-          </v-alert>
-          <v-btn class="mt-16" @click="$router.go(-1)">
-            <v-icon>mdi-arrow-left</v-icon> Zurück zu den Beratungen
-          </v-btn>
-        </v-form>
+            <v-alert v-if="showConfirmation" color="success" dark class="mt-4"
+              >Deine Nachricht wurde versendet, {{ coachName }} wird sich bei
+              dir melden.
+            </v-alert>
+            <v-alert v-if="error.status" color="error" class="white--text mt-4"
+              >{{ error.message }}
+            </v-alert>
+          </v-form>
+        </v-card-text>
+      </v-card>
+    </v-container>
+    <v-sheet color="grey lighten-5">
+      <v-container>
+        <PriceInfo />
+      </v-container>
+    </v-sheet>
+    <v-container>
+      <h2 class="text-h2 mt-8 secondary--text">weitere Berater*innen</h2>
+      <div v-if="filteredCoaches.length > 0">
+        <div
+          v-for="(coaching, i) in filteredCoaches.slice(0, 2)"
+          :key="i"
+          class="mt-5"
+        >
+          <Coaching :coach="coaching" />
+        </div>
       </div>
     </v-container>
   </div>
@@ -96,12 +138,14 @@ export default {
       showAddInfo: false,
       loading: false,
       isDisabled: false,
-      buttonText: 'anfragen',
+      buttonText: 'Terminanfrage senden',
       showConfirmation: false,
       error: {
         status: false,
         message: '',
       },
+      allCoaches: [],
+      filteredCoaches: [],
     }
   },
   computed: {
@@ -119,6 +163,9 @@ export default {
         console.log('result data: ', e)
         this.coach = e.data()
       }) */
+    const coachMembership = this.$fire.firestore
+      .collection('memberships')
+      .doc('Coach')
     this.$fire.firestore
       .collection('users')
       .doc(this.coachUID)
@@ -129,6 +176,21 @@ export default {
         e.data().info !== false
           ? (this.coach = e.data())
           : this.$router.push('/')
+      })
+      .then(() => {
+        this.$fire.firestore
+          .collection('users')
+          .where('membership', '==', coachMembership)
+          .get()
+          .then((ref) => {
+            ref.docs.forEach((doc) => {
+              const data = doc.data()
+              if (data.info && data.verifySetting.verified && data.stripe)
+                this.allCoaches.push({ id: doc.id, ...data })
+              // if (data.info) this.allCoaches.push({ id: doc.id, ...data })
+            })
+          })
+          .then((this.filteredCoaches = this.allCoaches))
       })
   },
   methods: {

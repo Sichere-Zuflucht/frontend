@@ -194,6 +194,7 @@ export default {
         .httpsCallable('request-getRequestsRealtime')()
         .then(async (req) => {
           this.requests = await req.data
+          console.log('req: ', req, this.requests)
         })
     },
     addSuggestions(request) {
