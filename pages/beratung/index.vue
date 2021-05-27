@@ -11,7 +11,23 @@
       <div v-if="requests.length != 0">
         <v-expansion-panels>
           <v-expansion-panel v-for="(item, i) in requests" :key="i">
-            <v-expansion-panel-header>
+            <v-expansion-panel-header
+              color="grey lighten-5"
+              class="d-flex align-center justify-start"
+            >
+              <v-avatar class="pr-2">
+                <v-img
+                  :lazy-src="item.womanAvatar"
+                  :src="item.womanAvatar"
+                  max-height="40"
+                  max-width="40"
+                ></v-img>
+              </v-avatar>
+              <div class="d-flex flex-column align-start">
+                <p class="caption mb-0">Frau</p>
+                <p class="font-weight-bold mb-0">{{ item.womanUserName }}</p>
+              </div>
+
               <v-chip
                 v-if="item.acceptedDate"
                 class="ma-2"
@@ -32,37 +48,23 @@
               <v-chip v-else class="ma-2" color="red" text-color="white">
                 unbearbeitet
               </v-chip>
-
-              Frau {{ item.userName }}
             </v-expansion-panel-header>
             <v-expansion-panel-content>
-              <v-card class="pa-6" elevation="0">
-                <v-card-title>
-                  <v-col class="mr-2 pa-0" cols="8">
-                    <p class="ma-0 caption">Frau</p>
-                    <p class="ma-0">{{ item.womanUserName }}</p></v-col
-                  >
-                  <v-col cols="3">
-                    <v-avatar color="primary" size="56">
-                      <v-img
-                        :lazy-src="item.womanAvatar"
-                        :src="item.womanAvatar"
-                        max-height="56"
-                        max-width="56"
-                      ></v-img>
-                    </v-avatar>
-                  </v-col>
-                </v-card-title>
-                <v-card-text>{{ item.message }}</v-card-text>
-                <v-card-actions class="d-inline-flex">
+              <v-card elevation="0">
+                <v-card-text
+                  ><v-textarea
+                    v-if="item.message"
+                    readonly
+                    label="Nachricht"
+                    :value="item.message"
+                    outlined
+                  ></v-textarea>
                   <div v-if="!item.coachAnswered">
-                    <v-divider></v-divider>
                     <v-select
                       v-model="selectedVideoType"
                       :items="videoTypes"
-                      single-line
-                      persistent-hint
-                      hint="Wähle einen Video Anbieter"
+                      outlined
+                      label="Videoanbieter auswählen"
                       class="mb-4"
                     ></v-select>
                     <v-list>
@@ -73,8 +75,9 @@
                         >
                           <v-list-item-content>
                             <v-list-item-title class="font-weight-bold"
-                              >{{ d }}
+                              >{{ formatDate(d.date) }}
                             </v-list-item-title>
+                            <p class="caption">{{ d.time }} Uhr</p>
                           </v-list-item-content>
                           <v-list-item-icon>
                             <v-icon @click="eraseDate(di, item.suggestions)"
@@ -89,14 +92,6 @@
                     <p class="mt-2 pa-2 caption">
                       Bitte füge mind. 3 Termine hinzu.
                     </p>
-
-                    <v-btn
-                      :loading="loading"
-                      :disabled="item.suggestions.length < 3"
-                      color="success"
-                      @click="addSuggestions(item)"
-                      >Zusagen
-                    </v-btn>
                   </div>
 
                   <div v-else-if="item.acceptedDate">
@@ -118,10 +113,19 @@
 
                   <v-banner v-else>
                     Es wurde noch kein Termin bestätigt...
-                  </v-banner>
-                </v-card-actions>
-                <v-card-actions class="d-inline-flex">
+                  </v-banner></v-card-text
+                >
+                <v-card-actions class="d-inline-flex"> </v-card-actions>
+                <v-card-actions class="d-flex justify-end">
                   <v-btn class="caption" plain>Frau absagen</v-btn>
+                  <v-btn
+                    v-if="!item.coachAnswered"
+                    :loading="loading"
+                    :disabled="item.suggestions.length < 3"
+                    color="success"
+                    @click="addSuggestions(item)"
+                    >Zusagen
+                  </v-btn>
                 </v-card-actions>
               </v-card>
             </v-expansion-panel-content>
@@ -213,6 +217,23 @@ export default {
     eraseDate(d, list) {
       const d2 = d + d
       d === 0 ? list.splice(d) : list.splice(d, d2)
+    },
+    formatDate(date) {
+      const d = new Date(date)
+      return d.toLocaleDateString('de-DE', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+      /* let month = '' + (d.getMonth() + 1)
+      let day = '' + d.getDate()
+      const year = d.getFullYear()
+
+      if (month.length < 2) month = '0' + month
+      if (day.length < 2) day = '0' + day
+
+      return [year, month, day].join('-') */
     },
   },
 }

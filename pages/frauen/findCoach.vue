@@ -1,25 +1,74 @@
 <template>
-  <v-container>
-    <h1 class="text-h1 primary--text mb-6">
-      Diese Berater*innen können dir helfen
-    </h1>
-    <CoachingSelection :is-coach="false" @filter="filter" />
-    <div v-if="filteredCoaches.length > 0">
-      <div v-for="(coaching, i) in filteredCoaches" :key="i" class="mt-5">
-        <Coaching :coach="coaching" />
+  <v-sheet>
+    <v-img
+      src="https://assets-global.website-files.com/5e95aa93bef5360e2788a86e/5e9e9727e2658e68125e8b48_header-berlin.jpg"
+    />
+    <v-container>
+      <h1 class="text-h1 primary--text">Beratung und Hilfe</h1>
+      <p class="mb-6">
+        in Form von <b>Online-Besprechungen</b> mit Fachleuten zu euren Themen.
+        Diese könnt ihr von überall ganz <b>einfach und anonym</b> mit dem
+        <b>Handy</b> machen.
+      </p>
+    </v-container>
+
+    <v-sheet color="blue-grey lighten-5"
+      ><v-container
+        ><div class="d-flex align-start">
+          <v-icon large color="secondary" class="pr-2">mdi-filter</v-icon>
+          <div>
+            <h2 class="text-h2 secondary--text">Beratungsfilter</h2>
+            <p class="caption">
+              Filtere hier die Berater*innen und Coaches nach den Fachgebieten
+              und Themen, die für dich relevant sind.
+            </p>
+          </div>
+        </div>
+
+        <CoachingSelection :is-coach="false" @filter="filter" />
+        <p class="caption mt-4">
+          <b>Dein Fachgebiet oder Thema ist nicht dabei?</b><br />
+          <a href="mailto:kontakt@sichere-zuflucht.de"
+            >Schreib uns eine Nachricht</a
+          >, vielleicht können wir trotzdem jemanden finden, der dir weiter
+          hilft.
+        </p></v-container
+      ></v-sheet
+    >
+    <v-container>
+      <div v-if="filteredCoaches.length > 0">
+        <div v-for="(coaching, i) in filteredCoaches" :key="i" class="mt-5">
+          <Coaching :coach="coaching" />
+        </div>
       </div>
-    </div>
-    <v-alert v-else color="primary" dark class="mt-8">
-      Keiner unserer Berater*innen erfüllt diese Kriterien. Bitte passe die
-      Kriterien an unter "Filter anzeigen" oder kontaktiere uns unter:
-      <a
-        class="white--text"
-        href="mailto:kontakt@sichere-zuflucht.de"
-        target="_blank"
-        >kontakt@sichere-zuflucht.de</a
+      <div
+        v-else-if="
+          filteredCoaches.length != allCoaches.length ||
+          filteredCoaches.length === 0
+        "
+        class="d-flex flex-column justify-center align-center mt-4"
       >
-    </v-alert>
-  </v-container>
+        <v-alert
+          v-if="filteredCoaches.length === 0"
+          color="primary"
+          dark
+          class="mt-8"
+        >
+          Keiner unserer Berater*innen erfüllt den angegebenen Kriterien.
+          <a
+            class="white--text"
+            href="mailto:kontakt@sichere-zuflucht.de"
+            target="_blank"
+          >
+            Schreibe uns eine Nachricht</a
+          >, sollte gar keiner unserer Berater*innen zu dir passen.
+        </v-alert>
+        <v-btn outlined small color="primary" @click="resetFilter"
+          >Alle anzeigen</v-btn
+        >
+      </div>
+    </v-container>
+  </v-sheet>
 </template>
 
 <script>
@@ -67,6 +116,9 @@ export default {
           )
         if (add) this.filteredCoaches.push(coach)
       })
+    },
+    resetFilter() {
+      this.filteredCoaches = this.allCoaches
     },
   },
 }

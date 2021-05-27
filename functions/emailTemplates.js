@@ -30,6 +30,39 @@ function listToHTML(list) {
   )
 }
 
+exports.housingInitialMail = (name, content, userId) => {
+  return {
+    subject: 'Sichere Zuflucht - Anfrage von Frau',
+    html: `<div style="font-size: 16px;">Wohnungssuche<br><br>
+    ${name} sucht eine Wohnung:
+    <br>
+    Angaben:
+    ${content.place}<br>
+    ${content.zip}<br>
+    <br>
+    Für ${content.amount} Person(en)<br>
+    und gesamt ${content.price}€ pro Monat.<br>
+    <br>
+    Zeitraum: ${listToHTML(content.range)}<br>
+    <br>
+    Eine Liste an angefragten zusätzlichen Einrichtungen:
+    ${listToHTML(content.features)}
+    <br>
+    <br>
+    —
+    <br>
+    <span style="font-family: monospace; margin-left: 2em">"${
+      content.message
+    }"</span>
+    <br>
+    <br>
+    Gesendet über das Wohnungsformular.
+    </div>`,
+    uid: userId,
+    sent: false,
+  }
+}
+
 exports.womanSuggestedDates = (coachName, dates, womanID) => {
   return {
     subject: `Sichere Zuflucht - Antwort von Coach ${coachName}`,

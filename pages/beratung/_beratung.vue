@@ -64,7 +64,6 @@
             "
           >
             <v-textarea
-              v-if="showAddInfo"
               v-model="message"
               outlined
               color="secondary"
@@ -72,37 +71,36 @@
               value="Jemand möchte mit Ihnen Kontakt aufnehmen."
               label="persönliche Anfrage schreiben"
             ></v-textarea>
-            <div class="d-flex justify-center mb-4">
+
+            <div class="d-flex flex-row-reverse mb-4">
               <v-btn
-                v-if="!showAddInfo"
-                text
-                color="grey"
-                class="mx-auto mb-8"
-                @click="
-                  () => {
-                    showAddInfo = true
-                  }
-                "
-                >Text hinzufügen
+                color="secondary"
+                :loading="loading"
+                :disabled="isDisabled"
+                @click="sendRequest"
+                >{{ buttonText }}
               </v-btn>
             </div>
-
-            <v-btn
-              color="secondary"
-              class="mx-auto mb-8"
-              absolute
-              right
-              :loading="loading"
-              :disabled="isDisabled"
-              @click="sendRequest"
-              >{{ buttonText }}
-            </v-btn>
             <v-alert v-if="showConfirmation" color="success" dark class="mt-4"
               >Deine Nachricht wurde versendet, {{ coachName }} wird sich bei
               dir melden.
             </v-alert>
             <v-alert v-if="error.status" color="error" class="white--text mt-4"
               >{{ error.message }}
+            </v-alert>
+            <v-alert
+              border="right"
+              colored-border
+              type="info"
+              color="secondary"
+              elevation="2"
+            >
+              <p class="caption">
+                Die Terminvorschläge werden von der/dem Berater*in bestätigt.
+                Danach kannst du die Beratung verbindlich buchen.
+
+                <a>Infos zur Termineinhaltung</a>
+              </p>
             </v-alert>
           </v-form>
         </v-card-text>
@@ -186,11 +184,25 @@ export default {
             ref.docs.forEach((doc) => {
               const data = doc.data()
               if (data.info && data.verifySetting.verified && data.stripe)
-                this.allCoaches.push({ id: doc.id, ...data })
+                if (this.coachUID !== doc.id)
+                  this.allCoaches.push({ id: doc.id, ...data })
               // if (data.info) this.allCoaches.push({ id: doc.id, ...data })
             })
           })
-          .then((this.filteredCoaches = this.allCoaches))
+          .then(() => {
+            function shuffleArray(array) {
+              for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1))
+                const temp = array[i]
+                array[i] = array[j]
+                array[j] = temp
+              }
+              return array
+            }
+            console.log(shuffleArray(this.allCoaches))
+
+            this.filteredCoaches = shuffleArray(this.allCoaches)
+          })
       })
   },
   methods: {
