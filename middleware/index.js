@@ -4,19 +4,17 @@ export default async function ({ store, redirect, route }) {
   await store.restored
 
   // /register is responsible for verifying the email address
-  if (route.path === '/register' && !isSignInWithEmailLink(route))
-    redirect('/login')
+  if (route.path === '/register' && !isSignInWithEmailLink(route)) redirect('/')
 
   // /update-profile asks the user for additional information
   if (route.path === '/update-profile' && route.query.eMail === undefined) {
-    redirect('/login')
+    redirect('/signup')
   }
-
   if (
-    route.path === '/login' &&
+    route.path === '/signup' &&
     store.getters['modules/user/isAuthenticated']
   ) {
-    redirect('/')
+    redirect('/profile')
   }
 
   redirectProfilePage(store, redirect, route)
@@ -24,6 +22,7 @@ export default async function ({ store, redirect, route }) {
 
 function isSignInWithEmailLink(route) {
   if (process.client) {
+    // window.$nuxt.$fire is important here
     return window.$nuxt.$fire.auth.isSignInWithEmailLink(route.fullPath)
   }
   return false
@@ -32,7 +31,7 @@ function isSignInWithEmailLink(route) {
 function redirectProfilePage(store, redirect, route) {
   if (route.path === '/profile') {
     if (!store.getters['modules/user/isAuthenticated']) {
-      return redirect('/login')
+      return redirect('/signup')
     }
 
     // coach did not enter info what coaching he wants to do

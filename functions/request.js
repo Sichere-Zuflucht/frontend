@@ -22,6 +22,35 @@ exports.getRequests = functions.https.onCall((data, context) => {
     })
 })
 
+exports.getRequestsRealtime = functions.https.onCall((data, context) => {
+  const p = new Promise((resolve, reject) => {
+    admin
+      .firestore()
+      .collection('requests')
+      .where('ids', 'array-contains', context.auth.uid)
+      .onSnapshot((snap) => {
+        const requests = []
+        snap.docs.forEach((u, i) => {
+          requests.push({
+            id: u.id,
+            ...u.data(),
+          })
+          if (i === snap.docs.length - 1) {
+            resolve(requests)
+          }
+        })
+      })
+  })
+  p.then((res) => {
+    function sortRequests(a, b) {
+      return b.coachAnswered - a.coachAnswered
+    }
+    const order = res.sort(sortRequests)
+    return order
+  })
+  return p
+})
+
 exports.sendRequest = functions.https.onCall(async (data, context) => {
   const womanData = await admin
     .firestore()
@@ -47,6 +76,34 @@ exports.sendRequest = functions.https.onCall(async (data, context) => {
       updatedAt: new Date(),
     })
 })
+
+// maybe interesting for later, if sichere zuflucht account is existing
+/* exports.sendHousingRequest = functions.https.onCall(async (data, context) => {
+  const womanData = await admin
+    .firestore()
+    .collection('users')
+    .doc(context.auth.uid)
+    .get()
+    .then((doc) => doc.data())
+
+  await admin
+    .firestore()
+    .collection('houseRequests')
+    .add({
+      eMails: housingInitialMail(
+        womanData.userName,
+        data.message,
+        context.auth.uid
+      ),
+      gotAnswer: false,
+      womanId: context.auth.uid,
+      message: data.message,
+      womanUserName: womanData.userName,
+      womanAvatar: womanData.avatar,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    })
+}) */
 
 exports.addSuggestions = functions.https.onCall(async (data, context) => {
   // get the inital request

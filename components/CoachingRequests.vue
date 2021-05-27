@@ -1,6 +1,21 @@
 <template>
-  <v-card elevation="2" nuxt :ripple="false" style="padding: 12px">
-    <v-sheet class="d-flex">
+  <v-card
+    elevation="2"
+    nuxt
+    :ripple="clickable"
+    :to="clickable ? '/beratung/' + coach.id : null"
+    outlined
+    :style="'border: 1px solid ' + $vuetify.theme.themes.light.primary"
+  >
+    <v-sheet
+      color="grey lighten-5"
+      class="d-flex"
+      :style="
+        'border-bottom: 1px solid ' +
+        $vuetify.theme.themes.light.primary +
+        ' !important'
+      "
+    >
       <v-avatar color="primary ma-5" size="35%"
         ><v-img :src="coach.avatar"
       /></v-avatar>
@@ -13,30 +28,86 @@
         </h3>
       </div>
     </v-sheet>
-    <v-card-text class="pt-0">
-      <p class="font-weight-bold mb-1 mt-2 caption">Fachgebiet</p>
-      <div class="d-flex flex-wrap">
-        <v-chip outlined color="primary" class="mr-1 mb-1 caption">
-          <p class="black--text ma-0 pa-0">{{ coach.info.topicArea }}</p>
-        </v-chip>
+
+    <v-card-text v-if="response">
+      <p class="text-uppercase font-weight-bold mb-1 mt-2 caption">
+        Vorschläge für einen Online-Beratungstermin
+      </p>
+      <div v-if="!response.coachAnswered">
+        Der Coach hat auf deine Anfrage noch nicht reagiert.
       </div>
-      <p class="font-weight-bold mb-1 mt-2 caption">Themen</p>
-      <div class="d-flex flex-wrap">
-        <v-chip
-          v-for="tag in coach.info.topicPoints"
-          :key="tag"
-          outlined
-          color="primary"
-          class="mr-1 mb-1 caption"
+      <div v-else-if="!response.acceptedDate">
+        <v-row>
+          <v-col cols="12">
+            <v-select
+              v-model="date"
+              :items="response.suggestions"
+              outlined
+              dense
+              hide-details
+              color="primary"
+              label="Bitte wählen"
+              class="my-2"
+            ></v-select>
+            <p class="caption">
+              Nach der Terminbestätigung wirst du direkt zu unserem
+              Zahlungsanbieter „stripe“ weitergeleitet. Nach deiner Zahlung
+              senden wir dir eine Termin-Bestätigung per E-Mail.
+            </p>
+            <v-btn
+              color="success"
+              :loading="payButtonLoading"
+              :disabled="!date"
+              @click="pay"
+              block
+              >{{ acceptText }}</v-btn
+            >
+          </v-col>
+        </v-row>
+      </div>
+      <div v-else>
+        <v-btn
+          class="my-2"
+          color="success"
+          target="_blank"
+          :href="
+            response.videoType === 'Jitsi'
+              ? response.jitsiLink
+              : response.redLink.codePatient
+          "
+          >zum Videocall
+        </v-btn>
+        <v-alert dark text dense color="success"
+          >Zugesagt für {{ response.acceptedDate }}</v-alert
         >
-          <p class="black--text ma-0 pa-0">{{ tag }}</p>
-        </v-chip>
       </div>
     </v-card-text>
-    <v-card-actions class="my-4">
-      <v-btn absolute right color="primary" :to="'/beratung/' + coach.id"
-        >Profil ansehen</v-btn
+    <v-card-actions
+      style="border-top: 1px solid lightgrey"
+      class="align-stretch pa-4"
+    >
+      <v-btn
+        small
+        color="primary"
+        outlined
+        nuxt
+        :to="'/beratung/' + response.coachId"
+        >{{ coach.id }} Neue Anfrage stellen</v-btn
       >
+      <v-dialog v-model="isDelete" persistent max-width="290">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn small text color="primary" v-bind="attrs" v-on="on"
+            >Termin löschen</v-btn
+          >
+        </template>
+        <v-alert type="warning" class="mt-2 ma-2"
+          >wirklich löschen?
+
+          <v-btn light @click="cancel(response.id)" class="mr-1"
+            >Ja, löschen</v-btn
+          ><v-btn light @click="isDelete = false"> nein </v-btn></v-alert
+        >
+      </v-dialog>
     </v-card-actions>
   </v-card>
 </template>
@@ -67,7 +138,7 @@ export default {
       acceptText: this.response
         ? this.response.payed
           ? 'Bezahlt'
-          : 'Bezahlen'
+          : 'Termin verbindlich buchen'
         : null,
       acceptLoading: false,
       acceptDisable: true,
@@ -140,9 +211,11 @@ export default {
     cancel(doc) {
       const db = this.$fire.firestore
       db.collection('requests').doc(doc).delete()
-      this.$fire.functions.httpsCallable('email-sendRequestDeleted')(
-        this.response.acceptedDate
-      )
+      this.$fire.functions
+        .httpsCallable('email-sendRequestDeleted')(this.response.acceptedDate)
+        .then(() => {
+          this.isDelete = false
+        })
     },
     async pay() {
       this.payButtonLoading = true

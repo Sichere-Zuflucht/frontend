@@ -1,8 +1,9 @@
 <template>
   <v-container>
-    <h1 class="text-h1 primary--text">Bitte vervollständige dein Profil</h1>
-    <p class="caption mt-6 text--secondary">Fülle alle Felder aus</p>
-    <v-form v-model="valid" class="mb-8">
+    <h1 class="text-h1 primary--text mb-4">Schön, dass du da bist!</h1>
+    <h2 class="text-h2 secondary--text mb-4">Du kannst direkt loslegen.</h2>
+    <p class="caption">Bitte vervollständige als erstes dein Profil.</p>
+    <v-form ref="form" v-model="valid" class="mb-8 mt-16">
       <h2 class="text-h2 secondary--text">Was möchtest du?</h2>
       <v-radio-group mandatory v-model="membership">
         <v-radio
@@ -20,27 +21,18 @@
           </template>
         </v-radio>
       </v-radio-group>
-      <!--<v-select
-        v-model="membership"
-        :items="memberships"
-        label="Als was meldest du dich an?"
-        item-text="description"
-        return-object
-      ></v-select>-->
       <h2 class="text-h2 secondary--text mt-6">Wer bist du?</h2>
       <p v-if="membership ? (membership.id === 'Coach' ? true : false) : false">
         Diese Angaben werden später in deinem Profil zu sehen sein. Du kannst
         sie aber jederzeit anpassen.
       </p>
       <v-text-field
-        type="text"
         class="secondary--text font-weight-bold"
         v-model="firstName"
-        label="Vorname"
         :rules="textRules"
+        label="Vorname"
       ></v-text-field>
       <v-text-field
-        type="text"
         class="secondary--text font-weight-bold"
         v-model="lastName"
         :rules="textRules"
@@ -67,9 +59,9 @@
         v-model="password"
         label="Passwort"
         :rules="passwordRules"
-        :type="value ? 'password' : 'text'"
-        :append-icon="value ? 'mdi-eye' : 'mdi-eye-off'"
-        @click:append="() => (value = !value)"
+        :type="hidePassword ? 'password' : 'text'"
+        :append-icon="hidePassword ? 'mdi-eye' : 'mdi-eye-off'"
+        @click:append="() => (hidePassword = !hidePassword)"
       ></v-text-field>
       <v-text-field
         class="secondary--text font-weight-bold"
@@ -96,14 +88,17 @@ export default {
   name: 'ProfileInformation',
   data() {
     return {
-      value: String,
       valid: false,
-      lastName: '',
-      firstName: '',
-      textRules: [(v) => !!v || 'Bitte ausfüllen'],
+      lastName: null,
+      firstName: null,
+      textRules: [
+        // (v) => !!v || 'Bitte ausfüllen',
+        (v) => (v && v.length >= 3) || 'mind. 3 Zeichen lang',
+      ],
       profession: null,
       professionDuration: null,
       password: '',
+      hidePassword: true,
       password2: '',
       passwordRules: [
         (v) => !!v || 'Passwort nicht vergessen',
@@ -112,7 +107,7 @@ export default {
           'Passwort muss mindestens 8 Zeichen lang sein',
       ],
       passwordRules2: [
-        (v) => !!v || 'Passwort nicht vergessen',
+        (v) => !!v || 'Passwortüberprüfung nicht vergessen',
         (v) =>
           (!!v && v === this.password) || 'Passwörter müssen übereinstimmen',
       ],
@@ -138,6 +133,8 @@ export default {
   },
   methods: {
     updateProfile() {
+      this.$refs.form.validate()
+      if (!this.$refs.form.validate()) return
       this.loading = true
       const db = this.$fire.firestore
       this.$fire.auth.currentUser
