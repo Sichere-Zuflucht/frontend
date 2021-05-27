@@ -51,7 +51,7 @@
         type="number"
         class="secondary--text font-weight-bold"
         v-model="professionDuration"
-        :rules="textRules"
+        :rules="requiredRule"
         label="Wie viele Jahre Berufserfahrung?"
       ></v-text-field>
       <v-text-field
@@ -95,6 +95,7 @@ export default {
         // (v) => !!v || 'Bitte ausfüllen',
         (v) => (v && v.length >= 3) || 'mind. 3 Zeichen lang',
       ],
+      requiredRule: [(v) => !!v || 'Bitte ausfüllen'],
       profession: null,
       professionDuration: null,
       password: '',

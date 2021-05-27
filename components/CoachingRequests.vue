@@ -48,7 +48,17 @@
               color="primary"
               label="Bitte wählen"
               class="my-2"
-            ></v-select>
+              ><template v-slot:item="{ item }"
+                ><div>
+                  <p class="font-weight-bold mb-0">
+                    {{ formatDate(item.date) }}
+                  </p>
+                  <p class="caption">{{ item.time }} Uhr</p>
+                </div></template
+              ><template v-slot:selection="{ item }"
+                >{{ item.date }} | {{ item.time }}</template
+              ></v-select
+            >
             <p class="caption">
               Nach der Terminbestätigung wirst du direkt zu unserem
               Zahlungsanbieter „stripe“ weitergeleitet. Nach deiner Zahlung
@@ -103,7 +113,11 @@
         <v-alert type="warning" class="mt-2 ma-2"
           >wirklich löschen?
 
-          <v-btn light @click="cancel(response.id)" class="mr-1"
+          <v-btn
+            light
+            @click="cancel(response.id)"
+            class="mr-1"
+            :loading="eraseLoading"
             >Ja, löschen</v-btn
           ><v-btn light @click="isDelete = false"> nein </v-btn></v-alert
         >
@@ -145,6 +159,7 @@ export default {
       date: null,
       payButtonLoading: false,
       isDelete: false,
+      eraseLoading: false,
     }
   },
   methods: {
@@ -209,12 +224,14 @@ export default {
       humanResponse.acceptedDate = dateInput
     },
     cancel(doc) {
+      this.eraseLoading = true
       const db = this.$fire.firestore
       db.collection('requests').doc(doc).delete()
       this.$fire.functions
         .httpsCallable('email-sendRequestDeleted')(this.response.acceptedDate)
         .then(() => {
           this.isDelete = false
+          this.eraseLoading = false
         })
     },
     async pay() {
@@ -232,6 +249,23 @@ export default {
         // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
         sessionId: paymentID,
       })
+    },
+    formatDate(date) {
+      const d = new Date(date)
+      return d.toLocaleDateString('de-DE', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+      /* let month = '' + (d.getMonth() + 1)
+      let day = '' + d.getDate()
+      const year = d.getFullYear()
+
+      if (month.length < 2) month = '0' + month
+      if (day.length < 2) day = '0' + day
+
+      return [year, month, day].join('-') */
     },
   },
 }
