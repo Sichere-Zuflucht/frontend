@@ -15,7 +15,7 @@
               color="grey lighten-5"
               class="d-flex align-center justify-start"
             >
-              <v-avatar class="pr-2">
+              <v-avatar class="pr-2 flex-shrink-1 flex-grow-0">
                 <v-img
                   :lazy-src="item.womanAvatar"
                   :src="item.womanAvatar"
@@ -23,14 +23,16 @@
                   max-width="40"
                 ></v-img>
               </v-avatar>
-              <div class="d-flex flex-column align-start">
+              <div
+                class="d-flex flex-column align-start flex-grow-0 flex-shrink-0"
+              >
                 <p class="caption mb-0">Frau</p>
                 <p class="font-weight-bold mb-0">{{ item.womanUserName }}</p>
               </div>
 
               <v-chip
                 v-if="item.acceptedDate"
-                class="ma-2"
+                class="ma-2 flex-shrink-0 flex-grow-1"
                 color="success"
                 text-color="white"
               >
@@ -38,32 +40,44 @@
               </v-chip>
               <v-chip
                 v-else-if="item.coachAnswered"
-                class="ma-2"
+                class="ma-2 flex-shrink-0 flex-grow-1"
                 color="orange"
                 text-color="white"
               >
                 auf Termin warten
               </v-chip>
 
-              <v-chip v-else class="ma-2" color="red" text-color="white">
+              <v-chip
+                v-else
+                class="ma-2 flex-shrink-0 flex-grow-1"
+                color="red"
+                text-color="white"
+              >
                 unbearbeitet
               </v-chip>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-card elevation="0">
                 <v-card-text
-                  ><v-textarea
+                  ><v-sheet
                     v-if="item.message"
-                    readonly
-                    label="Nachricht"
-                    :value="item.message"
-                    outlined
-                  ></v-textarea>
-                  <div v-if="!item.coachAnswered">
+                    color="grey lighten-5 pa-3 my-4"
+                  >
+                    <p
+                      class="caption ma-0 grey--text"
+                      style="transform: translateY(-22px); position: absolute"
+                    >
+                      Nachricht
+                    </p>
+                    <p class="mb-0">{{ item.message }}</p></v-sheet
+                  >
+
+                  <div v-if="!item.coachAnswered" class="pt-4">
                     <v-select
                       v-model="selectedVideoType"
                       :items="videoTypes"
                       outlined
+                      hide-details
                       label="Videoanbieter auswählen"
                       class="mb-4"
                     ></v-select>
@@ -89,7 +103,7 @@
                     </v-list>
 
                     <DatePicker :item="item" />
-                    <p class="mt-2 pa-2 caption">
+                    <p class="mt-2 mb-0 pa-2 caption">
                       Bitte füge mind. 3 Termine hinzu.
                     </p>
                   </div>
@@ -115,7 +129,6 @@
                     Es wurde noch kein Termin bestätigt...
                   </v-banner></v-card-text
                 >
-                <v-card-actions class="d-inline-flex"> </v-card-actions>
                 <v-card-actions class="d-flex justify-end">
                   <v-btn class="caption" plain>Frau absagen</v-btn>
                   <v-btn

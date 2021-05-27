@@ -4,8 +4,7 @@
       v-if="
         !(
           data.info &&
-          data.stripe &&
-          data.stripe.verified &&
+          data.stripe.payoutsEnabled &&
           data.verifySetting.verified
         )
       "
@@ -20,7 +19,7 @@
           <v-icon small class="pr-2">mdi-account</v-icon> Profil
         </v-btn>
         <v-btn
-          v-if="!(data.stripe && data.stripe.verified)"
+          v-if="!data.stripe.payoutsEnabled"
           class="mr-2 mb-2"
           append
           to="bezahlung"
@@ -40,56 +39,6 @@
       <v-divider class="my-2"></v-divider>
     </div>
   </div>
-  <!-- <v-expansion-panels v-if="data">
-    <v-expansion-panel v-if="!data.info">
-      <v-expansion-panel-header color="secondary" class="white--text">
-        <b>Profil vervollständigen.</b>
-      </v-expansion-panel-header>
-      <v-expansion-panel-content color="red" class="white--text">
-        Sie sind ansonsten nicht für die Frauen einsichtbar.
-        <p>
-          <v-btn to="registrierung" append class="ma-2 ml-0">weiter</v-btn>
-        </p>
-      </v-expansion-panel-content>
-    </v-expansion-panel>
-    <v-expansion-panel v-if="!data.strapi">
-      <v-expansion-panel-header
-        color="error"
-        class="white--text"
-        expand-icon="mdi-alert"
-        disable-icon-rotate
-      >
-        <b>STRIPE noch nicht registriert.</b>
-      </v-expansion-panel-header>
-      <v-expansion-panel-content color="red" class="white--text">
-        Wir nutzen den Anbieter STRIPE, damit Sie Zahlungen erhalten können.
-        <p>
-          <v-btn href="https://www.stripe.com" append class="ma-2 ml-0"
-            >zu STRIPE</v-btn
-          >
-        </p>
-      </v-expansion-panel-content>
-    </v-expansion-panel>
-    <v-expansion-panel v-if="!data.verified">
-      <v-expansion-panel-header
-        color="error"
-        class="white--text"
-        expand-icon="mdi-alert"
-        disable-icon-rotate
-      >
-        <b>Account noch nicht verifiziert.</b>
-      </v-expansion-panel-header>
-      <v-expansion-panel-content color="red" class="white--text">
-        Melden Sie sich bei uns und führen Sie ein privates Gespräch, damit wir
-        sie als Coach verfizieren können.
-        <p>
-          <v-btn to="personenverifizierung" append class="ma-2 ml-0"
-            >verifizieren</v-btn
-          >
-        </p>
-      </v-expansion-panel-content>
-    </v-expansion-panel>
-  </v-expansion-panels> -->
 </template>
 
 <script>

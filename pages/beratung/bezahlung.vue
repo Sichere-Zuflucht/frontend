@@ -10,28 +10,54 @@
         Bitte registrieren Sie sich, damit Frauen Ihre Angebote bezahlen können.
       </p>
       <div v-else>
+        <h2 class="text-h2 primary--text">Step 1</h2>
         <div v-if="!user.stripe.chargesEnabled">
-          Aktuell können Sie keine Zahlungen entgegennehmen.
+          <p class="mb-0">Aktuell können Sie keine Zahlungen entgegennehmen.</p>
+          <v-btn
+            :loading="loading"
+            :disabled="disabled"
+            color="secondary"
+            target="_blank"
+            @click="addStripe"
+            >bei Stripe registrieren
+          </v-btn>
+          <p class="caption">
+            Sie werden zur Stripes Registrierungsseite weitergeleitet.
+          </p>
         </div>
+        <v-alert type="success" color="success" v-else
+          >Bei Stripe registriert</v-alert
+        >
+
+        <h2 class="text-h2 primary--text mt-8">Step 2</h2>
         <div v-if="!user.stripe.payoutsEnabled">
-          Aktuell können Sie sich kein Geld auszahlen lassen.
+          <p v-if="!user.stripe.chargesEnabled">
+            Schließen Sie zuerst Schritt 1 ab
+          </p>
+          <div v-else>
+            <p class="mb-0">
+              Aktuell können Sie sich kein Geld auszahlen lassen.
+            </p>
+            <v-btn
+              :loading="loading"
+              :disabled="disabled"
+              color="secondary"
+              target="_blank"
+              @click="addStripe"
+              >Auszahlung hinzufügen
+            </v-btn>
+            <p class="caption">
+              Sie werden zur Stripes Registrierungsseite weitergeleitet.
+            </p>
+          </div>
         </div>
       </div>
-      <v-btn
-        :loading="loading"
-        :disabled="disabled"
-        color="secondary"
-        target="_blank"
-        @click="addStripe"
-        >bei Stripe registrieren
-      </v-btn>
+
       <!--      somehow make sure this button is shown until this is returning that payments are approved maybe even update firebase and return -->
       <!--      charges_enabled-->
       <!--      payouts_enabled-->
-      <v-btn @click="getStripeData"></v-btn>
-      <p class="caption">
-        Sie werden zur Stripes Registrierungsseite weitergeleitet.
-      </p>
+      <!--      <v-btn @click="getStripeData"></v-btn> -->
+
       <p v-if="stripeRegisterURL" class="caption">
         Falls die Weiterleitung nicht funktioniert, kopiere und öffne bitte
         folgende URL: {{ stripeRegisterURL }}

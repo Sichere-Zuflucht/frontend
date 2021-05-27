@@ -20,9 +20,8 @@
         </v-chip>
         <h2 class="text-h2 primary--text mt-6">Ändern</h2>
       </div>
-      <h2 v-else class="text-h2 secondary--text">Vervollständigen</h2>
+      <h2 v-else class="text-h2 primary--text">Vervollständigen</h2>
       <CoachingSelection
-        v-if="!user.info"
         :is-open="user.info ? false : true"
         :filter="false"
         :closable="user.info ? true : false"
