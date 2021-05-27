@@ -1,27 +1,10 @@
 <template>
   <v-app light>
     <v-navigation-drawer v-model="drawer" app class="primary" dark fixed>
-      <v-list v-if="loggedIn">
-        <v-list-item
-          v-for="(item, i) in loggedInUser"
-          :key="i"
-          :to="item.to"
-          nuxt
-          exact
-        >
-          <v-list-item-icon>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
-          </v-list-item-content>
-        </v-list-item>
-        <p class="caption ml-4 mb-0">
-          {{ user.membership ? user.membership.name : null }}
-        </p>
-        <div v-if="user.membership ? user.membership.id === 'Woman' : false">
+      <client-only>
+        <v-list v-if="loggedIn">
           <v-list-item
-            v-for="(item, i) in loggedInWoman"
+            v-for="(item, i) in loggedInUser"
             :key="i"
             :to="item.to"
             nuxt
@@ -34,44 +17,63 @@
               <v-list-item-title v-text="item.title" />
             </v-list-item-content>
           </v-list-item>
-        </div>
-        <div v-else>
+          <p class="caption ml-4 mb-0">
+            {{ user.membership ? user.membership.name : null }}
+          </p>
+          <div v-if="user.membership ? user.membership.id === 'Woman' : false">
+            <v-list-item
+              v-for="(item, i) in loggedInWoman"
+              :key="i"
+              :to="item.to"
+              nuxt
+              exact
+            >
+              <v-list-item-icon>
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title v-text="item.title" />
+              </v-list-item-content>
+            </v-list-item>
+          </div>
+          <div v-else>
+            <v-list-item
+              v-for="(item, i) in loggedInCoach"
+              :key="i"
+              :to="item.to"
+              nuxt
+              exact
+            >
+              <v-list-item-icon>
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title v-text="item.title" />
+              </v-list-item-content>
+            </v-list-item>
+          </div>
+          <v-list-item>
+            <v-btn block to="/" @click="logout">Abmelden</v-btn>
+          </v-list-item>
+        </v-list>
+        <v-list v-else>
           <v-list-item
-            v-for="(item, i) in loggedInCoach"
+            v-for="(item, i) in noUser"
             :key="i"
             :to="item.to"
             nuxt
             exact
           >
-            <v-list-item-icon>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title v-text="item.title" />
             </v-list-item-content>
           </v-list-item>
-        </div>
-        <v-list-item>
-          <v-btn block to="/" @click="logout">Abmelden</v-btn>
-        </v-list-item>
-      </v-list>
-      <v-list v-else>
-        <v-list-item
-          v-for="(item, i) in noUser"
-          :key="i"
-          :to="item.to"
-          nuxt
-          exact
-        >
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
-          </v-list-item-content>
-        </v-list-item>
-        <v-spacer />
-        <v-list-item>
-          <v-btn to="/signup" exact nuxt block>Anmelden</v-btn>
-        </v-list-item>
-      </v-list>
+          <v-spacer />
+          <v-list-item>
+            <v-btn to="/signup" exact nuxt block>Anmelden</v-btn>
+          </v-list-item>
+        </v-list>
+      </client-only>
     </v-navigation-drawer>
     <v-app-bar app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
