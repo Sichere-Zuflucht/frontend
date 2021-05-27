@@ -20,7 +20,7 @@
             Irgendetwas ist schief gelaufen. Versuche dich erneut zu
             registrieren.
           </p>
-          <v-btn nuxt to="/signup">Erneut registrieren</v-btn>
+          <v-btn to="/signup" exact nuxt>Erneut registrieren</v-btn>
         </v-alert>
       </v-card-text>
     </v-card>
@@ -42,6 +42,10 @@ export default {
   methods: {
     register() {
       // Confirm the link is a sign-in with email link.
+      console.log(
+        'emaillink: ',
+        this.$fire.auth.isSignInWithEmailLink(window.location.href)
+      )
       if (this.$fire.auth.isSignInWithEmailLink(window.location.href)) {
         const email = window.localStorage.getItem('emailForSignIn')
         if (email) {

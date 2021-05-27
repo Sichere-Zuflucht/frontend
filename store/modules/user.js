@@ -38,9 +38,8 @@ const getters = {
 }
 
 const actions = {
-  onAuthStateChangedAction({ commit }, { authUser, claims }) {
+  onAuthStateChangedAction({ commit }, { authUser }) {
     if (!authUser) {
-      // claims = null
       // Perform logout operations
       console.log('logg out', authUser)
       commit('setUserData', null)
@@ -62,6 +61,37 @@ const actions = {
         })
     }
   },
+  async login({ dispatch }, form) {
+    // sign user in
+    const { user } = await this.$fire.auth.signInWithEmailAndPassword(
+      form.email,
+      form.password
+    )
+    // fetch user profile and set in state
+    dispatch('fetchUserProfile', user)
+  },
+  fetchUserProfile({ commit }, user) {
+    // fetch user profile
+    this.$fire.firestore
+      .collection('users')
+      .doc(user.uid)
+      .get()
+      .then((u) => {
+        const userData = u.data()
+        if (userData) {
+          const data = {
+            authData: user,
+            storeData: userData,
+          }
+          commit('setUserDataAndRedirect', data)
+          userData.membership.get().then((doc) => {
+            commit('setMembershipAndRedirect', doc.data())
+          })
+        }
+      })
+
+    // change route to dashboard
+  },
   setInfo({ commit }, { info, uid }) {
     commit('setInfo', info)
     this.$fire.firestore.collection('users').doc(uid).update({ info })
@@ -80,12 +110,32 @@ const actions = {
 }
 
 const mutations = {
+  setUserDataAndRedirect(state, data) {
+    console.log('[STORE MUTATIONS] - setUserDataAndRedirect:', data)
+    const { uid, email, emailVerified } = data.authData
+    const userData = data.storeData
+    state.email = email
+    state.emailVerified = emailVerified
+    state.uid = uid
+    for (const entry of Object.entries(userData)) {
+      // filter out firestore objects (like membership)
+      if (entry[1].firestore === undefined) {
+        state[entry[0]] = entry[1]
+      }
+    }
+  },
+  setMembershipAndRedirect(state, membership) {
+    console.log('[STORE MUTATIONS] - setMembershipAndRedirect:', membership)
+    state.membership = membership
+    this.$router.push({ path: '/profile' })
+  },
   setUserData(state, userData) {
     console.log('[STORE MUTATIONS] - setUserData:', userData)
     if (!userData) {
       for (const key of Object.keys(state)) {
         state[key] = null
       }
+      // window.location.href = '/'
     } else {
       for (const entry of Object.entries(userData)) {
         // filter out firestore objects (like membership)
@@ -93,6 +143,7 @@ const mutations = {
           state[entry[0]] = entry[1]
         }
       }
+      // window.location.href = '/profile'
     }
   },
   setInfo(state, info) {
@@ -108,7 +159,7 @@ const mutations = {
     state.membership = membership
   },
   ON_AUTH_STATE_CHANGED_MUTATION(state, { authUser, claims }) {
-    console.log('ON_AUTH_STATE_CHANGED_MUTATION', authUser, state)
+    console.log('ON_AUTH_STATE_CHANGED_MUTATION', authUser)
     if (authUser) {
       const { uid, email, emailVerified } = authUser
       state.email = email

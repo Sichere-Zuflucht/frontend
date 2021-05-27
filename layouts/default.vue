@@ -1,10 +1,27 @@
 <template>
   <v-app light>
     <v-navigation-drawer v-model="drawer" app class="primary" dark fixed>
-      <client-only v-if="loggedIn">
-        <v-list>
+      <v-list v-if="loggedIn">
+        <v-list-item
+          v-for="(item, i) in loggedInUser"
+          :key="i"
+          :to="item.to"
+          nuxt
+          exact
+        >
+          <v-list-item-icon>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title v-text="item.title" />
+          </v-list-item-content>
+        </v-list-item>
+        <p class="caption ml-4 mb-0">
+          {{ user.membership ? user.membership.name : null }}
+        </p>
+        <div v-if="user.membership ? user.membership.id === 'Woman' : false">
           <v-list-item
-            v-for="(item, i) in loggedInUser"
+            v-for="(item, i) in loggedInWoman"
             :key="i"
             :to="item.to"
             nuxt
@@ -17,47 +34,27 @@
               <v-list-item-title v-text="item.title" />
             </v-list-item-content>
           </v-list-item>
-          <div
-            v-if="
-              user && user.membership ? user.membership.id === 'Woman' : false
-            "
+        </div>
+        <div v-else>
+          <v-list-item
+            v-for="(item, i) in loggedInCoach"
+            :key="i"
+            :to="item.to"
+            nuxt
+            exact
           >
-            <v-list-item
-              v-for="(item, i) in loggedInWoman"
-              :key="i"
-              :to="item.to"
-              nuxt
-              exact
-            >
-              <v-list-item-icon>
-                <v-icon>{{ item.icon }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title v-text="item.title" />
-              </v-list-item-content>
-            </v-list-item>
-          </div>
-          <div v-else>
-            <v-list-item
-              v-for="(item, i) in loggedInCoach"
-              :key="i"
-              :to="item.to"
-              nuxt
-              exact
-            >
-              <v-list-item-icon>
-                <v-icon>{{ item.icon }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title v-text="item.title" />
-              </v-list-item-content>
-            </v-list-item>
-          </div>
-          <v-list-item>
-            <v-btn block to="/" @click="logout">Abmelden</v-btn>
+            <v-list-item-icon>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title v-text="item.title" />
+            </v-list-item-content>
           </v-list-item>
-        </v-list>
-      </client-only>
+        </div>
+        <v-list-item>
+          <v-btn block to="/" @click="logout">Abmelden</v-btn>
+        </v-list-item>
+      </v-list>
       <v-list v-else>
         <v-list-item
           v-for="(item, i) in noUser"
@@ -72,7 +69,7 @@
         </v-list-item>
         <v-spacer />
         <v-list-item>
-          <v-btn block to="signup">Anmelden</v-btn>
+          <v-btn to="/signup" exact nuxt block>Anmelden</v-btn>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -92,8 +89,23 @@
       </client-only>
     </v-app-bar>
     <v-main>
-      <nuxt class="pb-8" />
+      <nuxt />
     </v-main>
+    <v-card
+      dark
+      color="red"
+      width="70"
+      style="position: fixed; bottom: 30%; right: 0; z-index: 100"
+      href="https://www.chefkoch.de/rs/s0/was+kochen/Rezepte.html"
+      tile
+    >
+      <v-card-text class="pa-1 d-flex flex-column align-center">
+        <v-icon small>mdi-eye-off</v-icon>
+        <p style="font-size: 10px; line-height: 10px" class="text-center mb-0">
+          Seite verstecken
+        </p>
+      </v-card-text>
+    </v-card>
     <v-footer inset absolute app class="d-flex flex-column justify-center mt-6">
       <span class="mt-4"
         >&copy; {{ new Date().getFullYear() }} Sichere Zuflucht gGmbH</span
@@ -160,19 +172,19 @@ export default {
         },
         {
           title: 'Über uns',
-          to: '/a',
+          to: '/',
         },
         {
           title: 'Wie wir helfen',
-          to: '/a',
+          to: '/',
         },
         {
           title: 'Wie du helfen kannst',
-          to: '/a',
+          to: '/',
         },
         {
           title: 'Aktuelles',
-          to: '/a',
+          to: '/',
         },
       ],
       footer: [
@@ -213,7 +225,7 @@ export default {
   },
   methods: {
     login() {
-      this.$router.push('/login')
+      this.$router.push('/signup')
     },
     logout() {
       this.$fire.auth.signOut()

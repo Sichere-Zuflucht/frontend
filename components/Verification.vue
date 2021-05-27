@@ -18,13 +18,13 @@
         >wird verifiziert...</v-chip
       >
       <p class="caption my-4">
-        Sie haben nach 48 Stunden noch keine eMail von uns erhalten? Bitte
-        prüfen Sie zuerst Ihren Spam Ordner, bevor Sie uns erneut kontaktieren.
+        Sie haben uns eine automatische Benachrichtigung zugeschickt, welche wir
+        bearbeiten werden und uns baldmöglichst bei Ihnen melden werden. Sollten
+        Sie nach 48 Stunden noch keine Antwort per eMail von uns erhalten haben,
+        dann prüfen Sie bitte zuerst Ihren Spam Ordner, bevor Sie uns erneut
+        kontaktieren.
       </p>
       <div>
-        <v-btn v-if="user" color="primary" @click="updateVerify"
-          >Kontakt aufnehmen</v-btn
-        >
         <v-btn v-if="user" color="primary" @click="updateVerify"
           >Erneut Kontaktieren</v-btn
         >
