@@ -1,8 +1,8 @@
 <template>
   <v-container>
     <h1 class="text-h1 primary--text mb-4">Wohnungssuche</h1>
-    <Verification />
-    <v-form ref="housing" class="mb-8">
+    <Verification v-if="!user.verifySetting.verified" />
+    <v-form v-else ref="housing" v-model="valid" class="mb-8">
       <h2 class="text-h2 secondary--text">Deine Daten sind sicher</h2>
       <p>
         Deine Angaben werden nur von uns eingesehen. Wir werden für dich
@@ -13,12 +13,19 @@
           <v-text-field
             v-model="location"
             type="name"
+            :rules="[rules.required, rules.length(2)]"
             label="*Ort der Unterkunft"
             prepend-icon="mdi-map-marker"
           ></v-text-field>
         </v-col>
         <v-col cols="3" md="5">
-          <v-text-field v-model="plz" type="name" label="*Plz."></v-text-field>
+          <v-text-field
+            v-model="plz"
+            type="number"
+            counter="5"
+            :rules="[rules.required, rules.length(5)]"
+            label="*Plz."
+          ></v-text-field>
         </v-col>
       </v-row>
       <v-row>
@@ -26,6 +33,7 @@
           <v-text-field
             v-model="personAmount"
             type="number"
+            :rules="[rules.required]"
             label="*Anzahl Personen"
             prepend-icon="mdi-account-group"
           ></v-text-field>
@@ -34,6 +42,7 @@
           <v-text-field
             v-model="price"
             type="number"
+            :rules="[rules.required]"
             label="*Preis"
             prepend-icon="mdi-currency-eur"
           >
@@ -55,22 +64,23 @@
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
                 v-model="dateRangeText"
-                label="Einzugsdatum"
+                label="Einzug Zeitraum"
                 prepend-icon="mdi-calendar"
                 readonly
                 v-bind="attrs"
                 v-on="on"
-              ></v-text-field>
+              >
+              </v-text-field>
             </template>
             <v-date-picker
               v-model="dates"
+              :min="new Date().toISOString().substr(0, 10)"
               range
               scrollable
-              :min="new Date().toISOString().substr(0, 10)"
             >
               <v-spacer></v-spacer>
               <v-btn text color="primary" @click="modal = false">
-                Abbrechen
+                Schließen
               </v-btn>
               <v-btn text color="primary" @click="$refs.dialog.save(dates)">
                 OK
@@ -104,7 +114,27 @@
           ></v-textarea>
         </v-col>
       </v-row>
-      <v-btn right absolute color="primary">Anfragen</v-btn>
+      <v-row>
+        <v-col cols="12">
+          <v-btn
+            color="success"
+            @click="validate()"
+            :loading="loading"
+            :disabled="!valid"
+            class="float-right"
+            >{{ buttonText }}</v-btn
+          >
+        </v-col>
+        <v-col class="pt-0">
+          <v-alert type="info" color="success" v-if="showConfirmation"
+            >Deine Anfrage wurde erfolgreich an Sichere Zuflucht verschickt. Wir
+            werden uns so bald wie möglich via eMail bei dir melden.</v-alert
+          >
+          <v-alert type="error" color="error" v-if="error.status">{{
+            error.message
+          }}</v-alert>
+        </v-col>
+      </v-row>
     </v-form>
   </v-container>
 </template>
@@ -113,20 +143,16 @@
 export default {
   data() {
     return {
+      valid: false,
       location: '',
       personAmount: '',
       plz: '',
       rules: {
-        email: (v) => !!(v || '').match(/@/) || 'Please enter a valid email',
+        email: (v) => !!(v || '').match(/@/) || 'Keine gültige E-Mail',
         length: (len) => (v) =>
           (v || '').length >= len ||
-          `Invalid character length, required ${len}`,
-        password: (v) =>
-          !!(v || '').match(
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+$/
-          ) ||
-          'Password must contain an upper case letter, a numeric character, and a special character',
-        required: (v) => !!v || 'This field is required',
+          `Ungültige Zeichenlänge, ${len} erforderlich`,
+        required: (v) => !!v || 'Bitte ausfüllen',
       },
       dates: [
         new Date().toISOString().substr(0, 10),
@@ -134,6 +160,7 @@ export default {
       ],
       modal: false,
       selected: [],
+      price: '',
       checkboxes: [
         {
           label: 'Türspion',
@@ -168,11 +195,48 @@ export default {
           value: 'public transport',
         },
       ],
+      loading: false,
+      showConfirmation: false,
+      buttonText: 'Anfrage versenden',
+      error: {
+        status: false,
+        message: '',
+      },
     }
   },
   computed: {
     dateRangeText() {
-      return this.dates.join(' ~ ')
+      return this.dates.join(' – ')
+    },
+    user() {
+      return this.$store.getters['modules/user/user']
+    },
+  },
+  methods: {
+    validate() {
+      if (!this.$refs.housing.validate()) return
+      this.loading = true
+      this.$fire.functions
+        .httpsCallable('email-sendReqHousingMail')({
+          message: this.message,
+          place: this.location,
+          zip: this.plz,
+          amount: this.personAmount,
+          monthprice: this.price,
+          range: this.dates,
+          features: this.selected,
+          createdAt: new Date(),
+        })
+        .then(() => {
+          this.buttonText = 'Versendet'
+          this.loading = false
+          this.showConfirmation = true
+          this.valid = false
+        })
+        .catch((err) => {
+          this.error.status = true
+          this.error.message = err.message
+        })
     },
   },
 }

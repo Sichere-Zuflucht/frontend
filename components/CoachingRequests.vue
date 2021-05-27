@@ -86,14 +86,28 @@
       style="border-top: 1px solid lightgrey"
       class="align-stretch pa-4"
     >
-      <v-btn small color="primary" outlined @click="isDelete = true"
-        >Termin löschen</v-btn
+      <v-btn
+        small
+        color="primary"
+        outlined
+        nuxt
+        :to="'/beratung/' + response.coachId"
+        >{{ coach.id }} Neue Anfrage stellen</v-btn
       >
-      <v-alert v-if="isDelete" type="warning" class="mt-2"
-        >wirklich löschen?
-        <v-btn @click="cancel(response.id)">Ja, löschen</v-btn></v-alert
-      >
-      <v-btn small color="primary" outlined>Neue Anfrage stellen</v-btn>
+      <v-dialog v-model="isDelete" persistent max-width="290">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn small text color="primary" v-bind="attrs" v-on="on"
+            >Termin löschen</v-btn
+          >
+        </template>
+        <v-alert type="warning" class="mt-2 ma-2"
+          >wirklich löschen?
+
+          <v-btn light @click="cancel(response.id)" class="mr-1"
+            >Ja, löschen</v-btn
+          ><v-btn light @click="isDelete = false"> nein </v-btn></v-alert
+        >
+      </v-dialog>
     </v-card-actions>
   </v-card>
 </template>
@@ -197,9 +211,11 @@ export default {
     cancel(doc) {
       const db = this.$fire.firestore
       db.collection('requests').doc(doc).delete()
-      this.$fire.functions.httpsCallable('email-sendRequestDeleted')(
-        this.response.acceptedDate
-      )
+      this.$fire.functions
+        .httpsCallable('email-sendRequestDeleted')(this.response.acceptedDate)
+        .then(() => {
+          this.isDelete = false
+        })
     },
     async pay() {
       this.payButtonLoading = true

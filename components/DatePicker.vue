@@ -1,5 +1,43 @@
 <template>
-  <v-menu
+  <v-dialog
+    ref="dialog"
+    v-model="modal"
+    :return-value.sync="date"
+    persistent
+    width="290px"
+  >
+    <template v-slot:activator="{ on, attrs }">
+      <v-btn
+        v-bind="attrs"
+        v-on="on"
+        :color="item.suggestions.length < 3 ? 'success' : null"
+        prepend-icon="mdi-calendar"
+        >Termin hinzufügen</v-btn
+      >
+    </template>
+    <v-date-picker v-model="date" :min="today" scrollable>
+      <v-spacer></v-spacer>
+      <v-text-field
+        label="Uhrzeit"
+        v-model="time"
+        type="time"
+        :disabled="!date"
+        outlined
+        hide-details
+        full-width
+      ></v-text-field>
+      <v-spacer></v-spacer>
+      <v-btn text color="primary" @click="modal = false"> Abbrechen </v-btn>
+      <v-btn
+        :disabled="!time"
+        color="primary"
+        @click="addDates(item.suggestions)"
+      >
+        OK
+      </v-btn>
+    </v-date-picker>
+  </v-dialog>
+  <!-- <v-menu
     v-model="menu"
     :close-on-content-click="false"
     :return-value.sync="date"
@@ -24,7 +62,7 @@
         OK
       </v-btn>
     </v-date-picker>
-  </v-menu>
+  </v-menu> -->
 </template>
 
 <script>
@@ -36,13 +74,27 @@ export default {
     return {
       menu: false,
       date: '',
-      today: this.formatDate(new Date()),
+      time: '',
+      modal: false,
+      today: new Date().toISOString().substr(0, 10),
     }
+  },
+  computed: {
+    dateRangeText() {
+      return this.dates.join(' – ')
+    },
   },
   methods: {
     addDates(d) {
-      d.push(this.date)
-      this.menu = false
+      // $refs.dialog.save(date)
+      d.push({
+        date: this.date,
+        time: this.time,
+      })
+      this.date = ''
+      this.time = ''
+      // this.menu = false
+      this.$refs.dialog.save()
     },
     formatDate(date) {
       const d = new Date(date)

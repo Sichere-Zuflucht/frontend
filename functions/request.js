@@ -46,7 +46,6 @@ exports.getRequestsRealtime = functions.https.onCall((data, context) => {
       return b.coachAnswered - a.coachAnswered
     }
     const order = res.sort(sortRequests)
-    console.log('order: ', order)
     return order
   })
   return p
@@ -77,6 +76,34 @@ exports.sendRequest = functions.https.onCall(async (data, context) => {
       updatedAt: new Date(),
     })
 })
+
+// maybe interesting for later, if sichere zuflucht account is existing
+/* exports.sendHousingRequest = functions.https.onCall(async (data, context) => {
+  const womanData = await admin
+    .firestore()
+    .collection('users')
+    .doc(context.auth.uid)
+    .get()
+    .then((doc) => doc.data())
+
+  await admin
+    .firestore()
+    .collection('houseRequests')
+    .add({
+      eMails: housingInitialMail(
+        womanData.userName,
+        data.message,
+        context.auth.uid
+      ),
+      gotAnswer: false,
+      womanId: context.auth.uid,
+      message: data.message,
+      womanUserName: womanData.userName,
+      womanAvatar: womanData.avatar,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    })
+}) */
 
 exports.addSuggestions = functions.https.onCall(async (data, context) => {
   // get the inital request

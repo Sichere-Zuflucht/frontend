@@ -6,6 +6,7 @@ admin.initializeApp()
 const {
   verificationNotificationMail,
   reqDeletedNotificationMail,
+  housingInitialMail,
 } = require('./emailTemplates')
 
 const transporter = nodemailer.createTransport({
@@ -94,6 +95,18 @@ exports.sendVerifyAccMail = functions.https.onCall(async (data, context) => {
     .get()
     .then((snap) => snap.data())
   return sendNotificationMailToSZ(verificationNotificationMail(email))
+})
+exports.sendReqHousingMail = functions.https.onCall(async (data, context) => {
+  const womanData = await admin
+    .firestore()
+    .collection('users')
+    .doc(context.auth.uid)
+    .get()
+    .then((doc) => doc.data())
+
+  return sendNotificationMailToSZ(
+    housingInitialMail(womanData.email, data, context.auth.uid561)
+  )
 })
 
 exports.sendRequestDeleted = functions.https.onCall((date) => {
