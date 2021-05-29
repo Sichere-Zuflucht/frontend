@@ -92,9 +92,12 @@ const actions = {
 
     // change route to dashboard
   },
-  setInfo({ commit }, { info, uid }) {
+  setInfo({ commit }, { info, description, uid }) {
     commit('setInfo', info)
-    this.$fire.firestore.collection('users').doc(uid).update({ info })
+    this.$fire.firestore
+      .collection('users')
+      .doc(uid)
+      .update({ info, description })
   },
   setVerify({ commit }, { uid, verifySetting }) {
     commit('setVerify', verifySetting)

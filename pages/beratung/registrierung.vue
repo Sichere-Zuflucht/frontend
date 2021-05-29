@@ -26,8 +26,10 @@
         :filter="false"
         :closable="user.info ? true : false"
         :is-coach="true"
+        :description="user.description ? user.description : ''"
         @selection="updateProfile"
       />
+      {{ profile }}
     </v-container>
   </client-only>
 </template>
@@ -50,9 +52,10 @@ export default {
           topicArea: data.topicArea, // topic
           topicPoints: data.topicPoints, // types
         },
+        description: data.description,
         uid: this.user.uid,
       })
-      this.$router.push('/beratung')
+      // this.$router.push('/beratung')
     },
   },
 }
