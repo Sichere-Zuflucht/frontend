@@ -31,12 +31,11 @@
           <p class="black--text ma-0 pa-0">{{ tag }}</p>
         </v-chip>
       </div>
-      <p class="font-weight-bold mb-1 mt-2 caption">Wer bin ich?</p>
-      <div class="d-flex flex-wrap">
-        Hier kann ein kleiner Text stehen, der auf der Profilseite des Coaches
-        eingegeben wird. Wir müssen dann leider darauf achten, dass die
-        Profiltexte nicht missbraucht werden, z.B. mit Kontaktdaten und
-        Weiterleitungen zur eigenen Homepage oder so …
+      <p v-if="coach.description" class="font-weight-bold mb-1 mt-2 caption">
+        Wer bin ich?
+      </p>
+      <div v-if="coach.description" class="d-flex flex-wrap">
+        {{ coach.description }}
       </div>
 
       <v-card

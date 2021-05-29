@@ -76,6 +76,29 @@
             >{{ t }}</v-chip
           >
         </v-chip-group>
+        <v-btn color="primary" block @click="isCoach ? update(3) : finish()">
+          <v-icon>mdi-check</v-icon></v-btn
+        >
+      </v-stepper-content>
+      <v-stepper-step
+        v-if="isCoach"
+        :complete="e6 > 3"
+        step="3"
+        color="secondary"
+      >
+        <h2
+          class="text-h5 text-uppercase secondary--text"
+          style="text-shadow: none"
+        >
+          Füge eine kurze Beschreibung über dich hinzu.
+        </h2>
+      </v-stepper-step>
+      <v-stepper-content v-if="isCoach" step="3">
+        <v-textarea
+          outlined
+          label="Beschreibung hinzufügen"
+          v-model="changeDescription"
+        ></v-textarea>
         <v-btn color="primary" block @click="finish">
           <v-icon>mdi-check</v-icon></v-btn
         >
@@ -113,6 +136,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    description: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
@@ -137,6 +164,7 @@ export default {
       topics: [],
       selectedTopic: '',
       selectedTopicPoints: [],
+      changeDescription: this.description,
       e6: 1,
       panel: [0],
       open: this.isOpen,
@@ -159,6 +187,7 @@ export default {
       const data = {
         topicArea: this.selectedTopic.topicArea,
         topicPoints: this.selectedTopicPoints,
+        description: this.changeDescription,
       }
       this.$emit('filter', data)
       this.$emit('selection', data)

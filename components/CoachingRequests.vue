@@ -48,16 +48,19 @@
               color="primary"
               label="Bitte wählen"
               class="my-2"
-              ><template v-slot:item="{ item }"
-                ><div>
-                  <p class="font-weight-bold mb-0">
-                    {{ formatDate(item.date) }}
-                  </p>
-                  <p class="caption">{{ item.time }} Uhr</p>
-                </div></template
+            >
+              <template v-slot:item="{ item, on }">
+                <v-list-item v-on="on">
+                  <v-list-item-content>
+                    <v-list-item-title class="font-weight-bold mb-0">
+                      {{ formatDate(item.date) }}
+                    </v-list-item-title>
+                    <p class="caption">{{ item.time }} Uhr</p>
+                  </v-list-item-content>
+                </v-list-item> </template
               ><template v-slot:selection="{ item }"
-                >{{ item.date }} | {{ item.time }}</template
-              ></v-select
+                >{{ formatDate(item.date) }} | {{ item.time }}
+              </template></v-select
             >
             <p class="caption">
               Nach der Terminbestätigung wirst du direkt zu unserem

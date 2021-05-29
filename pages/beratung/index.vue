@@ -44,7 +44,7 @@
                 color="orange"
                 text-color="white"
               >
-                auf Termin warten
+                Antwort abwarten
               </v-chip>
 
               <v-chip
