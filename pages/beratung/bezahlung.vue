@@ -5,12 +5,27 @@
       Wir nutzen als Zahlungssystem den Anbieter
       <a href="https://stripe.com" target="_blank">Stripe</a>.
     </p>
-    <div v-if="!(user.stripe && user.stripe.verified)">
-      <p v-if="!user.stripe" class="caption">
-        Bitte registrieren Sie sich, damit Frauen Ihre Angebote bezahlen können.
+
+    <div v-if="!user.stripe">
+      <p class="caption">
+        Bitte registrieren Sie sich, damit Frauen Ihr Angebot bezahlen können.
       </p>
+      <h2 class="text-h2 primary--text">Registrieren</h2>
+      <div v-if="!user.stripe">
+        <p class="mb-0">Aktuell können Sie keine Zahlungen entgegennehmen.</p>
+        <v-btn
+          :loading="loading"
+          :disabled="disabled"
+          color="secondary"
+          target="_blank"
+          @click="addStripe"
+          >bei Stripe registrieren
+        </v-btn>
+        <p class="caption">
+          Sie werden zur Stripes Registrierungsseite weitergeleitet.
+        </p>
+      </div>
       <div v-else>
-        <h2 class="text-h2 primary--text">Step 1</h2>
         <div v-if="!user.stripe.chargesEnabled">
           <p class="mb-0">Aktuell können Sie keine Zahlungen entgegennehmen.</p>
           <v-btn
@@ -25,31 +40,46 @@
             Sie werden zur Stripes Registrierungsseite weitergeleitet.
           </p>
         </div>
-        <v-alert type="success" color="success" v-else
-          >Bei Stripe registriert</v-alert
+        <div
+          v-else-if="user.stripe.chargesEnabled && !user.stripe.payoutsEnabled"
         >
-
-        <h2 class="text-h2 primary--text mt-8">Step 2</h2>
-        <div v-if="!user.stripe.payoutsEnabled">
-          <p v-if="!user.stripe.chargesEnabled">
-            Schließen Sie zuerst Schritt 1 ab
+          <v-alert type="success" color="success"
+            >Bei Stripe registriert</v-alert
+          >
+          <p class="mb-0">
+            Aktuell können Sie sich kein Geld auszahlen lassen.
           </p>
-          <div v-else>
-            <p class="mb-0">
-              Aktuell können Sie sich kein Geld auszahlen lassen.
-            </p>
-            <v-btn
-              :loading="loading"
-              :disabled="disabled"
-              color="secondary"
-              target="_blank"
-              @click="addStripe"
-              >Auszahlung hinzufügen
-            </v-btn>
-            <p class="caption">
-              Sie werden zur Stripes Registrierungsseite weitergeleitet.
-            </p>
+          <v-btn
+            :loading="loading"
+            :disabled="disabled"
+            color="secondary"
+            target="_blank"
+            @click="addStripe"
+            >Auszahlung hinzufügen
+          </v-btn>
+          <p class="caption">
+            Sie werden zur Stripes Registrierungsseite weitergeleitet.
+          </p>
+        </div>
+        <div v-else>
+          <h2 class="text-h2 primary--text">Stripe Übersicht</h2>
+          <div v-if="stripeData">
+            <p>Kartenzahlung:</p>
           </div>
+          <v-card v-for="(item, i) of stripeData" :key="i">
+            <v-card-text>
+              <p>
+                Betrag: {{ item.amount }} {{ item.currency.toUpperCase()
+                }}<br />
+
+                erstellt am: {{ new Date(item.created).getDate() }}.{{
+                  new Date(item.created).getMonth() + 1
+                }}.{{ new Date(item.created).getFullYear() }}
+              </p>
+
+              <v-btn @click="more(item.id)">Mehr</v-btn>
+            </v-card-text>
+          </v-card>
         </div>
       </div>
 
@@ -62,25 +92,6 @@
         Falls die Weiterleitung nicht funktioniert, kopiere und öffne bitte
         folgende URL: {{ stripeRegisterURL }}
       </p>
-    </div>
-    <div v-else>
-      <h2 class="text-h2 primary--text">Stripe Übersicht</h2>
-      <div v-if="stripeData">
-        <p>Kartenzahlung:</p>
-      </div>
-      <v-card v-for="(item, i) of stripeData" :key="i">
-        <v-card-text>
-          <p>
-            Betrag: {{ item.amount }} {{ item.currency.toUpperCase() }}<br />
-
-            erstellt am: {{ new Date(item.created).getDate() }}.{{
-              new Date(item.created).getMonth() + 1
-            }}.{{ new Date(item.created).getFullYear() }}
-          </p>
-
-          <v-btn @click="more(item.id)">Mehr</v-btn>
-        </v-card-text>
-      </v-card>
     </div>
   </v-container>
 </template>
