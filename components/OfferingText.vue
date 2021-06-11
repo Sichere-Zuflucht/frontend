@@ -1,47 +1,46 @@
 <template>
-  <v-sheet>
-    <p class="caption font-weight-bold mb-0 pb-0">Frauen finden hier:</p>
-    <v-list dense>
-      <v-list-item>
-        <v-list-item-icon>
-          <v-icon color="secondary" class="pt-2">mdi-check-outline</v-icon>
-        </v-list-item-icon>
-        <v-list-item-content>
-          Beratung und Hilfe in From von Online-Coachings bei häuslicher Gewalt
-        </v-list-item-content>
-      </v-list-item>
-      <v-list-item>
-        <v-list-item-icon>
-          <v-icon color="secondary" class="pt-2">mdi-check-outline</v-icon>
-        </v-list-item-icon>
-        <v-list-item-content>
-          Eine sichere Zuflucht für sich und ggf. ihre Kinder in Form einer
-          Unterkunft
-        </v-list-item-content>
-      </v-list-item>
-    </v-list>
-    <v-sheet v-if="buttons" class="d-flex align-center">
-      <v-btn to="/signup" exact nuxt color="secondary mx-auto"
-        >Anmeldung für Frauen</v-btn
-      >
-    </v-sheet>
-    <p v-if="price" class="my-12">[Preisinfo]</p>
-    <p class="caption font-weight-bold mb-0 pb-0">Berater*innen können hier:</p>
-    <v-list dense>
-      <v-list-item>
-        <v-list-item-icon>
-          <v-icon color="secondary" class="pt-2">mdi-check-outline</v-icon>
-        </v-list-item-icon>
-        <v-list-item-content>
-          Beratung und Hilfe für Frauen in häuslicher Gewaltsituation anbieten.
-        </v-list-item-content>
-      </v-list-item>
-    </v-list>
-    <v-sheet v-if="buttons" class="d-flex align-center">
-      <v-btn to="/signup" exact nuxt color="secondary mx-auto"
-        >Anmeldung für Berater*innen</v-btn
-      >
-    </v-sheet>
+  <v-sheet color="secondary" dark>
+    <v-container>
+      <h3 class="h2--text white--text text-center text-uppercase">
+        Melde dich an, um:
+      </h3>
+      <v-list dense color="transparent">
+        <v-list-item>
+          <v-list-item-icon>
+            <v-icon class="pt-2">mdi-face-woman</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <p class="font-weight-bold">Als Frau</p>
+            <ul>
+              <li>Online-Beratungen buchen zu können</li>
+              <li>Unterkunftsgesuche zu erstellen</li>
+            </ul>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-icon>
+            <v-icon color="white" class="pt-2">mdi-forum</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <p class="font-weight-bold">Als Berater*in</p>
+            <ul>
+              <li>dein Angebot zu erstellen</li>
+            </ul>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-icon>
+            <v-icon color="white" class="pt-2">mdi-home</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <p class="font-weight-bold">Als Unterkunfsbesitzer*in</p>
+            <ul>
+              <li>deine Unterkunft in unsere Datenbank aufzunehmen</li>
+            </ul>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-container>
   </v-sheet>
 </template>
 

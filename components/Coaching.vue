@@ -1,7 +1,13 @@
 <template>
-  <v-card elevation="2" nuxt :ripple="false" style="padding: 12px">
+  <v-card
+    elevation="2"
+    nuxt
+    :ripple="false"
+    style="padding: 12px"
+    max-width="300px"
+  >
     <v-sheet class="d-flex">
-      <v-avatar color="primary ma-5" size="35%"
+      <v-avatar color="primary my-5 mx-3" size="80"
         ><v-img :src="coach.avatar"
       /></v-avatar>
       <div class="ma-5 ml-2 d-flex flex-column justify-center">

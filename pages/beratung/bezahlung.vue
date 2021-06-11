@@ -6,7 +6,7 @@
       <a href="https://stripe.com" target="_blank">Stripe</a>.
     </p>
 
-    <div v-if="!user.stripe">
+    <div v-if="!user.stripe || !user.stripe.verified">
       <p class="caption">
         Bitte registrieren Sie sich, damit Frauen Ihr Angebot bezahlen können.
       </p>
