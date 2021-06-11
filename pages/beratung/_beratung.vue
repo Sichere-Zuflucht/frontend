@@ -45,13 +45,17 @@
         elevation="2"
       >
         <v-card-title class="text-h2 secondary--text"
-          >online-<br />Beratungstermin<br />anfragen</v-card-title
+          >online-beratungstermin anfragen</v-card-title
         >
         <v-card-text>
           <p class="font-weight-bold mb-1 mt-2 caption">
-            Deine Terminvorschläge
+            Schlage dieser*m Berater*in passende Termine für euer
+            Beratungsgespräch vor.
           </p>
-          <p>Deine Vorschläge sollten mind. 48h in der Zukunft liegen.</p>
+          <p>
+            Deine Vorschläge sollten an Werktagen sein und mind. 24h in der
+            Zukunft liegen.
+          </p>
 
           <v-form
             ref="form"
@@ -71,6 +75,8 @@
               label="persönliche Anfrage schreiben"
             ></v-textarea>
 
+            <p>Preis pro 60 Min.: <b>50 €</b></p>
+
             <div class="d-flex flex-row-reverse mb-4">
               <v-btn
                 color="secondary"
@@ -80,38 +86,37 @@
                 >{{ buttonText }}
               </v-btn>
             </div>
-            <v-alert v-if="showConfirmation" color="success" dark class="mt-4"
-              >Deine Nachricht wurde versendet, {{ coachName }} wird sich bei
-              dir melden.
+            <v-alert
+              v-if="showConfirmation"
+              color="success"
+              dark
+              class="mt-4 d-flex flex-column justify-center"
+              ><v-icon class="mb-4">mdi-check</v-icon>
+              <p class="mb-0">
+                Deine Anfrage wurde gesendet. {{ coachName }} wird sich
+                innerhalb der nächsten 24h per E-Mail bei dir melden.
+              </p>
             </v-alert>
             <v-alert v-if="error.status" color="error" class="white--text mt-4"
               >{{ error.message }}
             </v-alert>
-            <v-alert
-              border="right"
-              colored-border
-              type="info"
-              color="secondary"
-              elevation="2"
-            >
-              <p class="caption">
-                Die Terminvorschläge werden von der/dem Berater*in bestätigt.
-                Danach kannst du die Beratung verbindlich buchen.
-
-                <a>Infos zur Termineinhaltung</a>
-              </p>
-            </v-alert>
+            <p class="caption">
+              Die Terminvorschläge werden von der/dem Berater*in bestätigt.
+              Danach kannst du die Beratung verbindlich buchen. <br /><br />
+              <a color="primary">Wie läuft das Beratungsgespräch ab?</a><br /><a
+                color="primary"
+              >
+                Infos zur Termineinhaltung </a
+              ><br /><a color="primary"> zu Preisen</a>
+            </p>
           </v-form>
         </v-card-text>
       </v-card>
-    </v-container>
-    <v-sheet color="grey lighten-5">
-      <v-container>
-        <PriceInfo />
-      </v-container>
-    </v-sheet>
-    <v-container>
       <h2 class="text-h2 mt-8 secondary--text">weitere Berater*innen</h2>
+      <p class="caption">
+        <b>Per Online-Beratung</b> werden dir unsere Berater*innen und Coaches
+        zuhören und weiter helfen. Schau dich um, Sie beraten in vielen Themen.
+      </p>
       <div v-if="filteredCoaches.length > 0">
         <div
           v-for="(coaching, i) in filteredCoaches.slice(0, 2)"

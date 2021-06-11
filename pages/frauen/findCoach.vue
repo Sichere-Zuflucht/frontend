@@ -1,8 +1,6 @@
 <template>
   <v-sheet>
-    <v-img
-      src="https://assets-global.website-files.com/5e95aa93bef5360e2788a86e/5e9e9727e2658e68125e8b48_header-berlin.jpg"
-    />
+    <v-img src="le-buzz-tVnm9I9jb8I-unsplash.jpg" max-height="230" />
     <v-container>
       <h1 class="text-h1 primary--text">Beratung und Hilfe</h1>
       <p class="mb-6">
@@ -17,7 +15,9 @@
         ><div class="d-flex align-start">
           <v-icon large color="secondary" class="pr-2">mdi-filter</v-icon>
           <div>
-            <h2 class="text-h2 secondary--text">Beratungsfilter</h2>
+            <h2 class="text-h2 secondary--text">
+              Beratungsfilter {{ filteredCoaches.length }}
+            </h2>
             <p class="caption">
               Filtere hier die Berater*innen und Coaches nach den Fachgebieten
               und Themen, die für dich relevant sind.
@@ -36,8 +36,15 @@
       ></v-sheet
     >
     <v-container>
-      <div v-if="filteredCoaches.length > 0">
-        <div v-for="(coaching, i) in filteredCoaches" :key="i" class="mt-5">
+      <div
+        v-if="filteredCoaches.length > 0"
+        class="d-flex flex-wrap justify-space-around"
+      >
+        <div
+          v-for="(coaching, i) in filteredCoaches"
+          :key="i"
+          class="mt-5 px-1"
+        >
           <Coaching :coach="coaching" />
         </div>
       </div>
@@ -68,6 +75,7 @@
         >
       </div>
     </v-container>
+    <PriceInfo />
   </v-sheet>
 </template>
 
