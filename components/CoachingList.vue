@@ -1,7 +1,13 @@
 <template>
-  <v-card elevation="2" nuxt :ripple="false" style="padding: 12px">
+  <v-card
+    elevation="2"
+    nuxt
+    :ripple="false"
+    style="padding: 12px"
+    max-width="300px"
+  >
     <v-sheet class="d-flex">
-      <v-avatar color="primary ma-5" size="35%"
+      <v-avatar color="primary my-5 mx-3" size="80"
         ><v-img :src="coach.avatar"
       /></v-avatar>
       <div class="ma-5 ml-2 d-flex flex-column justify-center">
@@ -16,14 +22,8 @@
     <v-card-text class="pt-0">
       <p class="font-weight-bold mb-1 mt-2 caption">Fachgebiet</p>
       <div class="d-flex flex-wrap">
-        <v-chip outlined color="primary" class="mr-1 mb-1 caption">
-          <p class="black--text ma-0 pa-0">{{ coach.info.topicArea }}</p>
-        </v-chip>
-      </div>
-      <p class="font-weight-bold mb-1 mt-2 caption">Themen</p>
-      <div class="d-flex flex-wrap">
         <v-chip
-          v-for="tag in coach.info.topicPoints"
+          v-for="tag in coach.info.topicArea"
           :key="tag"
           outlined
           color="primary"

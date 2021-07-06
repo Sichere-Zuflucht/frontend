@@ -48,30 +48,35 @@
               color="primary"
               label="Bitte wählen"
               class="my-2"
-              ><template v-slot:item="{ item }"
-                ><div>
-                  <p class="font-weight-bold mb-0">
-                    {{ formatDate(item.date) }}
-                  </p>
-                  <p class="caption">{{ item.time }} Uhr</p>
-                </div></template
-              ><template v-slot:selection="{ item }"
-                >{{ item.date }} | {{ item.time }}</template
-              ></v-select
             >
+              <template v-slot:item="{ item, on }">
+                <v-list-item v-on="on">
+                  <v-list-item-content>
+                    <v-list-item-title class="font-weight-bold mb-0">
+                      {{ formatDate(item.date) }}
+                    </v-list-item-title>
+                    <p class="caption">{{ item.time }} Uhr</p>
+                  </v-list-item-content>
+                </v-list-item> </template
+              ><template v-slot:selection="{ item }"
+                >{{ formatDate(item.date) }} | {{ item.time }}
+              </template></v-select
+            >
+            <p class="font-weight-bold mb-0 my-4">Preis: 50€</p>
+            <v-btn
+              color="success"
+              :loading="btn.payButtonLoading"
+              :disabled="!date || btn.isDisabled"
+              @click="pay(date)"
+              block
+              >{{ btn.acceptText }}</v-btn
+            >
+            <v-alert type="error" v-if="btn.error">{{ btn.errorMsg }}</v-alert>
             <p class="caption">
               Nach der Terminbestätigung wirst du direkt zu unserem
               Zahlungsanbieter „stripe“ weitergeleitet. Nach deiner Zahlung
               senden wir dir eine Termin-Bestätigung per E-Mail.
             </p>
-            <v-btn
-              color="success"
-              :loading="payButtonLoading"
-              :disabled="!date"
-              @click="pay"
-              block
-              >{{ acceptText }}</v-btn
-            >
           </v-col>
         </v-row>
       </div>
@@ -82,13 +87,14 @@
           target="_blank"
           :href="
             response.videoType === 'Jitsi'
-              ? response.jitsiLink
-              : response.redLink.codePatient
+              ? response.video
+              : response.video.codePatient
           "
           >zum Videocall
         </v-btn>
         <v-alert dark text dense color="success"
-          >Zugesagt für {{ response.acceptedDate }}</v-alert
+          >Zugesagt für {{ formatDate(response.acceptedDate.date) }} um
+          {{ response.acceptedDate.time }}</v-alert
         >
       </div>
     </v-card-text>
@@ -142,87 +148,26 @@ export default {
       type: Boolean,
       default: true,
     },
-    small: {
-      type: Boolean,
-      default: false,
-    },
   },
   data() {
     return {
-      acceptText: this.response
-        ? this.response.payed
-          ? 'Bezahlt'
-          : 'Termin verbindlich buchen'
-        : null,
-      acceptLoading: false,
-      acceptDisable: true,
       date: null,
-      payButtonLoading: false,
       isDelete: false,
       eraseLoading: false,
+      btn: {
+        error: false,
+        errorMsg: '',
+        acceptText: this.response
+          ? this.response.acceptedDate
+            ? 'Bezahlt'
+            : 'Termin verbindlich buchen'
+          : null,
+        isDisabled: false,
+        payButtonLoading: false,
+      },
     }
   },
   methods: {
-    async getRedLink(humanResponse, dateInput) {
-      this.acceptLoading = true
-      const data = {
-        method: 'getEntrycodes',
-        date: dateInput,
-        token: this.$config.RED_API,
-      }
-      const response = await fetch(
-        'https://redclient.redmedical.de/service/video',
-        {
-          method: 'POST',
-          header: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        }
-      )
-      await response
-        .json()
-        .then((redRes) => {
-          if (redRes.success) {
-            const jitsi =
-              'https://meet.jit.si/' +
-              humanResponse.coach.firstName.toLowerCase() +
-              '_' +
-              humanResponse.coach.lastName.toLowerCase() +
-              '&?' +
-              humanResponse.id
-            this.$fire.functions
-              .httpsCallable('request-acceptDate')({
-                coachName:
-                  humanResponse.coach.firstName +
-                  ' ' +
-                  humanResponse.coach.lastName,
-                acceptedDate: dateInput,
-                requestId: humanResponse.id,
-                jitsiLink: jitsi,
-                redLink: {
-                  codeArzt:
-                    'https://video.redmedical.de/#/login?name=' +
-                    humanResponse.coach.firstName +
-                    ' ' +
-                    humanResponse.coach.lastName +
-                    '&code=' +
-                    redRes.codeArzt,
-                  codePatient:
-                    'https://video.redmedical.de/#/login?name=unbekannt&code=' +
-                    redRes.codePatient,
-                },
-              })
-              .then(() => {
-                this.acceptDisable = true
-              })
-          }
-        })
-        .catch((error) => {
-          console.log('err: ', error)
-        })
-      humanResponse.acceptedDate = dateInput
-    },
     cancel(doc) {
       this.eraseLoading = true
       const db = this.$fire.firestore
@@ -234,21 +179,80 @@ export default {
           this.eraseLoading = false
         })
     },
-    async pay() {
+    async pay(dateInput) {
       this.payButtonLoading = true
+      let redReq, data, video
+      if (this.response.videoType === 'RED') {
+        data = {
+          method: 'getEntrycodes',
+          date: dateInput.date,
+          token: this.$config.redAPI,
+        }
+        redReq = await fetch('https://redclient.redmedical.de/service/video', {
+          method: 'POST',
+          header: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        })
+        redReq
+          .json()
+          .then((redRes) => {
+            console.log('redRes', redRes, redRes.success)
+            video = {
+              codeArzt:
+                'https://video.redmedical.de/#/login?name=' +
+                this.response.coach.firstName +
+                ' ' +
+                this.response.coach.lastName +
+                '&code=' +
+                redRes.codeArzt,
+              codePatient:
+                'https://video.redmedical.de/#/login?name=unbekannt&code=' +
+                redRes.codePatient,
+            }
+            this.standardPayment(video, dateInput)
+          })
+          .catch((error) => {
+            console.log('err: ', error)
+          })
+      } else {
+        video =
+          'https://meet.jit.si/' +
+          this.response.coach.firstName.toLowerCase() +
+          '_' +
+          this.response.coach.lastName.toLowerCase() +
+          '&?' +
+          this.response.id
+        this.standardPayment(video, dateInput)
+      }
+    },
+    async standardPayment(v, dI) {
       const paymentID = (
         await this.$fire.functions.httpsCallable('stripe-payCoaching')({
           responseID: this.response.id,
           isDev: this.$config.isDev,
         })
       ).data
-
-      this.$stripe.redirectToCheckout({
-        // Make the id field from the Checkout Session creation API response
-        // available to this file, so you can provide it as argument here
-        // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
-        sessionId: paymentID,
-      })
+      this.$fire.functions
+        .httpsCallable('request-acceptDate')({
+          coachName:
+            this.response.coach.firstName + ' ' + this.response.coach.lastName,
+          acceptedDate: dI,
+          requestId: this.response.id,
+          video: v,
+        })
+        .then(() => {
+          this.payButtonLoading = false
+          this.btn.isDisabled = true
+          console.log(paymentID)
+          /* this.$stripe.redirectToCheckout({
+            // Make the id field from the Checkout Session creation API response
+            // available to this file, so you can provide it as argument here
+            // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
+            sessionId: paymentID,
+          }) */
+        })
     },
     formatDate(date) {
       const d = new Date(date)
@@ -258,14 +262,6 @@ export default {
         month: 'long',
         day: 'numeric',
       })
-      /* let month = '' + (d.getMonth() + 1)
-      let day = '' + d.getDate()
-      const year = d.getFullYear()
-
-      if (month.length < 2) month = '0' + month
-      if (day.length < 2) day = '0' + day
-
-      return [year, month, day].join('-') */
     },
   },
 }

@@ -1,8 +1,6 @@
 <template>
   <v-sheet>
-    <v-img
-      src="https://assets-global.website-files.com/5e95aa93bef5360e2788a86e/5e9e9727e2658e68125e8b48_header-berlin.jpg"
-    />
+    <v-img src="le-buzz-tVnm9I9jb8I-unsplash.jpg" max-height="230" />
     <v-container>
       <h1 class="text-h1 primary--text">Beratung und Hilfe</h1>
       <p class="mb-6">
@@ -25,7 +23,11 @@
           </div>
         </div>
 
-        <CoachingSelection :is-coach="false" @filter="filter" />
+        <CoachingSelection
+          :is-coach="false"
+          @filter="filter"
+          :info="user.info ? user.info : ''"
+        />
         <p class="caption mt-4">
           <b>Dein Fachgebiet oder Thema ist nicht dabei?</b><br />
           <a href="mailto:kontakt@sichere-zuflucht.de"
@@ -36,9 +38,16 @@
       ></v-sheet
     >
     <v-container>
-      <div v-if="filteredCoaches.length > 0">
-        <div v-for="(coaching, i) in filteredCoaches" :key="i" class="mt-5">
-          <Coaching :coach="coaching" />
+      <div
+        v-if="filteredCoaches.length > 0"
+        class="d-flex flex-wrap justify-space-around"
+      >
+        <div
+          v-for="(coaching, i) in filteredCoaches"
+          :key="i"
+          class="mt-5 px-1"
+        >
+          <CoachingList :coach="coaching" />
         </div>
       </div>
       <div
@@ -68,6 +77,7 @@
         >
       </div>
     </v-container>
+    <PriceInfo />
   </v-sheet>
 </template>
 
@@ -78,6 +88,7 @@ export default {
     return {
       allCoaches: [],
       filteredCoaches: [],
+      user: this.$store.getters['modules/user/user'],
     }
   },
   mounted() {
@@ -107,13 +118,16 @@ export default {
           coach.info.languages.filter((value) => data.languages.includes(value))
             .length >= 1 */
         // topicArea
-        add = add && coach.info.topicArea === data.topicArea
-        // topicPoints
+        // add = add && coach.info.topicArea === data.topicArea
         add =
+          add &&
+          coach.info.topicArea.filter((value) => data.topicArea.includes(value))
+        // topicPoints
+        /* add =
           add &&
           coach.info.topicPoints.filter((value) =>
             data.topicPoints.includes(value)
-          )
+          ) */
         if (add) this.filteredCoaches.push(coach)
       })
     },

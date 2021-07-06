@@ -1,6 +1,6 @@
 <template>
   <v-app light>
-    <v-navigation-drawer v-model="drawer" app class="primary" dark fixed>
+    <v-navigation-drawer v-model="drawer" app class="secondary" dark fixed>
       <client-only>
         <v-list v-if="loggedIn">
           <v-list-item
@@ -14,7 +14,7 @@
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title v-text="item.title" />
+              {{ item.title }}
             </v-list-item-content>
           </v-list-item>
           <p class="caption ml-4 mb-0">
@@ -32,7 +32,7 @@
                 <v-icon>{{ item.icon }}</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title v-text="item.title" />
+                {{ item.title }}
               </v-list-item-content>
             </v-list-item>
           </div>
@@ -48,8 +48,14 @@
                 <v-icon>{{ item.icon }}</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title v-text="item.title" />
+                {{ item.title }}
               </v-list-item-content>
+            </v-list-item>
+            <v-list-item :to="'/beratung/' + user.uid" nuxt exact>
+              <v-list-item-icon>
+                <v-icon>mdi-account-edit</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content> Profil </v-list-item-content>
             </v-list-item>
           </div>
           <v-list-item>
@@ -65,12 +71,15 @@
             exact
           >
             <v-list-item-content>
-              <v-list-item-title v-text="item.title" />
+              {{ item.title }}
             </v-list-item-content>
           </v-list-item>
           <v-spacer />
           <v-list-item>
-            <v-btn to="/signup" exact nuxt block>Anmelden</v-btn>
+            <v-btn to="/signup" exact nuxt block>Registrieren</v-btn>
+          </v-list-item>
+          <v-list-item>
+            <v-btn to="/login" exact nuxt block text>Einloggen</v-btn>
           </v-list-item>
         </v-list>
       </client-only>
@@ -90,9 +99,6 @@
         ></v-btn>
       </client-only>
     </v-app-bar>
-    <v-main>
-      <nuxt />
-    </v-main>
     <v-card
       dark
       color="red"
@@ -108,21 +114,10 @@
         </p>
       </v-card-text>
     </v-card>
-    <v-footer inset absolute app class="d-flex flex-column justify-center mt-6">
-      <span class="mt-4"
-        >&copy; {{ new Date().getFullYear() }} Sichere Zuflucht gGmbH</span
-      >
-      <span class="mb-6"
-        ><a href="mailto:kontakt@sichere-zuflucht.de"
-          >kontakt@sichere-zuflucht.de</a
-        ></span
-      >
-      <div class="d-flex flex-wrap justify-center">
-        <v-btn v-for="(item, i) in footer" :key="i" :to="item.to" text plain
-          ><p v-text="item.title"></p
-        ></v-btn>
-      </div>
-    </v-footer>
+    <v-main style="hyphens: auto" class="pb-6">
+      <nuxt />
+    </v-main>
+    <Footer></Footer>
   </v-app>
 </template>
 
@@ -149,6 +144,11 @@ export default {
           title: 'Wohnungen',
           to: '/frauen/wohnungssuche',
         },
+        {
+          icon: 'mdi-cog',
+          title: 'Einstellungen',
+          to: '/settings',
+        },
       ],
       loggedInCoach: [
         {
@@ -162,9 +162,9 @@ export default {
           to: '/beratung/personenverifizierung',
         },
         {
-          icon: 'mdi-account-edit',
-          title: 'Profil bearbeiten',
-          to: '/beratung/registrierung',
+          icon: 'mdi-cog',
+          title: 'Einstellungen',
+          to: '/settings',
         },
       ],
       noUser: [
@@ -186,28 +186,6 @@ export default {
         },
         {
           title: 'Aktuelles',
-          to: '/',
-        },
-      ],
-      footer: [
-        {
-          title: 'Presse',
-          to: '/',
-        },
-        {
-          title: 'FAQ',
-          to: '/',
-        },
-        {
-          title: 'AGB',
-          to: '/',
-        },
-        {
-          title: 'Datenschutz',
-          to: '/',
-        },
-        {
-          title: 'Impressum',
           to: '/',
         },
       ],
