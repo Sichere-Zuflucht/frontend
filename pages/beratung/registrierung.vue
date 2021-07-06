@@ -50,7 +50,6 @@ export default {
           topicArea: data.topicArea, // topic
           topicPoints: data.topicPoints, // types
         },
-        uid: this.user.uid,
       })
       this.$router.push('/beratung')
     },

@@ -5,7 +5,7 @@
     <p class="caption">Bitte vervollständige als erstes dein Profil.</p>
     <v-form ref="form" v-model="valid" class="mb-8 mt-16">
       <h2 class="text-h2 secondary--text">Was möchtest du?</h2>
-      <v-radio-group mandatory v-model="membership">
+      <v-radio-group v-model="membership" mandatory>
         <v-radio
           v-for="(n, i) in memberships"
           :key="i"
@@ -27,36 +27,36 @@
         sie aber jederzeit anpassen.
       </p>
       <v-text-field
-        class="secondary--text font-weight-bold"
         v-model="firstName"
+        class="secondary--text font-weight-bold"
         :rules="textRules"
         label="Vorname"
       ></v-text-field>
       <v-text-field
-        class="secondary--text font-weight-bold"
         v-model="lastName"
+        class="secondary--text font-weight-bold"
         :rules="textRules"
         label="Nachname"
       ></v-text-field>
       <v-text-field
         v-if="membership ? (membership.id === 'Coach' ? true : false) : false"
+        v-model="profession"
         type="text"
         class="secondary--text font-weight-bold"
-        v-model="profession"
         :rules="textRules"
         label="Beruf"
       ></v-text-field>
       <v-text-field
         v-if="membership ? (membership.id === 'Coach' ? true : false) : false"
+        v-model="professionDuration"
         type="number"
         class="secondary--text font-weight-bold"
-        v-model="professionDuration"
         :rules="requiredRule"
         label="Wie viele Jahre Berufserfahrung?"
       ></v-text-field>
       <v-text-field
-        class="secondary--text font-weight-bold"
         v-model="password"
+        class="secondary--text font-weight-bold"
         label="Passwort"
         :rules="passwordRules"
         :type="hidePassword ? 'password' : 'text'"
@@ -64,8 +64,8 @@
         @click:append="() => (hidePassword = !hidePassword)"
       ></v-text-field>
       <v-text-field
-        class="secondary--text font-weight-bold"
         v-model="password2"
+        class="secondary--text font-weight-bold"
         :rules="passwordRules2"
         label="Passwort wiederholen"
         type="password"
@@ -136,8 +136,7 @@ export default {
     updateProfile() {
       this.$refs.form.validate()
       if (!this.$refs.form.validate()) return
-      this.loading = true
-      const db = this.$fire.firestore
+      // this.loading = true
       this.$fire.auth.currentUser
         .updatePassword(this.password)
         .catch((e) => {
@@ -148,50 +147,29 @@ export default {
           let createdUserData = {}
           if (this.membership.id === 'Coach') {
             createdUserData = {
-              firstName: this.firstName,
-              lastName: this.lastName,
-              avatar:
-                'https://picsum.photos/seed/' +
-                this.$fire.auth.currentUser.uid.substring(0, 8) +
-                '/200',
-              createdAt: new Date(),
-              userName: this.$fire.auth.currentUser.uid.substring(0, 8),
-              email: this.$fire.auth.currentUser.email,
-              membership: db.collection('memberships').doc(this.membership.id),
-              profession: this.profession,
-              professionDuration: this.professionDuration,
-              stripe: false,
-              verifySetting: {
-                isVerifying: false,
-                verified: false,
+              public: {
+                firstName: this.firstName,
+                lastName: this.lastName,
+                profession: this.profession,
+                professionDuration: this.professionDuration,
+                membership: this.membership.id,
               },
+              email: this.$fire.auth.currentUser.email,
             }
           } else {
             createdUserData = {
+              public: {
+                membership: this.membership.id,
+              },
               firstName: this.firstName,
               lastName: this.lastName,
-              avatar:
-                'https://picsum.photos/seed/' +
-                this.$fire.auth.currentUser.uid.substring(0, 8) +
-                '/200',
-              createdAt: new Date(),
-              userName: this.$fire.auth.currentUser.uid.substring(0, 8),
               email: this.$fire.auth.currentUser.email,
-              membership: db.collection('memberships').doc(this.membership.id),
-              verifySetting: {
-                isVerifying: false,
-                verified: false,
-              },
             }
           }
+          console.log('dispatch sotre create firebase user')
           return this.$store.dispatch('modules/user/createFirebaseUser', {
-            uid: this.$fire.auth.currentUser.uid,
             userData: createdUserData,
           })
-        })
-        .then(() => {
-          this.loading = false
-          this.$router.push('/profile')
         })
     },
   },
