@@ -113,7 +113,7 @@
           <v-card-title class="text-h2 secondary--text"
             >online-beratungstermin anfragen</v-card-title
           >
-          <v-card-text>
+          <v-card-text v-if="user.uid">
             <p class="font-weight-bold mb-1 mt-2 caption">
               Schlage dieser*m Berater*in passende Termine für euer
               Beratungsgespräch vor.
@@ -178,7 +178,16 @@
               </p>
             </v-form>
           </v-card-text>
+          <v-card-text v-else
+            ><p class="font-weight-bold my-2 caption">
+              Melde dich bei Sichere Zuflucht an, um diese/n Berater*in
+              kontaktieren zu können.
+            </p>
+            <v-btn nuxt to="/signup" color="secondary">Registrieren</v-btn
+            ><v-btn nuxt to="/login" text>Einloggen</v-btn></v-card-text
+          >
         </v-card>
+        <v-divider class="mt-16 mb-6" />
         <h2 class="text-h2 mt-8 secondary--text">weitere Berater*innen</h2>
         <p class="caption">
           <b>Per Online-Beratung</b> werden dir unsere Berater*innen und Coaches
