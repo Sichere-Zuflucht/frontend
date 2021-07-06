@@ -3,6 +3,7 @@ import colors from 'vuetify/es5/util/colors'
 const base = '/frontend'
 const hostURL = 'https://sichere-zuflucht.github.io'
 const isDev = process.env.NODE_ENV !== 'production'
+const port = 80
 
 export default {
   // Target: https://go.nuxtjs.dev/config-target
@@ -23,7 +24,7 @@ export default {
         'pk_test_51IbjZeFRsEq5IriEKQifwCzu8LMnx6uMxxhOz7HIELiaYpFCnsfNlVaiTOU72b2uWwQP4B5gI8GwDrsrSNJS0hPP00e8y3RbDo',
     },
     isDev,
-    baseUrl: (isDev ? 'http://localhost:3000' : hostURL) + base,
+    baseUrl: (isDev ? 'http://localhost:' + port : hostURL) + base,
   },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -144,14 +145,17 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    extend(config, { isDev }) {
+    extend(config, { isDev, isClient }) {
       // Sets webpack's mode to development if `isDev` is true.
       if (isDev) {
         config.mode = 'development'
+      } else if (isClient) {
+        config.devtool = 'hidden-source-map'
       }
     },
   },
   server: {
     host: '0.0.0.0',
+    port,
   },
 }

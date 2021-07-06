@@ -25,6 +25,7 @@
     "@nuxtjs/firebase": "^7.5.0",
     "core-js": "^3.9.1",
     "firebase": "^8.3.1",
+    "lodash": "^4.17.21",
     "nuxt": "^2.15.3",
     "nuxt-stripe-module": "^3.2.0",
     "push-dir": "^0.4.1",

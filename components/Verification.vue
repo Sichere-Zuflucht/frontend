@@ -53,13 +53,11 @@ export default {
   methods: {
     updateVerify() {
       this.$fire.functions.httpsCallable('email-sendVerifyAccMail')()
-      const uid = this.user.uid
       const verifySetting = {
         isVerifying: true,
         verified: false,
       }
       this.$store.dispatch('modules/user/setVerify', {
-        uid,
         verifySetting,
       })
     },

@@ -1,13 +1,26 @@
+import _ from 'lodash'
 const state = () => ({
   uid: null,
   email: null,
   emailVerified: null,
   membership: null,
+  public: null,
   verifySetting: {
     isVerifying: null,
     verified: null,
   },
 })
+
+function removeFirebaseObjects(obj) {
+  if (typeof obj === 'object')
+    return Object.entries(obj)
+      .filter(([k, v]) => v.firestore === undefined)
+      .reduce(
+        (r, [key, value]) => ({ ...r, [key]: removeFirebaseObjects(value) }),
+        {}
+      )
+  else return obj
+}
 
 const getters = {
   uid(state) {
@@ -38,7 +51,7 @@ const getters = {
 }
 
 const actions = {
-  onAuthStateChangedAction({ commit }, { authUser }) {
+  onAuthStateChangedAction({ commit, dispatch }, { authUser }) {
     if (!authUser) {
       // Perform logout operations
       console.log('logg out', authUser)
@@ -46,19 +59,7 @@ const actions = {
     } else {
       // Do something with the authUser and the claims object...
       console.log('logg in', authUser)
-      this.$fire.firestore
-        .collection('users')
-        .doc(authUser.uid)
-        .get()
-        .then((user) => {
-          const userData = user.data()
-          if (userData) {
-            commit('setUserData', userData)
-            userData.membership.get().then((doc) => {
-              commit('setMembership', doc.data())
-            })
-          }
-        })
+      dispatch('fetchUserProfile', { user: authUser })
     }
   },
   async login({ dispatch }, form) {
@@ -68,9 +69,9 @@ const actions = {
       form.password
     )
     // fetch user profile and set in state
-    dispatch('fetchUserProfile', user)
+    dispatch('fetchUserProfile', { user })
   },
-  fetchUserProfile({ commit }, user) {
+  fetchUserProfile({ commit }, { user, redirect = false }) {
     // fetch user profile
     this.$fire.firestore
       .collection('users')
@@ -79,55 +80,50 @@ const actions = {
       .then((u) => {
         const userData = u.data()
         if (userData) {
-          const data = {
-            authData: user,
-            storeData: userData,
-          }
-          commit('setUserDataAndRedirect', data)
-          userData.membership.get().then((doc) => {
-            commit('setMembershipAndRedirect', doc.data())
+          commit('setAuthData', user)
+          commit('setUserData', userData)
+          userData.public.membership.get().then((doc) => {
+            commit('setMembership', {
+              membership: doc.data(),
+              redirect,
+            })
           })
         }
       })
-
-    // change route to dashboard
   },
-  setInfo({ commit }, { info, uid }) {
-    commit('setInfo', info)
-    this.$fire.firestore.collection('users').doc(uid).update({ info })
+  setInfo({ commit }, { info }) {
+    this.$fire.functions
+      .httpsCallable('user-setInfo')(info)
+      .then(() => commit('setInfo', info))
   },
-  setVerify({ commit }, { uid, verifySetting }) {
-    commit('setVerify', verifySetting)
-    this.$fire.firestore.collection('users').doc(uid).update({ verifySetting })
+  setVerify({ commit }, { verifySetting }) {
+    this.$fire.functions
+      .httpsCallable('user-setVerify')(verifySetting)
+      .then(() => commit('setVerify', verifySetting))
   },
-  async createFirebaseUser({ commit }, { uid, userData }) {
-    commit('setUserData', userData)
-    await userData.membership.get().then((doc) => {
-      commit('setMembership', doc.data())
-    })
-    await this.$fire.firestore.collection('users/').doc(uid).set(userData)
+  createFirebaseUser({ dispatch }, { userData }) {
+    this.$fire.functions
+      .httpsCallable('user-create')(userData)
+      .then((authUser) => {
+        dispatch('fetchUserProfile', { user: authUser.data, redirect: true })
+      })
   },
 }
 
 const mutations = {
-  setUserDataAndRedirect(state, data) {
-    console.log('[STORE MUTATIONS] - setUserDataAndRedirect:', data)
-    const { uid, email, emailVerified } = data.authData
-    const userData = data.storeData
+  setAuthData(state, authData) {
+    console.log('[STORE MUTATIONS] - setAuthData:', authData)
+    const { uid, email, emailVerified } = authData
     state.email = email
     state.emailVerified = emailVerified
     state.uid = uid
-    for (const entry of Object.entries(userData)) {
-      // filter out firestore objects (like membership)
-      if (entry[1].firestore === undefined) {
-        state[entry[0]] = entry[1]
-      }
-    }
   },
-  setMembershipAndRedirect(state, membership) {
-    console.log('[STORE MUTATIONS] - setMembershipAndRedirect:', membership)
+  setMembership(state, data) {
+    console.log('[STORE MUTATIONS] - setMembership:', data)
+    const { membership, redirect } = data
     state.membership = membership
-    this.$router.push({ path: '/profile' })
+    state.public.membership = membership
+    if (redirect) this.$router.push({ path: '/profile' })
   },
   setUserData(state, userData) {
     console.log('[STORE MUTATIONS] - setUserData:', userData)
@@ -135,15 +131,8 @@ const mutations = {
       for (const key of Object.keys(state)) {
         state[key] = null
       }
-      // window.location.href = '/'
     } else {
-      for (const entry of Object.entries(userData)) {
-        // filter out firestore objects (like membership)
-        if (entry[1].firestore === undefined) {
-          state[entry[0]] = entry[1]
-        }
-      }
-      // window.location.href = '/profile'
+      _.merge(state, removeFirebaseObjects(userData))
     }
   },
   setInfo(state, info) {
@@ -153,10 +142,6 @@ const mutations = {
   setVerify(state, verifySetting) {
     console.log('[STORE MUTATIONS] - setVerify:', state, verifySetting)
     state.verifySetting = verifySetting
-  },
-  setMembership(state, membership) {
-    console.log('[STORE MUTATIONS] - setMembership:', membership)
-    state.membership = membership
   },
   ON_AUTH_STATE_CHANGED_MUTATION(state, { authUser, claims }) {
     console.log('ON_AUTH_STATE_CHANGED_MUTATION', authUser)
