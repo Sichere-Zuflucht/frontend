@@ -101,13 +101,15 @@ exports.coachAcceptedDate = (coachName, date, coachID) => {
   }
 }
 
-exports.verificationNotificationMail = (email) => {
+exports.verificationNotificationMail = (email, tel, www) => {
   return {
     subject: 'Sichere Zuflucht - Verifizierungsanfrage',
     html: `<div style="font-size: 16px;">Verifizierung Anfrage<br><br>
     eine Person möchte sich von uns Verifizieren lassen.
     <br>
-    <span style="font-family: monospace; margin-left: 2em">"${email}"</span>
+    <span style="font-family: monospace; margin-left: 2em">"E-Mail: ${email}"</span>
+    <span style="font-family: monospace; margin-left: 2em">"Tel: ${tel}"</span>
+    <span style="font-family: monospace; margin-left: 2em">"Webseite: ${www}"</span>
     </div>`,
   }
 }
