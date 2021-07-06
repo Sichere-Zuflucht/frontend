@@ -14,11 +14,23 @@
             </p>
             <v-row
               ><v-col cols="4" class="d-flex flex-column align-center"
-                ><b>SSL-</b>zertifiziert</v-col
+                ><v-img
+                  class="mb-2"
+                  width="30"
+                  contain
+                  src="ssl-zertifiziert.svg"
+                /><b style="line-height: 1em">SSL</b>zertifiziert</v-col
               ><v-col cols="4" class="d-flex flex-column align-center"
-                ><b>Serverstandort</b>Deutschland</v-col
+                ><v-img
+                  class="mb-2"
+                  width="30"
+                  contain
+                  src="serverstandort-deutschland.svg"
+                /><b style="line-height: 1em">Serverstandort</b
+                >Deutschland</v-col
               ><v-col cols="4" class="d-flex flex-column align-center"
-                ><b>DSGVO-</b>konform</v-col
+                ><v-img class="mb-2" width="50" contain src="dsgvo.svg" />
+                <b style="line-height: 1em">DSGVO</b>konform</v-col
               ></v-row
             ></v-card-text
           ></v-card
@@ -74,7 +86,10 @@
       class="d-flex flex-wrap flex-column flex-sm-row align-center justify-center pb-4"
     >
       <div class="d-flex flex-wrap justify-center">
-        <v-btn icon href="https://www.facebook.com/" target="_blank"
+        <v-btn
+          icon
+          href="https://www.facebook.com/sichere.zuflucht"
+          target="_blank"
           ><v-icon>mdi-facebook</v-icon>
         </v-btn>
         <v-btn icon href="https://twitter.com/SichereZuflucht" target="_blank"
@@ -86,9 +101,9 @@
           target="_blank"
           ><v-icon>mdi-instagram</v-icon>
         </v-btn>
-        <v-btn icon href="https://www.youtube.com/" target="_blank"
+        <!--<v-btn icon href="https://www.youtube.com/" target="_blank"
           ><v-icon>mdi-youtube</v-icon>
-        </v-btn>
+        </v-btn>-->
       </div>
       <span class="mt-0 caption"
         >&copy; {{ new Date().getFullYear() }} Sichere Zuflucht gGmbH</span

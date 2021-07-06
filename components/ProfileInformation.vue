@@ -47,14 +47,6 @@
         label="Beruf"
       ></v-text-field>
       <v-text-field
-        v-if="membership ? (membership.id === 'Coach' ? true : false) : false"
-        type="number"
-        class="secondary--text font-weight-bold"
-        v-model="professionDuration"
-        :rules="requiredRule"
-        label="Wie viele Jahre Berufserfahrung?"
-      ></v-text-field>
-      <v-text-field
         class="secondary--text font-weight-bold"
         v-model="password"
         label="Passwort"
@@ -97,7 +89,6 @@ export default {
       ],
       requiredRule: [(v) => !!v || 'Bitte ausfüllen'],
       profession: null,
-      professionDuration: null,
       password: '',
       hidePassword: true,
       password2: '',
@@ -159,7 +150,6 @@ export default {
               email: this.$fire.auth.currentUser.email,
               membership: db.collection('memberships').doc(this.membership.id),
               profession: this.profession,
-              professionDuration: this.professionDuration,
               stripe: false,
               verifySetting: {
                 isVerifying: false,
