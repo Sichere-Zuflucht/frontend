@@ -1,14 +1,16 @@
 <template>
   <v-container>
-    <p class="caption mb-0 font-weight-bold">Hallo</p>
-    <h1 v-if="user.public.firstName" class="text-h1 secondary--text">
-      {{ user.public.firstName }} {{ user.public.lastName }}
-    </h1>
+    <client-only>
+      <p class="caption mb-0 font-weight-bold">Hallo</p>
+      <h1 v-if="user && user.public" class="text-h1 secondary--text">
+        {{ user.public.firstName }} {{ user.public.lastName }}
+      </h1>
+    </client-only>
     <VerificationsAlert />
     <!--    <Coaching v-if="user" :coach="user"></Coaching> -->
     <h2 class="primary--text mb-2">Anfragen</h2>
     <div v-if="requests != null">
-      <div v-if="requests.length != 0">
+      <div v-if="requests.length !== 0">
         <v-expansion-panels>
           <v-expansion-panel v-for="(item, i) in requests" :key="i">
             <v-expansion-panel-header
@@ -164,7 +166,6 @@
 export default {
   data() {
     return {
-      user: {},
       requests: null,
       videoTypes: ['Jitsi', 'RED'],
       selectedVideoType: 'Jitsi',
@@ -175,34 +176,12 @@ export default {
     coachName() {
       return this.user.firstName + ' ' + this.user.lastName
     },
+    user() {
+      return this.$store.state.modules.user
+    },
   },
   mounted() {
-    this.user = this.$store.getters['modules/user/user']
     this.getRealtimeData()
-
-    /* this.$fire.firestore
-      .collection('requests')
-      .where('ids', 'array-contains', this.user.uid)
-      .onSnapshot((snap) => {
-        this.requests = []
-        snap.docs.forEach((u) => {
-          this.requests.push({
-            id: u.id,
-            ...u.data(),
-          })
-        })
-      })
-    /*
-    this.$fire.firestore.collection('requests').onSnapshot((snap) => {
-      this.requests = []
-      snap.docs.forEach((u) => {
-        if (u.data().ids.includes(this.user.uid))
-          this.requests.push({
-            id: u.id,
-            ...u.data(),
-          })
-      })
-    }) */
   },
   methods: {
     getRealtimeData() {
@@ -239,14 +218,6 @@ export default {
         month: 'long',
         day: 'numeric',
       })
-      /* let month = '' + (d.getMonth() + 1)
-      let day = '' + d.getDate()
-      const year = d.getFullYear()
-
-      if (month.length < 2) month = '0' + month
-      if (day.length < 2) day = '0' + day
-
-      return [year, month, day].join('-') */
     },
   },
 }

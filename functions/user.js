@@ -11,29 +11,30 @@ exports.create = functions.https.onCall(async (data, context) => {
 
   // todo do verification of data (i.e. all inputs not empty etc.)
   const userName = context.auth.uid.substr(0, 8)
-  _.merge(data, {
+  _.merge(data.public, {
+    userName,
+    avatar: 'https://picsum.photos/seed/' + userName + '/200',
+    membership,
+    info: false,
+  })
+
+  _.merge(data.private, {
     verifySetting: {
       isVerifying: false,
       verified: false,
     },
     stripe: false,
     createdAt: new Date(),
-    public: {
-      userName,
-      avatar: 'https://picsum.photos/seed/' + userName + '/200',
-      membership,
-    },
   })
 
   functions.logger.log('create user', data)
   functions.logger.log('with id', context.auth.uid)
   // admin.firestore().collection('memberships').doc().create({})
-  return admin
-    .firestore()
-    .collection('users')
-    .doc(context.auth.uid)
-    .set(data)
-    .then(() => context.auth.token)
+  const docRef = admin.firestore().collection('users').doc(context.auth.uid)
+  docRef.set({})
+  await docRef.collection('public').doc('data').set(data.public)
+  await docRef.collection('private').doc('data').set(data.private)
+  return context.auth.token
 })
 
 exports.setInfo = functions.https.onCall((info, context) => {
@@ -42,7 +43,9 @@ exports.setInfo = functions.https.onCall((info, context) => {
     .firestore()
     .collection('users')
     .doc(context.auth.uid)
-    .set({ public: { info } }, { merge: true })
+    .collection('public')
+    .doc('data')
+    .set({ info }, { merge: true })
 })
 
 exports.setVerify = functions.https.onCall((verifySetting, context) => {
@@ -51,5 +54,7 @@ exports.setVerify = functions.https.onCall((verifySetting, context) => {
     .firestore()
     .collection('users')
     .doc(context.auth.uid)
+    .collection('private')
+    .doc('data')
     .set({ verifySetting }, { merge: true })
 })
