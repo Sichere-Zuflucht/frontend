@@ -1,8 +1,8 @@
 <template>
   <v-container>
     <p class="caption mb-0 font-weight-bold">Hallo</p>
-    <h1 v-if="user.firstName" class="text-h1 secondary--text">
-      {{ user.firstName }} {{ user.lastName }}
+    <h1 v-if="user.public.firstName" class="text-h1 secondary--text">
+      {{ user.public.firstName }} {{ user.public.lastName }}
     </h1>
     <VerificationsAlert />
     <!--    <Coaching v-if="user" :coach="user"></Coaching> -->

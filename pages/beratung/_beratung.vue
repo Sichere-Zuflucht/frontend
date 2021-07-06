@@ -1,28 +1,35 @@
 <template>
   <div v-if="coach">
     <v-sheet class="d-flex justify-center pt-8"
-      ><v-avatar :lazy-src="coach.avatar" :src="coach.avatar" size="162">
-        <v-img :lazy-src="coach.avatar" :src="coach.avatar"></v-img
+      ><v-avatar
+        :lazy-src="coach.public.avatar"
+        :src="coach.public.avatar"
+        size="162"
+      >
+        <v-img
+          :lazy-src="coach.public.avatar"
+          :src="coach.public.avatar"
+        ></v-img
       ></v-avatar>
     </v-sheet>
     <v-container>
       <h1 class="text-center text-h1 primary--text text-uppercase">
-        {{ coach.firstName }} {{ coach.lastName }}
+        {{ coach.public.firstName }} {{ coach.public.lastName }}
       </h1>
       <h2 class="text-center text-h5 mb-8">
-        {{ coach.profession }}
+        {{ coach.public.profession }}
       </h2>
 
       <p class="font-weight-bold mb-1 mt-2 caption">Fachgebiet</p>
       <div class="d-flex flex-wrap">
         <v-chip outlined color="primary" class="mr-1 mb-1 caption">
-          <p class="black--text ma-0 pa-0">{{ coach.info.topicArea }}</p>
+          <p class="black--text ma-0 pa-0">{{ coach.public.info.topicArea }}</p>
         </v-chip>
       </div>
       <p class="font-weight-bold mb-1 mt-2 caption">Themen</p>
       <div class="d-flex flex-wrap">
         <v-chip
-          v-for="tag in coach.info.topicPoints"
+          v-for="tag in coach.public.info.topicPoints"
           :key="tag"
           outlined
           color="primary"
@@ -111,16 +118,14 @@
         <PriceInfo />
       </v-container>
     </v-sheet>
-    <v-container>
+    <v-container v-if="filteredCoaches.length > 0">
       <h2 class="text-h2 mt-8 secondary--text">weitere Berater*innen</h2>
-      <div v-if="filteredCoaches.length > 0">
-        <div
-          v-for="(coaching, i) in filteredCoaches.slice(0, 2)"
-          :key="i"
-          class="mt-5"
-        >
-          <Coaching :coach="coaching" />
-        </div>
+      <div
+        v-for="(coaching, i) in filteredCoaches.slice(0, 2)"
+        :key="i"
+        class="mt-5"
+      >
+        <Coaching :coach="coaching" />
       </div>
     </v-container>
   </div>
@@ -171,19 +176,23 @@ export default {
       .then((e) => {
         e.data().verifySetting.verified &&
         e.data().stripe &&
-        e.data().info !== false
+        e.data().public.info !== false
           ? (this.coach = e.data())
           : this.$router.push('/')
       })
       .then(() => {
         this.$fire.firestore
           .collection('users')
-          .where('membership', '==', coachMembership)
+          .where('public.membership', '==', coachMembership)
           .get()
           .then((ref) => {
             ref.docs.forEach((doc) => {
               const data = doc.data()
-              if (data.info && data.verifySetting.verified && data.stripe)
+              if (
+                data.public.info &&
+                data.verifySetting.verified &&
+                data.stripe
+              )
                 if (this.coachUID !== doc.id)
                   this.allCoaches.push({ id: doc.id, ...data })
               // if (data.info) this.allCoaches.push({ id: doc.id, ...data })

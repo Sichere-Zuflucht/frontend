@@ -84,7 +84,7 @@ export default {
     const coach = this.$fire.firestore.collection('memberships').doc('Coach')
     this.$fire.firestore
       .collection('users')
-      .where('membership', '==', coach)
+      .where('public.membership', '==', coach)
       .get()
       .then((ref) => {
         ref.docs.forEach((doc) => {
@@ -107,11 +107,11 @@ export default {
           coach.info.languages.filter((value) => data.languages.includes(value))
             .length >= 1 */
         // topicArea
-        add = add && coach.info.topicArea === data.topicArea
+        add = add && coach.public.info.topicArea === data.topicArea
         // topicPoints
         add =
           add &&
-          coach.info.topicPoints.filter((value) =>
+          coach.public.info.topicPoints.filter((value) =>
             data.topicPoints.includes(value)
           )
         if (add) this.filteredCoaches.push(coach)
