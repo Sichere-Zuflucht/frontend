@@ -2,14 +2,14 @@
   <v-card elevation="2" nuxt :ripple="false" style="padding: 12px">
     <v-sheet class="d-flex">
       <v-avatar color="primary ma-5" size="35%"
-        ><v-img :src="coach.avatar"
+        ><v-img :src="coach.public.avatar"
       /></v-avatar>
       <div class="ma-5 ml-2 d-flex flex-column justify-center">
         <h2 class="secondary--text text-h2">
-          {{ coach.firstName }} {{ coach.lastName }}
+          {{ coach.public.firstName }} {{ coach.public.lastName }}
         </h2>
         <h3 class="mt-2 text-h5">
-          {{ coach.profession }}
+          {{ coach.public.profession }}
         </h3>
       </div>
     </v-sheet>
@@ -17,13 +17,13 @@
       <p class="font-weight-bold mb-1 mt-2 caption">Fachgebiet</p>
       <div class="d-flex flex-wrap">
         <v-chip outlined color="primary" class="mr-1 mb-1 caption">
-          <p class="black--text ma-0 pa-0">{{ coach.info.topicArea }}</p>
+          <p class="black--text ma-0 pa-0">{{ coach.public.info.topicArea }}</p>
         </v-chip>
       </div>
       <p class="font-weight-bold mb-1 mt-2 caption">Themen</p>
       <div class="d-flex flex-wrap">
         <v-chip
-          v-for="tag in coach.info.topicPoints"
+          v-for="tag in coach.public.info.topicPoints"
           :key="tag"
           outlined
           color="primary"
