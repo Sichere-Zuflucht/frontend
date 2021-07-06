@@ -39,7 +39,7 @@ function redirectProfilePage(store, redirect, route) {
       store.getters['modules/user/membership'].id === 'Coach' &&
       !store.getters['modules/user/user'].info
     ) {
-      return redirect('/beratung/registrierung')
+      return redirect('/beratung')
     }
     return redirect(store.getters['modules/user/routing'])
   }
