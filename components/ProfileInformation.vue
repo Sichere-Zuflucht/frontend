@@ -144,32 +144,33 @@ export default {
           this.showError = true
         })
         .then(() => {
-          let createdUserData = {}
+          const createdUserData = {}
           if (this.membership.id === 'Coach') {
-            createdUserData = {
-              public: {
-                firstName: this.firstName,
-                lastName: this.lastName,
-                profession: this.profession,
-                professionDuration: this.professionDuration,
-                membership: this.membership.id,
-              },
+            createdUserData.public = {
+              firstName: this.firstName,
+              lastName: this.lastName,
+              profession: this.profession,
+              professionDuration: this.professionDuration,
+              membership: this.membership.id,
+            }
+            createdUserData.private = {
               email: this.$fire.auth.currentUser.email,
             }
           } else {
-            createdUserData = {
-              public: {
-                membership: this.membership.id,
-              },
+            createdUserData.public = {
+              membership: this.membership.id,
+            }
+            createdUserData.private = {
               firstName: this.firstName,
               lastName: this.lastName,
               email: this.$fire.auth.currentUser.email,
             }
           }
           console.log('dispatch sotre create firebase user')
-          return this.$store.dispatch('modules/user/createFirebaseUser', {
-            userData: createdUserData,
-          })
+          return this.$store.dispatch(
+            'modules/user/createFirebaseUser',
+            createdUserData
+          )
         })
     },
   },

@@ -1,14 +1,6 @@
-import _ from 'lodash'
 const state = () => ({
-  uid: null,
-  email: null,
-  emailVerified: null,
-  membership: null,
+  private: null,
   public: null,
-  verifySetting: {
-    isVerifying: null,
-    verified: null,
-  },
 })
 
 function removeFirebaseObjects(obj) {
@@ -24,29 +16,31 @@ function removeFirebaseObjects(obj) {
 
 const getters = {
   uid(state) {
-    if (state.uid) return state.uid
-    else return null
+    return state.public?.uid
   },
-
   user(state) {
     return state
   },
-
+  private(state) {
+    return state.private
+  },
+  public(state) {
+    return state.public
+  },
   isAuthenticated(state) {
-    return !!state.uid
+    return !!state.public?.uid
   },
   membership(state) {
-    return state.membership
+    return state.public?.membership
   },
   isVerifying(state) {
-    return state.verifySetting.isVerifying
+    return state.private?.verifySetting.isVerifying
   },
   verified(state) {
-    return state.verifySetting.verified
+    return state.private?.verifySetting.verified
   },
   routing(state) {
-    if (state.membership) return state.membership.routing
-    else return '/'
+    return state.public?.membership.routing || '/'
   },
 }
 
@@ -69,27 +63,37 @@ const actions = {
       form.password
     )
     // fetch user profile and set in state
-    dispatch('fetchUserProfile', { user })
+    dispatch('fetchUserProfile', { user, redirect: true })
   },
   fetchUserProfile({ commit }, { user, redirect = false }) {
+    console.log('fetchUser', user, redirect)
     // fetch user profile
-    this.$fire.firestore
-      .collection('users')
-      .doc(user.uid)
-      .get()
-      .then((u) => {
-        const userData = u.data()
-        if (userData) {
-          commit('setAuthData', user)
-          commit('setUserData', userData)
-          userData.public.membership.get().then((doc) => {
+
+    const userRef = this.$fire.firestore.collection('users/').doc(user.uid)
+
+    userRef.get().then((userDoc) => {
+      if (userDoc.exists) {
+        const _private = userRef
+          .collection('private')
+          .get()
+          .then((ref) => ref.docs[0].data())
+        const _public = userRef
+          .collection('public')
+          .get()
+          .then((ref) => ref.docs[0].data())
+
+        Promise.all([_private, _public]).then((p) => {
+          p[1].uid = user.uid
+          commit('setUserData', { _private: p[0], _public: p[1] })
+          p[1].membership.get().then((doc) => {
             commit('setMembership', {
               membership: doc.data(),
               redirect,
             })
           })
-        }
-      })
+        })
+      }
+    })
   },
   setInfo({ commit }, { info }) {
     this.$fire.functions
@@ -101,7 +105,7 @@ const actions = {
       .httpsCallable('user-setVerify')(verifySetting)
       .then(() => commit('setVerify', verifySetting))
   },
-  createFirebaseUser({ dispatch }, { userData }) {
+  createFirebaseUser({ dispatch }, userData) {
     this.$fire.functions
       .httpsCallable('user-create')(userData)
       .then((authUser) => {
@@ -121,40 +125,27 @@ const mutations = {
   setMembership(state, data) {
     console.log('[STORE MUTATIONS] - setMembership:', data)
     const { membership, redirect } = data
-    state.membership = membership
     state.public.membership = membership
     if (redirect) this.$router.push({ path: '/profile' })
   },
-  setUserData(state, userData) {
-    console.log('[STORE MUTATIONS] - setUserData:', userData)
-    if (!userData) {
+  setUserData(state, { _private, _public }) {
+    console.log('[STORE MUTATIONS] - setUserData:', _private, _public)
+    if (!_private || !_public) {
       for (const key of Object.keys(state)) {
         state[key] = null
       }
     } else {
-      _.merge(state, removeFirebaseObjects(userData))
+      state.private = removeFirebaseObjects(_private)
+      state.public = removeFirebaseObjects(_public)
     }
   },
   setInfo(state, info) {
     console.log('[STORE MUTATIONS] - setInfo:', info)
-    state.info = info
+    state.public.info = info
   },
   setVerify(state, verifySetting) {
     console.log('[STORE MUTATIONS] - setVerify:', state, verifySetting)
-    state.verifySetting = verifySetting
-  },
-  ON_AUTH_STATE_CHANGED_MUTATION(state, { authUser, claims }) {
-    console.log('ON_AUTH_STATE_CHANGED_MUTATION', authUser)
-    if (authUser) {
-      const { uid, email, emailVerified } = authUser
-      state.email = email
-      state.emailVerified = emailVerified
-      state.uid = uid
-    } else {
-      state.email = null
-      state.emailVerified = null
-      state.uid = null
-    }
+    state.private.verifySetting = verifySetting
   },
 }
 
