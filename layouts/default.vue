@@ -51,6 +51,12 @@
                 {{ item.title }}
               </v-list-item-content>
             </v-list-item>
+            <v-list-item :to="'/beratung/' + user.uid" nuxt exact>
+              <v-list-item-icon>
+                <v-icon>mdi-account-edit</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content> Profil </v-list-item-content>
+            </v-list-item>
           </div>
           <v-list-item>
             <v-btn block to="/" @click="logout">Abmelden</v-btn>
@@ -70,7 +76,7 @@
           </v-list-item>
           <v-spacer />
           <v-list-item>
-            <v-btn to="/signup" exact nuxt block>Anmelden</v-btn>
+            <v-btn to="/signup" exact nuxt block>Registrieren</v-btn>
           </v-list-item>
           <v-list-item>
             <v-btn to="/login" exact nuxt block text>Einloggen</v-btn>
@@ -138,6 +144,11 @@ export default {
           title: 'Wohnungen',
           to: '/frauen/wohnungssuche',
         },
+        {
+          icon: 'mdi-cog',
+          title: 'Einstellungen',
+          to: '/settings',
+        },
       ],
       loggedInCoach: [
         {
@@ -151,9 +162,9 @@ export default {
           to: '/beratung/personenverifizierung',
         },
         {
-          icon: 'mdi-account-edit',
-          title: 'Profil bearbeiten',
-          to: '/beratung/registrierung',
+          icon: 'mdi-cog',
+          title: 'Einstellungen',
+          to: '/settings',
         },
       ],
       noUser: [

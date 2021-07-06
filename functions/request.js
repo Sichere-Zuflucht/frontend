@@ -165,8 +165,7 @@ exports.acceptDate = functions.https.onCall(async (data, context) => {
             ),
             acceptedDate: data.acceptedDate,
             updatedAt: new Date(),
-            jitsiLink: data.jitsiLink,
-            redLink: data.redLink,
+            video: data.video,
           },
           { merge: true }
         )

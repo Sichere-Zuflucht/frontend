@@ -75,7 +75,7 @@
             <div v-if="makeLogin">
               <v-alert type="info" color="secondary" class="my-4">
                 Es existiert kein Konto mit der E-Mail-Adresse {{ email }}.
-                Willst du dich mit der eMail <b>{{ email }}</b> bei Sichere
+                Willst du dich mit der E-Mail <b>{{ email }}</b> bei Sichere
                 Zuflucht registrieren?
               </v-alert>
               <div class="d-flex justify-end">

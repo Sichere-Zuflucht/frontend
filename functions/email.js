@@ -94,7 +94,9 @@ exports.sendVerifyAccMail = functions.https.onCall(async (data, context) => {
     .doc(context.auth.uid)
     .get()
     .then((snap) => snap.data())
-  return sendNotificationMailToSZ(verificationNotificationMail(email))
+  return sendNotificationMailToSZ(
+    verificationNotificationMail(email, data.tel, data.www)
+  )
 })
 exports.sendReqHousingMail = functions.https.onCall(async (data, context) => {
   const womanData = await admin

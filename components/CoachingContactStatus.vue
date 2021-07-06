@@ -67,7 +67,7 @@
               color="success"
               :loading="btn.payButtonLoading"
               :disabled="!date || btn.isDisabled"
-              @click="pay(response, date)"
+              @click="pay(date)"
               block
               >{{ btn.acceptText }}</v-btn
             >
@@ -87,8 +87,8 @@
           target="_blank"
           :href="
             response.videoType === 'Jitsi'
-              ? response.jitsiLink
-              : response.redLink.codePatient
+              ? response.video
+              : response.video.codePatient
           "
           >zum Videocall
         </v-btn>
@@ -179,89 +179,80 @@ export default {
           this.eraseLoading = false
         })
     },
-    async pay(humanResponse, dateInput) {
+    async pay(dateInput) {
       this.payButtonLoading = true
-
+      let redReq, data, video
+      if (this.response.videoType === 'RED') {
+        data = {
+          method: 'getEntrycodes',
+          date: dateInput.date,
+          token: this.$config.redAPI,
+        }
+        redReq = await fetch('https://redclient.redmedical.de/service/video', {
+          method: 'POST',
+          header: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        })
+        redReq
+          .json()
+          .then((redRes) => {
+            console.log('redRes', redRes, redRes.success)
+            video = {
+              codeArzt:
+                'https://video.redmedical.de/#/login?name=' +
+                this.response.coach.firstName +
+                ' ' +
+                this.response.coach.lastName +
+                '&code=' +
+                redRes.codeArzt,
+              codePatient:
+                'https://video.redmedical.de/#/login?name=unbekannt&code=' +
+                redRes.codePatient,
+            }
+            this.standardPayment(video, dateInput)
+          })
+          .catch((error) => {
+            console.log('err: ', error)
+          })
+      } else {
+        video =
+          'https://meet.jit.si/' +
+          this.response.coach.firstName.toLowerCase() +
+          '_' +
+          this.response.coach.lastName.toLowerCase() +
+          '&?' +
+          this.response.id
+        this.standardPayment(video, dateInput)
+      }
+    },
+    async standardPayment(v, dI) {
       const paymentID = (
         await this.$fire.functions.httpsCallable('stripe-payCoaching')({
           responseID: this.response.id,
           isDev: this.$config.isDev,
         })
       ).data
-      let response, data
-      if (response.videoType === 'RED') {
-        data = {
-          method: 'getEntrycodes',
-          date: dateInput,
-          token: this.$config.RED_API,
-        }
-        response = await fetch(
-          // const response
-          'https://redclient.redmedical.de/service/video',
-          {
-            method: 'POST',
-            header: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-          }
-        )
-      }
-      await response
-        .json()
-        .then((redRes) => {
-          console.log('redRes', redRes, redRes.success)
-          let jitsi = ''
-          if (redRes.success) {
-            jitsi =
-              'https://meet.jit.si/' +
-              humanResponse.coach.firstName.toLowerCase() +
-              '_' +
-              humanResponse.coach.lastName.toLowerCase() +
-              '&?' +
-              humanResponse.id
-          } else {
-            this.btn.errorMsg = 'Jitsi: ' + redRes.error
-            this.btn.error = true
-          }
-          this.$fire.functions
-            .httpsCallable('request-acceptDate')({
-              coachName:
-                humanResponse.coach.firstName +
-                ' ' +
-                humanResponse.coach.lastName,
-              acceptedDate: dateInput,
-              requestId: humanResponse.id,
-              jitsiLink: jitsi,
-              redLink: {
-                codeArzt:
-                  'https://video.redmedical.de/#/login?name=' +
-                  humanResponse.coach.firstName +
-                  ' ' +
-                  humanResponse.coach.lastName +
-                  '&code=' +
-                  redRes.codeArzt,
-                codePatient:
-                  'https://video.redmedical.de/#/login?name=unbekannt&code=' +
-                  redRes.codePatient,
-              },
-            })
-            .then(() => {
-              console.log('redirect to stripe', paymentID)
-              this.payButtonLoading = false
-              this.btn.isDisabled = true
-              this.$stripe.redirectToCheckout({
-                // Make the id field from the Checkout Session creation API response
-                // available to this file, so you can provide it as argument here
-                // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
-                sessionId: paymentID,
-              })
-            })
+      this.$fire.functions
+        .httpsCallable('request-acceptDate')({
+          coachName:
+            this.response.coach.firstName + ' ' + this.response.coach.lastName,
+          acceptedDate: dI,
+          requestId: this.response.id,
+          video: v,
         })
-        .catch((error) => {
-          console.log('err: ', error)
+        .then(() => {
+          this.payButtonLoading = false
+          this.btn.isDisabled = true
+          console.log(paymentID)
+          /* this.$stripe.redirectToCheckout({
+            // Make the id field from the Checkout Session creation API response
+            // available to this file, so you can provide it as argument here
+            // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
+            sessionId: paymentID,
+          }) */
         })
-      humanResponse.acceptedDate = dateInput
     },
     formatDate(date) {
       const d = new Date(date)
@@ -271,14 +262,6 @@ export default {
         month: 'long',
         day: 'numeric',
       })
-      /* let month = '' + (d.getMonth() + 1)
-      let day = '' + d.getDate()
-      const year = d.getFullYear()
-
-      if (month.length < 2) month = '0' + month
-      if (day.length < 2) day = '0' + day
-
-      return [year, month, day].join('-') */
     },
   },
 }
