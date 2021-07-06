@@ -15,9 +15,7 @@
         ><div class="d-flex align-start">
           <v-icon large color="secondary" class="pr-2">mdi-filter</v-icon>
           <div>
-            <h2 class="text-h2 secondary--text">
-              Beratungsfilter {{ filteredCoaches.length }}
-            </h2>
+            <h2 class="text-h2 secondary--text">Beratungsfilter</h2>
             <p class="caption">
               Filtere hier die Berater*innen und Coaches nach den Fachgebieten
               und Themen, die für dich relevant sind.
@@ -25,7 +23,11 @@
           </div>
         </div>
 
-        <CoachingSelection :is-coach="false" @filter="filter" />
+        <CoachingSelection
+          :is-coach="false"
+          @filter="filter"
+          :info="user.info ? user.info : ''"
+        />
         <p class="caption mt-4">
           <b>Dein Fachgebiet oder Thema ist nicht dabei?</b><br />
           <a href="mailto:kontakt@sichere-zuflucht.de"
@@ -45,7 +47,7 @@
           :key="i"
           class="mt-5 px-1"
         >
-          <Coaching :coach="coaching" />
+          <CoachingList :coach="coaching" />
         </div>
       </div>
       <div
@@ -86,6 +88,7 @@ export default {
     return {
       allCoaches: [],
       filteredCoaches: [],
+      user: this.$store.getters['modules/user/user'],
     }
   },
   mounted() {
@@ -115,13 +118,16 @@ export default {
           coach.info.languages.filter((value) => data.languages.includes(value))
             .length >= 1 */
         // topicArea
-        add = add && coach.info.topicArea === data.topicArea
-        // topicPoints
+        // add = add && coach.info.topicArea === data.topicArea
         add =
+          add &&
+          coach.info.topicArea.filter((value) => data.topicArea.includes(value))
+        // topicPoints
+        /* add =
           add &&
           coach.info.topicPoints.filter((value) =>
             data.topicPoints.includes(value)
-          )
+          ) */
         if (add) this.filteredCoaches.push(coach)
       })
     },

@@ -17,17 +17,17 @@
           >Beratungsangebote ansehen
         </v-btn>
       </div>
-
-      <CoachingRequests
-        v-else-if="responses.length === 1"
-        :coach="responses[0].coach"
-        :response="responses[0]"
-        :clickable="false"
-      />
+      <v-container v-else-if="responses.length === 1">
+        <CoachingContactStatus
+          :coach="responses[0].coach"
+          :response="responses[0]"
+          :clickable="false"
+        />
+      </v-container>
       <v-slide-group v-else show-arrows class="px-1 pb-4">
         <v-slide-item v-for="(response, i) in responses" :key="i">
           <div style="width: 95vw; max-width: 300px; padding: 5px">
-            <CoachingRequests
+            <CoachingContactStatus
               :coach="response.coach"
               :response="response"
               :clickable="false"
@@ -35,11 +35,14 @@
           </div>
         </v-slide-item>
       </v-slide-group>
-      <v-btn text color="primary" small
-        >Wie läuft das Beratungsgespräch ab?</v-btn
-      ><br />
-      <v-btn text color="primary" small>Infos zur Termineinhaltung</v-btn><br />
-      <v-btn text color="primary" small>Infos zu Preisen</v-btn>
+      <v-container>
+        <v-btn text color="primary" small
+          >Wie läuft das Beratungsgespräch ab?</v-btn
+        ><br />
+        <v-btn text color="primary" small>Infos zur Termineinhaltung</v-btn
+        ><br />
+        <v-btn text color="primary" small>Infos zu Preisen</v-btn>
+      </v-container>
     </div>
     <v-container v-else>
       <v-sheet elevation="2" class="pa-2"

@@ -128,7 +128,7 @@
         <v-col class="pt-0">
           <v-alert type="info" color="success" v-if="showConfirmation"
             >Deine Anfrage wurde erfolgreich an Sichere Zuflucht verschickt. Wir
-            werden uns so bald wie möglich via eMail bei dir melden.</v-alert
+            werden uns so bald wie möglich via E-Mail bei dir melden.</v-alert
           >
           <v-alert type="error" color="error" v-if="error.status">{{
             error.message

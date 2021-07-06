@@ -22,14 +22,8 @@
     <v-card-text class="pt-0">
       <p class="font-weight-bold mb-1 mt-2 caption">Fachgebiet</p>
       <div class="d-flex flex-wrap">
-        <v-chip outlined color="primary" class="mr-1 mb-1 caption">
-          <p class="black--text ma-0 pa-0">{{ coach.info.topicArea }}</p>
-        </v-chip>
-      </div>
-      <p class="font-weight-bold mb-1 mt-2 caption">Themen</p>
-      <div class="d-flex flex-wrap">
         <v-chip
-          v-for="tag in coach.info.topicPoints"
+          v-for="tag in coach.info.topicArea"
           :key="tag"
           outlined
           color="primary"

@@ -3,6 +3,7 @@ import colors from 'vuetify/es5/util/colors'
 const base = '/frontend'
 const hostURL = 'https://sichere-zuflucht.github.io'
 const isDev = process.env.NODE_ENV !== 'production'
+const redAPI = process.env.RED_API
 
 export default {
   // Target: https://go.nuxtjs.dev/config-target
@@ -23,6 +24,7 @@ export default {
         'pk_test_51IbjZeFRsEq5IriEKQifwCzu8LMnx6uMxxhOz7HIELiaYpFCnsfNlVaiTOU72b2uWwQP4B5gI8GwDrsrSNJS0hPP00e8y3RbDo',
     },
     isDev,
+    redAPI,
     baseUrl: (isDev ? 'http://localhost:3000' : hostURL) + base,
   },
 
@@ -116,8 +118,8 @@ export default {
     },
     services: {
       functions: {
-        emulatorPort: process.env.NODE_ENV === 'development' ? 5001 : undefined,
-        // emulatorPort: undefined,
+        // emulatorPort: process.env.NODE_ENV === 'development' ? 5001 : undefined,
+        emulatorPort: undefined,
       },
       auth: {
         persistence: 'local', // default
@@ -142,6 +144,7 @@ export default {
           // Firestore Settings - currently only works in SPA mode
         },
       },
+      storage: true,
     },
   },
 

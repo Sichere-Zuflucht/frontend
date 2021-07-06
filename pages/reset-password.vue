@@ -34,8 +34,8 @@
           v-if="showConfirmation"
           color="success"
           class="white--text mt-4"
-          >Wenn ein Account mit der eMail {{ email }} bei uns hinterlegt ist,
-          wird eine eMail an diese Adresse geschickt. Bitte folge den dort
+          >Wenn ein Account mit der E-Mail {{ email }} bei uns hinterlegt ist,
+          wird eine E-Mail an diese Adresse geschickt. Bitte folge den dort
           beschriebenen Anweisungen.
         </v-alert>
         <v-alert v-if="error.status" color="error" class="white--text mt-4"

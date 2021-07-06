@@ -92,12 +92,9 @@ const actions = {
 
     // change route to dashboard
   },
-  setInfo({ commit }, { info, description, uid }) {
-    commit('setInfo', info)
-    this.$fire.firestore
-      .collection('users')
-      .doc(uid)
-      .update({ info, description })
+  setInfo({ commit }, { info, avatar, uid }) {
+    commit('setInfo', info, avatar)
+    this.$fire.firestore.collection('users').doc(uid).update({ info, avatar })
   },
   setVerify({ commit }, { uid, verifySetting }) {
     commit('setVerify', verifySetting)
@@ -149,9 +146,10 @@ const mutations = {
       // window.location.href = '/profile'
     }
   },
-  setInfo(state, info) {
+  setInfo(state, info, avatar) {
     console.log('[STORE MUTATIONS] - setInfo:', info)
     state.info = info
+    state.avatar = avatar
   },
   setVerify(state, verifySetting) {
     console.log('[STORE MUTATIONS] - setVerify:', state, verifySetting)

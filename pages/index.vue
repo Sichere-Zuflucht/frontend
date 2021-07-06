@@ -13,9 +13,7 @@
     <v-img src="paige-cody-bOVZ_f3fbQM-unsplash.jpg" max-height="300px"></v-img>
     <v-sheet color="grey lighten-5"
       ><v-container>
-        <h3
-          class="text-h6 font-weight-bold text-uppercase mb-4 text-center primary--text"
-        >
+        <h3 class="text-uppercase mb-4 text-center primary--text">
           Wir helfen dir!<br /><span
             class="secondary--text"
             style="font-size: 3em; line-height: 1em"
@@ -23,14 +21,15 @@
           >
         </h3>
         <p class="text-center error--text font-weight-bold">
-          Wir lassen dich mit deinen Erlebnissen nicht allein."
+          "Wir lassen dich mit deinen Erlebnissen nicht allein."
         </p>
         <Offerings />
       </v-container>
     </v-sheet>
     <v-container>
       <h3
-        class="text-h3 text-uppercase mb-4 text-center font-weight-bold secondary--text"
+        class="text-h3 text-uppercase text-center secondary--text"
+        style="font-weight: bold"
       >
         Sichere Zuflucht Magazin
       </h3>
