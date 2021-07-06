@@ -271,7 +271,7 @@ export default {
         focus: this.changeFocus,
         coachingTopics: this.changeCoachingTopics,
         assistance: this.changeAssistance,
-        avatar: this.changeAvatar,
+        avatar: this.changeAvatar ? this.changeAvatar : this.avatar,
       }
       this.$emit('filter', data)
       this.$emit('selection', data)

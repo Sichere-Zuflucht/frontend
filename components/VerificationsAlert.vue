@@ -38,7 +38,7 @@
         <small>Erstelle oder vervollständige dein Profil</small>
       </v-stepper-step>
       <v-stepper-content step="1">
-        <v-btn class="mr-2 mb-2" color="secondary" to="beratung/edit-profil">
+        <v-btn class="mr-2 mb-2" color="secondary" nuxt append to="edit-profil">
           bearbeiten
         </v-btn>
       </v-stepper-content>
@@ -57,7 +57,7 @@
         <small>Mit dem Zahlungssystem verbinden</small>
       </v-stepper-step>
       <v-stepper-content step="2">
-        <v-btn class="mr-2 mb-2" color="secondary" to="beratung/bezahlung">
+        <v-btn class="mr-2 mb-2" color="secondary" nuxt append to="bezahlung">
           verbinden
         </v-btn>
       </v-stepper-content>
@@ -79,7 +79,9 @@
         <v-btn
           class="mr-2 mb-2"
           color="secondary"
-          to="beratung/personenverifizierung"
+          nuxt
+          append
+          to="personenverifizierung"
         >
           starten
         </v-btn>
