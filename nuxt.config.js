@@ -10,6 +10,10 @@ export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
 
+  generate: {
+    crawler: false,
+  },
+
   router: {
     base,
     middleware: 'index',
@@ -81,7 +85,8 @@ export default {
       { rel: 'preconnect', href: 'https://fonts.gstatic.com' },
       {
         href:
-          'https://fonts.googleapis.com/css2?family=Exo:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap',
+          'https://fonts.googleapis.com/css2?family=Exo:ital,wght@0,300;0,400;0,' +
+          '600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap',
         rel: 'stylesheet',
       },
     ],
@@ -95,7 +100,7 @@ export default {
   // does this change stuff with firestore contxt allready innitialized?
   render: {
     bundleRenderer: {
-      runInNewContext: false,
+      runInNewContext: 'once',
     },
   },
 
@@ -146,11 +151,12 @@ export default {
         // emulatorPort: process.env.NODE_ENV === 'development' ? 9090 : undefined,
         emulatorPort: undefined,
         settings: {
-          // Firestore Settings - currently only works in SPA mode
+          merge: true,
         },
       },
       storage: true,
     },
+    terminateDatabasesAfterGenerate: true,
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
@@ -192,7 +198,7 @@ export default {
       if (isDev) {
         config.mode = 'development'
       } else if (isClient) {
-        config.devtool = 'hidden-source-map'
+        config.devtool = 'source-map'
       }
     },
   },
