@@ -47,14 +47,6 @@
         label="Beruf"
       ></v-text-field>
       <v-text-field
-        v-if="membership ? (membership.id === 'Coach' ? true : false) : false"
-        v-model="professionDuration"
-        type="number"
-        class="secondary--text font-weight-bold"
-        :rules="requiredRule"
-        label="Wie viele Jahre Berufserfahrung?"
-      ></v-text-field>
-      <v-text-field
         v-model="password"
         class="secondary--text font-weight-bold"
         label="Passwort"
@@ -97,7 +89,6 @@ export default {
       ],
       requiredRule: [(v) => !!v || 'Bitte ausfüllen'],
       profession: null,
-      professionDuration: null,
       password: '',
       hidePassword: true,
       password2: '',

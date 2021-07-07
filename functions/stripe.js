@@ -70,6 +70,8 @@ exports.createPaymentForCoaching = async (coachID, requestID, isDev) => {
     .firestore()
     .collection('users')
     .doc(coachID)
+    .collection('private')
+    .doc('data')
     .get()
     .then((doc) => doc.data())
 
@@ -152,23 +154,16 @@ exports.accountUpdated = functions.https.onRequest(async (req, res) => {
     res.status(400).send('User with email not found')
     return
   }
-  functions.logger.log('accountupdated', snapshot)
-  admin
-    .firestore()
-    .collection('users')
-    .doc(snapshot.docs[0].id)
-    .collection('private')
-    .doc('data')
-    .set(
-      {
-        stripe: {
-          chargesEnabled,
-          payoutsEnabled,
-          verified: chargesEnabled && payoutsEnabled,
-        },
+  snapshot.docs[0].ref.set(
+    {
+      stripe: {
+        chargesEnabled,
+        payoutsEnabled,
+        verified: chargesEnabled && payoutsEnabled,
       },
-      { merge: true }
-    )
+    },
+    { merge: true }
+  )
 
   res.send('yes')
 })

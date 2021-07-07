@@ -2,6 +2,12 @@
 //
 // The variables you want to modify
 // $font-size-root: 20px;
+
+@font-face {
+  font-family: 'Yellowtail';
+  src: local('Yellowtail'), url(~assets/Yellowtail-Regular.ttf);
+}
+
 $container-padding-x: 24px;
 $body-font-family: 'Exo', sans-serif !default;
 $btn-font-weight: 600;
@@ -58,11 +64,11 @@ $headings: (
     'text-transform': false,
   ),
   'subtitle-1': (
-    'size': 1rem,
+    'size': 1.6rem,
     'weight': normal,
     'line-height': 1.75rem,
     'letter-spacing': 0.009375em,
-    'font-family': $body-font-family,
+    'font-family': 'Yellowtail-Regular',
     'text-transform': false,
   ),
   'subtitle-2': (
@@ -121,8 +127,8 @@ $headings: (
   height: 100%;
 }
 .v-slide-group__next {
-  right: -23px;
+  right: 0; // -23px;
 }
 .v-slide-group__prev {
-  left: -23px;
+  left: 0; // -23px;
 }
