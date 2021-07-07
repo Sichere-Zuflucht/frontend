@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <h1 class="text-h1 primary--text mb-4">Wohnungssuche</h1>
-    <Verification v-if="!user.verifySetting.verified" />
+    <Verification v-if="!$store.getters['modules/user/verified']" />
     <v-form v-else ref="housing" v-model="valid" class="mb-8">
       <h2 class="text-h2 secondary--text">Deine Daten sind sicher</h2>
       <p>
@@ -61,7 +61,7 @@
             persistent
             width="290px"
           >
-            <template v-slot:activator="{ on, attrs }">
+            <template #activator="{ on, attrs }">
               <v-text-field
                 v-model="dateRangeText"
                 label="Einzug Zeitraum"
@@ -118,19 +118,19 @@
         <v-col cols="12">
           <v-btn
             color="success"
-            @click="validate()"
             :loading="loading"
             :disabled="!valid"
             class="float-right"
+            @click="validate()"
             >{{ buttonText }}</v-btn
           >
         </v-col>
         <v-col class="pt-0">
-          <v-alert type="info" color="success" v-if="showConfirmation"
+          <v-alert v-if="showConfirmation" type="info" color="success"
             >Deine Anfrage wurde erfolgreich an Sichere Zuflucht verschickt. Wir
             werden uns so bald wie möglich via E-Mail bei dir melden.</v-alert
           >
-          <v-alert type="error" color="error" v-if="error.status">{{
+          <v-alert v-if="error.status" type="error" color="error">{{
             error.message
           }}</v-alert>
         </v-col>
@@ -208,9 +208,9 @@ export default {
     dateRangeText() {
       return this.dates.join(' – ')
     },
-    user() {
-      return this.$store.getters['modules/user/user']
-    },
+    // user() {
+    //   return this.$store.getters['modules/user/user']
+    // },
   },
   methods: {
     validate() {

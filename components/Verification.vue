@@ -42,6 +42,7 @@
                 v-if="user"
                 color="secondary"
                 :disabled="!verifyVal"
+                :loading="updateVerifyLoading"
                 @click="updateVerify"
                 >Senden</v-btn
               >
@@ -138,6 +139,7 @@ export default {
       expand: this.isVerifying,
       verPhone: '',
       verWeb: '',
+      updateVerifyLoading: false,
     }
   },
   computed: {
@@ -153,10 +155,13 @@ export default {
   },
   methods: {
     updateVerify() {
-      this.$store.dispatch('modules/user/requestVerify', {
-        tel: this.verPhone,
-        www: this.verWeb,
-      })
+      this.updateVerifyLoading = true
+      this.$store
+        .dispatch('modules/user/requestVerify', {
+          tel: this.verPhone,
+          www: this.verWeb,
+        })
+        .then(() => (this.updateVerifyLoading = false))
     },
   },
 }
