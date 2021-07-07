@@ -24,25 +24,25 @@
           >Kontaktdaten</v-card-title
         >
         <v-card-text>
-          <v-form v-model="verifyVal" ref="verifyForm">
+          <v-form ref="verifyForm" v-model="verifyVal">
             <v-text-field
+              v-model="verPhone"
               label="Tel./Hdy.*"
               outlined
               type="tel"
               :rules="rules.phone"
-              v-model="verPhone"
             ></v-text-field>
             <v-text-field
+              v-model="verWeb"
               label="Webseite"
               outlined
-              v-model="verWeb"
             ></v-text-field>
             <div class="d-flex justify-center">
               <v-btn
                 v-if="user"
                 color="secondary"
-                @click="updateVerify"
                 :disabled="!verifyVal"
+                @click="updateVerify"
                 >Senden</v-btn
               >
             </div>
@@ -60,9 +60,13 @@
         uns erhalten haben, dann prüfen Sie bitte zuerst Ihre Email Inbox und
         den Spam Ordner, bevor Sie uns erneut kontaktieren.
       </p>
-      <v-btn v-show="!expand" @click="expand = !expand"
-        >Erneut kontaktieren</v-btn
-      >
+      <v-row class="mt-3">
+        <v-btn v-show="!expand" @click="expand = !expand"
+          >Erneut kontaktieren</v-btn
+        >
+        <v-spacer />
+        <v-btn color="primary" @click="$router.go(-1)">Zurück</v-btn>
+      </v-row>
     </div>
     <div v-else>
       <v-alert type="info" color="success" class="my-4"
@@ -79,7 +83,7 @@
           >Kontaktdaten</v-card-title
         >
         <v-card-text>
-          <v-form v-model="verifyVal" ref="verifyForm">
+          <v-form ref="verifyForm" v-model="verifyVal">
             <v-text-field
               label="Tel./Hdy.*"
               outlined
@@ -92,8 +96,8 @@
               <v-btn
                 v-if="user"
                 color="secondary"
-                @click="updateVerify"
                 :disabled="!verifyVal"
+                @click="updateVerify"
                 >Senden</v-btn
               >
             </div>
@@ -149,18 +153,9 @@ export default {
   },
   methods: {
     updateVerify() {
-      this.$fire.functions.httpsCallable('email-sendVerifyAccMail')({
+      this.$store.dispatch('modules/user/requestVerify', {
         tel: this.verPhone,
         www: this.verWeb,
-      })
-      const uid = this.user.uid
-      const verifySetting = {
-        isVerifying: true,
-        verified: false,
-      }
-      this.$store.dispatch('modules/user/setVerify', {
-        uid,
-        verifySetting,
       })
     },
   },

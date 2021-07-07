@@ -1,8 +1,4 @@
-export default async function ({ store, redirect, route }) {
-  // this makes sure the cookies are loaded, only first time is blocking,
-  // because for continued calls the promise is already resolved
-  await store.restored
-
+export default function ({ store, redirect, route }) {
   // /register is responsible for verifying the email address
   if (route.path === '/register' && !isSignInWithEmailLink(route)) redirect('/')
 
@@ -37,7 +33,7 @@ function redirectProfilePage(store, redirect, route) {
     // coach did not enter info what coaching he wants to do
     if (
       store.getters['modules/user/membership'].id === 'Coach' &&
-      !store.getters['modules/user/user'].info
+      !store.getters['modules/user/public'].info
     ) {
       return redirect('/beratung')
     }

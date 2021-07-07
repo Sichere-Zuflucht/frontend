@@ -95,7 +95,7 @@
       <client-only>
         <v-btn v-if="loggedIn" to="/profile" nuxt exact icon
           ><v-avatar color="primary" size="38"
-            ><v-img :src="user.avatar" /></v-avatar
+            ><v-img :src="user.public.avatar" /></v-avatar
         ></v-btn>
       </client-only>
     </v-app-bar>
@@ -192,13 +192,15 @@ export default {
     }
   },
   computed: {
-    loginText: (that) => (!that.loggedIn ? 'Login' : 'Logout'),
-    loggedIn: (that) => {
-      if (process.client)
-        return that.$store.getters['modules/user/isAuthenticated']
-      return false
+    loginText() {
+      return !this.loggedIn ? 'Login' : 'Logout'
     },
-    user: (that) => that.$store.getters['modules/user/user'],
+    loggedIn() {
+      return this.$store.getters['modules/user/isAuthenticated']
+    },
+    user() {
+      return this.$store.getters['modules/user/user']
+    },
     membership() {
       return this.$store.getters['modules/user/membership']
     },

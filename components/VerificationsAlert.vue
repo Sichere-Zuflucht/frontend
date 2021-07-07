@@ -1,140 +1,127 @@
 <template>
-  <div v-if="data">
-    <p
-      v-if="
-        !(
-          data.info &&
-          data.stripe.payoutsEnabled &&
-          data.verifySetting.verified
-        )
-      "
-    >
-      Bitte vervollständigen Sie Ihr Konto, damit wir Ihr Profil freischalten
-      können.
-    </p>
-    <v-stepper
-      v-if="
-        !(
-          data.info &&
-          data.stripe.payoutsEnabled &&
-          data.verifySetting.verified
-        )
-      "
-      v-model="steps"
-      vertical
-    >
-      <v-stepper-step
-        :complete="!!data.info"
-        step="1"
-        :editable="!data.info"
-        color="success"
+  <div>
+    <client-only v-if="userData && userData.private && userData.public">
+      <p
+        v-if="
+          !(
+            userData.public.info &&
+            userData.private.stripe.payoutsEnabled &&
+            userData.private.verifySetting.verified
+          )
+        "
       >
-        <h2
-          class="text-h5 text-uppercase secondary--text"
-          style="text-shadow: none"
-        >
-          Profil
-        </h2>
-        <small>Erstelle oder vervollständige dein Profil</small>
-      </v-stepper-step>
-      <v-stepper-content step="1">
-        <v-btn class="mr-2 mb-2" color="secondary" nuxt append to="edit-profil">
-          bearbeiten
-        </v-btn>
-      </v-stepper-content>
-      <v-stepper-step
-        :complete="!!data.stripe.payoutsEnabled"
-        :editable="!data.stripe.payoutsEnabled"
-        step="2"
-        :color="!!data.stripe.payoutsEnabled ? 'success' : 'secondary'"
+        Bitte vervollständigen Sie Ihr Konto, damit wir Ihr Profil freischalten
+        können.
+      </p>
+      <v-stepper
+        v-if="
+          !(
+            userData.public.info &&
+            userData.private.stripe.payoutsEnabled &&
+            userData.private.verifySetting.verified
+          )
+        "
+        v-model="steps"
+        vertical
       >
-        <h2
-          class="text-h5 text-uppercase secondary--text"
-          style="text-shadow: none"
+        <v-stepper-step
+          :complete="!!userData.public.info"
+          step="1"
+          :editable="!userData.public.info"
+          color="success"
         >
-          Zahlungsart
-        </h2>
-        <small>Mit dem Zahlungssystem verbinden</small>
-      </v-stepper-step>
-      <v-stepper-content step="2">
-        <v-btn class="mr-2 mb-2" color="secondary" nuxt append to="bezahlung">
-          verbinden
-        </v-btn>
-      </v-stepper-content>
-      <v-stepper-step
-        :complete="!!data.verifySetting.verified"
-        :editable="!data.verifySetting.verified"
-        step="3"
-        :color="!!data.verifySetting.verified ? 'success' : 'secondary'"
-      >
-        <h2
-          class="text-h5 text-uppercase secondary--text"
-          style="text-shadow: none"
+          <h2
+            class="text-h5 text-uppercase secondary--text"
+            style="text-shadow: none"
+          >
+            Profil
+          </h2>
+          <small>Erstelle oder vervollständige dein Profil</small>
+        </v-stepper-step>
+        <v-stepper-content step="1">
+          <v-btn
+            class="mr-2 mb-2"
+            color="secondary"
+            nuxt
+            append
+            to="edit-profil"
+          >
+            bearbeiten
+          </v-btn>
+        </v-stepper-content>
+        <v-stepper-step
+          :complete="!!userData.private.stripe.payoutsEnabled"
+          :editable="!userData.private.stripe.payoutsEnabled"
+          step="2"
+          :color="
+            !!userData.private.stripe.payoutsEnabled ? 'success' : 'secondary'
+          "
         >
-          Verifizierung
-        </h2>
-        <small>Von uns verifizieren lassen</small>
-      </v-stepper-step>
-      <v-stepper-content step="3">
-        <v-btn
-          class="mr-2 mb-2"
-          color="secondary"
-          nuxt
-          append
-          to="personenverifizierung"
+          <h2
+            class="text-h5 text-uppercase secondary--text"
+            style="text-shadow: none"
+          >
+            Zahlungsart
+          </h2>
+          <small>Mit dem Zahlungssystem verbinden</small>
+        </v-stepper-step>
+        <v-stepper-content step="2">
+          <v-btn class="mr-2 mb-2" color="secondary" nuxt append to="bezahlung">
+            verbinden
+          </v-btn>
+        </v-stepper-content>
+        <v-stepper-step
+          :complete="!!userData.private.verifySetting.verified"
+          :editable="!userData.private.verifySetting.verified"
+          step="3"
+          :color="
+            userData.private.verifySetting.isVerifying
+              ? 'blue'
+              : !!userData.private.verifySetting.verified
+              ? 'success'
+              : 'secondary'
+          "
         >
-          starten
-        </v-btn>
-      </v-stepper-content>
-      <!-- <v-alert color="red lighten-4">
-        <v-btn v-if="!data.info" class="mr-2 mb-2" to="beratung/registrierung">
-          <v-icon small class="pr-2">mdi-account</v-icon> Profil
-        </v-btn>
-        <v-btn
-          v-if="!data.stripe.payoutsEnabled"
-          class="mr-2 mb-2"
-          append
-          to="bezahlung"
-          ><v-icon small class="pr-2">mdi-credit-card-outline</v-icon>
-          Bezahlung
-        </v-btn>
-        <v-btn
-          v-if="!data.verifySetting.verified"
-          class="mr-2 mb-2"
-          append
-          to="personenverifizierung"
-        >
-          <v-icon small class="pr-2">mdi-shield-check</v-icon>
-          Verifizierung</v-btn
-        >
-      </v-alert>
-      <v-divider class="my-2"></v-divider> -->
-    </v-stepper>
+          <h2
+            class="text-h5 text-uppercase secondary--text"
+            style="text-shadow: none"
+          >
+            Verifizierung
+            {{ userData.private.verifySetting.isVerifying ? 'im Gange' : '' }}
+          </h2>
+          <small>Von uns verifizieren lassen</small>
+        </v-stepper-step>
+        <v-stepper-content step="3">
+          <v-btn
+            class="mr-2 mb-2"
+            color="secondary"
+            nuxt
+            append
+            to="personenverifizierung"
+          >
+            {{
+              userData.private.verifySetting.isVerifying
+                ? 'erneut anfragen'
+                : 'starten'
+            }}
+          </v-btn>
+        </v-stepper-content>
+      </v-stepper>
+    </client-only>
   </div>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      data: null,
-      steps: 1,
-    }
-  },
-  mounted() {
-    const uid = this.$store.getters['modules/user/uid']
-    const db = this.$fire.firestore
-    db.collection('users')
-      .doc(uid)
-      .get()
-      .then((data) => {
-        this.data = data.data()
-        this.steps = this.data.info
-          ? this.data.stripe.chargesEnabled && this.data.stripe.payoutsEnabled
-            ? 3
-            : 2
-          : 1
-      })
+  computed: {
+    userData() {
+      return this.$store.getters['modules/user/user']
+    },
+    steps() {
+      if (!this.$store.getters['modules/user/public'].info) return 1
+      if (!this.$store.getters['modules/user/stripeDone']) return 2
+      return 3
+    },
   },
 }
 </script>

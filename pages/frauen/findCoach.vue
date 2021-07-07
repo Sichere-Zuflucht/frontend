@@ -25,8 +25,8 @@
 
         <CoachingSelection
           :is-coach="false"
+          :info="user.info || {}"
           @filter="filter"
-          :info="user.info ? user.info : ''"
         />
         <p class="caption mt-4">
           <b>Dein Fachgebiet oder Thema ist nicht dabei?</b><br />
@@ -47,7 +47,7 @@
           :key="i"
           class="mt-5 px-1"
         >
-          <CoachingList :coach="coaching" />
+          <CoachingList :pub-coach-data="coaching" />
         </div>
       </div>
       <div
@@ -91,21 +91,11 @@ export default {
       user: this.$store.getters['modules/user/user'],
     }
   },
-  mounted() {
-    const coach = this.$fire.firestore.collection('memberships').doc('Coach')
-    this.$fire.firestore
-      .collection('users')
-      .where('membership', '==', coach)
-      .get()
-      .then((ref) => {
-        ref.docs.forEach((doc) => {
-          const data = doc.data()
-          if (data.info && data.verifySetting.verified && data.stripe)
-            this.allCoaches.push({ id: doc.id, ...data })
-          // if (data.info) this.allCoaches.push({ id: doc.id, ...data })
-        })
-      })
-      .then((this.filteredCoaches = this.allCoaches))
+  async fetch() {
+    this.allCoaches = (
+      await this.$fire.functions.httpsCallable('user-getCoaches')()
+    ).data
+    this.filteredCoaches = this.allCoaches
   },
   methods: {
     filter(data) {
@@ -118,14 +108,14 @@ export default {
           coach.info.languages.filter((value) => data.languages.includes(value))
             .length >= 1 */
         // topicArea
-        // add = add && coach.info.topicArea === data.topicArea
+        // add = add && coach.public.info.topicArea === data.topicArea
         add =
           add &&
           coach.info.topicArea.filter((value) => data.topicArea.includes(value))
         // topicPoints
         /* add =
           add &&
-          coach.info.topicPoints.filter((value) =>
+          coach.public.info.topicPoints.filter((value) =>
             data.topicPoints.includes(value)
           ) */
         if (add) this.filteredCoaches.push(coach)

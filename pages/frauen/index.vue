@@ -37,21 +37,22 @@
       </v-slide-group>
       <v-container>
         <v-btn text color="primary" small
-          >Wie läuft das Beratungsgespräch ab?</v-btn
-        ><br />
-        <v-btn text color="primary" small>Infos zur Termineinhaltung</v-btn
-        ><br />
+          >Wie läuft das Beratungsgespräch ab?
+        </v-btn>
+        <br />
+        <v-btn text color="primary" small>Infos zur Termineinhaltung </v-btn>
+        <br />
         <v-btn text color="primary" small>Infos zu Preisen</v-btn>
       </v-container>
     </div>
     <v-container v-else>
-      <v-sheet elevation="2" class="pa-2"
-        ><v-skeleton-loader
+      <v-sheet elevation="2" class="pa-2">
+        <v-skeleton-loader
           class="mx-auto"
           max-width="300"
           type="list-item-avatar, list-item-three-line, list-item-three-line, actions"
-        ></v-skeleton-loader
-      ></v-sheet>
+        ></v-skeleton-loader>
+      </v-sheet>
     </v-container>
     <v-sheet color="blue-grey lighten-5">
       <v-container>
@@ -67,39 +68,32 @@ export default {
   data() {
     return {
       userData: null,
-      responses: null,
+      responses: [],
     }
   },
-  computed: {
-    user() {
-      return this.$store.getters['modules/user/user']
-    },
-  },
-  mounted() {
-    this.getRealtimeData()
-  },
-  methods: {
-    getRealtimeData() {
-      this.responses = []
-      this.$fire.functions
-        .httpsCallable('request-getRequestsRealtime')()
-        .then(async (req) => {
-          const data = await req.data
-          data.forEach((r) => {
-            if (r.ids.includes(this.user.uid))
-              this.$fire.firestore
-                .collection('users')
-                .doc(r.coachId)
-                .get()
-                .then((coachSnap) => {
-                  this.responses.push({
-                    coach: coachSnap.data(),
-                    ...r,
-                  })
-                })
+
+  async mounted() {
+    // these responses contain only communication where this user was involved
+    const responses = (
+      await this.$fire.functions.httpsCallable('request-getRequests')()
+    ).data
+
+    // get the data for each coach and add it to the response
+    // then opush it to the responses list
+    responses.forEach((response) => {
+      this.$fire.firestore
+        .collection('users')
+        .doc(response.coachId)
+        .collection('public')
+        .doc('data')
+        .get()
+        .then((coachSnap) => {
+          this.responses.push({
+            coach: coachSnap.data(),
+            ...response,
           })
         })
-    },
+    })
   },
 }
 </script>

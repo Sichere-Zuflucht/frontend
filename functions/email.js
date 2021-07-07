@@ -1,7 +1,6 @@
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
 const nodemailer = require('nodemailer')
-admin.initializeApp()
 
 const {
   verificationNotificationMail,
@@ -24,6 +23,8 @@ async function sendMail(emailData) {
     .firestore()
     .collection('users')
     .doc(emailData.uid)
+    .collection('private')
+    .doc('data')
     .get()
     .then((snap) => snap.data())
 
@@ -47,6 +48,7 @@ function sendNotificationMailToSZ(emailData) {
 
   return transporter.sendMail(mailOptions)
 }
+
 function sendNotificationReqDeleted(emailData) {
   const mailOptions = {
     from: 's.fellner@sichere-zuflucht.de',
@@ -88,15 +90,27 @@ exports.sendMail = functions.firestore
   })
 
 exports.sendVerifyAccMail = functions.https.onCall(async (data, context) => {
-  const { email } = await admin
+  const privData = await admin
     .firestore()
     .collection('users')
     .doc(context.auth.uid)
+    .collection('private')
+    .doc('data')
     .get()
-    .then((snap) => snap.data())
-  return sendNotificationMailToSZ(
-    verificationNotificationMail(email, data.tel, data.www)
-  )
+
+  const settings = {
+    verifySetting: {
+      isVerifying: true,
+      verified: false,
+    },
+  }
+
+  return Promise.all([
+    privData.ref.set(settings, { merge: true }),
+    sendNotificationMailToSZ(
+      verificationNotificationMail(privData.data().email, data.tel, data.www)
+    ),
+  ]).then(() => settings.verifySetting)
 })
 exports.sendReqHousingMail = functions.https.onCall(async (data, context) => {
   const womanData = await admin

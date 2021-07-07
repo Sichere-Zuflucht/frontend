@@ -5,28 +5,31 @@
         >mdi-account-cog-outline</v-icon
       >
     </v-sheet>
-    <v-container>
+    <v-container v-if="pubData && privData">
       <small>Name:</small>
-      <p>{{ user.firstName }} {{ user.lastName }}</p>
+      <p>
+        {{ pubData.firstName || privData.firstName }}
+        {{ pubData.lastName || privData.lastName }}
+      </p>
       <small>NutzerID:</small>
-      <p>{{ user.uid }}</p>
+      <p>{{ pubData.uid }}</p>
       <small>E-Mail:</small>
-      <p>{{ user.email }}</p>
+      <p>{{ privData.email }}</p>
       <small>Mitglied als:</small>
-      <p>{{ membership ? membership.name : '' }}</p>
+      <p v-if="pubData.membership">{{ pubData.membership.name }}</p>
       <v-btn
         :disabled="btn.disabled"
         :loading="btn.loading"
-        @click="resetPassword"
         color="secondary"
+        @click="resetPassword"
         >Passwort ändern</v-btn
       >
       <v-alert v-if="btn.success" type="success" color="success"
-        >Es wurde eine E-Mail an {{ user.email }} geschickt. Bitte folgen Sie
-        den dort beschriebenen Anweisungen.</v-alert
+        >Es wurde eine E-Mail an {{ privData.email }} geschickt. Bitte folgen
+        Sie den dort beschriebenen Anweisungen.</v-alert
       >
       <v-dialog v-model="overlay" width="300">
-        <template v-slot:activator="{ on }">
+        <template #activator="{ on }">
           <v-btn color="error" text v-on="on">Account löschen</v-btn>
         </template>
         <v-card>
@@ -45,7 +48,7 @@
             </p>
           </v-card-text>
           <v-card-actions
-            ><v-form v-model="deleteVal" ref="deleteForm">
+            ><v-form ref="deleteForm" v-model="deleteVal">
               <v-text-field
                 v-model="userProvidedPassword"
                 outlined
@@ -57,8 +60,8 @@
               <v-btn
                 color="error"
                 :disabled="!deleteVal"
-                @click="deleteUser"
                 :loading="deleteLoading"
+                @click="deleteUser"
                 >wirklich löschen</v-btn
               >
               <v-btn @click="overlay = !overlay">abbrechen</v-btn></v-form
@@ -77,8 +80,9 @@
 export default {
   data() {
     return {
-      user: this.$store.getters['modules/user/user'],
-      membership: this.$store.getters['modules/user/membership'],
+      // pubData: null,
+      // privData: null,
+      // membership: null,
       btn: {
         disabled: false,
         loading: false,
@@ -97,11 +101,25 @@ export default {
       },
     }
   },
+  computed: {
+    pubData() {
+      return this.$store.getters['modules/user/public']
+    },
+    privData() {
+      return this.$store.getters['modules/user/private']
+    },
+  },
+  // async fetch() {
+  //   this.pubData = this.$store.getters['modules/user/public']
+  //   this.privData = this.$store.getters['modules/user/private']
+  //   this.membership = this.$store.getters['modules/user/membership']
+  // },
+
   methods: {
     resetPassword() {
       this.btn.loading = true
       this.$fire.auth
-        .sendPasswordResetEmail(this.user.email)
+        .sendPasswordResetEmail(this.privData.email)
         .then(() => {
           this.btn.loading = false
           this.btn.disabled = true
@@ -117,7 +135,7 @@ export default {
       this.deleteLoading = true
       this.$fire.firestore
         .collection('requests')
-        .where('ids', 'array-contains', this.user.uid)
+        .where('ids', 'array-contains', this.pubData.uid)
         .get()
         .then((ref) => {
           ref.docs.forEach((doc) => {
@@ -125,12 +143,12 @@ export default {
           })
           this.$fire.firestore
             .collection('users')
-            .doc(this.user.uid)
+            .doc(this.pubData.uid)
             .delete()
             .then(() => {
               this.$fire.auth
                 .signInWithEmailAndPassword(
-                  this.user.email,
+                  this.privData.email,
                   this.userProvidedPassword
                 )
                 .then((userCredential) => {
