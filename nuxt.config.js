@@ -4,6 +4,7 @@ const base = '/frontend'
 const hostURL = 'https://sichere-zuflucht.github.io'
 const isDev = process.env.NODE_ENV !== 'production'
 const port = 80
+const redAPI = process.env.RED_API
 
 export default {
   // Target: https://go.nuxtjs.dev/config-target
@@ -24,20 +25,56 @@ export default {
         'pk_test_51IbjZeFRsEq5IriEKQifwCzu8LMnx6uMxxhOz7HIELiaYpFCnsfNlVaiTOU72b2uWwQP4B5gI8GwDrsrSNJS0hPP00e8y3RbDo',
     },
     isDev,
+    redAPI,
     baseUrl: (isDev ? 'http://localhost:' + port : hostURL) + base,
   },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - sichere-zufluch',
-    title: 'sichere-zuflucht',
+    titleTemplate: 'Sichere Zuflucht',
+    title: 'Sichere Zuflucht',
     htmlAttrs: {
-      lang: 'en',
+      lang: 'de',
     },
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' },
+      {
+        hid: 'description',
+        name: 'description',
+        content:
+          'Wir schaffen Zufluchtsorte – für Gewalt erleidende Frauen und Kinder in der Corona-Krise. Sichere-Zuflucht ist ein Plattform, auf der leerstehende Wohnungen, Apartments oder Mietwohnungen den Frauenhäusern als Zuflucht angeboten werden können',
+      },
+      { property: 'og:title', content: 'Sichere Zuflucht' },
+      {
+        property: 'og:description',
+        content:
+          'Wir schaffen Zufluchtsorte – für Gewalt erleidende Frauen und Kinder in der Corona-Krise. Sichere-Zuflucht ist ein Plattform, auf der leerstehende Wohnungen, Apartments oder Mietwohnungen den Frauenhäusern als Zuflucht angeboten werden können',
+      },
+      {
+        property: 'og:image',
+        content:
+          'https://assets-global.website-files.com/5e95aa93bef5360e2788a86e/5e9c77999aae7e1abab9e645_sichere-zuflucht-logo-lang-2.svg',
+      },
+      {
+        property: 'og:type',
+        content: 'website',
+      },
+      {
+        property: 'twitter:description',
+        content:
+          'Wir schaffen Zufluchtsorte – für Gewalt erleidende Frauen und Kinder in der Corona-Krise. Sichere-Zuflucht ist ein Plattform, auf der leerstehende Wohnungen, Apartments oder Mietwohnungen den Frauenhäusern als Zuflucht angeboten werden können',
+      },
+      {
+        property: 'twitter:title',
+        content: 'Sichere Zuflucht',
+      },
+      {
+        property: 'twitter:image',
+        content:
+          'https://assets-global.website-files.com/5e95aa93bef5360e2788a86e/5e9c77999aae7e1abab9e645_sichere-zuflucht-logo-lang-2.svg',
+      },
+      { content: 'summary_large_image', name: 'twitter:card' },
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: base + '/favicon.ico' },
@@ -55,6 +92,12 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [],
+  // does this change stuff with firestore contxt allready innitialized?
+  render: {
+    bundleRenderer: {
+      runInNewContext: false,
+    },
+  },
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -106,6 +149,7 @@ export default {
           // Firestore Settings - currently only works in SPA mode
         },
       },
+      storage: true,
     },
   },
 
