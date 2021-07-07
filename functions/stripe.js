@@ -4,11 +4,16 @@ const stripe = require('stripe')(functions.config().stripe.sk)
 
 exports.getStripeLink = functions.https.onCall(async (data, context) => {
   // verify this user is not registered with stripe (look in firebase)
-  const userDoc = admin.firestore().collection('users').doc(context.auth.uid)
-  const userData = await userDoc.get().then((doc) => doc.data())
+  const privateRef = admin
+    .firestore()
+    .collection('users')
+    .doc(context.auth.uid)
+    .collection('private')
+    .doc('data')
+  const privateData = await privateRef.get().then((doc) => doc.data())
 
   let stripeId
-  if (!userData.stripe) {
+  if (!privateData.stripe) {
     // create new customer account if not existing
     const customer = await stripe.account.create({
       type: 'express',
@@ -21,13 +26,16 @@ exports.getStripeLink = functions.https.onCall(async (data, context) => {
     })
     stripeId = customer.id
     // save result in firebase
-    userDoc.set({ stripe: { id: stripeId, verified: false } }, { merge: true })
-    userData.stripe = { id: stripeId }
+    privateRef.set(
+      { stripe: { id: stripeId, verified: false } },
+      { merge: true }
+    )
+    privateData.stripe = { id: stripeId }
   } else {
-    stripeId = userData.stripe.id
+    stripeId = privateData.stripe.id
   }
   const base = data.isDev
-    ? 'http://localhost:3000'
+    ? 'http://localhost/frontend'
     : 'https://sichere-zuflucht.github.io/frontend'
 
   const accountLink = await stripe.accountLinks.create({
@@ -36,7 +44,7 @@ exports.getStripeLink = functions.https.onCall(async (data, context) => {
     return_url: base + '/bezahlung/approved',
     type: 'account_onboarding',
   })
-  userDoc.set({ stripe: { accountLink } }, { merge: true })
+  privateRef.set({ stripe: { accountLink } }, { merge: true })
 
   // save in firebase
   return accountLink
@@ -44,10 +52,15 @@ exports.getStripeLink = functions.https.onCall(async (data, context) => {
 
 exports.checkStripeAccount = functions.https.onCall(async (data, context) => {
   // verify this user is not registered with stripe (look in firebase)
-  const userDoc = admin.firestore().collection('users').doc(context.auth.uid)
-  const userData = await userDoc.get().then((doc) => doc.data())
-  if (userData.stripe) {
-    return await stripe.account.retrieve(userData.stripe.id)
+  const privateDoc = admin
+    .firestore()
+    .collection('users')
+    .doc(context.auth.uid)
+    .collection('private')
+    .doc('data')
+  const privateData = await privateDoc.get().then((doc) => doc.data())
+  if (privateData.stripe) {
+    return await stripe.account.retrieve(privateData.stripe.id)
   }
   return {}
 })
@@ -123,11 +136,18 @@ exports.accountUpdated = functions.https.onRequest(async (req, res) => {
   const chargesEnabled = req.body.data.object.charges_enabled
   const payoutsEnabled = req.body.data.object.payouts_enabled
 
+  // const snapshot = await admin
+  //   .firestore()
+  //   .collection('users')
+  //   .where('private/data/email', '==', email)
+  //   .get()
+
   const snapshot = await admin
     .firestore()
-    .collection('users')
+    .collectionGroup('private')
     .where('email', '==', email)
     .get()
+
   if (snapshot.empty) {
     res.status(400).send('User with email not found')
     return
@@ -137,6 +157,8 @@ exports.accountUpdated = functions.https.onRequest(async (req, res) => {
     .firestore()
     .collection('users')
     .doc(snapshot.docs[0].id)
+    .collection('private')
+    .doc('data')
     .set(
       {
         stripe: {

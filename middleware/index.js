@@ -37,7 +37,7 @@ function redirectProfilePage(store, redirect, route) {
     // coach did not enter info what coaching he wants to do
     if (
       store.getters['modules/user/membership'].id === 'Coach' &&
-      !store.getters['modules/user/user'].info
+      !store.getters['modules/user/public'].info
     ) {
       return redirect('/beratung/registrierung')
     }

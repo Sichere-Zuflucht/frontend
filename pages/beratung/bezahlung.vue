@@ -5,13 +5,13 @@
       Wir nutzen als Zahlungssystem den Anbieter
       <a href="https://stripe.com" target="_blank">Stripe</a>.
     </p>
-    <div v-if="!(user.stripe && user.stripe.verified)">
-      <p v-if="!user.stripe" class="caption">
+    <div v-if="stripe !== undefined && !(stripe && stripe.verified)">
+      <p v-if="!stripe" class="caption">
         Bitte registrieren Sie sich, damit Frauen Ihre Angebote bezahlen können.
       </p>
-      <div v-else>
+      <div>
         <h2 class="text-h2 primary--text">Step 1</h2>
-        <div v-if="!user.stripe.chargesEnabled">
+        <div v-if="!stripe.chargesEnabled">
           <p class="mb-0">Aktuell können Sie keine Zahlungen entgegennehmen.</p>
           <v-btn
             :loading="loading"
@@ -25,15 +25,13 @@
             Sie werden zur Stripes Registrierungsseite weitergeleitet.
           </p>
         </div>
-        <v-alert type="success" color="success" v-else
+        <v-alert v-else type="success" color="success"
           >Bei Stripe registriert</v-alert
         >
 
         <h2 class="text-h2 primary--text mt-8">Step 2</h2>
-        <div v-if="!user.stripe.payoutsEnabled">
-          <p v-if="!user.stripe.chargesEnabled">
-            Schließen Sie zuerst Schritt 1 ab
-          </p>
+        <div v-if="!stripe.payoutsEnabled">
+          <p v-if="!stripe.chargesEnabled">Schließen Sie zuerst Schritt 1 ab</p>
           <div v-else>
             <p class="mb-0">
               Aktuell können Sie sich kein Geld auszahlen lassen.
@@ -89,24 +87,30 @@
 export default {
   data() {
     return {
-      user: {},
       stripeRegisterURL: null,
       loading: false,
       disabled: false,
       stripeData: {},
     }
   },
-  mounted() {
-    this.user = this.$store.getters['modules/user/user']
-    console.log(this.user)
-    // this.run()
+  computed: {
+    user() {
+      return this.$store.state.modules.user
+    },
+    stripe() {
+      try {
+        return this.$store.getters['modules/user/stripe']
+      } catch (TypeError) {
+        return 'type error'
+      }
+    },
   },
   methods: {
     addStripe() {
       this.loading = true
       this.$fire.functions
         .httpsCallable('stripe-getStripeLink')({
-          email: this.user.email,
+          email: this.user.private.email,
           isDev: this.$config.isDev,
         })
         .then((stripeData) => {

@@ -27,6 +27,9 @@ const getters = {
   public(state) {
     return state.public
   },
+  stripe(state) {
+    return state.private?.stripe
+  },
   isAuthenticated(state) {
     return !!state.public?.uid
   },
