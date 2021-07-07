@@ -1,7 +1,7 @@
 <template>
   <client-only>
     <v-container v-if="user">
-      <h1 class="text-h1 secondary--text">Dein Profil</h1>
+      <h1 class="text-h1 secondary--text">Profil bearbeiten</h1>
       <div v-if="user.info">
         <h2 class="text-h2 primary--text mb-2">Aktuell</h2>
         <p class="mt-3 d-inline">Sie bieten aktuell</p>
@@ -21,11 +21,13 @@
         <h2 class="text-h2 primary--text mt-6">Ändern</h2>
       </div>
       <h2 v-else class="text-h2 primary--text">Vervollständigen</h2>
+      <CoachingList />
       <CoachingSelection
         :is-open="user.info ? false : true"
         :filter="false"
         :closable="user.info ? true : false"
         :is-coach="true"
+        :description="user.description ? user.description : ''"
         @selection="updateProfile"
       />
     </v-container>
@@ -46,12 +48,11 @@ export default {
       this.profile = data
       this.select = false
       this.$store.dispatch('modules/user/setInfo', {
-        info: {
-          topicArea: data.topicArea, // topic
-          topicPoints: data.topicPoints, // types
-        },
+        topicArea: data.topicArea, // topic
+        topicPoints: data.topicPoints, // types
+        description: data.description,
       })
-      this.$router.push('/beratung')
+      // this.$router.push('/beratung')
     },
   },
 }

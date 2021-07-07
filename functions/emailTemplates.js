@@ -69,7 +69,9 @@ exports.womanSuggestedDates = (coachName, dates, womanID) => {
     html: `<div style="font-size: 16px;">Hallo,<br><br>
              der Coach ${coachName} hat auf Ihre Anfrage reagiert und schickt Ihnen folgende Terminvorschläge:
         <br>
-        <span style="font-family: monospace;">${listToHTML(dates)}</span>
+        <span style="font-family: monospace;">${listToHTML(
+          dates.map((date) => date.date + ' ' + date.time)
+        )}</span>
         <br>
         Bitte loggen Sie sich auf unserer <a href="sichere-zuflucht.de">Plattform</a> ein, um einen Termin auszuwählen.
         <br>
@@ -101,13 +103,15 @@ exports.coachAcceptedDate = (coachName, date, coachID) => {
   }
 }
 
-exports.verificationNotificationMail = (email) => {
+exports.verificationNotificationMail = (email, tel, www) => {
   return {
     subject: 'Sichere Zuflucht - Verifizierungsanfrage',
     html: `<div style="font-size: 16px;">Verifizierung Anfrage<br><br>
     eine Person möchte sich von uns Verifizieren lassen.
     <br>
-    <span style="font-family: monospace; margin-left: 2em">"${email}"</span>
+    <span style="font-family: monospace; margin-left: 2em">"E-Mail: ${email}"</span>
+    <span style="font-family: monospace; margin-left: 2em">"Tel: ${tel}"</span>
+    <span style="font-family: monospace; margin-left: 2em">"Webseite: ${www}"</span>
     </div>`,
   }
 }

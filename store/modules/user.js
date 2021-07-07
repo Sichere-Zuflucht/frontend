@@ -4,9 +4,9 @@ const state = () => ({
 })
 
 function removeFirebaseObjects(obj) {
-  if (typeof obj === 'object')
+  if (!!obj && typeof obj === 'object')
     return Object.entries(obj)
-      .filter(([k, v]) => v.firestore === undefined)
+      .filter(([k, v]) => v?.firestore === undefined)
       .reduce(
         (r, [key, value]) => ({ ...r, [key]: removeFirebaseObjects(value) }),
         {}
@@ -30,11 +30,20 @@ const getters = {
   stripe(state) {
     return state.private?.stripe
   },
+  stripeDone(state) {
+    return (
+      state.private?.stripe.chargesEnabled &&
+      state.private?.stripe.payoutsEnabled
+    )
+  },
   isAuthenticated(state) {
     return !!state.public?.uid
   },
   membership(state) {
     return state.public?.membership
+  },
+  avatar(state) {
+    return state.public?.avatar
   },
   isVerifying(state) {
     return state.private?.verifySetting.isVerifying
@@ -44,6 +53,13 @@ const getters = {
   },
   routing(state) {
     return state.public?.membership.routing || '/'
+  },
+  readyToShow(state) {
+    return (
+      state.private?.verifySetting.verified &&
+      state.private.stripe &&
+      state.public?.info
+    )
   },
 }
 
@@ -98,15 +114,22 @@ const actions = {
       }
     })
   },
-  setInfo({ commit }, { info }) {
+  setInfo({ commit }, info) {
     this.$fire.functions
-      .httpsCallable('user-setInfo')(info)
+      .httpsCallable('user-setData')({ data: { info }, priv: false })
       .then(() => commit('setInfo', info))
   },
-  setVerify({ commit }, { verifySetting }) {
+  setAvatar({ commit }, avatar) {
     this.$fire.functions
-      .httpsCallable('user-setVerify')(verifySetting)
-      .then(() => commit('setVerify', verifySetting))
+      .httpsCallable('user-setData')({ data: { avatar }, priv: false })
+      .then(() => commit('setAvatar', avatar))
+  },
+  requestVerify({ commit }, verifyData) {
+    return this.$fire.functions
+      .httpsCallable('email-sendVerifyAccMail')(verifyData)
+      .then((settings) => {
+        commit('setVerify', settings.data)
+      })
   },
   createFirebaseUser({ dispatch }, userData) {
     this.$fire.functions
@@ -131,13 +154,14 @@ const mutations = {
     state.public.membership = membership
     if (redirect) this.$router.push({ path: '/profile' })
   },
-  setUserData(state, { _private, _public }) {
-    console.log('[STORE MUTATIONS] - setUserData:', _private, _public)
-    if (!_private || !_public) {
+  setUserData(state, data) {
+    console.log('[STORE MUTATIONS] - setUserData:', data)
+    if (!data?._private || !data?._public) {
       for (const key of Object.keys(state)) {
         state[key] = null
       }
     } else {
+      const { _private, _public } = data
       state.private = removeFirebaseObjects(_private)
       state.public = removeFirebaseObjects(_public)
     }
@@ -146,8 +170,12 @@ const mutations = {
     console.log('[STORE MUTATIONS] - setInfo:', info)
     state.public.info = info
   },
+  setAvatar(state, avatar) {
+    console.log('[STORE MUTATIONS] - setAvatar:', avatar)
+    state.public.avatar = avatar
+  },
   setVerify(state, verifySetting) {
-    console.log('[STORE MUTATIONS] - setVerify:', state, verifySetting)
+    console.log('[STORE MUTATIONS] - setVerify:', verifySetting)
     state.private.verifySetting = verifySetting
   },
 }

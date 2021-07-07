@@ -1,49 +1,112 @@
 <template>
   <div>
-    <!--    <div v-if="data && info">{{ info }}</div>-->
-    <client-only v-if="data && data.private && data.public">
-      <div
+    <client-only v-if="userData && userData.private && userData.public">
+      <p
         v-if="
           !(
-            data.public.info &&
-            data.private.stripe.payoutsEnabled &&
-            data.private.verifySetting.verified
+            userData.public.info &&
+            userData.private.stripe.payoutsEnabled &&
+            userData.private.verifySetting.verified
           )
         "
       >
-        <v-divider class="my-2"></v-divider>
-        <v-alert color="red lighten-4">
-          <p>
-            Schließe folgende Punkte vollständig ab, um für die Frauen einsehbar
-            zu werden:
-          </p>
-          <v-btn
-            v-if="!data.public.info"
-            class="mr-2 mb-2"
-            to="beratung/registrierung"
+        Bitte vervollständigen Sie Ihr Konto, damit wir Ihr Profil freischalten
+        können.
+      </p>
+      <v-stepper
+        v-if="
+          !(
+            userData.public.info &&
+            userData.private.stripe.payoutsEnabled &&
+            userData.private.verifySetting.verified
+          )
+        "
+        v-model="steps"
+        vertical
+      >
+        <v-stepper-step
+          :complete="!!userData.public.info"
+          step="1"
+          :editable="!userData.public.info"
+          color="success"
+        >
+          <h2
+            class="text-h5 text-uppercase secondary--text"
+            style="text-shadow: none"
           >
-            <v-icon small class="pr-2">mdi-account</v-icon> Profil
-          </v-btn>
+            Profil
+          </h2>
+          <small>Erstelle oder vervollständige dein Profil</small>
+        </v-stepper-step>
+        <v-stepper-content step="1">
           <v-btn
-            v-if="!data.private.stripe.payoutsEnabled"
             class="mr-2 mb-2"
+            color="secondary"
+            nuxt
             append
-            to="bezahlung"
-            ><v-icon small class="pr-2">mdi-credit-card-outline</v-icon>
-            Bezahlung
+            to="edit-profil"
+          >
+            bearbeiten
           </v-btn>
+        </v-stepper-content>
+        <v-stepper-step
+          :complete="!!userData.private.stripe.payoutsEnabled"
+          :editable="!userData.private.stripe.payoutsEnabled"
+          step="2"
+          :color="
+            !!userData.private.stripe.payoutsEnabled ? 'success' : 'secondary'
+          "
+        >
+          <h2
+            class="text-h5 text-uppercase secondary--text"
+            style="text-shadow: none"
+          >
+            Zahlungsart
+          </h2>
+          <small>Mit dem Zahlungssystem verbinden</small>
+        </v-stepper-step>
+        <v-stepper-content step="2">
+          <v-btn class="mr-2 mb-2" color="secondary" nuxt append to="bezahlung">
+            verbinden
+          </v-btn>
+        </v-stepper-content>
+        <v-stepper-step
+          :complete="!!userData.private.verifySetting.verified"
+          :editable="!userData.private.verifySetting.verified"
+          step="3"
+          :color="
+            userData.private.verifySetting.isVerifying
+              ? 'blue'
+              : !!userData.private.verifySetting.verified
+              ? 'success'
+              : 'secondary'
+          "
+        >
+          <h2
+            class="text-h5 text-uppercase secondary--text"
+            style="text-shadow: none"
+          >
+            Verifizierung
+            {{ userData.private.verifySetting.isVerifying ? 'im Gange' : '' }}
+          </h2>
+          <small>Von uns verifizieren lassen</small>
+        </v-stepper-step>
+        <v-stepper-content step="3">
           <v-btn
-            v-if="!data.private.verifySetting.verified"
             class="mr-2 mb-2"
+            color="secondary"
+            nuxt
             append
             to="personenverifizierung"
           >
-            <v-icon small class="pr-2">mdi-shield-check</v-icon>
-            Verifizierung</v-btn
-          >
-        </v-alert>
-        <v-divider class="my-2"></v-divider>
-      </div>
+            {{
+              userData.private.verifySetting.isVerifying
+                ? 'erneut anfragen'
+                : 'starten'
+            }}
+          </v-btn>
+        </v-stepper-content>
+      </v-stepper>
     </client-only>
   </div>
 </template>
@@ -51,8 +114,13 @@
 <script>
 export default {
   computed: {
-    data() {
-      return this.$store.state.modules.user
+    userData() {
+      return this.$store.getters['modules/user/user']
+    },
+    steps() {
+      if (!this.$store.getters['modules/user/public'].info) return 1
+      if (!this.$store.getters['modules/user/stripeDone']) return 2
+      return 3
     },
   },
 }

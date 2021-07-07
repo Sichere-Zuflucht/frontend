@@ -37,24 +37,38 @@ exports.create = functions.https.onCall(async (data, context) => {
   return context.auth.token
 })
 
-exports.setInfo = functions.https.onCall((info, context) => {
-  // todo verify info here
+exports.setData = functions.https.onCall(({ data, priv }, context) => {
+  // todo verify data here
+  // i.e. this should not be able to tinker with the verification stuff
+  if ('verifySetting' in Object.keys(data)) return false
   return admin
     .firestore()
     .collection('users')
     .doc(context.auth.uid)
-    .collection('public')
+    .collection(priv ? 'private' : 'public')
     .doc('data')
-    .set({ info }, { merge: true })
+    .set(data, { merge: true })
 })
 
-exports.setVerify = functions.https.onCall((verifySetting, context) => {
-  // todo verify info here
-  return admin
+exports.getCoaches = functions.https.onCall(async (data, context) => {
+  // find private docs with fulfill the criteria coach
+  const search = await admin
     .firestore()
-    .collection('users')
-    .doc(context.auth.uid)
-    .collection('private')
-    .doc('data')
-    .set({ verifySetting }, { merge: true })
+    .collectionGroup('private')
+    .where('verifySetting.verified', '==', true)
+    .get()
+
+  // get the parent and its id
+  // then traverse back down to the public folder
+  // return both
+  return Promise.all(
+    search.docs.map(async (doc) => {
+      return {
+        uid: doc.ref.parent.parent.id,
+        ...(
+          await doc.ref.parent.parent.collection('public').doc('data').get()
+        ).data(),
+      }
+    })
+  )
 })
