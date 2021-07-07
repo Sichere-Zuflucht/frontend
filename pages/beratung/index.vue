@@ -175,22 +175,21 @@ export default {
       loading: false,
     }
   },
+  async fetch() {
+    this.requests = (
+      await this.$fire.functions.httpsCallable('request-getRequests')()
+    ).data
+  },
   computed: {
     coachName() {
       return this.user.public.firstName + ' ' + this.user.public.lastName
     },
     user() {
-      console.log('user', this.$store.state.modules.user)
       return this.$store.state.modules.user
     },
     private() {
       return this.$store.getters['modules/user/private']
     },
-  },
-  async mounted() {
-    this.requests = (
-      await this.$fire.functions.httpsCallable('request-getRequests')()
-    ).data
   },
   methods: {
     addSuggestions(request) {
