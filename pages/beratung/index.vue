@@ -1,19 +1,16 @@
 <template>
-  <v-container v-if="data">
-    <p class="caption mb-0 font-weight-bold">Hallo</p>
-    <h1 v-if="user.firstName" class="text-h1 secondary--text">
-      {{ user.firstName }} {{ user.lastName }}
-    </h1>
+  <v-container v-if="user">
+    <client-only>
+      <p class="caption mb-0 font-weight-bold">Hallo</p>
+      <h1 v-if="user && user.public" class="text-h1 secondary--text">
+        {{ user.public.firstName }} {{ user.public.lastName }}
+      </h1>
+    </client-only>
     <VerificationsAlert />
-    <!--    <CoachingListv-if="user" :coach="user"></Coaching> -->
-    <div
-      v-if="
-        data.info && data.stripe.payoutsEnabled && data.verifySetting.verified
-      "
-    >
+    <div v-if="!!this.private && this.private.stripe">
       <h2 class="primary--text mb-2">Anfragen</h2>
       <div v-if="requests != null">
-        <div v-if="requests.length != 0">
+        <div v-if="requests.length !== 0">
           <v-expansion-panels>
             <v-expansion-panel v-for="(item, i) in requests" :key="i">
               <v-expansion-panel-header
@@ -172,66 +169,30 @@
 export default {
   data() {
     return {
-      user: {},
       requests: null,
       videoTypes: ['Jitsi', 'RED'],
       selectedVideoType: 'Jitsi',
       loading: false,
-      data: null,
     }
   },
   computed: {
     coachName() {
-      return this.user.firstName + ' ' + this.user.lastName
+      return this.user.public.firstName + ' ' + this.user.public.lastName
+    },
+    user() {
+      console.log('user', this.$store.state.modules.user)
+      return this.$store.state.modules.user
+    },
+    private() {
+      return this.$store.getters['modules/user/private']
     },
   },
-  mounted() {
-    const uid = this.$store.getters['modules/user/uid']
-    this.$fire.firestore
-      .collection('users')
-      .doc(uid)
-      .get()
-      .then((data) => {
-        this.data = data.data()
-      })
-
-    this.user = this.$store.getters['modules/user/user']
-    this.getRealtimeData()
-
-    /* this.$fire.firestore
-      .collection('requests')
-      .where('ids', 'array-contains', this.user.uid)
-      .onSnapshot((snap) => {
-        this.requests = []
-        snap.docs.forEach((u) => {
-          this.requests.push({
-            id: u.id,
-            ...u.data(),
-          })
-        })
-      })
-    /*
-    this.$fire.firestore.collection('requests').onSnapshot((snap) => {
-      this.requests = []
-      snap.docs.forEach((u) => {
-        if (u.data().ids.includes(this.user.uid))
-          this.requests.push({
-            id: u.id,
-            ...u.data(),
-          })
-      })
-    }) */
+  async mounted() {
+    this.requests = (
+      await this.$fire.functions.httpsCallable('request-getRequests')()
+    ).data
   },
   methods: {
-    getRealtimeData() {
-      this.requests = []
-      this.$fire.functions
-        .httpsCallable('request-getRequestsRealtime')()
-        .then(async (req) => {
-          this.requests = await req.data
-          console.log('req: ', req, this.requests)
-        })
-    },
     addSuggestions(request) {
       this.loading = true
       this.$fire.functions
@@ -242,6 +203,8 @@ export default {
           videoType: this.selectedVideoType,
         })
         .then(() => {
+          request.coachAnswered = true
+          request.updatedAt = new Date()
           this.loading = false
         })
     },

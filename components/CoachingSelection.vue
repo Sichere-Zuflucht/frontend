@@ -18,26 +18,25 @@
         </v-stepper-step>
         <v-stepper-content v-if="isCoach" step="0">
           <v-row class="mb-4">
-            <v-col class="d-flex align-center justify-center"
-              ><v-avatar size="80"
-                ><v-img
-                  :src="
-                    changeAvatar ? changeAvatar : avatar
-                  " /></v-avatar></v-col
-            ><v-col class="d-flex align-center justify-center"
-              ><v-btn color="secondary" @click="overlay = !overlay"
-                >Foto bearbeiten</v-btn
-              >
+            <v-col class="d-flex align-center justify-center">
+              <v-avatar size="80">
+                <v-img :src="$store.getters['modules/user/avatar']" />
+              </v-avatar>
+            </v-col>
+            <v-col class="d-flex align-center justify-center">
+              <v-btn color="secondary" @click="overlay = !overlay"
+                >Foto bearbeiten
+              </v-btn>
               <v-overlay :absolute="true" :opacity="1" :value="overlay">
-                <v-form ref="uploadForm" v-model="uploadRef"
-                  ><v-file-input
-                    :rules="rules.picture"
+                <v-form ref="uploadForm" v-model="uploadRef">
+                  <v-file-input
+                    v-model="imageFile"
+                    :rules="rules"
                     accept="image/png, image/jpeg, image/png"
                     placeholder="Foto hochladen"
                     prepend-icon="mdi-camera"
                     label="Profilfoto"
                     :show-size="1000"
-                    v-model="imageFile"
                     style="width: 220px"
                     required
                   ></v-file-input>
@@ -49,15 +48,15 @@
                   >
                     Foto hochladen
                   </v-btn>
-                  <v-btn text @click="overlay = !overlay"> Abbrechen </v-btn>
+                  <v-btn text @click="overlay = !overlay"> Abbrechen</v-btn>
                 </v-form>
               </v-overlay>
             </v-col>
           </v-row>
 
-          <v-btn color="primary" block @click="update(1)"
-            ><v-icon>mdi-arrow-down</v-icon></v-btn
-          >
+          <v-btn color="primary" block @click="update(1)">
+            <v-icon>mdi-arrow-down</v-icon>
+          </v-btn>
         </v-stepper-content>
         <v-stepper-step
           :complete="e6 > 1"
@@ -80,14 +79,12 @@
               :value="t.topicArea"
               active-class="primary primary--text"
               outlined
-              >{{ t.topicArea }}</v-chip
-            >
+              >{{ t.topicArea }}
+            </v-chip>
           </v-chip-group>
-          <v-btn color="primary" block @click="isCoach ? update(2) : finish()"
-            ><v-icon>{{
-              isCoach ? 'mdi-arrow-down' : 'mdi-check'
-            }}</v-icon></v-btn
-          >
+          <v-btn color="primary" block @click="isCoach ? update(2) : finish()">
+            <v-icon>{{ isCoach ? 'mdi-arrow-down' : 'mdi-check' }}</v-icon>
+          </v-btn>
         </v-stepper-content>
         <v-stepper-step
           v-if="isCoach"
@@ -110,6 +107,7 @@
             Schwerpunkt etc.
           </p>
           <v-text-field
+            v-model="changeSince"
             outlined
             label="Coach/Berater*in seit dem Jahr:"
             type="number"
@@ -122,43 +120,43 @@
             ]"
             placeholder="Jahreszahl"
             min="1900"
-            max="2099"
+            :max="new Date().getFullYear()"
             step="1"
-            v-model="changeSince"
           ></v-text-field>
           <v-textarea
+            v-model="changeHistory"
             outlined
             label="Beruflicher Hintergrund"
             placeholder="z.B. was Sie „vorher“ gemacht haben oder was Sie bewegt"
-            v-model="changeHistory"
           ></v-textarea>
           <v-textarea
+            v-model="changeFocus"
             outlined
             label="Schwerpunkte"
             placeholder="Am besten welche, die zu den Problemen unserer Frauen passen."
-            v-model="changeFocus"
           ></v-textarea>
           <v-textarea
+            v-model="changeCoachingTopics"
             outlined
             label="Beratungs-/ Coaching-Themen"
             placeholder="1. 2. 3. …"
-            v-model="changeCoachingTopics"
           ></v-textarea>
           <v-textarea
+            v-model="changeDescription"
             outlined
             label="Persönliches über mich"
             placeholder="Mit Nahbarkeit können Sie den Frauen helfen, ihre Scheu zu überwinden und sich Ihre Hilfe zu holen."
-            v-model="changeDescription"
           ></v-textarea>
           <v-textarea
+            v-model="changeAssistance"
             outlined
             label="konkrete Hilfestellung"
             placeholder="… was soll hier rein?"
-            v-model="changeAssistance"
           ></v-textarea>
           <v-btn color="primary" block @click="finish">
-            <v-icon>mdi-check</v-icon> Speichern</v-btn
-          >
+            <v-icon>mdi-check</v-icon>
+            Speichern
+          </v-btn>
         </v-stepper-content>
       </v-stepper>
     </v-expand-transition>
@@ -196,6 +194,7 @@ export default {
     },
     info: {
       type: Object,
+      default: () => {},
     },
     avatar: {
       type: String,
@@ -235,18 +234,16 @@ export default {
       open: this.isOpen,
       uploadRef: true,
       changeAvatar: null,
-      imageFile: '',
+      imageFile: [],
       isLoading: false,
       overlay: false,
-      rules: {
-        picture: [
-          (value) =>
-            !value ||
-            value.size < 2000000 ||
-            'Fotogröße sollte kleiner als 2 MB sein.',
-          (value) => !!value || 'Lade ein Foto hoch.',
-        ],
-      },
+      rules: [
+        (value) =>
+          !value ||
+          value.size < 2000000 ||
+          'Fotogröße sollte kleiner als 2 MB sein.',
+        (value) => !!value || 'Lade ein Foto hoch.',
+      ],
     }
   },
   mounted() {
@@ -282,19 +279,13 @@ export default {
       this.$emit('filter', {
         // languages: this.languages,
         topicArea: this.selectedTopic.topicArea,
-        /* description: this.changeDescription,
-        since: this.changeSince,
-        history: this.changeHistory,
-        focus: this.changeFocus,
-        coachingTopics: this.changeCoachingTopics,
-        assistance: this.changeAssistance, */
       })
     },
     upload(file) {
       this.isLoading = true
       const uploadTask = this.$fire.storage
         .ref()
-        .child(this.$store.state.modules.user.uid)
+        .child(this.$store.getters['modules/user/uid'])
         .put(file)
       uploadTask.on(
         'state_changed',
@@ -334,6 +325,7 @@ export default {
         () => {
           uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
             this.changeAvatar = downloadURL
+            this.$store.dispatch('modules/user/setAvatar', downloadURL)
           })
           this.imageFile = ''
           this.isLoading = false

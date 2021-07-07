@@ -49,7 +49,7 @@
               label="Bitte wählen"
               class="my-2"
             >
-              <template v-slot:item="{ item, on }">
+              <template #item="{ item, on }">
                 <v-list-item v-on="on">
                   <v-list-item-content>
                     <v-list-item-title class="font-weight-bold mb-0">
@@ -58,7 +58,7 @@
                     <p class="caption">{{ item.time }} Uhr</p>
                   </v-list-item-content>
                 </v-list-item> </template
-              ><template v-slot:selection="{ item }"
+              ><template #selection="{ item }"
                 >{{ formatDate(item.date) }} | {{ item.time }}
               </template></v-select
             >
@@ -67,11 +67,11 @@
               color="success"
               :loading="btn.payButtonLoading"
               :disabled="!date || btn.isDisabled"
-              @click="pay(date)"
               block
+              @click="pay(date)"
               >{{ btn.acceptText }}</v-btn
             >
-            <v-alert type="error" v-if="btn.error">{{ btn.errorMsg }}</v-alert>
+            <v-alert v-if="btn.error" type="error">{{ btn.errorMsg }}</v-alert>
             <p class="caption">
               Nach der Terminbestätigung wirst du direkt zu unserem
               Zahlungsanbieter „stripe“ weitergeleitet. Nach deiner Zahlung
@@ -111,7 +111,7 @@
         >{{ coach.id }} Neue Anfrage stellen</v-btn
       >
       <v-dialog v-model="isDelete" persistent max-width="290">
-        <template v-slot:activator="{ on, attrs }">
+        <template #activator="{ on, attrs }">
           <v-btn small text color="primary" v-bind="attrs" v-on="on"
             >Termin löschen</v-btn
           >
@@ -121,9 +121,9 @@
 
           <v-btn
             light
-            @click="cancel(response.id)"
             class="mr-1"
             :loading="eraseLoading"
+            @click="cancel(response.id)"
             >Ja, löschen</v-btn
           ><v-btn light @click="isDelete = false"> nein </v-btn></v-alert
         >
@@ -245,7 +245,11 @@ export default {
         .then(() => {
           this.payButtonLoading = false
           this.btn.isDisabled = true
-          console.log(paymentID)
+          // eslint-disable-next-line vue/no-mutating-props
+          this.response.acceptedDate = dI
+          // eslint-disable-next-line vue/no-mutating-props
+          this.response.video = v
+          console.log('paymentid here', paymentID)
           /* this.$stripe.redirectToCheckout({
             // Make the id field from the Checkout Session creation API response
             // available to this file, so you can provide it as argument here

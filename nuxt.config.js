@@ -3,6 +3,7 @@ import colors from 'vuetify/es5/util/colors'
 const base = '/frontend'
 const hostURL = 'https://sichere-zuflucht.github.io'
 const isDev = process.env.NODE_ENV !== 'production'
+const port = 80
 const redAPI = process.env.RED_API
 
 export default {
@@ -25,7 +26,7 @@ export default {
     },
     isDev,
     redAPI,
-    baseUrl: (isDev ? 'http://localhost:3000' : hostURL) + base,
+    baseUrl: (isDev ? 'http://localhost:' + port : hostURL) + base,
   },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -90,7 +91,13 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [{ src: '~/plugins/vuex-persist', ssr: false }],
+  plugins: [],
+  // does this change stuff with firestore contxt allready innitialized?
+  render: {
+    bundleRenderer: {
+      runInNewContext: false,
+    },
+  },
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -124,8 +131,6 @@ export default {
       auth: {
         persistence: 'local', // default
         initialize: {
-          onAuthStateChangedMutation:
-            'modules/user/ON_AUTH_STATE_CHANGED_MUTATION',
           onAuthStateChangedAction: 'modules/user/onAuthStateChangedAction',
           subscribeManually: false,
         },
@@ -182,14 +187,17 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    extend(config, { isDev }) {
+    extend(config, { isDev, isClient }) {
       // Sets webpack's mode to development if `isDev` is true.
       if (isDev) {
         config.mode = 'development'
+      } else if (isClient) {
+        config.devtool = 'hidden-source-map'
       }
     },
   },
   server: {
     host: '0.0.0.0',
+    port,
   },
 }

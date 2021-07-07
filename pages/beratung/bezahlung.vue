@@ -6,7 +6,7 @@
       >
     </v-sheet>
     <v-container>
-      <div v-if="!user.stripe || !user.stripe.verified">
+      <div v-if="!stripe || !stripe.verified">
         <h1 class="text-h1 primary--text my-8">Bezahlung</h1>
         <p>
           Sie erhalten für Ihre Beratungsleistung über unser Portal
@@ -17,7 +17,7 @@
           vollständigen Verifizierung Ihrer Person, können Sie direkt starten.
         </p>
 
-        <div v-if="!user.stripe">
+        <div v-if="!stripe">
           <div class="d-flex justify-center mb-2 mt-12">
             <v-btn
               :loading="loading"
@@ -34,7 +34,7 @@
         </div>
         <div v-else>
           <v-alert
-            v-if="!user.stripe.chargesEnabled"
+            v-if="!stripe.chargesEnabled"
             color="error"
             icon="mdi-clock-fast"
             outlined
@@ -58,9 +58,7 @@
             </v-btn>
           </v-alert>
           <v-alert
-            v-else-if="
-              user.stripe.chargesEnabled && !user.stripe.payoutsEnabled
-            "
+            v-else-if="stripe.chargesEnabled && !stripe.payoutsEnabled"
             color="error"
             icon="mdi-clock-fast"
             outlined
@@ -121,28 +119,38 @@
 export default {
   data() {
     return {
-      user: {},
       stripeRegisterURL: null,
       loading: false,
       disabled: false,
       stripeData: null,
-      stripeDash: '',
     }
   },
-  mounted() {
-    this.user = this.$store.getters['modules/user/user']
-    this.stripeDash =
-      'https://dashboard.stripe.com/' +
-      this.user.stripe.id +
-      (this.$config.isDev ? '/test/' : '/') +
-      'dashboard'
+  computed: {
+    user() {
+      return this.$store.state.modules.user
+    },
+    stripe() {
+      try {
+        return this.$store.getters['modules/user/stripe']
+      } catch (TypeError) {
+        return 'type error'
+      }
+    },
+    stripeDash() {
+      return (
+        'https://dashboard.stripe.com/' +
+        this.stripe.id +
+        (this.$config.isDev ? '/test/' : '/') +
+        'dashboard'
+      )
+    },
   },
   methods: {
     addStripe() {
       this.loading = true
       this.$fire.functions
         .httpsCallable('stripe-getStripeLink')({
-          email: this.user.email,
+          email: this.user.private.email,
           isDev: this.$config.isDev,
         })
         .then((stripeData) => {

@@ -48,12 +48,9 @@ export default {
       this.profile = data
       this.select = false
       this.$store.dispatch('modules/user/setInfo', {
-        info: {
-          topicArea: data.topicArea, // topic
-          topicPoints: data.topicPoints, // types
-        },
+        topicArea: data.topicArea, // topic
+        topicPoints: data.topicPoints, // types
         description: data.description,
-        uid: this.user.uid,
       })
       // this.$router.push('/beratung')
     },

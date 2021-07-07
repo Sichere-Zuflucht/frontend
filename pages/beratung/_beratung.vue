@@ -1,18 +1,18 @@
 <template>
-  <div v-if="coach">
+  <div v-if="pubData">
     <v-sheet class="d-flex justify-center pt-8" style="position: relative"
-      ><v-avatar :lazy-src="coach.avatar" :src="coach.avatar" size="162">
-        <v-img :lazy-src="coach.avatar" :src="coach.avatar"></v-img
+      ><v-avatar :lazy-src="pubData.avatar" :src="pubData.avatar" size="162">
+        <v-img :lazy-src="pubData.avatar" :src="pubData.avatar"></v-img
       ></v-avatar>
       <v-dialog v-model="dialog" width="400">
-        <template v-slot:activator="{ on }">
+        <template #activator="{ on }">
           <v-btn
-            v-on="on"
             color="secondary"
             icon
             elevation="1"
             class="white"
             style="position: absolute; bottom: 5px; margin-left: 30%"
+            v-on="on"
             ><v-icon>mdi-share-variant</v-icon></v-btn
           >
         </template>
@@ -36,16 +36,16 @@
     </v-sheet>
     <v-container>
       <h1 class="text-center text-h1 primary--text text-uppercase">
-        {{ coach.firstName }} {{ coach.lastName }}
+        {{ pubData.firstName }} {{ pubData.lastName }}
       </h1>
       <h2 class="text-center text-h5 mb-8">
-        {{ coach.profession }}
+        {{ pubData.profession }}
       </h2>
 
       <p class="font-weight-bold mb-1 mt-2 caption">Fachgebiet</p>
       <div class="d-flex flex-wrap">
         <v-chip
-          v-for="tag in coach.info.topicArea"
+          v-for="tag in pubData.info.topicArea"
           :key="tag"
           outlined
           color="primary"
@@ -54,56 +54,56 @@
           <p class="black--text ma-0 pa-0">{{ tag }}</p>
         </v-chip>
       </div>
-      <div v-if="coach.info.since">
+      <div v-if="pubData.info.since">
         <p class="font-weight-bold mb-0 mt-4 caption">
           Ich bin Coach/Berater*in seit dem Jahr:
         </p>
         <div class="d-flex flex-wrap">
-          {{ coach.info.since }}
+          {{ pubData.info.since }}
         </div>
       </div>
 
-      <div v-if="coach.info.history">
+      <div v-if="pubData.info.history">
         <p class="font-weight-bold mb-0 mt-4 caption">
           Mein beruflicher Hintergrund:
         </p>
         <div class="d-flex flex-wrap">
-          {{ coach.info.history }}
+          {{ pubData.info.history }}
         </div>
       </div>
-      <div v-if="coach.info.focus">
+      <div v-if="pubData.info.focus">
         <p class="font-weight-bold mb-0 mt-4 caption">
           Meine Schwerpunkte sind:
         </p>
         <div class="d-flex flex-wrap">
-          {{ coach.info.focus }}
+          {{ pubData.info.focus }}
         </div>
       </div>
-      <div v-if="coach.info.coachingTopics">
+      <div v-if="pubData.info.coachingTopics">
         <p class="font-weight-bold mb-0 mt-4 caption">
           Meine Beratungs-/Coaching-Themen sind:
         </p>
         <div class="d-flex flex-wrap">
-          {{ coach.info.coachingTopics }}
+          {{ pubData.info.coachingTopics }}
         </div>
       </div>
-      <div v-if="coach.info.description">
+      <div v-if="pubData.info.description">
         <p class="font-weight-bold mb-0 mt-4 caption">
           Etwas Persönliches über mich:
         </p>
         <div class="d-flex flex-wrap">
-          {{ coach.info.description }}
+          {{ pubData.info.description }}
         </div>
       </div>
-      <div v-if="coach.info.assistance">
+      <div v-if="pubData.info.assistance">
         <p class="font-weight-bold mb-0 mt-4 caption">
           Ich kann diese konkrete Hilfestellung anbieten:
         </p>
         <div class="d-flex flex-wrap">
-          {{ coach.info.assistance }}
+          {{ pubData.info.assistance }}
         </div>
       </div>
-      <div v-if="this.coachUID != this.user.uid">
+      <div v-if="$route.params.beratung !== $store.getters['modules/user/uid']">
         <v-card
           outlined
           class="mt-8"
@@ -113,7 +113,7 @@
           <v-card-title class="text-h2 secondary--text"
             >online-beratungstermin anfragen</v-card-title
           >
-          <v-card-text>
+          <v-card-text v-if="$store.getters['modules/user/isAuthenticated']">
             <p class="font-weight-bold mb-1 mt-2 caption">
               Schlage dieser*m Berater*in passende Termine für euer
               Beratungsgespräch vor.
@@ -178,7 +178,16 @@
               </p>
             </v-form>
           </v-card-text>
+          <v-card-text v-else
+            ><p class="font-weight-bold my-2 caption">
+              Melde dich bei Sichere Zuflucht an, um diese/n Berater*in
+              kontaktieren zu können.
+            </p>
+            <v-btn nuxt to="/signup" color="secondary">Registrieren</v-btn
+            ><v-btn nuxt to="/login" text>Einloggen</v-btn></v-card-text
+          >
         </v-card>
+        <v-divider class="mt-16 mb-6" />
         <h2 class="text-h2 mt-8 secondary--text">weitere Berater*innen</h2>
         <p class="caption">
           <b>Per Online-Beratung</b> werden dir unsere Berater*innen und Coaches
@@ -204,11 +213,10 @@
 
 <script>
 export default {
+  middleware: 'showCoach',
   data() {
     return {
-      coach: null,
       message: '',
-      coachUID: '',
       showAddInfo: false,
       loading: false,
       isDisabled: false,
@@ -224,68 +232,29 @@ export default {
       linkVal:
         this.$config.baseUrl + '/beratung/' + this.$route.params.beratung,
       copied: false,
+      pubData: null,
+    }
+  },
+  async fetch() {
+    if (
+      this.$route.params.beratung === this.$store.getters['modules/user/uid']
+    ) {
+      this.pubData = this.$store.getters['modules/user/public']
+    } else {
+      this.pubData = (
+        await this.$fire.firestore
+          .collection('users')
+          .doc(this.$route.params.beratung)
+          .collection('public')
+          .doc('data')
+          .get()
+      ).data()
     }
   },
   computed: {
     coachName() {
-      return this.coach.firstName + ' ' + this.coach.lastName
+      return this.pubData.firstName + ' ' + this.pubData.lastName
     },
-  },
-  mounted() {
-    this.coachUID = this.$route.params.beratung
-    this.user = this.$store.getters['modules/user/user']
-    /* this.$fire.firestore
-      .collection('users')
-      .doc(this.coachUID)
-      .get()
-      .then((e) => {
-        console.log('result data: ', e)
-        this.coach = e.data()
-      }) */
-    const coachMembership = this.$fire.firestore
-      .collection('memberships')
-      .doc('Coach')
-    this.$fire.firestore
-      .collection('users')
-      .doc(this.coachUID)
-      .get()
-      .then((e) => {
-        e.data().verifySetting.verified &&
-        e.data().stripe &&
-        e.data().info !== false
-          ? (this.coach = e.data())
-          : this.coachUID === this.user.uid
-          ? (this.coach = e.data())
-          : this.$router.push('/')
-      })
-      .then(() => {
-        this.$fire.firestore
-          .collection('users')
-          .where('membership', '==', coachMembership)
-          .get()
-          .then((ref) => {
-            ref.docs.forEach((doc) => {
-              const data = doc.data()
-              if (data.info && data.verifySetting.verified && data.stripe)
-                if (this.coachUID !== doc.id)
-                  this.allCoaches.push({ id: doc.id, ...data })
-              // if (data.info) this.allCoaches.push({ id: doc.id, ...data })
-            })
-          })
-          .then(() => {
-            function shuffleArray(array) {
-              for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1))
-                const temp = array[i]
-                array[i] = array[j]
-                array[j] = temp
-              }
-              return array
-            }
-
-            this.filteredCoaches = shuffleArray(this.allCoaches)
-          })
-      })
   },
   methods: {
     sendRequest() {
@@ -294,7 +263,7 @@ export default {
         .httpsCallable('request-sendRequest')({
           coachName: this.coachName,
           message: this.message,
-          coachUID: this.coachUID,
+          coachUID: this.$route.params.beratung,
           createdAt: new Date(),
           isDev: this.$config.isDev,
         })

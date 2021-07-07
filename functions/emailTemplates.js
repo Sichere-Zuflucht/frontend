@@ -69,7 +69,9 @@ exports.womanSuggestedDates = (coachName, dates, womanID) => {
     html: `<div style="font-size: 16px;">Hallo,<br><br>
              der Coach ${coachName} hat auf Ihre Anfrage reagiert und schickt Ihnen folgende Terminvorschläge:
         <br>
-        <span style="font-family: monospace;">${listToHTML(dates)}</span>
+        <span style="font-family: monospace;">${listToHTML(
+          dates.map((date) => date.date + ' ' + date.time)
+        )}</span>
         <br>
         Bitte loggen Sie sich auf unserer <a href="sichere-zuflucht.de">Plattform</a> ein, um einen Termin auszuwählen.
         <br>
