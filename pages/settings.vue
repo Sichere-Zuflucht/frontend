@@ -69,20 +69,27 @@
           ></v-card
         >
       </v-dialog>
-      <v-alert v-if="err.status" type="error" color="error">{{
-        err.msg
-      }}</v-alert>
+      <v-alert
+        v-if="err.status && !overlay"
+        type="error"
+        color="error"
+        class="mt-4"
+        >{{ err.msg }}</v-alert
+      >
     </v-container>
   </div>
 </template>
 
 <script>
 export default {
+  middleware({ store, redirect }) {
+    // If the user is not authenticated
+    if (!store.getters['modules/user/isAuthenticated']) {
+      return redirect('/')
+    }
+  },
   data() {
     return {
-      // pubData: null,
-      // privData: null,
-      // membership: null,
       btn: {
         disabled: false,
         loading: false,
@@ -109,12 +116,6 @@ export default {
       return this.$store.getters['modules/user/private']
     },
   },
-  // async fetch() {
-  //   this.pubData = this.$store.getters['modules/user/public']
-  //   this.privData = this.$store.getters['modules/user/private']
-  //   this.membership = this.$store.getters['modules/user/membership']
-  // },
-
   methods: {
     resetPassword() {
       this.btn.loading = true
@@ -131,48 +132,26 @@ export default {
           // ..
         })
     },
-    deleteUser() {
+    async deleteUser() {
       this.deleteLoading = true
-      this.$fire.firestore
-        .collection('requests')
-        .where('ids', 'array-contains', this.pubData.uid)
-        .get()
-        .then((ref) => {
-          ref.docs.forEach((doc) => {
-            this.$fire.firestore.collection('requests').doc(doc.id).delete()
-          })
-          this.$fire.firestore
-            .collection('users')
-            .doc(this.pubData.uid)
-            .delete()
-            .then(() => {
-              this.$fire.auth
-                .signInWithEmailAndPassword(
-                  this.privData.email,
-                  this.userProvidedPassword
-                )
-                .then((userCredential) => {
-                  this.$fire.auth.currentUser
-                    .delete()
-                    .then(() => {
-                      this.$router.push('/')
-                      // User deleted.
-                    })
-                    .catch((error) => {
-                      this.err.status = true
-                      this.err.msg = error.code + ': ' + error.message
-                    })
-                })
-                .catch((error) => {
-                  this.err.status = true
-                  this.err.msg = error.code + ': ' + error.message
-                })
-            })
-            .catch((error) => {
-              this.err.status = true
-              this.err.msg = error.code + ': ' + error.message
-            })
+      await this.$fire.auth
+        .signInWithEmailAndPassword(
+          this.privData.email,
+          this.userProvidedPassword
+        )
+        .then(async () => {
+          const res = await this.$fire.functions.httpsCallable('user-delete')(
+            this.pubData.uid
+          )
+          console.log('result', res)
+          this.$router.go('/')
         })
+        .catch(() => {
+          this.err.status = true
+          this.err.msg = 'Falsches Passwort eingegeben.'
+          this.overlay = false
+        })
+      this.deleteLoading = false
     },
   },
 }
