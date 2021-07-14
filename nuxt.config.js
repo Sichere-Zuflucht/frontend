@@ -139,7 +139,7 @@ export default {
           onAuthStateChangedAction: 'modules/user/onAuthStateChangedAction',
           subscribeManually: false,
         },
-        ssr: true, // default
+        ssr: true,
         emulatorPort: undefined,
         // emulatorHost: 'http://localhost',
       },

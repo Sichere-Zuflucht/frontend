@@ -251,6 +251,7 @@ export default {
       ).data()
     }
   },
+  fetchOnServer: false,
   computed: {
     coachName() {
       return this.pubData.firstName + ' ' + this.pubData.lastName
