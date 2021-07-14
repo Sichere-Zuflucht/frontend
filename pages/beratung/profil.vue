@@ -23,9 +23,9 @@
       <h2 v-else class="text-h2 primary--text">Vervollständigen</h2>
       <CoachingList />
       <CoachingSelection
-        :is-open="user.info ? false : true"
+        :is-open="!user.info"
         :filter="false"
-        :closable="user.info ? true : false"
+        :closable="!!user.info"
         :is-coach="true"
         :description="user.description ? user.description : ''"
         @selection="updateProfile"
@@ -52,7 +52,6 @@ export default {
         topicPoints: data.topicPoints, // types
         description: data.description,
       })
-      // this.$router.push('/beratung')
     },
   },
 }

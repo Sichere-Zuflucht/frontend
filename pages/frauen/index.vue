@@ -71,15 +71,14 @@ export default {
       responses: [],
     }
   },
-
-  async mounted() {
+  async fetch() {
     // these responses contain only communication where this user was involved
     const responses = (
       await this.$fire.functions.httpsCallable('request-getRequests')()
     ).data
 
     // get the data for each coach and add it to the response
-    // then opush it to the responses list
+    // then push it to the responses list
     responses.forEach((response) => {
       this.$fire.firestore
         .collection('users')
@@ -95,5 +94,6 @@ export default {
         })
     })
   },
+  fetchOnServer: false,
 }
 </script>

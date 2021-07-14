@@ -10,9 +10,9 @@
       </p>
     </v-container>
 
-    <v-sheet color="blue-grey lighten-5"
-      ><v-container
-        ><div class="d-flex align-start">
+    <v-sheet color="blue-grey lighten-5">
+      <v-container>
+        <div class="d-flex align-start">
           <v-icon large color="secondary" class="pr-2">mdi-filter</v-icon>
           <div>
             <h2 class="text-h2 secondary--text">Beratungsfilter</h2>
@@ -35,8 +35,8 @@
           >, vielleicht können wir trotzdem jemanden finden, der dir weiter
           hilft.
         </p></v-container
-      ></v-sheet
-    >
+      >
+    </v-sheet>
     <v-container>
       <div
         v-if="filteredCoaches.length > 0"
@@ -73,8 +73,8 @@
           >, sollte gar keiner unserer Berater*innen zu dir passen.
         </v-alert>
         <v-btn outlined small color="primary" @click="resetFilter"
-          >Alle anzeigen</v-btn
-        >
+          >Alle anzeigen
+        </v-btn>
       </div>
     </v-container>
     <PriceInfo />
@@ -99,26 +99,11 @@ export default {
   },
   methods: {
     filter(data) {
-      this.filteredCoaches = []
-      this.allCoaches.forEach((coach) => {
-        let add = true
-        // language
-        /* add =
-          add &&
-          coach.info.languages.filter((value) => data.languages.includes(value))
-            .length >= 1 */
-        // topicArea
-        // add = add && coach.public.info.topicArea === data.topicArea
-        add =
-          add &&
+      this.filteredCoaches = this.allCoaches.filter((coach) => {
+        return (
           coach.info.topicArea.filter((value) => data.topicArea.includes(value))
-        // topicPoints
-        /* add =
-          add &&
-          coach.public.info.topicPoints.filter((value) =>
-            data.topicPoints.includes(value)
-          ) */
-        if (add) this.filteredCoaches.push(coach)
+            .length > 0
+        )
       })
     },
     resetFilter() {

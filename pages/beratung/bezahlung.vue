@@ -167,11 +167,6 @@ export default {
           }
         })
     },
-    getStripeData() {
-      this.$fire.functions
-        .httpsCallable('stripe-checkStripeAccount')()
-        .then((a) => console.log(a))
-    },
   },
 }
 </script>
