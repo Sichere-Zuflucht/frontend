@@ -180,6 +180,7 @@ export default {
       await this.$fire.functions.httpsCallable('request-getRequests')()
     ).data
   },
+  fetchOnServer: false,
   computed: {
     coachName() {
       return this.user.public.firstName + ' ' + this.user.public.lastName
