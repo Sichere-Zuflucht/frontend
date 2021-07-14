@@ -208,9 +208,6 @@ export default {
     dateRangeText() {
       return this.dates.join(' – ')
     },
-    // user() {
-    //   return this.$store.getters['modules/user/user']
-    // },
   },
   methods: {
     validate() {
