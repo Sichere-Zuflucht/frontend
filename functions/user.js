@@ -72,3 +72,22 @@ exports.getCoaches = functions.https.onCall(async (data, context) => {
     })
   )
 })
+
+exports.delete = functions.https.onCall(async (uid, context) => {
+  // delete requests
+  await admin
+    .firestore()
+    .collection('requests')
+    .where('ids', 'array-contains', uid)
+    .get()
+    .then((docs) => {
+      docs.forEach((doc) => {
+        doc.ref.delete()
+      })
+    })
+
+  // delete user in auth
+  await admin.auth().deleteUser(uid)
+  // delete user in firestore
+  await admin.firestore().collection('users').doc(uid).delete()
+})
