@@ -2,6 +2,7 @@ const _ = require('lodash')
 
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
+const firebaseTools = require('firebase-tools')
 
 exports.create = functions.https.onCall(async (data, context) => {
   const membership = await admin
@@ -89,5 +90,9 @@ exports.delete = functions.https.onCall(async (uid, context) => {
   // delete user in auth
   await admin.auth().deleteUser(uid)
   // delete user in firestore
-  await admin.firestore().collection('users').doc(uid).delete()
+  return await firebaseTools.firestore.delete('/users/' + uid, {
+    project: process.env.GCLOUD_PROJECT,
+    recursive: true,
+    yes: true,
+  })
 })

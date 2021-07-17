@@ -81,66 +81,6 @@ export default {
     }
   },
   methods: {
-    async getRedLink(humanResponse, dateInput) {
-      this.acceptLoading = true
-      const data = {
-        method: 'getEntrycodes',
-        date: dateInput,
-        token: this.$config.RED_API,
-      }
-      const response = await fetch(
-        'https://redclient.redmedical.de/service/video',
-        {
-          method: 'POST',
-          header: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        }
-      )
-      await response
-        .json()
-        .then((redRes) => {
-          if (redRes.success) {
-            const jitsi =
-              'https://meet.jit.si/' +
-              humanResponse.coach.firstName.toLowerCase() +
-              '_' +
-              humanResponse.coach.lastName.toLowerCase() +
-              '&?' +
-              humanResponse.id
-            this.$fire.functions
-              .httpsCallable('request-acceptDate')({
-                coachName:
-                  humanResponse.coach.firstName +
-                  ' ' +
-                  humanResponse.coach.lastName,
-                acceptedDate: dateInput,
-                requestId: humanResponse.id,
-                jitsiLink: jitsi,
-                redLink: {
-                  codeArzt:
-                    'https://video.redmedical.de/#/login?name=' +
-                    humanResponse.coach.firstName +
-                    ' ' +
-                    humanResponse.coach.lastName +
-                    '&code=' +
-                    redRes.codeArzt,
-                  codePatient:
-                    'https://video.redmedical.de/#/login?name=unbekannt&code=' +
-                    redRes.codePatient,
-                },
-              })
-              .then(() => {
-                this.acceptDisable = true
-              })
-          }
-        })
-        .catch((error) => {
-          console.log('err: ', error)
-        })
-      humanResponse.acceptedDate = dateInput
-    },
     cancel(doc) {
       const db = this.$fire.firestore
       db.collection('requests').doc(doc).delete()

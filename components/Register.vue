@@ -12,7 +12,7 @@
             required
           ></v-text-field
         ></v-form>
-        <v-btn @click="login" class="my-4" color="secondary"
+        <v-btn class="my-4" color="secondary" @click="login"
           >Registrierung abschließen</v-btn
         >
         <v-alert v-if="showError" color="error" dark>
