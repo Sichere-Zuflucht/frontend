@@ -144,3 +144,11 @@ exports.acceptDate = functions.https.onCall(async (data, context) => {
         )
     })
 })
+
+exports.delete = functions.https.onCall((data, context) => {
+  const docRef = admin.firestore().collection('requests').doc(data.docId)
+  return docRef.get().then((doc) => {
+    if (doc.data().ids.includes(context.auth.uid)) return docRef.delete()
+    return false
+  })
+})

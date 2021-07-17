@@ -6,20 +6,20 @@
     persistent
     width="290px"
   >
-    <template v-slot:activator="{ on, attrs }">
+    <template #activator="{ on, attrs }">
       <v-btn
         v-bind="attrs"
-        v-on="on"
         :color="item.suggestions.length < 3 ? 'success' : null"
         prepend-icon="mdi-calendar"
+        v-on="on"
         >Termin hinzufügen</v-btn
       >
     </template>
     <v-date-picker v-model="date" :min="today" scrollable>
       <v-spacer></v-spacer>
       <v-text-field
-        label="Uhrzeit"
         v-model="time"
+        label="Uhrzeit"
         type="time"
         :disabled="!date"
         outlined

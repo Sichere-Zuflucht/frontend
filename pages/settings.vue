@@ -48,7 +48,11 @@
             </p>
           </v-card-text>
           <v-card-actions
-            ><v-form ref="deleteForm" v-model="deleteVal">
+            ><v-form
+              ref="deleteForm"
+              v-model="deleteVal"
+              @submit.prevent="deleteUser"
+            >
               <v-text-field
                 v-model="userProvidedPassword"
                 outlined
@@ -56,12 +60,13 @@
                 type="password"
                 :rules="rules.delete"
                 color="error"
+                required
               ></v-text-field>
               <v-btn
                 color="error"
                 :disabled="!deleteVal"
                 :loading="deleteLoading"
-                @click="deleteUser"
+                type="submit"
                 >wirklich löschen</v-btn
               >
               <v-btn @click="overlay = !overlay">abbrechen</v-btn></v-form
@@ -140,13 +145,13 @@ export default {
           this.userProvidedPassword
         )
         .then(async () => {
-          const res = await this.$fire.functions.httpsCallable('user-delete')(
+          await this.$fire.functions.httpsCallable('user-delete')(
             this.pubData.uid
           )
-          console.log('result', res)
           this.$router.go('/')
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log(err)
           this.err.status = true
           this.err.msg = 'Falsches Passwort eingegeben.'
           this.overlay = false

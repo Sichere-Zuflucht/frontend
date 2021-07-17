@@ -22,6 +22,7 @@
           :coach="responses[0].coach"
           :response="responses[0]"
           :clickable="false"
+          @cancel="responses = []"
         />
       </v-container>
       <v-slide-group v-else show-arrows class="px-1 pb-4">
@@ -31,6 +32,7 @@
               :coach="response.coach"
               :response="response"
               :clickable="false"
+              @cancel="cancel(response)"
             />
           </div>
         </v-slide-item>
@@ -95,5 +97,10 @@ export default {
     })
   },
   fetchOnServer: false,
+  methods: {
+    cancel(response) {
+      this.responses = this.responses.filter((r) => r !== response)
+    },
+  },
 }
 </script>

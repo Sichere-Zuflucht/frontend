@@ -167,11 +167,7 @@
     </div>
   </div>
 </template>
-<style>
-.v-expansion-panel-content__wrap {
-  padding: 0;
-}
-</style>
+
 <script>
 export default {
   name: 'CoachingSelection',
@@ -246,16 +242,10 @@ export default {
       ],
     }
   },
-  mounted() {
-    this.$fire.firestore
-      .collection('coachingTypes')
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          this.topics.push(doc.data())
-        })
-        // this.selectedTopic = this.topics[0]
-      })
+  async fetch() {
+    this.topics = (
+      await this.$fire.firestore.collection('coachingTypes').get()
+    ).docs.map((doc) => doc.data())
   },
   methods: {
     finish() {
@@ -274,7 +264,6 @@ export default {
       this.$emit('selection', data)
     },
     update(val) {
-      this.selectedTopicPoints = []
       this.e6 = val
       this.$emit('filter', {
         // languages: this.languages,
@@ -293,13 +282,16 @@ export default {
           // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          // eslint-disable-next-line no-console
           console.log('Upload is ' + progress + '% done')
 
           switch (snapshot.state) {
             case 'paused':
+              // eslint-disable-next-line no-console
               console.log('Upload is paused')
               break
             case 'running':
+              // eslint-disable-next-line no-console
               console.log('Upload is running')
               break
           }
@@ -336,3 +328,8 @@ export default {
   },
 }
 </script>
+<style>
+.v-expansion-panel-content__wrap {
+  padding: 0;
+}
+</style>
