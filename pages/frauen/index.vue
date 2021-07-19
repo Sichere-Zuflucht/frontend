@@ -70,7 +70,7 @@ export default {
   data() {
     return {
       userData: null,
-      responses: [],
+      responses: null,
     }
   },
   async fetch() {
@@ -81,20 +81,19 @@ export default {
 
     // get the data for each coach and add it to the response
     // then push it to the responses list
-    responses.forEach((response) => {
-      this.$fire.firestore
-        .collection('users')
-        .doc(response.coachId)
-        .collection('public')
-        .doc('data')
-        .get()
-        .then((coachSnap) => {
-          this.responses.push({
-            coach: coachSnap.data(),
-            ...response,
-          })
-        })
-    })
+    this.responses = await Promise.all(
+      responses.map(async (response) => {
+        const coach = (
+          await this.$fire.firestore
+            .collection('users')
+            .doc(response.coachId)
+            .collection('public')
+            .doc('data')
+            .get()
+        ).data()
+        return { coach, ...response }
+      })
+    )
   },
   fetchOnServer: false,
   methods: {
