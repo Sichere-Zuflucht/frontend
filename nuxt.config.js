@@ -11,7 +11,9 @@ export default {
   target: 'static',
 
   generate: {
-    crawler: false,
+    crawler: true,
+    fallback: true,
+    // exclude: ['/beratung/*'],
   },
 
   router: {
@@ -96,7 +98,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: ['~/plugins/init.client.js'],
   // does this change stuff with firestore contxt allready innitialized?
   render: {
     bundleRenderer: {

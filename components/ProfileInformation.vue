@@ -115,6 +115,7 @@ export default {
     ).docs.map((doc) => doc.data())
     this.membership = this.memberships[0]
   },
+  fetchOnServer: false,
   methods: {
     updateProfile() {
       this.loading = true

@@ -247,6 +247,7 @@ export default {
       await this.$fire.firestore.collection('coachingTypes').get()
     ).docs.map((doc) => doc.data())
   },
+  fetchOnServer: false,
   methods: {
     finish() {
       this.open = false
