@@ -97,6 +97,7 @@ export default {
     ).data
     this.filteredCoaches = this.allCoaches
   },
+  fetchOnServer: false,
   methods: {
     filter(data) {
       this.filteredCoaches = this.allCoaches.filter((coach) => {
