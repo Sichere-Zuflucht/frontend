@@ -98,7 +98,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ['~/plugins/init.client.js'],
+  plugins: [],
   // does this change stuff with firestore contxt allready innitialized?
   render: {
     bundleRenderer: {

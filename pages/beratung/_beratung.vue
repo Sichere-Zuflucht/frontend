@@ -209,6 +209,12 @@
       </div>
     </v-container>
   </div>
+  <div v-else>
+    <v-sheet class="ma-5">
+      <v-row>Dieser coach konnte leider nicht gefunden werden. </v-row>
+      <v-row><v-btn @click="$router.go(-1)">zurück</v-btn></v-row>
+    </v-sheet>
+  </div>
 </template>
 
 <script>

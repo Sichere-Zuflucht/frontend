@@ -64,12 +64,6 @@ const getters = {
 }
 
 const actions = {
-  nuxtServerInit({ commit }, req) {
-    console.log('req', req)
-    // if (req.session.user) {
-    //   commit('user', req.session.user)
-    // }
-  },
   onAuthStateChangedAction({ commit, dispatch }, { authUser }) {
     if (!authUser) {
       // Perform logout operations
