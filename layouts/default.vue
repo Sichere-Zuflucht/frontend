@@ -1,5 +1,5 @@
 <template>
-  <v-app light>
+  <v-app>
     <v-navigation-drawer v-model="drawer" app class="secondary" dark fixed>
       <client-only>
         <v-list v-if="loggedIn">

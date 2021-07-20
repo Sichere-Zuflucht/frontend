@@ -1,4 +1,8 @@
-export default function ({ store, redirect, route }) {
+import isWoman from '@/middleware/isWoman'
+
+export default async function ({ store, redirect, route }) {
+  await store.restored
+
   // /register is responsible for verifying the email address
   if (route.path === '/register' && !isSignInWithEmailLink(route)) redirect('/')
 
@@ -6,6 +10,11 @@ export default function ({ store, redirect, route }) {
   if (route.path === '/update-profile' && route.query.eMail === undefined) {
     redirect('/signup')
   }
+
+  if (route.path.startsWith('/frauen')) {
+    isWoman({ store, redirect })
+  }
+
   if (
     route.path === '/signup' &&
     store.getters['modules/user/isAuthenticated']
@@ -29,7 +38,18 @@ function redirectProfilePage(store, redirect, route) {
     if (!store.getters['modules/user/isAuthenticated']) {
       return redirect('/signup')
     }
-
+    console.log(store.getters['modules/user/membership'].id)
+    console.log(store.getters['modules/user/membership'].id)
+    console.log(store.getters['modules/user/membership'].id)
+    console.log(store.getters['modules/user/membership'].id)
+    console.log(store.getters['modules/user/membership'].id)
+    console.log(store.getters['modules/user/membership'].id)
+    console.log(store.getters['modules/user/membership'].id)
+    console.log(store.getters['modules/user/membership'].id)
+    console.log(store.getters['modules/user/membership'].id)
+    console.log(store.getters['modules/user/membership'].id)
+    console.log(store.getters['modules/user/membership'].id)
+    console.log(store.getters['modules/user/membership'].id)
     // coach did not enter info what coaching he wants to do
     if (
       store.getters['modules/user/membership'].id === 'Coach' &&
