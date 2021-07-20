@@ -167,6 +167,7 @@
 
 <script>
 export default {
+  middleware: 'isCoach',
   data() {
     return {
       requests: null,

@@ -36,6 +36,7 @@
 
 <script>
 export default {
+  middleware: 'isCoach',
   data() {
     return {
       select: true,

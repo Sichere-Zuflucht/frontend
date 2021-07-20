@@ -2,13 +2,13 @@
   <v-card
     elevation="2"
     nuxt
+    :dark="coachingLiesInPast"
     :ripple="clickable"
     :to="clickable ? '/beratung/' + coach.id : null"
     outlined
     :style="'border: 1px solid ' + $vuetify.theme.themes.light.primary"
   >
     <v-sheet
-      color="grey lighten-5"
       class="d-flex"
       :style="
         'border-bottom: 1px solid ' +
@@ -16,9 +16,9 @@
         ' !important'
       "
     >
-      <v-avatar color="primary ma-5" size="35%"
-        ><v-img :src="coach.avatar"
-      /></v-avatar>
+      <v-avatar color="primary ma-5" size="35%">
+        <v-img :src="coach.avatar" />
+      </v-avatar>
       <div class="ma-5 ml-2 d-flex flex-column justify-center">
         <h2 class="secondary--text text-h2">
           {{ coach.firstName }} {{ coach.lastName }}
@@ -40,7 +40,7 @@
         <v-row>
           <v-col cols="12">
             <v-select
-              v-model="date"
+              v-model="selectedDate"
               :items="response.suggestions"
               outlined
               dense
@@ -57,20 +57,21 @@
                     </v-list-item-title>
                     <p class="caption">{{ item.time }} Uhr</p>
                   </v-list-item-content>
-                </v-list-item> </template
-              ><template #selection="{ item }"
+                </v-list-item>
+              </template>
+              <template #selection="{ item }"
                 >{{ formatDate(item.date) }} | {{ item.time }}
-              </template></v-select
-            >
+              </template>
+            </v-select>
             <p class="font-weight-bold mb-0 my-4">Preis: 50€</p>
             <v-btn
               color="success"
               :loading="btn.payButtonLoading"
-              :disabled="!date || btn.isDisabled"
+              :disabled="!selectedDate || btn.isDisabled"
               block
-              @click="pay(date)"
-              >{{ btn.acceptText }}</v-btn
-            >
+              @click="pay(selectedDate)"
+              >{{ btn.acceptText }}
+            </v-btn>
             <v-alert v-if="btn.error" type="error">{{ btn.errorMsg }}</v-alert>
             <p class="caption">
               Nach der Terminbestätigung wirst du direkt zu unserem
@@ -80,11 +81,13 @@
           </v-col>
         </v-row>
       </div>
+      <div v-else-if="!coachingLiesInPast">pasterones</div>
       <div v-else>
         <v-btn
           class="my-2"
           color="success"
           target="_blank"
+          :disabled="coachingLiesInPast"
           :href="
             response.videoType === 'Jitsi'
               ? response.video
@@ -94,8 +97,8 @@
         </v-btn>
         <v-alert dark text dense color="success"
           >Zugesagt für {{ formatDate(response.acceptedDate.date) }} um
-          {{ response.acceptedDate.time }}</v-alert
-        >
+          {{ response.acceptedDate.time }}
+        </v-alert>
       </div>
     </v-card-text>
     <v-card-actions
@@ -108,13 +111,13 @@
         outlined
         nuxt
         :to="'/beratung/' + response.coachId"
-        >{{ coach.id }} Neue Anfrage stellen</v-btn
-      >
+        >{{ coach.id }} Neue Anfrage stellen
+      </v-btn>
       <v-dialog v-model="isDelete" persistent max-width="290">
         <template #activator="{ on, attrs }">
           <v-btn small text color="primary" v-bind="attrs" v-on="on"
-            >Termin löschen</v-btn
-          >
+            >Termin löschen
+          </v-btn>
         </template>
         <v-alert type="warning" class="mt-2 ma-2"
           >wirklich löschen?
@@ -124,9 +127,10 @@
             class="mr-1"
             :loading="eraseLoading"
             @click="cancel(response.id)"
-            >Ja, löschen</v-btn
-          ><v-btn light @click="isDelete = false"> nein </v-btn></v-alert
-        >
+            >Ja, löschen
+          </v-btn>
+          <v-btn light @click="isDelete = false"> nein</v-btn>
+        </v-alert>
       </v-dialog>
     </v-card-actions>
   </v-card>
@@ -151,7 +155,7 @@ export default {
   },
   data() {
     return {
-      date: null,
+      selectedDate: null,
       isDelete: false,
       eraseLoading: false,
       btn: {
@@ -167,11 +171,16 @@ export default {
       },
     }
   },
+  computed: {
+    coachingLiesInPast() {
+      const acceptedDate = new Date(this.response.acceptedDate?.date || '')
+      acceptedDate.setDate(acceptedDate.getDate() + 1)
+      return !!this.response.acceptedDate && acceptedDate <= new Date()
+    },
+  },
   methods: {
     cancel(doc) {
       this.eraseLoading = true
-      // const db = this.$fire.firestore
-      // db.collection('requests').doc(doc).delete()
       this.$fire.functions.httpsCallable('request-delete')({ docId: doc })
       this.$fire.functions
         .httpsCallable('email-sendRequestDeleted')(this.response.acceptedDate)
