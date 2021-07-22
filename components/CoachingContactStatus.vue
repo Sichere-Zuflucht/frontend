@@ -4,7 +4,7 @@
     nuxt
     :dark="coachingLiesInPast"
     :ripple="clickable"
-    :to="clickable ? '/beratung/' + coach.id : null"
+    :to="clickable ? '/berater/' + coach.id : null"
     outlined
     :style="'border: 1px solid ' + $vuetify.theme.themes.light.primary"
   >
@@ -81,7 +81,6 @@
           </v-col>
         </v-row>
       </div>
-      <div v-else-if="!coachingLiesInPast">pasterones</div>
       <div v-else>
         <v-btn
           class="my-2"
@@ -110,7 +109,7 @@
         color="primary"
         outlined
         nuxt
-        :to="'/beratung/' + response.coachId"
+        :to="'/berater/' + response.coachId"
         >{{ coach.id }} Neue Anfrage stellen
       </v-btn>
       <v-dialog v-model="isDelete" persistent max-width="290">

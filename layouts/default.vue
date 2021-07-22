@@ -51,7 +51,12 @@
                 {{ item.title }}
               </v-list-item-content>
             </v-list-item>
-            <v-list-item :to="'/beratung/' + user.uid" nuxt exact>
+            <v-list-item
+              v-if="membership === 'Coach' && user.public"
+              :to="'/berater/' + user.public.uid"
+              nuxt
+              exact
+            >
               <v-list-item-icon>
                 <v-icon>mdi-account-edit</v-icon>
               </v-list-item-icon>

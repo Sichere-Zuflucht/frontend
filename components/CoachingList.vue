@@ -34,11 +34,7 @@
       </div>
     </v-card-text>
     <v-card-actions class="my-4">
-      <v-btn
-        absolute
-        right
-        color="primary"
-        :to="'/beratung/' + pubCoachData.uid"
+      <v-btn absolute right color="primary" :to="'/berater/' + pubCoachData.uid"
         >Profil ansehen</v-btn
       >
     </v-card-actions>
