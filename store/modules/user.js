@@ -65,7 +65,7 @@ const getters = {
 }
 
 const actions = {
-  onAuthStateChangedAction({ commit, dispatch }, { authUser, claims }) {
+  async onAuthStateChangedAction({ commit, dispatch }, { authUser, claims }) {
     if (!authUser) {
       // Perform logout operations
       console.log('logg out', authUser)
@@ -74,23 +74,10 @@ const actions = {
     } else {
       // Do something with the authUser and the claims object...
       console.log('logg in', authUser)
-      commit('setClaims', {
-        claims,
-      })
-      dispatch('fetchUserProfile', { user: authUser })
-    }
-  },
-  async setClaims({ commit, dispatch }, { authUser, claims }) {
-    if (!authUser) {
-      // Perform logout operations
-      console.log('delete claims', authUser)
-      commit('setClaims', null)
-    } else {
-      // Do something with the authUser and the claims object...
-      console.log('save claims', claims)
       await commit('setClaims', {
         claims,
       })
+      dispatch('fetchUserProfile', { user: authUser })
     }
   },
   async login({ dispatch }, form) {
@@ -149,11 +136,14 @@ const actions = {
         commit('setVerify', settings.data)
       })
   },
-  createFirebaseUser({ dispatch }, userData) {
+  createFirebaseUser({ dispatch, commit }, userData) {
     this.$fire.functions
       .httpsCallable('user-create')(userData)
-      .then((authUser) => {
-        dispatch('fetchUserProfile', { user: authUser.data, redirect: true })
+      .then(({ data }) => {
+        commit('setClaims', {
+          claims: data,
+        })
+        dispatch('fetchUserProfile', { user: data, redirect: true })
       })
   },
 }
