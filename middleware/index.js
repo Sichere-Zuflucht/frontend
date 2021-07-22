@@ -1,6 +1,7 @@
 import isWoman from '@/middleware/isWoman'
+import profile from '@/middleware/profile'
 
-export default async function ({ store, redirect, route }) {
+export default async function ({ store, redirect, route, app }) {
   await store.restored
 
   // /register is responsible for verifying the email address
@@ -12,17 +13,10 @@ export default async function ({ store, redirect, route }) {
   }
 
   if (route.path.startsWith('/frauen')) {
-    isWoman({ store, redirect })
+    return isWoman({ store, redirect })
   }
 
-  if (
-    route.path === '/signup' &&
-    store.getters['modules/user/isAuthenticated']
-  ) {
-    redirect('/profile')
-  }
-
-  redirectProfilePage(store, redirect, route)
+  profile({ store, redirect, route, router: app.router })
 }
 
 function isSignInWithEmailLink(route) {
@@ -31,32 +25,4 @@ function isSignInWithEmailLink(route) {
     return window.$nuxt.$fire.auth.isSignInWithEmailLink(route.fullPath)
   }
   return false
-}
-
-function redirectProfilePage(store, redirect, route) {
-  if (route.path === '/profile') {
-    if (!store.getters['modules/user/isAuthenticated']) {
-      return redirect('/signup')
-    }
-    console.log(store.getters['modules/user/membership'].id)
-    console.log(store.getters['modules/user/membership'].id)
-    console.log(store.getters['modules/user/membership'].id)
-    console.log(store.getters['modules/user/membership'].id)
-    console.log(store.getters['modules/user/membership'].id)
-    console.log(store.getters['modules/user/membership'].id)
-    console.log(store.getters['modules/user/membership'].id)
-    console.log(store.getters['modules/user/membership'].id)
-    console.log(store.getters['modules/user/membership'].id)
-    console.log(store.getters['modules/user/membership'].id)
-    console.log(store.getters['modules/user/membership'].id)
-    console.log(store.getters['modules/user/membership'].id)
-    // coach did not enter info what coaching he wants to do
-    if (
-      store.getters['modules/user/membership'].id === 'Coach' &&
-      !store.getters['modules/user/public'].info
-    ) {
-      return redirect('/beratung')
-    }
-    return redirect(store.getters['modules/user/routing'])
-  }
 }
