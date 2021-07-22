@@ -1,6 +1,7 @@
 const state = () => ({
   private: null,
   public: null,
+  claims: null,
 })
 
 function removeFirebaseObjects(obj) {
@@ -37,10 +38,10 @@ const getters = {
     )
   },
   isAuthenticated(state) {
-    return !!state.public?.uid
+    return !!state.claims?.email_verified
   },
   membership(state) {
-    return state.public?.membership
+    return state.claims?.membership
   },
   avatar(state) {
     return state.public?.avatar
@@ -52,7 +53,7 @@ const getters = {
     return state.private?.verifySetting.verified
   },
   routing(state) {
-    return state.public?.membership.routing || '/'
+    return state.claims?.routing || '/'
   },
   readyToShow(state) {
     return (
@@ -64,15 +65,32 @@ const getters = {
 }
 
 const actions = {
-  onAuthStateChangedAction({ commit, dispatch }, { authUser }) {
+  onAuthStateChangedAction({ commit, dispatch }, { authUser, claims }) {
     if (!authUser) {
       // Perform logout operations
       console.log('logg out', authUser)
       commit('setUserData', null)
+      commit('setClaims', null)
     } else {
       // Do something with the authUser and the claims object...
       console.log('logg in', authUser)
+      commit('setClaims', {
+        claims,
+      })
       dispatch('fetchUserProfile', { user: authUser })
+    }
+  },
+  async setClaims({ commit, dispatch }, { authUser, claims }) {
+    if (!authUser) {
+      // Perform logout operations
+      console.log('delete claims', authUser)
+      commit('setClaims', null)
+    } else {
+      // Do something with the authUser and the claims object...
+      console.log('save claims', claims)
+      await commit('setClaims', {
+        claims,
+      })
     }
   },
   async login({ dispatch }, form) {
@@ -177,6 +195,15 @@ const mutations = {
   setVerify(state, verifySetting) {
     console.log('[STORE MUTATIONS] - setVerify:', verifySetting)
     state.private.verifySetting = verifySetting
+  },
+  setClaims(state, data) {
+    console.log('[STORE MUTATIONS] - setClaims:', data)
+    if (!data) {
+      state.claims = null
+    } else {
+      const { claims } = data
+      state.claims = claims
+    }
   },
 }
 

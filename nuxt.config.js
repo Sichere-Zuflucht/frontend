@@ -120,7 +120,7 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ['@nuxtjs/firebase', 'nuxt-stripe-module'],
+  modules: ['@nuxtjs/firebase', 'nuxt-stripe-module', '@nuxtjs/pwa'],
   firebase: {
     config: {
       apiKey: 'AIzaSyDMjjzgxNWEsDWYETgWbFgaYnwzAmLyzhM',
@@ -132,10 +132,11 @@ export default {
     },
     services: {
       functions: {
-        // emulatorPort: process.env.NODE_ENV === 'development' ? 5001 : undefined,
-        emulatorPort: undefined,
+        emulatorPort: process.env.NODE_ENV === 'development' ? 5001 : undefined,
+        // emulatorPort: undefined,
       },
       auth: {
+        serverLogin: true,
         persistence: 'local', // default
         initialize: {
           onAuthStateChangedAction: 'modules/user/onAuthStateChangedAction',
@@ -161,6 +162,24 @@ export default {
     terminateDatabasesAfterGenerate: true,
   },
 
+  pwa: {
+    // disable the modules you don't need
+    meta: false,
+    icon: false,
+    // if you omit a module key form configuration sensible defaults will be applied
+    // manifest: false,
+
+    workbox: {
+      importScripts: [
+        // ...
+        'firebase-auth-sw.js',
+      ],
+      // by default the workbox module will not install the service worker in dev environment to avoid conflicts with HMR
+      // only set this true for testing and remember to always clear your browser cache in development
+      dev: process.env.NODE_ENV === 'development',
+    },
+  },
+  // todo can not connect to emulator
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
