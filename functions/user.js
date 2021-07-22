@@ -5,10 +5,18 @@ const admin = require('firebase-admin')
 const firebaseTools = require('firebase-tools')
 
 exports.create = functions.https.onCall(async (data, context) => {
-  const membership = await admin
+  const membership = admin
     .firestore()
     .collection('memberships')
     .doc(data.public.membership)
+
+  // eslint-disable-next-line no-unused-vars
+  const membershipData = (await membership.get()).data()
+  // add custom claim for page restriction
+  await admin.auth().setCustomUserClaims(context.auth.uid, {
+    membership: membershipData.id,
+    routing: membershipData.routing,
+  })
 
   // todo do verification of data (i.e. all inputs not empty etc.)
   const userName = context.auth.uid.substr(0, 8)
