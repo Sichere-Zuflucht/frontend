@@ -170,13 +170,15 @@ export default {
   methods: {
     cancel(doc) {
       this.eraseLoading = true
-      const db = this.$fire.firestore
-      db.collection('requests').doc(doc).delete()
+      // const db = this.$fire.firestore
+      // db.collection('requests').doc(doc).delete()
+      this.$fire.functions.httpsCallable('request-delete')({ docId: doc })
       this.$fire.functions
         .httpsCallable('email-sendRequestDeleted')(this.response.acceptedDate)
         .then(() => {
           this.isDelete = false
           this.eraseLoading = false
+          this.$emit('cancel')
         })
     },
     async pay(dateInput) {
@@ -198,7 +200,6 @@ export default {
         redReq
           .json()
           .then((redRes) => {
-            console.log('redRes', redRes, redRes.success)
             video = {
               codeArzt:
                 'https://video.redmedical.de/#/login?name=' +
@@ -214,6 +215,7 @@ export default {
             this.standardPayment(video, dateInput)
           })
           .catch((error) => {
+            // eslint-disable-next-line no-console
             console.log('err: ', error)
           })
       } else {
@@ -227,13 +229,7 @@ export default {
         this.standardPayment(video, dateInput)
       }
     },
-    async standardPayment(v, dI) {
-      const paymentID = (
-        await this.$fire.functions.httpsCallable('stripe-payCoaching')({
-          responseID: this.response.id,
-          isDev: this.$config.isDev,
-        })
-      ).data
+    standardPayment(v, dI) {
       this.$fire.functions
         .httpsCallable('request-acceptDate')({
           coachName:
@@ -249,7 +245,6 @@ export default {
           this.response.acceptedDate = dI
           // eslint-disable-next-line vue/no-mutating-props
           this.response.video = v
-          console.log('paymentid here', paymentID)
           /* this.$stripe.redirectToCheckout({
             // Make the id field from the Checkout Session creation API response
             // available to this file, so you can provide it as argument here

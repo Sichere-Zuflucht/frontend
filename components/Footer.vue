@@ -64,7 +64,12 @@
       ></v-col>
     </v-row>
     <v-row
-      class="d-flex flex-wrap flex-column flex-sm-row align-center justify-center"
+      class="
+        d-flex
+        flex-wrap flex-column flex-sm-row
+        align-center
+        justify-center
+      "
     >
       <div class="d-flex flex-column align-center mt-8">
         <v-icon color="primary">mdi-heart</v-icon>
@@ -83,7 +88,13 @@
       </div>
     </v-row>
     <v-row
-      class="d-flex flex-wrap flex-column flex-sm-row align-center justify-center pb-4"
+      class="
+        d-flex
+        flex-wrap flex-column flex-sm-row
+        align-center
+        justify-center
+        pb-4
+      "
     >
       <div class="d-flex flex-wrap justify-center">
         <v-btn

@@ -22,7 +22,7 @@
         </v-radio>
       </v-radio-group>
       <h2 class="text-h2 secondary--text mt-6">Wer bist du?</h2>
-      <p v-if="membership ? (membership.id === 'Coach' ? true : false) : false">
+      <p v-if="membership ? membership.id === 'Coach' : false">
         Diese Angaben werden später in deinem Profil zu sehen sein. Du kannst
         sie aber jederzeit anpassen.
       </p>
@@ -39,7 +39,7 @@
         label="Nachname"
       ></v-text-field>
       <v-text-field
-        v-if="membership ? (membership.id === 'Coach' ? true : false) : false"
+        v-if="membership ? membership.id === 'Coach' : false"
         v-model="profession"
         type="text"
         class="secondary--text font-weight-bold"
@@ -109,30 +109,23 @@ export default {
       membership: undefined,
     }
   },
-  mounted() {
-    this.$fire.firestore
-      .collection('memberships')
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          this.memberships.push(doc.data())
-          if (!this.membership) this.membership = doc.data()
-          this.memberships.sort(function (a, b) {
-            return a < b ? 1 : -1
-          })
-        })
-      })
+  async fetch() {
+    this.memberships = (
+      await this.$fire.firestore.collection('memberships').get()
+    ).docs.map((doc) => doc.data())
+    this.membership = this.memberships[0]
   },
+  fetchOnServer: false,
   methods: {
     updateProfile() {
-      this.$refs.form.validate()
-      if (!this.$refs.form.validate()) return
-      // this.loading = true
+      this.loading = true
       this.$fire.auth.currentUser
         .updatePassword(this.password)
         .catch((e) => {
+          // eslint-disable-next-line no-console
           console.error(e)
           this.showError = true
+          this.loading = false
         })
         .then(() => {
           const createdUserData = {}
@@ -157,7 +150,6 @@ export default {
               email: this.$fire.auth.currentUser.email,
             }
           }
-          console.log('dispatch sotre create firebase user')
           return this.$store.dispatch(
             'modules/user/createFirebaseUser',
             createdUserData
