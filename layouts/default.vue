@@ -1,5 +1,5 @@
 <template>
-  <v-app light>
+  <v-app>
     <v-navigation-drawer v-model="drawer" app class="secondary" dark fixed>
       <client-only>
         <v-list v-if="loggedIn">
@@ -51,7 +51,12 @@
                 {{ item.title }}
               </v-list-item-content>
             </v-list-item>
-            <v-list-item :to="'/beratung/' + user.uid" nuxt exact>
+            <v-list-item
+              v-if="membership === 'Coach' && user.public"
+              :to="'/berater/' + user.public.uid"
+              nuxt
+              exact
+            >
               <v-list-item-icon>
                 <v-icon>mdi-account-edit</v-icon>
               </v-list-item-icon>
@@ -93,7 +98,7 @@
       ></v-toolbar-title>
       <v-spacer />
       <client-only>
-        <v-btn v-if="loggedIn" to="/profile" nuxt exact icon
+        <v-btn v-if="loggedIn && user.public" to="/profile" nuxt exact icon
           ><v-avatar color="primary" size="38"
             ><v-img :src="user.public.avatar" /></v-avatar
         ></v-btn>

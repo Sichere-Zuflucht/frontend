@@ -10,3 +10,8 @@
     </v-container>
   </div>
 </template>
+<script>
+export default {
+  middleware: 'isCoach',
+}
+</script>

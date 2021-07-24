@@ -1,8 +1,8 @@
 import colors from 'vuetify/es5/util/colors'
 
-const base = '/frontend'
 const hostURL = 'https://sichere-zuflucht.github.io'
 const isDev = process.env.NODE_ENV !== 'production'
+const base = isDev ? '' : '/frontend'
 const port = 80
 const redAPI = process.env.RED_API
 
@@ -136,12 +136,9 @@ export default {
         emulatorPort: undefined,
       },
       auth: {
-        persistence: 'local', // default
         initialize: {
           onAuthStateChangedAction: 'modules/user/onAuthStateChangedAction',
-          subscribeManually: false,
         },
-        ssr: true,
         emulatorPort: undefined,
         // emulatorHost: 'http://localhost',
       },

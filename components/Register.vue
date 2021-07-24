@@ -66,6 +66,7 @@ export default {
           })
         })
         .catch((e) => {
+          console.log(e)
           this.showError = true
         })
     },
