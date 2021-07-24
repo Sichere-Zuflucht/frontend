@@ -5,10 +5,19 @@ const admin = require('firebase-admin')
 const firebaseTools = require('firebase-tools')
 
 exports.create = functions.https.onCall(async (data, context) => {
-  const membership = await admin
+  const membership = admin
     .firestore()
     .collection('memberships')
     .doc(data.public.membership)
+
+  // eslint-disable-next-line no-unused-vars
+  const membershipData = (await membership.get()).data()
+  // add custom claim for page restriction
+  const claims = {
+    membership: membershipData.id,
+    routing: membershipData.routing,
+  }
+  await admin.auth().setCustomUserClaims(context.auth.uid, claims)
 
   // todo do verification of data (i.e. all inputs not empty etc.)
   const userName = context.auth.uid.substr(0, 8)
@@ -35,7 +44,7 @@ exports.create = functions.https.onCall(async (data, context) => {
   docRef.set({})
   await docRef.collection('public').doc('data').set(data.public)
   await docRef.collection('private').doc('data').set(data.private)
-  return context.auth.token
+  return _.merge(context.auth.token, claims)
 })
 
 exports.setData = functions.https.onCall(({ data, priv }, context) => {

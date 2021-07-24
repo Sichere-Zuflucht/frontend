@@ -1,19 +1,33 @@
-export default function ({ store, redirect, route }) {
+export default async function ({ store, redirect, route, app }) {
+  await store.restored
+
   // /register is responsible for verifying the email address
-  if (route.path === '/register' && !isSignInWithEmailLink(route)) redirect('/')
+  if (route.path === '/register' && !isSignInWithEmailLink(route))
+    return redirect('/signup')
 
   // /update-profile asks the user for additional information
   if (route.path === '/update-profile' && route.query.eMail === undefined) {
-    redirect('/signup')
-  }
-  if (
-    route.path === '/signup' &&
-    store.getters['modules/user/isAuthenticated']
-  ) {
-    redirect('/profile')
+    return redirect('/signup')
   }
 
-  redirectProfilePage(store, redirect, route)
+  if (requiresAuth(route) && !isAuthenticated(store)) {
+    console.log('requires auth')
+    return redirect('/login')
+  }
+
+  if (requiresWoman(route) && !isWoman(store)) {
+    console.log('requires woman')
+    return redirect('/login')
+  }
+
+  if (requiresCoach(route) && !isCoach(store)) {
+    console.log('requires coach')
+    return redirect('/login')
+  }
+
+  if (route.path === '/profile') {
+    return redirect(store.getters['modules/user/routing'])
+  }
 }
 
 function isSignInWithEmailLink(route) {
@@ -24,19 +38,32 @@ function isSignInWithEmailLink(route) {
   return false
 }
 
-function redirectProfilePage(store, redirect, route) {
-  if (route.path === '/profile') {
-    if (!store.getters['modules/user/isAuthenticated']) {
-      return redirect('/signup')
-    }
+function requiresAuth(route) {
+  return [
+    '/frauen',
+    '/reset-password',
+    '/settings',
+    '/bezahlung',
+    '/beratung',
+  ].includes(route.path)
+}
 
-    // coach did not enter info what coaching he wants to do
-    if (
-      store.getters['modules/user/membership'].id === 'Coach' &&
-      !store.getters['modules/user/public'].info
-    ) {
-      return redirect('/beratung')
-    }
-    return redirect(store.getters['modules/user/routing'])
-  }
+function isAuthenticated(store) {
+  return !!store.getters['modules/user/isAuthenticated']
+}
+
+function requiresWoman(route) {
+  return ['/frauen'].includes(route.path)
+}
+
+function isWoman(store) {
+  return store.getters['modules/user/membership'] === 'Woman'
+}
+
+function requiresCoach(route) {
+  return ['/beratung'].includes(route.path)
+}
+
+function isCoach(store) {
+  return store.getters['modules/user/membership'] === 'Coach'
 }
