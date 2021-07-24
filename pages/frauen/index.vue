@@ -22,6 +22,7 @@
           :coach="responses[0].coach"
           :response="responses[0]"
           :clickable="false"
+          @cancel="responses = []"
         />
       </v-container>
       <v-slide-group v-else show-arrows class="px-1 pb-4">
@@ -31,6 +32,7 @@
               :coach="response.coach"
               :response="response"
               :clickable="false"
+              @cancel="cancel(response)"
             />
           </div>
         </v-slide-item>
@@ -68,32 +70,36 @@ export default {
   data() {
     return {
       userData: null,
-      responses: [],
+      responses: null,
     }
   },
-
-  async mounted() {
+  async fetch() {
     // these responses contain only communication where this user was involved
     const responses = (
       await this.$fire.functions.httpsCallable('request-getRequests')()
     ).data
 
     // get the data for each coach and add it to the response
-    // then opush it to the responses list
-    responses.forEach((response) => {
-      this.$fire.firestore
-        .collection('users')
-        .doc(response.coachId)
-        .collection('public')
-        .doc('data')
-        .get()
-        .then((coachSnap) => {
-          this.responses.push({
-            coach: coachSnap.data(),
-            ...response,
-          })
-        })
-    })
+    // then push it to the responses list
+    this.responses = await Promise.all(
+      responses.map(async (response) => {
+        const coach = (
+          await this.$fire.firestore
+            .collection('users')
+            .doc(response.coachId)
+            .collection('public')
+            .doc('data')
+            .get()
+        ).data()
+        return { coach, ...response }
+      })
+    )
+  },
+  fetchOnServer: false,
+  methods: {
+    cancel(response) {
+      this.responses = this.responses.filter((r) => r !== response)
+    },
   },
 }
 </script>

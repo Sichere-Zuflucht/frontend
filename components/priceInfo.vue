@@ -2,7 +2,14 @@
   <v-sheet color="grey lighten-5">
     <v-container>
       <h4
-        class="text-uppercase text-h3 secondary--text font-weight-bold mb-1 mt-2 caption"
+        class="
+          text-uppercase text-h3
+          secondary--text
+          font-weight-bold
+          mb-1
+          mt-2
+          caption
+        "
       >
         Preise
       </h4>
@@ -22,7 +29,3 @@
     </v-container>
   </v-sheet>
 </template>
-
-<script>
-export default {}
-</script>

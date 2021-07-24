@@ -39,10 +39,10 @@
         <v-stepper-content step="2" class="pa-0">
           <div v-if="requestPassword">
             <v-alert
+              v-if="!makeLogin"
               type="info"
               color="secondary"
               class="my-4"
-              v-if="!makeLogin"
             >
               Es existiert bereits ein Konto mit der E-Mail-Adresse
               <b>{{ email }}</b

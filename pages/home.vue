@@ -172,8 +172,8 @@
           </div>
           <div class="w-layout-grid grid-3">
             <img
-              src="webflow/Gruppe-180.png"
               id="w-node-f4051ee5-1164-e7fc-b5a9-3323e4432657-be88a86f"
+              src="webflow/Gruppe-180.png"
               alt="Erklärung–Sichere Zuflucht–eine Plattform für die Vermittlung von Wohnungen an Frauenhäuser"
               class="image-6 _3d"
             />
