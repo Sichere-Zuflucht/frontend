@@ -5,18 +5,22 @@
         Willkommen bei Sichere Zuflucht
       </h1></v-sheet
     >
-    <v-container>
-      <h2 class="text-h4 font-weight-bold primary--text mt-3 mb-3">
-        Du hast Antwort auf deine Anfrage(n) von:
-      </h2>
-    </v-container>
+
     <div v-if="responses" class="pb-4">
-      <div v-if="responses.length === 0">
-        <p>Du hast noch keine Berater*innen kontaktiert.</p>
+      <v-container>
+        <h2 class="text-h4 font-weight-bold primary--text mt-3 mb-3">
+          {{
+            responses.length === 0
+              ? 'Starte jetzt und suche deine passende Beratung.'
+              : 'Du hast Antwort auf deine Anfrage(n) von:'
+          }}
+        </h2>
+      </v-container>
+      <v-container v-if="responses.length === 0" class="pt-0">
         <v-btn to="findCoach" color="secondary" append
           >Beratungsangebote ansehen
         </v-btn>
-      </div>
+      </v-container>
       <v-container v-else-if="responses.length === 1">
         <CoachingContactStatus
           :coach="responses[0].coach"

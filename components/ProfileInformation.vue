@@ -15,8 +15,7 @@
         >
           <template slot="label">
             <p class="ma-0" style="padding-top: 2px">
-              <b>{{ n.description }}</b
-              ><br />{{ n.subdescription }}
+              <b>{{ n.description }}</b>
             </p>
           </template>
         </v-radio>
@@ -113,7 +112,7 @@ export default {
     this.memberships = (
       await this.$fire.firestore.collection('memberships').get()
     ).docs.map((doc) => doc.data())
-    this.membership = this.memberships[0]
+    this.membership = this.memberships[0].sort((a, b) => a - b)
   },
   fetchOnServer: false,
   methods: {
