@@ -93,7 +93,7 @@
           </div>
         </v-stepper-content>
         <v-stepper-content step="3" class="pa-0">
-          <h2 class="text-h1 primary--text mb-4">Danke für deine Anmeldung!</h2>
+          <h2 class="text-h1 primary--text mb-4">erfolgreich!</h2>
           <h3 class="text-h2 secondary--text mb-8">
             Wir haben dir eine Bestätigungsmail gesendet.
           </h3>

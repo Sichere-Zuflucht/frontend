@@ -24,7 +24,7 @@
           <v-list-item-content>
             <p class="font-weight-bold">Als Berater*in</p>
             <ul>
-              <li>dein Angebot zu erstellen</li>
+              <li>dein Angebot zu erstellen und sicher zu beraten</li>
             </ul>
           </v-list-item-content>
         </v-list-item>

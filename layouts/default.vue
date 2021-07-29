@@ -108,8 +108,8 @@
       dark
       color="red"
       width="70"
-      style="position: fixed; bottom: 30%; right: 0; z-index: 100"
-      href="https://www.chefkoch.de/rs/s0/was+kochen/Rezepte.html"
+      style="position: fixed; bottom: 50px; right: 0; z-index: 100"
+      href="https://www.brigitte.de/"
       tile
     >
       <v-card-text class="pa-1 d-flex flex-column align-center">

@@ -232,7 +232,7 @@ export default {
           this.response.coach.firstName.toLowerCase() +
           '_' +
           this.response.coach.lastName.toLowerCase() +
-          '&?' +
+          '_' + // no ?:&'"%# symbols allowed
           this.response.id
         this.standardPayment(video, dateInput)
       }
