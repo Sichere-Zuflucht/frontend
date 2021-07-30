@@ -201,7 +201,7 @@ export default {
 
       this.$fire.auth
         .sendSignInLinkToEmail(this.email, {
-          url: this.$config.baseUrl + '/register',
+          url: this.$config.baseUrl + '/registration/confirm-register-link',
           handleCodeInApp: true,
         })
         .then(() => {

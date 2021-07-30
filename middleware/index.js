@@ -2,12 +2,15 @@ export default async function ({ store, redirect, route, app }) {
   await store.restored
 
   // /register is responsible for verifying the email address
-  if (route.path === '/register' && !isSignInWithEmailLink(route))
+  if (
+    route.path === '/registration/confirm-register-link' &&
+    !isSignInWithEmailLink(route)
+  )
     return redirect('/signup')
 
-  // '/register/membership-selection' asks the user for additional information
+  // '/registration/membership-selection' asks the user for additional information
   if (
-    route.path === '/register/membership-selection' &&
+    route.path === '/registration/membership-selection' &&
     route.query.eMail === undefined
   ) {
     return redirect('/signup')
