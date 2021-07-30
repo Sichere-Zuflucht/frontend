@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/berater/suche", {data:[{}],fetch:{},mutations:[]});
