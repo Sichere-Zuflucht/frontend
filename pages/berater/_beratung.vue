@@ -183,8 +183,11 @@
               Melde dich bei Sichere Zuflucht an, um diese/n Berater*in
               kontaktieren zu können.
             </p>
-            <v-btn nuxt to="/signup" color="secondary">Registrieren</v-btn
-            ><v-btn nuxt to="/login" text>Einloggen</v-btn></v-card-text
+            <v-btn nuxt to="/registration/signup" color="secondary"
+              >Registrieren</v-btn
+            ><v-btn nuxt to="/registration/signin" text
+              >Einloggen</v-btn
+            ></v-card-text
           >
         </v-card>
         <v-divider class="mt-16 mb-6" />

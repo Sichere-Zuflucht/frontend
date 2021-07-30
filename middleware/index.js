@@ -6,29 +6,29 @@ export default async function ({ store, redirect, route, app }) {
     route.path === '/registration/confirm-register-link' &&
     !isSignInWithEmailLink(route)
   )
-    return redirect('/signup')
+    return redirect('/registration/signup')
 
   // '/registration/membership-selection' asks the user for additional information
   if (
     route.path === '/registration/membership-selection' &&
     route.query.eMail === undefined
   ) {
-    return redirect('/signup')
+    return redirect('/registration/signup')
   }
 
   if (requiresAuth(route) && !isAuthenticated(store)) {
     console.log('requires auth')
-    return redirect('/login')
+    return redirect('/registration/signin')
   }
 
   if (requiresWoman(route) && !isWoman(store)) {
     console.log('requires woman')
-    return redirect('/login')
+    return redirect('/registration/signin')
   }
 
   if (requiresCoach(route) && !isCoach(store)) {
     console.log('requires coach')
-    return redirect('/login')
+    return redirect('/registration/signin')
   }
 
   if (route.path === '/profile') {
