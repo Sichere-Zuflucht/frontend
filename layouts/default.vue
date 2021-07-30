@@ -109,7 +109,7 @@
     <v-main style="hyphens: auto" class="pb-6">
       <nuxt />
     </v-main>
-    <Footer></Footer>
+    <UtilsFooter></UtilsFooter>
   </v-app>
 </template>
 

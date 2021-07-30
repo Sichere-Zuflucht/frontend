@@ -6,7 +6,7 @@
       >
     </v-sheet>
     <v-container>
-      <Verification />
+      <SharedVerificationPage />
     </v-container>
   </div>
 </template>
