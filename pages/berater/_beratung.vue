@@ -203,12 +203,14 @@
             :key="i"
             class="mt-5"
           >
-            <CoachingList :coach="coaching" />
+            <CoachingProfileWrapper :coach="coaching" />
           </div>
         </div>
       </div>
       <div v-else class="mt-16">
-        <v-btn to="edit-profil" nuxt color="secondary">Profil bearbeiten</v-btn>
+        <v-btn to="/beratung/edit-profil" nuxt color="secondary"
+          >Profil bearbeiten</v-btn
+        >
       </div>
     </v-container>
   </div>

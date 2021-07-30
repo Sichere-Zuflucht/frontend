@@ -3,24 +3,7 @@
     <v-navigation-drawer v-model="drawer" app class="secondary" dark fixed>
       <client-only>
         <v-list v-if="loggedIn">
-          <v-list-item
-            v-for="(item, i) in loggedInUser"
-            :key="i"
-            :to="item.to"
-            nuxt
-            exact
-          >
-            <v-list-item-icon>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              {{ item.title }}
-            </v-list-item-content>
-          </v-list-item>
-          <p class="caption ml-4 mb-0">
-            {{ user.membership ? user.membership.name : null }}
-          </p>
-          <div v-if="user.membership ? user.membership.id === 'Woman' : false">
+          <div v-if="membership === 'Woman'">
             <v-list-item
               v-for="(item, i) in loggedInWoman"
               :key="i"
@@ -135,14 +118,12 @@ export default {
   data() {
     return {
       drawer: false,
-      loggedInUser: [
+      loggedInWoman: [
         {
           icon: 'mdi-view-dashboard',
           title: 'Übersicht',
-          to: '/profile',
+          to: '/frauen',
         },
-      ],
-      loggedInWoman: [
         {
           icon: 'mdi-account-box',
           title: 'Beratungen',
@@ -156,10 +137,15 @@ export default {
         {
           icon: 'mdi-cog',
           title: 'Einstellungen',
-          to: '/settings',
+          to: '/frauen/settings',
         },
       ],
       loggedInCoach: [
+        {
+          icon: 'mdi-view-dashboard',
+          title: 'Übersicht',
+          to: '/beratung',
+        },
         {
           icon: 'mdi-credit-card',
           title: 'Bezahlung',
@@ -173,7 +159,7 @@ export default {
         {
           icon: 'mdi-cog',
           title: 'Einstellungen',
-          to: '/settings',
+          to: '/beratung/settings',
         },
       ],
       noUser: [

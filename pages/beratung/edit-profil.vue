@@ -41,7 +41,7 @@ export default {
       })
       this.$store.dispatch('modules/user/setAvatar', data.avatar)
 
-      this.$router.push('/beratung/' + this.userPublic.uid)
+      this.$router.push('/berater/' + this.userPublic.uid)
     },
   },
 }
