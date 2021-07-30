@@ -52,7 +52,7 @@
       </div>
       <div
         v-else-if="
-          filteredCoaches.length != allCoaches.length ||
+          filteredCoaches.length !== allCoaches.length ||
           filteredCoaches.length === 0
         "
         class="d-flex flex-column justify-center align-center mt-4"
@@ -77,7 +77,7 @@
         </v-btn>
       </div>
     </v-container>
-    <PriceInfo />
+    <WomanPriceInfo />
   </v-sheet>
 </template>
 

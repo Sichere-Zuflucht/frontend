@@ -45,8 +45,8 @@ function isSignInWithEmailLink(route) {
 }
 
 function requiresAuth(route) {
-  return ['/frauen', '/settings', '/bezahlung', '/beratung'].includes(
-    route.path
+  return ['frauen', 'settings', 'bezahlung', 'beratung'].includes(
+    route.path.split('/')[1]
   )
 }
 
@@ -64,7 +64,7 @@ function isWoman(store) {
 }
 
 function requiresCoach(route) {
-  return ['/beratung'].includes(route.path)
+  return route.path.startsWith('/beratung')
 }
 
 function isCoach(store) {

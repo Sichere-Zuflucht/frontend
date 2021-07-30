@@ -127,7 +127,7 @@ export default {
         {
           icon: 'mdi-account-box',
           title: 'Beratungen',
-          to: '/frauen/findCoach',
+          to: '/berater/suche',
         },
         {
           icon: 'mdi-shield-home',
