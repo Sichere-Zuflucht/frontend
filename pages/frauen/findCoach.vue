@@ -47,7 +47,7 @@
           :key="i"
           class="mt-5 px-1"
         >
-          <CoachingList :pub-coach-data="coaching" />
+          <CoachingProfileWrapper :pub-coach-data="coaching" />
         </div>
       </div>
       <div

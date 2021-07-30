@@ -23,12 +23,12 @@ export default async function ({ store, redirect, route, app }) {
 
   if (requiresWoman(route) && !isWoman(store)) {
     console.log('requires woman')
-    return redirect('/registration/signin')
+    return redirect('/')
   }
 
   if (requiresCoach(route) && !isCoach(store)) {
     console.log('requires coach')
-    return redirect('/registration/signin')
+    return redirect('/')
   }
 
   if (route.path === '/profile') {
@@ -55,7 +55,8 @@ function isAuthenticated(store) {
 }
 
 function requiresWoman(route) {
-  return ['/frauen'].includes(route.path)
+  return route.path.startsWith('/frauen/')
+  // return ['/frauen'].includes(route.path)
 }
 
 function isWoman(store) {
