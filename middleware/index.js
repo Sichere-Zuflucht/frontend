@@ -5,8 +5,11 @@ export default async function ({ store, redirect, route, app }) {
   if (route.path === '/register' && !isSignInWithEmailLink(route))
     return redirect('/signup')
 
-  // /update-profile asks the user for additional information
-  if (route.path === '/update-profile' && route.query.eMail === undefined) {
+  // '/register/membership-selection' asks the user for additional information
+  if (
+    route.path === '/register/membership-selection' &&
+    route.query.eMail === undefined
+  ) {
     return redirect('/signup')
   }
 

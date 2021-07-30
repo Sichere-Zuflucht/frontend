@@ -61,7 +61,7 @@ export default {
         .then((result) => {
           window.localStorage.removeItem('emailForSignIn')
           this.$router.push({
-            path: '/update-profile',
+            path: '/register/membership-selection',
             query: { eMail: this.email },
           })
         })
