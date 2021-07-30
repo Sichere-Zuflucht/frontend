@@ -224,7 +224,6 @@
 
 <script>
 export default {
-  middleware: 'showCoach',
   data() {
     return {
       message: '',
