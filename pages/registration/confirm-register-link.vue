@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-container>
     <h1 class="text-h1 primary--text mb-4">Registrierung</h1>
     <v-card>
       <v-card-text>
@@ -24,7 +24,7 @@
         </v-alert>
       </v-card-text>
     </v-card>
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -61,7 +61,7 @@ export default {
         .then((result) => {
           window.localStorage.removeItem('emailForSignIn')
           this.$router.push({
-            path: '/register/membership-selection',
+            path: '/registration/membership-selection',
             query: { eMail: this.email },
           })
         })
