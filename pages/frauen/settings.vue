@@ -1,3 +1,3 @@
 <template>
-  <ProfilSettings />
+  <SharedProfilSettings />
 </template>
