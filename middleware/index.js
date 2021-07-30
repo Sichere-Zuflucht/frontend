@@ -45,13 +45,9 @@ function isSignInWithEmailLink(route) {
 }
 
 function requiresAuth(route) {
-  return [
-    '/frauen',
-    '/reset-password',
-    '/settings',
-    '/bezahlung',
-    '/beratung',
-  ].includes(route.path)
+  return ['/frauen', '/settings', '/bezahlung', '/beratung'].includes(
+    route.path
+  )
 }
 
 function isAuthenticated(store) {
