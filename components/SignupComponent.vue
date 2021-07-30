@@ -58,7 +58,7 @@
               @click:append="() => (value = !value)"
             ></v-text-field>
             <div class="d-flex justify-end">
-              <v-btn text to="reset-password" color="grey"
+              <v-btn text to="/registration/reset-password" color="grey"
                 >Passwort vergessen</v-btn
               ><v-btn
                 class="inline"
