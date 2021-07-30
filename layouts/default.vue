@@ -81,10 +81,14 @@
           </v-list-item>
           <v-spacer />
           <v-list-item>
-            <v-btn to="/signup" exact nuxt block>Registrieren</v-btn>
+            <v-btn to="/registration/signup" exact nuxt block
+              >Registrieren</v-btn
+            >
           </v-list-item>
           <v-list-item>
-            <v-btn to="/login" exact nuxt block text>Einloggen</v-btn>
+            <v-btn to="/registration/signin" exact nuxt block text
+              >Einloggen</v-btn
+            >
           </v-list-item>
         </v-list>
       </client-only>
@@ -212,7 +216,7 @@ export default {
   },
   methods: {
     login() {
-      this.$router.push('/signup')
+      this.$router.push('/registration/signup')
     },
     logout() {
       this.$fire.auth.signOut()
