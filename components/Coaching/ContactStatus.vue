@@ -24,7 +24,7 @@
           {{ coach.firstName }} {{ coach.lastName }}
         </h2>
         <h3 class="mt-2 text-h5">
-          {{ coach.profession }}
+          {{ coach.info.profession }}
         </h3>
       </div>
     </v-sheet>
@@ -88,7 +88,7 @@
           target="_blank"
           :disabled="coachingLiesInPast"
           :href="
-            response.videoType === 'Jitsi'
+            response.videoType === 'sichere Verbindung'
               ? response.video
               : response.video.codePatient
           "

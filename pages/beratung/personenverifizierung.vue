@@ -6,12 +6,7 @@
       >
     </v-sheet>
     <v-container>
-      <Verification />
+      <SharedVerificationPage />
     </v-container>
   </div>
 </template>
-<script>
-export default {
-  middleware: 'isCoach',
-}
-</script>

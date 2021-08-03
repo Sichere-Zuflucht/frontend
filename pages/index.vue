@@ -23,7 +23,7 @@
         <p class="text-center error--text font-weight-bold">
           "Wir lassen dich mit deinen Erlebnissen nicht allein."
         </p>
-        <Offerings />
+        <SharedServiceOverview />
       </v-container>
     </v-sheet>
     <v-container>
@@ -88,9 +88,7 @@
               >
                 Anmeldung für Berater*innen
               </v-btn>
-              <v-btn class="text-decoration-line-through" text block
-                >mehr erfahren</v-btn
-              >
+              <v-btn text block>mehr erfahren</v-btn>
             </v-card-subtitle>
           </v-card>
         </v-col>
@@ -117,9 +115,7 @@
               >
                 Ich biete meine Unterkunft an
               </v-btn>
-              <v-btn class="text-decoration-line-through" text block
-                >mehr erfahren</v-btn
-              >
+              <v-btn text block>mehr erfahren</v-btn>
             </v-card-subtitle>
           </v-card>
         </v-col>

@@ -2,27 +2,33 @@ export default async function ({ store, redirect, route, app }) {
   await store.restored
 
   // /register is responsible for verifying the email address
-  if (route.path === '/register' && !isSignInWithEmailLink(route))
-    return redirect('/signup')
+  if (
+    route.path === '/registration/confirm-register-link' &&
+    !isSignInWithEmailLink(route)
+  )
+    return redirect('/registration/signup')
 
-  // /update-profile asks the user for additional information
-  if (route.path === '/update-profile' && route.query.eMail === undefined) {
-    return redirect('/signup')
+  // '/registration/membership-selection' asks the user for additional information
+  if (
+    route.path === '/registration/membership-selection' &&
+    route.query.eMail === undefined
+  ) {
+    return redirect('/registration/signup')
   }
 
   if (requiresAuth(route) && !isAuthenticated(store)) {
     console.log('requires auth')
-    return redirect('/login')
+    return redirect('/registration/signin')
   }
 
   if (requiresWoman(route) && !isWoman(store)) {
     console.log('requires woman')
-    return redirect('/login')
+    return redirect('/')
   }
 
   if (requiresCoach(route) && !isCoach(store)) {
     console.log('requires coach')
-    return redirect('/login')
+    return redirect('/')
   }
 
   if (route.path === '/profile') {
@@ -39,13 +45,9 @@ function isSignInWithEmailLink(route) {
 }
 
 function requiresAuth(route) {
-  return [
-    '/frauen',
-    '/reset-password',
-    '/settings',
-    '/bezahlung',
-    '/beratung',
-  ].includes(route.path)
+  return ['frauen', 'settings', 'bezahlung', 'beratung'].includes(
+    route.path.split('/')[1]
+  )
 }
 
 function isAuthenticated(store) {
@@ -53,7 +55,8 @@ function isAuthenticated(store) {
 }
 
 function requiresWoman(route) {
-  return ['/frauen'].includes(route.path)
+  return route.path.startsWith('/frauen/')
+  // return ['/frauen'].includes(route.path)
 }
 
 function isWoman(store) {
@@ -61,7 +64,7 @@ function isWoman(store) {
 }
 
 function requiresCoach(route) {
-  return ['/beratung'].includes(route.path)
+  return route.path.startsWith('/beratung')
 }
 
 function isCoach(store) {

@@ -27,7 +27,7 @@
           <v-form ref="verifyForm" v-model="verifyVal">
             <v-text-field
               v-model="verPhone"
-              label="Tel./Hdy.*"
+              label="Tel./Handy.*"
               outlined
               type="tel"
               :rules="rules.phone"
@@ -57,16 +57,14 @@
       >
       <p class="caption my-4">
         Sie haben uns ihre Kontaktdaten zugeschickt, anhand denen wir uns bei
-        Ihnen melden werden. Sollten Sie nach 48 Stunden noch keine Antwort von
-        uns erhalten haben, dann prüfen Sie bitte zuerst Ihre Email Inbox und
-        den Spam Ordner, bevor Sie uns erneut kontaktieren.
+        Ihnen telefonisch melden werden. Sollten Sie nach 48 Stunden noch keinen
+        Anruf von uns erhalten haben, können Sie sich über den Button erneut
+        verifizieren.
       </p>
       <v-row class="mt-3">
         <v-btn v-show="!expand" @click="expand = !expand"
-          >Erneut kontaktieren</v-btn
+          >neu verifizieren</v-btn
         >
-        <v-spacer />
-        <v-btn color="primary" @click="$router.go(-1)">Zurück</v-btn>
       </v-row>
     </div>
     <div v-else>
@@ -109,10 +107,13 @@
     <v-divider class="my-16" />
     <p class="mt-4">
       <b>Warum ist die Verifizierung nötig?</b><br />
-      Wir müssen gewährleisten, dass wir nur Personen in unseren Beraterkreis
-      aufnehmen, die unseren Frauen auch wirklich qualifiziert helfen können.
-      Deshalb prüfen wir jede einzelne Anmeldung.
+      Wir müssen gewährleisten, dass wir nur Personen in unseren
+      Berater*innenkreis aufnehmen, die unseren Frauen auch wirklich
+      qualifiziert helfen können. Deshalb prüfen wir jede einzelne Anmeldung.
     </p>
+    <v-btn class="pl-0" color="primary" text
+      >Mehr Infos auf unserer Berater*innenseite</v-btn
+    >
   </div>
 </template>
 

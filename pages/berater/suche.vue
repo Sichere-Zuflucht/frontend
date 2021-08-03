@@ -47,12 +47,12 @@
           :key="i"
           class="mt-5 px-1"
         >
-          <CoachingList :pub-coach-data="coaching" />
+          <CoachingProfileWrapper :pub-coach-data="coaching" />
         </div>
       </div>
       <div
         v-else-if="
-          filteredCoaches.length != allCoaches.length ||
+          filteredCoaches.length !== allCoaches.length ||
           filteredCoaches.length === 0
         "
         class="d-flex flex-column justify-center align-center mt-4"
@@ -77,7 +77,7 @@
         </v-btn>
       </div>
     </v-container>
-    <PriceInfo />
+    <WomanPriceInfo />
   </v-sheet>
 </template>
 

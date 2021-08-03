@@ -3,24 +3,7 @@
     <v-navigation-drawer v-model="drawer" app class="secondary" dark fixed>
       <client-only>
         <v-list v-if="loggedIn">
-          <v-list-item
-            v-for="(item, i) in loggedInUser"
-            :key="i"
-            :to="item.to"
-            nuxt
-            exact
-          >
-            <v-list-item-icon>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              {{ item.title }}
-            </v-list-item-content>
-          </v-list-item>
-          <p class="caption ml-4 mb-0">
-            {{ user.membership ? user.membership.name : null }}
-          </p>
-          <div v-if="user.membership ? user.membership.id === 'Woman' : false">
+          <div v-if="membership === 'Woman'">
             <v-list-item
               v-for="(item, i) in loggedInWoman"
               :key="i"
@@ -81,10 +64,14 @@
           </v-list-item>
           <v-spacer />
           <v-list-item>
-            <v-btn to="/signup" exact nuxt block>Registrieren</v-btn>
+            <v-btn to="/registration/signup" exact nuxt block
+              >Registrieren</v-btn
+            >
           </v-list-item>
           <v-list-item>
-            <v-btn to="/login" exact nuxt block text>Einloggen</v-btn>
+            <v-btn to="/registration/signin" exact nuxt block text
+              >Einloggen</v-btn
+            >
           </v-list-item>
         </v-list>
       </client-only>
@@ -122,7 +109,7 @@
     <v-main style="hyphens: auto" class="pb-6">
       <nuxt />
     </v-main>
-    <Footer></Footer>
+    <UtilsFooter></UtilsFooter>
   </v-app>
 </template>
 
@@ -131,18 +118,16 @@ export default {
   data() {
     return {
       drawer: false,
-      loggedInUser: [
+      loggedInWoman: [
         {
           icon: 'mdi-view-dashboard',
           title: 'Übersicht',
-          to: '/profile',
+          to: '/frauen',
         },
-      ],
-      loggedInWoman: [
         {
           icon: 'mdi-account-box',
           title: 'Beratungen',
-          to: '/frauen/findCoach',
+          to: '/berater/suche',
         },
         {
           icon: 'mdi-shield-home',
@@ -152,10 +137,15 @@ export default {
         {
           icon: 'mdi-cog',
           title: 'Einstellungen',
-          to: '/settings',
+          to: '/frauen/settings',
         },
       ],
       loggedInCoach: [
+        {
+          icon: 'mdi-view-dashboard',
+          title: 'Übersicht',
+          to: '/beratung',
+        },
         {
           icon: 'mdi-credit-card',
           title: 'Bezahlung',
@@ -169,7 +159,7 @@ export default {
         {
           icon: 'mdi-cog',
           title: 'Einstellungen',
-          to: '/settings',
+          to: '/beratung/settings',
         },
       ],
       noUser: [
@@ -212,7 +202,7 @@ export default {
   },
   methods: {
     login() {
-      this.$router.push('/signup')
+      this.$router.push('/registration/signup')
     },
     logout() {
       this.$fire.auth.signOut()

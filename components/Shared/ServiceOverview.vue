@@ -7,7 +7,18 @@
             <v-expand-transition v-if="disabled">
               <div
                 v-if="hover"
-                class="d-flex transition-fast-in-fast-out secondary v-card--reveal font-weight-bold d-flex align-center justify-center text-center white--text"
+                class="
+                  d-flex
+                  transition-fast-in-fast-out
+                  secondary
+                  v-card--reveal
+                  font-weight-bold
+                  d-flex
+                  align-center
+                  justify-center
+                  text-center
+                  white--text
+                "
                 style="height: 100%"
               >
                 Bald können wir das anbieten.
@@ -28,7 +39,7 @@
               :disabled="disabled"
               nuxt
               exact
-              to="frauen/findCoach"
+              to="berater/suche"
             >
               Beratungs-Themen ansehen
             </v-btn>
@@ -43,7 +54,18 @@
             ><v-expand-transition v-if="disabled">
               <div
                 v-if="hover"
-                class="d-flex transition-fast-in-fast-out secondary v-card--reveal font-weight-bold d-flex align-center justify-center text-center white--text"
+                class="
+                  d-flex
+                  transition-fast-in-fast-out
+                  secondary
+                  v-card--reveal
+                  font-weight-bold
+                  d-flex
+                  align-center
+                  justify-center
+                  text-center
+                  white--text
+                "
                 style="height: 100%"
               >
                 Bald können wir das anbieten.
@@ -74,7 +96,7 @@
   </v-row>
 </template>
 
-<script>
+<script setup>
 export default {
   props: {
     disabled: {
