@@ -1,9 +1,12 @@
 <template>
   <div>
+    <v-sheet color="secondary d-flex justify-center">
+      <v-icon size="60" class="pa-12" color="white"
+        >mdi-account-edit-outline</v-icon
+      >
+    </v-sheet>
     <v-container v-if="userPublic">
-      <h1 class="text-h1 secondary--text">Profil bearbeiten</h1>
-      <h2 v-if="userPublic.info" class="text-h2 primary--text mt-6">Ändern</h2>
-      <h2 v-else class="text-h2 primary--text">Vervollständigen</h2>
+      <h1 class="text-h1 primary--text mb-4">Profil<br />bearbeiten</h1>
       <CoachingSelection
         :filter="false"
         :is-coach="true"

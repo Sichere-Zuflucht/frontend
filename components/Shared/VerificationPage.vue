@@ -1,9 +1,9 @@
 <template>
   <div>
-    <h2 class="text-h2 primary--text">Verifizierung</h2>
+    <h1 class="text-h1 primary--text mb-4">Verifizierung<br />anfragen</h1>
 
     <div v-if="!isVerifying && !verified">
-      <p class="mt-4">
+      <p>
         <b
           >Wir prüfen jede Anmeldung persönlich und schalten erst im Anschluss
           Ihr Profil frei.</b

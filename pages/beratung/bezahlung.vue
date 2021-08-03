@@ -7,7 +7,7 @@
     </v-sheet>
     <v-container>
       <div v-if="!stripe || !stripe.verified">
-        <h1 class="text-h1 primary--text my-8">Bezahlung</h1>
+        <h1 class="text-h1 primary--text mb-4">Bezahlung<br />verwalten</h1>
         <p>
           Sie erhalten für Ihre Beratungsleistung über unser Portal
           <b>50€/Stunde</b>. Damit das Geld Sie auch umgehend erreicht, arbeiten
