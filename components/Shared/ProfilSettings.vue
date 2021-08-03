@@ -6,6 +6,7 @@
       >
     </v-sheet>
     <v-container v-if="pubData && privData">
+      <h1 class="text-h1 primary--text mb-4">Einstellungen<br />einsehen</h1>
       <small>Name:</small>
       <p>
         {{ pubData.firstName || privData.firstName }}

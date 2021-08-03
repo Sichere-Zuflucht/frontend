@@ -85,7 +85,13 @@
       ></v-toolbar-title>
       <v-spacer />
       <client-only>
-        <v-btn v-if="loggedIn && user.public" to="/profile" nuxt exact icon
+        <v-btn
+          v-if="loggedIn && user.public"
+          :to="membership === 'Coach' ? '/beratung' : '/frauen'"
+          nuxt
+          exact
+          icon
+          plain
           ><v-avatar color="primary" size="38"
             ><v-img :src="user.public.avatar" /></v-avatar
         ></v-btn>

@@ -88,7 +88,7 @@
           target="_blank"
           :disabled="coachingLiesInPast"
           :href="
-            response.videoType === 'sichere Verbindung'
+            response.videoType === 'sicherer Anbieter'
               ? response.video
               : response.video.codePatient
           "
