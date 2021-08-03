@@ -120,15 +120,18 @@ $headings: (
     'text-transform': uppercase,
   ),
 );
-.v-slide-group__next,
-.v-slide-group__prev {
-  position: absolute;
-  z-index: 2;
-  height: 100%;
-}
-.v-slide-group__next {
-  right: 0; // -23px;
-}
-.v-slide-group__prev {
-  left: 0; // -23px;
-}
+
+/* 
+  .v-slide-group__next,
+  .v-slide-group__prev {
+    position: absolute;
+    z-index: 2;
+    height: 100%;
+  }
+  .v-slide-group__next {
+    right: 0; // -23px;
+  }
+  .v-slide-group__prev {
+    left: 0; // -23px;
+  }
+ */
