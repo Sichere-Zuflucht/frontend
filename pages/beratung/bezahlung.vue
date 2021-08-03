@@ -117,7 +117,6 @@
 
 <script>
 export default {
-  middleware: 'isCoach',
   data() {
     return {
       stripeRegisterURL: null,

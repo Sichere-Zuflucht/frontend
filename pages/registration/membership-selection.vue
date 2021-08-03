@@ -38,14 +38,6 @@
         label="Nachname"
       ></v-text-field>
       <v-text-field
-        v-if="membership ? membership.id === 'Coach' : false"
-        v-model="profession"
-        type="text"
-        class="secondary--text font-weight-bold"
-        :rules="textRules"
-        label="Beruf"
-      ></v-text-field>
-      <v-text-field
         v-model="password"
         class="secondary--text font-weight-bold"
         label="Passwort"
@@ -76,7 +68,7 @@
 
 <script>
 export default {
-  name: 'ProfileInformation',
+  name: 'UpdateProfile',
   data() {
     return {
       valid: false,
@@ -87,7 +79,6 @@ export default {
         (v) => (v && v.length >= 3) || 'mind. 3 Zeichen lang',
       ],
       requiredRule: [(v) => !!v || 'Bitte ausfüllen'],
-      profession: null,
       password: '',
       hidePassword: true,
       password2: '',
@@ -112,7 +103,8 @@ export default {
     this.memberships = (
       await this.$fire.firestore.collection('memberships').get()
     ).docs.map((doc) => doc.data())
-    this.membership = this.memberships[0].sort((a, b) => a - b)
+    this.memberships.reverse()
+    this.membership = this.memberships[0]
   },
   fetchOnServer: false,
   methods: {
@@ -132,8 +124,6 @@ export default {
             createdUserData.public = {
               firstName: this.firstName,
               lastName: this.lastName,
-              profession: this.profession,
-              professionDuration: this.professionDuration,
               membership: this.membership.id,
             }
             createdUserData.private = {

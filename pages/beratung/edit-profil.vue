@@ -17,7 +17,6 @@
 
 <script>
 export default {
-  middleware: 'isCoach',
   data() {
     return {
       select: true,
@@ -38,10 +37,11 @@ export default {
         focus: data.focus,
         coachingTopics: data.coachingTopics,
         assistance: data.assistance,
+        profession: data.profession,
       })
       this.$store.dispatch('modules/user/setAvatar', data.avatar)
 
-      this.$router.push('/beratung/' + this.userPublic.uid)
+      this.$router.push('/berater/' + this.userPublic.uid)
     },
   },
 }

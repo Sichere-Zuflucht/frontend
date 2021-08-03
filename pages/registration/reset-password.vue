@@ -47,7 +47,9 @@
     <p class="text--secondary text-center mt-4 mb-0">
       Du kennst dein Passwort?
     </p>
-    <v-btn to="/signup" exact nuxt text color="grey">Anmelden</v-btn>
+    <v-btn to="/registration/signup" exact nuxt text color="grey"
+      >Anmelden</v-btn
+    >
   </v-container>
 </template>
 

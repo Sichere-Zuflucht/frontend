@@ -39,7 +39,7 @@
         {{ pubData.firstName }} {{ pubData.lastName }}
       </h1>
       <h2 class="text-center text-h5 mb-8">
-        {{ pubData.profession }}
+        {{ pubData.info.profession }}
       </h2>
 
       <p class="font-weight-bold mb-1 mt-2 caption">Fachgebiet</p>
@@ -183,8 +183,11 @@
               Melde dich bei Sichere Zuflucht an, um diese/n Berater*in
               kontaktieren zu können.
             </p>
-            <v-btn nuxt to="/signup" color="secondary">Registrieren</v-btn
-            ><v-btn nuxt to="/login" text>Einloggen</v-btn></v-card-text
+            <v-btn nuxt to="/registration/signup" color="secondary"
+              >Registrieren</v-btn
+            ><v-btn nuxt to="/registration/signin" text
+              >Einloggen</v-btn
+            ></v-card-text
           >
         </v-card>
         <v-divider class="mt-16 mb-6" />
@@ -200,12 +203,14 @@
             :key="i"
             class="mt-5"
           >
-            <CoachingList :coach="coaching" />
+            <CoachingProfileWrapper :coach="coaching" />
           </div>
         </div>
       </div>
       <div v-else class="mt-16">
-        <v-btn to="edit-profil" nuxt color="secondary">Profil bearbeiten</v-btn>
+        <v-btn to="/beratung/edit-profil" nuxt color="secondary"
+          >Profil bearbeiten</v-btn
+        >
       </div>
     </v-container>
   </div>
@@ -219,7 +224,6 @@
 
 <script>
 export default {
-  middleware: 'showCoach',
   data() {
     return {
       message: '',

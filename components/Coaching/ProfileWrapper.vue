@@ -15,7 +15,7 @@
           {{ pubCoachData.firstName }} {{ pubCoachData.lastName }}
         </h2>
         <h3 class="text-h5">
-          {{ pubCoachData.profession }}
+          {{ pubCoachData.info.profession }}
         </h3>
       </div>
       <v-divider class="my-3" />

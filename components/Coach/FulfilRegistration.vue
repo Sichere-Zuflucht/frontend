@@ -44,7 +44,7 @@
             color="secondary"
             nuxt
             append
-            to="edit-profil"
+            to="/beratung/edit-profil"
           >
             bearbeiten
           </v-btn>
