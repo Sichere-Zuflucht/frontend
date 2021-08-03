@@ -2,7 +2,7 @@
   <v-sheet class="pb-0">
     <v-sheet color="secondary pa-8"
       ><h1 class="text-h1 white--text">
-        Willkommen bei Sichere Zuflucht
+        Willkommen bei<br />Sichere Zuflucht
       </h1></v-sheet
     >
 
@@ -63,7 +63,7 @@
     <v-sheet color="blue-grey lighten-5">
       <v-container>
         <h2 class="text-h2 secondary--text mt-6 mb-3">Unsere Angebote</h2>
-        <Offerings />
+        <SharedServiceOverview />
       </v-container>
     </v-sheet>
   </v-sheet>
@@ -107,3 +107,19 @@ export default {
   },
 }
 </script>
+
+<style>
+.v-slide-group__next,
+.v-slide-group__prev {
+  position: absolute;
+  z-index: 2;
+  height: calc(100% + 10px);
+  align-items: end !important;
+}
+.v-slide-group__next {
+  right: 0;
+}
+.v-slide-group__prev {
+  left: 0;
+}
+</style>
