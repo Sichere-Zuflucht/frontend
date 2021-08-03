@@ -21,7 +21,7 @@
             ><h2 class="text-h2 primary--text">Teilen</h2></v-card-title
           ><v-text-field
             ref="link"
-            :label="copied ? 'Link copied' : 'Click to copy link'"
+            :label="copied ? 'Link kopiert' : 'Hier klicken zum kopieren'"
             class="pa-4"
             readonly
             :value="linkVal"
@@ -41,18 +41,19 @@
       <h2 class="text-center text-h5 mb-8">
         {{ pubData.info.profession }}
       </h2>
-
-      <p class="font-weight-bold mb-1 mt-2 caption">Fachgebiet</p>
-      <div class="d-flex flex-wrap">
-        <v-chip
-          v-for="tag in pubData.info.topicArea"
-          :key="tag"
-          outlined
-          color="primary"
-          class="mr-1 mb-1 caption"
-        >
-          <p class="black--text ma-0 pa-0">{{ tag }}</p>
-        </v-chip>
+      <div v-if="pubData.info.topicArea">
+        <p class="font-weight-bold mb-1 mt-2 caption">Fachgebiet</p>
+        <div class="d-flex flex-wrap">
+          <v-chip
+            v-for="tag in pubData.info.topicArea"
+            :key="tag"
+            outlined
+            color="primary"
+            class="mr-1 mb-1 caption"
+          >
+            <p class="black--text ma-0 pa-0">{{ tag }}</p>
+          </v-chip>
+        </div>
       </div>
       <div v-if="pubData.info.since">
         <p class="font-weight-bold mb-0 mt-4 caption">
