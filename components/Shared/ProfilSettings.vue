@@ -87,6 +87,7 @@
 
 <script>
 export default {
+  name: 'Settings',
   middleware({ store, redirect }) {
     // If the user is not authenticated
     if (!store.getters['modules/user/isAuthenticated']) {

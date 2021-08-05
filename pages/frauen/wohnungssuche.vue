@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <h1 class="text-h1 primary--text mb-4">Wohnungssuche</h1>
-    <Verification v-if="!$store.getters['modules/user/verified']" />
+    <SharedVerificationPage v-if="!$store.getters['modules/user/verified']" />
     <v-form v-else ref="housing" v-model="valid" class="mb-8">
       <h2 class="text-h2 secondary--text">Deine Daten sind sicher</h2>
       <p>

@@ -23,7 +23,7 @@
         <p class="text-center error--text font-weight-bold">
           "Wir lassen dich mit deinen Erlebnissen nicht allein."
         </p>
-        <Offerings />
+        <SharedServiceOverview />
       </v-container>
     </v-sheet>
     <v-container>

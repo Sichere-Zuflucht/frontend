@@ -77,7 +77,7 @@
 
 <script>
 export default {
-  name: 'ProfileInformation',
+  name: 'UpdateProfile',
   data() {
     return {
       valid: false,

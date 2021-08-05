@@ -6,7 +6,7 @@
         {{ user.public.firstName }} {{ user.public.lastName }}
       </h1>
     </client-only>
-    <VerificationsAlert />
+    <CoachFulfilRegistration />
     <div v-if="!!this.private && this.private.stripe">
       <h2 class="primary--text mb-2">Anfragen</h2>
       <div v-if="requests != null">
@@ -102,7 +102,7 @@
                         </v-list-item-group>
                       </v-list>
 
-                      <DatePicker :item="item" />
+                      <UtilsDatePicker :item="item" />
                       <p class="mt-2 mb-0 pa-2 caption">
                         Bitte füge mind. 3 Termine hinzu.
                       </p>
@@ -167,7 +167,6 @@
 
 <script>
 export default {
-  middleware: 'isCoach',
   data() {
     return {
       requests: null,
