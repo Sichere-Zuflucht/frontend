@@ -126,7 +126,7 @@
                             ? item.video
                             : item.video.codeArzt
                         "
-                        >zum {{ item.videoType }} Videocall
+                        >zum Videocall ({{ item.videoType }})
                       </v-btn>
                     </div>
 
