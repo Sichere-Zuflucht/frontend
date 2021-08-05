@@ -39,7 +39,7 @@
               :disabled="disabled"
               nuxt
               exact
-              to="frauen/findCoach"
+              to="berater/suche"
             >
               Beratungs-Themen ansehen
             </v-btn>

@@ -13,7 +13,7 @@
     <div v-if="responses" class="pb-4">
       <div v-if="responses.length === 0">
         <p>Du hast noch keine Berater*innen kontaktiert.</p>
-        <v-btn to="findCoach" color="secondary" append
+        <v-btn to="/berater/suche" color="secondary"
           >Beratungsangebote ansehen
         </v-btn>
       </div>
@@ -59,7 +59,7 @@
     <v-sheet color="blue-grey lighten-5">
       <v-container>
         <h2 class="text-h2 secondary--text mt-6 mb-3">Unsere Angebote</h2>
-        <Offerings />
+        <SharedServiceOverview /> />
       </v-container>
     </v-sheet>
   </v-sheet>

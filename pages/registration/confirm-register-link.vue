@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-container>
     <h1 class="text-h1 primary--text mb-4">Registrierung</h1>
     <v-card>
       <v-card-text>
@@ -20,11 +20,13 @@
             Irgendetwas ist schief gelaufen. Versuche dich erneut zu
             registrieren.
           </p>
-          <v-btn to="/signup" exact nuxt>Erneut registrieren</v-btn>
+          <v-btn to="/registration/signup" exact nuxt
+            >Erneut registrieren</v-btn
+          >
         </v-alert>
       </v-card-text>
     </v-card>
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -61,7 +63,7 @@ export default {
         .then((result) => {
           window.localStorage.removeItem('emailForSignIn')
           this.$router.push({
-            path: '/update-profile',
+            path: '/registration/membership-selection',
             query: { eMail: this.email },
           })
         })
