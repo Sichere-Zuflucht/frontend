@@ -17,7 +17,7 @@
         </h2>
       </v-container>
       <v-container v-if="responses.length === 0" class="pt-0">
-        <v-btn to="findCoach" color="secondary" append
+        <v-btn to="berater/suche" color="secondary"
           >Beratungsangebote ansehen
         </v-btn>
       </v-container>
