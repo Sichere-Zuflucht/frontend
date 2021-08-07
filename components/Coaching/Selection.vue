@@ -25,7 +25,7 @@
             </v-col>
             <v-col class="d-flex align-center justify-center">
               <v-btn color="secondary" @click="overlay = !overlay"
-                >Foto bearbeiten
+                >Foto auswählen
               </v-btn>
               <v-overlay :absolute="true" :opacity="1" :value="overlay">
                 <v-form ref="uploadForm" v-model="uploadRef">
@@ -35,11 +35,12 @@
                     accept="image/png, image/jpeg, image/png"
                     placeholder="Foto hochladen"
                     prepend-icon="mdi-camera"
-                    label="Profilfoto"
+                    label="Foto auswählen"
                     :show-size="1000"
                     style="width: 220px"
                     required
                   ></v-file-input>
+                  <v-btn text @click="overlay = !overlay"> Abbrechen</v-btn>
                   <v-btn
                     :loading="isLoading"
                     color="success"
@@ -48,14 +49,13 @@
                   >
                     Foto hochladen
                   </v-btn>
-                  <v-btn text @click="overlay = !overlay"> Abbrechen</v-btn>
                 </v-form>
               </v-overlay>
             </v-col>
           </v-row>
 
           <v-btn color="primary" block @click="update(1)">
-            <v-icon>mdi-arrow-down</v-icon>
+            <v-icon>mdi-arrow-down</v-icon> Weiter
           </v-btn>
         </v-stepper-content>
         <v-stepper-step
@@ -84,6 +84,7 @@
           </v-chip-group>
           <v-btn color="primary" block @click="isCoach ? update(2) : finish()">
             <v-icon>{{ isCoach ? 'mdi-arrow-down' : 'mdi-check' }}</v-icon>
+            {{ isCoach ? 'Weiter' : 'Fertig' }}
           </v-btn>
         </v-stepper-content>
         <v-stepper-step
@@ -106,6 +107,12 @@
             Bild von Ihrer Person machen können. Z.B. mit Berufserfahrung,
             Schwerpunkt etc.
           </p>
+          <v-textarea
+            v-model="changeProfession"
+            outlined
+            label="Aktueller Beruf"
+            placeholder="Wie lautet Ihre Jobbezeichnung."
+          ></v-textarea>
           <v-text-field
             v-model="changeSince"
             outlined
@@ -219,6 +226,7 @@ export default {
       },
       topics: [],
       selectedTopic: this.info.topicArea,
+      changeProfession: this.info.profession,
       changeSince: this.info.since,
       changeDescription: this.info.description,
       changeHistory: this.info.history,
@@ -260,6 +268,7 @@ export default {
         coachingTopics: this.changeCoachingTopics,
         assistance: this.changeAssistance,
         avatar: this.changeAvatar ? this.changeAvatar : this.avatar,
+        profession: this.changeProfession,
       }
       this.$emit('filter', data)
       this.$emit('selection', data)

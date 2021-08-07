@@ -96,7 +96,7 @@
   </v-row>
 </template>
 
-<script>
+<script setup>
 export default {
   props: {
     disabled: {

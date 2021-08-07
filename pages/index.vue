@@ -88,9 +88,7 @@
               >
                 Anmeldung für Berater*innen
               </v-btn>
-              <v-btn class="text-decoration-line-through" text block
-                >mehr erfahren</v-btn
-              >
+              <v-btn text block>mehr erfahren</v-btn>
             </v-card-subtitle>
           </v-card>
         </v-col>
@@ -117,9 +115,7 @@
               >
                 Ich biete meine Unterkunft an
               </v-btn>
-              <v-btn class="text-decoration-line-through" text block
-                >mehr erfahren</v-btn
-              >
+              <v-btn text block>mehr erfahren</v-btn>
             </v-card-subtitle>
           </v-card>
         </v-col>

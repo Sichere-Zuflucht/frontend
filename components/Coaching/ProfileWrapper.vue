@@ -6,20 +6,19 @@
     style="padding: 12px"
     max-width="300px"
   >
-    <v-sheet class="d-flex">
-      <v-avatar color="primary my-5 mx-3" size="80"
+    <v-card-text class="pt-0">
+      <v-avatar color="primary" class="my-5" size="80"
         ><v-img :src="pubCoachData.avatar"
       /></v-avatar>
-      <div class="ma-5 ml-2 d-flex flex-column justify-center">
+      <div class="d-flex flex-column justify-center">
         <h2 class="secondary--text text-h2">
           {{ pubCoachData.firstName }} {{ pubCoachData.lastName }}
         </h2>
-        <h3 class="mt-2 text-h5">
-          {{ pubCoachData.profession }}
+        <h3 class="text-h5">
+          {{ pubCoachData.info.profession }}
         </h3>
       </div>
-    </v-sheet>
-    <v-card-text class="pt-0">
+      <v-divider class="my-3" />
       <p class="font-weight-bold mb-1 mt-2 caption">Fachgebiet</p>
       <div class="d-flex flex-wrap">
         <v-chip

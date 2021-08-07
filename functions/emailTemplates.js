@@ -51,9 +51,8 @@ exports.housingInitialMail = (name, content, userId) => {
     <br>
     —
     <br>
-    <span style="font-family: monospace; margin-left: 2em">"${
-      content.message
-    }"</span>
+    <span style="font-family: monospace; margin-left: 2em">"
+    ${content.message}"</span>
     <br>
     <br>
     Gesendet über das Wohnungsformular.
@@ -69,9 +68,9 @@ exports.womanSuggestedDates = (coachName, dates, womanID) => {
     html: `<div style="font-size: 16px;">Hallo,<br><br>
              der Coach ${coachName} hat auf Ihre Anfrage reagiert und schickt Ihnen folgende Terminvorschläge:
         <br>
-        <span style="font-family: monospace;">${listToHTML(
-          dates.map((date) => date.date + ' ' + date.time)
-        )}</span>
+        <span style="font-family: monospace;">
+        ${listToHTML(dates.map((date) => date.date + ' ' + date.time))}
+      </span>
         <br>
         Bitte loggen Sie sich auf unserer <a href="sichere-zuflucht.de">Plattform</a> ein, um einen Termin auszuwählen.
         <br>
@@ -90,7 +89,7 @@ exports.coachAcceptedDate = (coachName, date, coachID) => {
              eine Frau hat Ihrem Termin zugesagt:
         <br>
         <br>
-        <span style="font-family: monospace; margin-left: 2em">"${date}"</span>
+        <span style="font-family: monospace; margin-left: 2em">"${date.date} ${date.time}"</span>
         <br>
         <br>
         Bitte loggen Sie sich auf unserer <a href="sichere-zuflucht.de">Plattform</a> ein, um für den Termin den Videocall aufzusetzen.
@@ -119,7 +118,7 @@ exports.reqDeletedNotificationMail = (date) => {
   return {
     subject: 'Sichere Zuflucht - Anfrage abgesagt',
     html: `<div style="font-size: 16px;">Anfrage wurde abgesagt<br><br>
-    Eine Frau hat Ihre Anfrage für den ${date} abgesagt.
+    Eine Frau hat Ihre Anfrage für den ${date.date} ${date.time} abgesagt.
     </div>`,
   }
 }

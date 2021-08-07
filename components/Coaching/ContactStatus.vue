@@ -24,7 +24,7 @@
           {{ coach.firstName }} {{ coach.lastName }}
         </h2>
         <h3 class="mt-2 text-h5">
-          {{ coach.profession }}
+          {{ coach.info.profession }}
         </h3>
       </div>
     </v-sheet>
@@ -60,7 +60,7 @@
                 </v-list-item>
               </template>
               <template #selection="{ item }"
-                >{{ formatDate(item.date) }} | {{ item.time }}
+                ><p>{{ formatDate(item.date) }} | {{ item.time }}</p>
               </template>
             </v-select>
             <p class="font-weight-bold mb-0 my-4">Preis: 50€</p>
@@ -82,22 +82,41 @@
         </v-row>
       </div>
       <div v-else>
-        <v-btn
-          class="my-2"
-          color="success"
-          target="_blank"
-          :disabled="coachingLiesInPast"
-          :href="
-            response.videoType === 'Jitsi'
-              ? response.video
-              : response.video.codePatient
-          "
-          >zum Videocall
-        </v-btn>
-        <v-alert dark text dense color="success"
-          >Zugesagt für {{ formatDate(response.acceptedDate.date) }} um
-          {{ response.acceptedDate.time }}
-        </v-alert>
+        <div v-if="response.payed">
+          <v-btn
+            class="my-2"
+            color="success"
+            target="_blank"
+            :disabled="coachingLiesInPast"
+            :href="
+              response.videoType === 'sicherer Anbieter'
+                ? response.video
+                : response.video.codePatient
+            "
+            >zum Videocall
+          </v-btn>
+          <v-alert dark text dense color="success"
+            >Zugesagt für {{ formatDate(response.acceptedDate.date) }} um
+            {{ response.acceptedDate.time }}
+          </v-alert>
+        </div>
+        <div v-else>
+          <v-alert dark color="error" type="error"
+            ><p>
+              Es liegt keine Bezahlung vor. Es scheint etwas schief gelaufen zu
+              sein.
+            </p>
+            <v-btn @click="pay(response.acceptedDate)"
+              >Bezahlen erneut versuchen</v-btn
+            >
+            <p class="caption mt-2">
+              oder den Support kontaktieren unter
+              <a href="mailto:technik@sichere-zuflucht.de"
+                >technik@sichere-zuflucht.de</a
+              >
+            </p>
+          </v-alert>
+        </div>
       </div>
     </v-card-text>
     <v-card-actions
@@ -118,8 +137,8 @@
             >Termin löschen
           </v-btn>
         </template>
-        <v-alert type="warning" class="mt-2 ma-2"
-          >wirklich löschen?
+        <v-alert type="error" color="error" class="mt-2 ma-2"
+          ><p>Wirklich löschen?</p>
 
           <v-btn
             light
@@ -132,6 +151,9 @@
         </v-alert>
       </v-dialog>
     </v-card-actions>
+    <v-overlay :value="redirectWarning" color="secondary" opacity="1">
+      <p>Weiterleitung zu Stripe. Bitte warten...</p>
+    </v-overlay>
   </v-card>
 </template>
 
@@ -168,6 +190,7 @@ export default {
         isDisabled: false,
         payButtonLoading: false,
       },
+      redirectWarning: false,
     }
   },
   computed: {
@@ -191,6 +214,7 @@ export default {
     },
     async pay(dateInput) {
       this.payButtonLoading = true
+      this.redirectWarning = true
       let redReq, data, video
       if (this.response.videoType === 'RED') {
         data = {
@@ -232,7 +256,7 @@ export default {
           this.response.coach.firstName.toLowerCase() +
           '_' +
           this.response.coach.lastName.toLowerCase() +
-          '&?' +
+          '_' + // no ?:&'"%# symbols allowed
           this.response.id
         this.standardPayment(video, dateInput)
       }
@@ -246,19 +270,25 @@ export default {
           requestId: this.response.id,
           video: v,
         })
-        .then(() => {
+        .then(async () => {
           this.payButtonLoading = false
           this.btn.isDisabled = true
           // eslint-disable-next-line vue/no-mutating-props
           this.response.acceptedDate = dI
           // eslint-disable-next-line vue/no-mutating-props
           this.response.video = v
-          /* this.$stripe.redirectToCheckout({
+          const paymentID = (
+            await this.$fire.functions.httpsCallable('stripe-payCoaching')({
+              responseID: this.response.id,
+              isDev: this.$config.isDev,
+            })
+          ).data
+          this.$stripe.redirectToCheckout({
             // Make the id field from the Checkout Session creation API response
             // available to this file, so you can provide it as argument here
             // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
             sessionId: paymentID,
-          }) */
+          })
         })
     },
     formatDate(date) {
