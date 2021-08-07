@@ -12,7 +12,7 @@
         :color="item.suggestions.length < 3 ? 'success' : null"
         prepend-icon="mdi-calendar"
         v-on="on"
-        >Termin hinzufügen</v-btn
+        >Datum/Uhrzeit auswählen</v-btn
       >
     </template>
     <v-date-picker v-model="date" :min="today" scrollable>

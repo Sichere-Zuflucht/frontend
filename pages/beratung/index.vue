@@ -88,7 +88,9 @@
                             :key="di"
                           >
                             <v-list-item-content>
-                              <v-list-item-title class="font-weight-bold"
+                              <v-list-item-title
+                                class="font-weight-bold"
+                                style="font-size: 1em"
                                 >{{ formatDate(d.date) }}
                               </v-list-item-title>
                               <p class="caption">{{ d.time }} Uhr</p>
@@ -120,18 +122,26 @@
                         color="success"
                         target="_blank"
                         :href="
-                          item.videoType === 'Jitsi'
+                          item.videoType === 'sicherer Anbieter'
                             ? item.video
                             : item.video.codeArzt
                         "
-                        >zum {{ item.videoType }} Videocall
+                        >zum Videocall ({{ item.videoType }})
                       </v-btn>
                     </div>
 
                     <v-banner v-else>
-                      Es wurde noch kein Termin bestätigt...
-                    </v-banner></v-card-text
-                  >
+                      Es wurde noch kein Termin bestätigt. Ihre vorgeschlagenen
+                      Termine sind:<br /><br />
+                      <span
+                        v-for="(d, di) in item.suggestions"
+                        :key="di"
+                        class="pt-4"
+                        ><b>{{ formatDate(d.date) }}</b
+                        ><br />
+                        {{ d.time }} Uhr<br /><br
+                      /></span> </v-banner
+                  ></v-card-text>
                   <v-card-actions class="d-flex justify-end">
                     <v-btn class="caption" plain>Frau absagen</v-btn>
                     <v-btn
@@ -140,7 +150,7 @@
                       :disabled="item.suggestions.length < 3"
                       color="success"
                       @click="addSuggestions(item)"
-                      >Zusagen
+                      >Termine vorschlagen
                     </v-btn>
                   </v-card-actions>
                 </v-card>
@@ -170,8 +180,8 @@ export default {
   data() {
     return {
       requests: null,
-      videoTypes: ['Jitsi', 'RED'],
-      selectedVideoType: 'Jitsi',
+      videoTypes: ['sicherer Anbieter', 'zertifizierter Anbieter'],
+      selectedVideoType: 'sicherer Anbieter',
       loading: false,
     }
   },
