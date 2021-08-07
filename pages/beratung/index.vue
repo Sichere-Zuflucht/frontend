@@ -17,17 +17,40 @@
                 color="grey lighten-5"
                 class="d-flex align-center justify-start"
               >
-                <v-avatar class="pr-2 flex-shrink-1 flex-grow-0">
-                  <v-img
-                    :lazy-src="item.womanAvatar"
-                    :src="item.womanAvatar"
+                <v-avatar
+                  class="mr-2 flex-shrink-1 flex-grow-0"
+                  :style="'border: 1px solid ' + item.womanColor"
+                >
+                  <!-- <v-img
+                    lazy-src="woman-icon-sichere-zuflucht.svg"
+                    src="woman-icon-sichere-zuflucht.svg"
+                    :style="'border: 1px solid ' + item.womanColor"
+                    :color="item.womanColor"
                     max-height="40"
                     max-width="40"
-                  ></v-img>
+                  ></v-img> -->
+                  <SharedWomanIcon :color="item.womanColor" class="pa-2" />
                 </v-avatar>
-                <div class="d-flex flex-column flex-grow-0 flex-shrink-0">
-                  <p class="caption mb-0">Frau</p>
-                  <p class="font-weight-bold mb-0">{{ item.womanUserName }}</p>
+                <div
+                  class="d-flex flex-column flex-grow-0 flex-shrink-0"
+                  style="position: relative"
+                >
+                  <p
+                    class="mb-0"
+                    style="
+                      position: absolute;
+                      top: -50%;
+                      font-size: 0.5em !important;
+                    "
+                  >
+                    KryptoNr. Frau
+                  </p>
+                  <p
+                    class="font-weight-bold mb-0"
+                    :style="'color: ' + item.womanColor"
+                  >
+                    {{ item.womanUserName }}
+                  </p>
                 </div>
 
                 <v-chip
