@@ -59,7 +59,7 @@
     <v-sheet color="blue-grey lighten-5">
       <v-container>
         <h2 class="text-h2 secondary--text mt-6 mb-3">Unsere Angebote</h2>
-        <SharedServiceOverview /> />
+        <SharedServiceOverview />
       </v-container>
     </v-sheet>
   </v-sheet>

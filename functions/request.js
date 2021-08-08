@@ -1,5 +1,6 @@
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
+const { sendRequestDeleted } = require('./email')
 
 const {
   coachInitialMail,
@@ -148,7 +149,10 @@ exports.acceptDate = functions.https.onCall(async (data, context) => {
 exports.delete = functions.https.onCall((data, context) => {
   const docRef = admin.firestore().collection('requests').doc(data.docId)
   return docRef.get().then((doc) => {
-    if (doc.data().ids.includes(context.auth.uid)) return docRef.delete()
+    if (doc.data().ids.includes(context.auth.uid)) {
+      sendRequestDeleted((doc.data().acceptedDate || {}).date)
+      return docRef.delete()
+    }
     return false
   })
 })
