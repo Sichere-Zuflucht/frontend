@@ -1,3 +1,12 @@
+function dateToString(date) {
+  const d = new Date(date.date)
+  const currDate = d.getDate()
+  const currMonth = d.getMonth() + 1 // Months are zero based
+  const currYear = d.getFullYear()
+  return date
+    ? date.time + ' ' + currDate + '.' + currMonth + '.' + currYear
+    : ''
+}
 exports.coachInitialMail = (coachName, message, coachID) => {
   return {
     subject: 'Sichere Zuflucht - Anfrage von Frau',
@@ -70,7 +79,7 @@ exports.womanSuggestedDates = (coachName, dates, womanID) => {
              der Coach ${coachName} hat auf Ihre Anfrage reagiert und schickt Ihnen folgende Terminvorschläge:
         <br>
         <span style="font-family: monospace;">${listToHTML(
-          dates.map((date) => date.date + ' ' + date.time)
+          dates.map(dateToString)
         )}</span>
         <br>
         Bitte loggen Sie sich auf unserer <a href="sichere-zuflucht.de">Plattform</a> ein, um einen Termin auszuwählen.
@@ -90,7 +99,9 @@ exports.coachAcceptedDate = (coachName, date, coachID) => {
              eine Frau hat Ihrem Termin zugesagt:
         <br>
         <br>
-        <span style="font-family: monospace; margin-left: 2em">"${date}"</span>
+        <span style="font-family: monospace; margin-left: 2em">"${dateToString(
+          date
+        )}"</span>
         <br>
         <br>
         Bitte loggen Sie sich auf unserer <a href="sichere-zuflucht.de">Plattform</a> ein, um für den Termin den Videocall aufzusetzen.
@@ -119,7 +130,7 @@ exports.reqDeletedNotificationMail = (date) => {
   return {
     subject: 'Sichere Zuflucht - Anfrage abgesagt',
     html: `<div style="font-size: 16px;">Anfrage wurde abgesagt<br><br>
-    Eine Frau hat Ihre Anfrage für den ${date} abgesagt.
+    Eine Frau hat Ihre Anfrage für den ${dateToString(date)} abgesagt.
     </div>`,
   }
 }
