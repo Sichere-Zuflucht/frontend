@@ -49,17 +49,6 @@ function sendNotificationMailToSZ(emailData) {
   return transporter.sendMail(mailOptions)
 }
 
-function sendNotificationReqDeleted(emailData) {
-  const mailOptions = {
-    from: 's.fellner@sichere-zuflucht.de',
-    to: 'kontakt@sichere-zuflucht.de',
-    subject: emailData.subject,
-    html: emailData.html,
-  }
-
-  return transporter.sendMail(mailOptions)
-}
-
 exports.sendMail = functions.firestore
   .document('/requests/{id}')
   .onWrite(async function (change, context) {
@@ -125,6 +114,6 @@ exports.sendReqHousingMail = functions.https.onCall(async (data, context) => {
   )
 })
 
-exports.sendRequestDeleted = functions.https.onCall((date) => {
-  return sendNotificationReqDeleted(reqDeletedNotificationMail(date))
-})
+exports.sendRequestDeleted = (data) => {
+  return sendNotificationMailToSZ(reqDeletedNotificationMail(data))
+}

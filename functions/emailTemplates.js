@@ -1,11 +1,13 @@
 function dateToString(date) {
-  const d = new Date(date.date)
-  const currDate = d.getDate()
-  const currMonth = d.getMonth() + 1 // Months are zero based
-  const currYear = d.getFullYear()
-  return date
-    ? date.time + ' ' + currDate + '.' + currMonth + '.' + currYear
-    : ''
+  if (date) {
+    const d = new Date(date.date)
+    const currDate = d.getDate()
+    const currMonth = d.getMonth() + 1 // Months are zero based
+    const currYear = d.getFullYear()
+    return date.time + ' ' + currDate + '.' + currMonth + '.' + currYear
+  } else {
+    return 'Kein Datum'
+  }
 }
 exports.coachInitialMail = (coachName, message, coachID) => {
   return {

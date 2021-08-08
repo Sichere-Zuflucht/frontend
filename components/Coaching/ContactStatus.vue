@@ -180,9 +180,8 @@ export default {
   methods: {
     cancel(doc) {
       this.eraseLoading = true
-      this.$fire.functions.httpsCallable('request-delete')({ docId: doc })
       this.$fire.functions
-        .httpsCallable('email-sendRequestDeleted')(this.response.acceptedDate)
+        .httpsCallable('request-delete')({ docId: doc })
         .then(() => {
           this.isDelete = false
           this.eraseLoading = false
