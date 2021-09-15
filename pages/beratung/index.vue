@@ -166,7 +166,6 @@
                       /></span> </v-banner
                   ></v-card-text>
                   <v-card-actions class="d-flex justify-end">
-                    <v-btn class="caption" plain>Frau absagen</v-btn>
                     <v-btn
                       v-if="!item.coachAnswered"
                       :loading="loading"
@@ -175,6 +174,25 @@
                       @click="addSuggestions(item)"
                       >Termine vorschlagen
                     </v-btn>
+                    <v-dialog v-model="isDelete" persistent max-width="290">
+                      <template #activator="{ on, attrs }">
+                        <v-btn small text color="grey" v-bind="attrs" v-on="on"
+                          >Termin absagen
+                        </v-btn>
+                      </template>
+                      <v-alert type="error" color="error" class="mt-2 ma-2"
+                        ><p>Wirklich absagen?</p>
+
+                        <v-btn
+                          light
+                          class="mr-1"
+                          :loading="eraseLoading"
+                          @click="cancel(item)"
+                          >Ja, absagen
+                        </v-btn>
+                        <v-btn light @click="isDelete = false"> nein</v-btn>
+                      </v-alert>
+                    </v-dialog>
                   </v-card-actions>
                 </v-card>
               </v-expansion-panel-content>
@@ -206,6 +224,8 @@ export default {
       videoTypes: ['sicherer Anbieter', 'zertifizierter Anbieter'],
       selectedVideoType: 'sicherer Anbieter',
       loading: false,
+      isDelete: false,
+      eraseLoading: false,
     }
   },
   async fetch() {
@@ -226,6 +246,22 @@ export default {
     },
   },
   methods: {
+    cancel(doc) {
+      this.eraseLoading = true
+      this.$fire.functions.httpsCallable('request-delete')({ docId: doc.id })
+      const fakeDate = {
+        date: 'noch nicht festgelegten',
+        time: 'Termin',
+      }
+      const date = doc.acceptedDate ? doc.acceptedDate : fakeDate
+      this.$fire.functions
+        .httpsCallable('email-sendRequestDeleted')(date)
+        .then(() => {
+          this.isDelete = false
+          this.eraseLoading = false
+          this.$emit('cancel')
+        })
+    },
     addSuggestions(request) {
       this.loading = true
       this.$fire.functions

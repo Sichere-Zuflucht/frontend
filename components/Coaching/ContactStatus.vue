@@ -81,6 +81,7 @@
           </v-col>
         </v-row>
       </div>
+
       <div v-else>
         <div v-if="response.payed">
           <v-btn
@@ -134,18 +135,18 @@
       <v-dialog v-model="isDelete" persistent max-width="290">
         <template #activator="{ on, attrs }">
           <v-btn small text color="primary" v-bind="attrs" v-on="on"
-            >Termin löschen
+            >Termin absagen
           </v-btn>
         </template>
         <v-alert type="error" color="error" class="mt-2 ma-2"
-          ><p>Wirklich löschen?</p>
+          ><p>Wirklich absagen?</p>
 
           <v-btn
             light
             class="mr-1"
             :loading="eraseLoading"
             @click="cancel(response.id)"
-            >Ja, löschen
+            >Ja, absagen
           </v-btn>
           <v-btn light @click="isDelete = false"> nein</v-btn>
         </v-alert>
