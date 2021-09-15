@@ -92,8 +92,15 @@
           exact
           icon
           plain
-          ><v-avatar color="primary" size="38"
-            ><v-img :src="user.public.avatar" /></v-avatar
+        >
+          <v-avatar v-if="membership === 'Coach'" size="38"
+            ><v-img v-if="user.public.avatar" :src="user.public.avatar" />
+            <SharedCoachIcon
+              v-else
+              color="#b3b3b3"
+              style="border: 1px solid #000"
+              class="pa-2"
+            /> </v-avatar
         ></v-btn>
       </client-only>
     </v-app-bar>
@@ -156,11 +163,6 @@ export default {
           icon: 'mdi-credit-card',
           title: 'Bezahlung',
           to: '/beratung/bezahlung',
-        },
-        {
-          icon: 'mdi-shield-check',
-          title: 'Verifizierung',
-          to: '/beratung/personenverifizierung',
         },
         {
           icon: 'mdi-cog',

@@ -20,7 +20,16 @@
           <v-row class="mb-4">
             <v-col class="d-flex align-center justify-center">
               <v-avatar size="80">
-                <v-img :src="$store.getters['modules/user/avatar']" />
+                <v-img
+                  v-if="avatar"
+                  :src="$store.getters['modules/user/avatar']"
+                />
+                <SharedCoachIcon
+                  v-else
+                  color="#b3b3b3"
+                  style="border: 1px solid #b3b3b3"
+                  class="pa-2"
+                />
               </v-avatar>
             </v-col>
             <v-col class="d-flex align-center justify-center">
