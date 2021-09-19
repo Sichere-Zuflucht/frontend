@@ -10,9 +10,7 @@
           Unsere Plattform ermöglicht Frauen in Gewaltbeziehungen sich anonym
           Beratung zu holen – sicher, schnell, anonym und deutschlandweit.
         </p>
-        <div class="d-flex align-center justify-center pt-6 pb-12">
-          <v-btn color="secondary">Ja, ich möchte beraten</v-btn>
-        </div>
+        <UtilsBtn text="Ja, ich möchte beraten" />
         <h2 class="text-h2 secondary--text">
           Warum brauchen gewaltbetroffene Frauen Ihre Unterstützung?
         </h2>
@@ -189,9 +187,7 @@
           </p>
         </div>
       </div>
-      <div class="d-flex align-center justify-center pt-6 pb-12">
-        <v-btn color="secondary">Ja, ich möchte beraten</v-btn>
-      </div>
+      <UtilsBtn text="Ja, ich möchte beraten" />
     </v-container>
     <v-divider />
     <v-container>
@@ -218,9 +214,7 @@
           Wir würden uns sehr freuen, wenn sie teil unseres Berater*innen Pools
           werden! <br /><br />Vielen Dank für ihr Engagement!
         </h3>
-        <div class="d-flex align-center justify-center pt-6">
-          <v-btn color="secondary">Ja, ich möchte beraten</v-btn>
-        </div>
+        <UtilsBtn text="Ja, ich möchte beraten" />
         <v-img src="erol-ahmed-9XiN0r2NWSM-unsplash.jpg" class="pa-8"
           ><h2 class="white--text text-h2 text-center">
             Sie möchten uns unterstützen!
@@ -230,10 +224,8 @@
             entwickeln wir in unserer Freizeit und finanzieren es aus unseren
             privaten Mitteln. Deshalb sind wir für jede Spende dankbar!
           </p>
-          <div class="d-flex align-center justify-center py-2">
-            <v-btn color="secondary">Jetzt spenden</v-btn>
-          </div></v-img
-        >
+          <UtilsBtn text="Jetzt spenden" classname="py-2" />
+        </v-img>
       </v-container>
     </v-sheet>
   </div>
