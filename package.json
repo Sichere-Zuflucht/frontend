@@ -23,11 +23,8 @@
   },
   "dependencies": {
     "@nuxtjs/firebase": "^7.6.1",
-    "@tiptap/extension-highlight": "^2.0.0-beta.16",
-    "@tiptap/extension-text-align": "^2.0.0-beta.23",
-    "@tiptap/extension-underline": "^2.0.0-beta.16",
-    "@tiptap/starter-kit": "^2.0.0-beta.105",
-    "@tiptap/vue-2": "^2.0.0-beta.51",
+    "@nuxtjs/markdownit": "^2.0.0",
+    "@nuxtjs/strapi": "^0.3.1",
     "core-js": "^3.9.1",
     "firebase": "^8.7.0",
     "lodash": "^4.17.21",
