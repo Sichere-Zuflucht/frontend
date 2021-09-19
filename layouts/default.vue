@@ -109,6 +109,10 @@
     <v-main style="hyphens: auto" class="pb-6">
       <nuxt />
     </v-main>
+    <div class="d-flex flex-column align-center my-8">
+      <v-icon color="primary">mdi-heart</v-icon>
+      <p class="text-uppercase primary--text">du bist nicht allein!</p>
+    </div>
     <UtilsFooter></UtilsFooter>
   </v-app>
 </template>
@@ -177,7 +181,7 @@ export default {
         },
         {
           title: 'Wie du helfen kannst',
-          to: '/',
+          to: '/info-berater',
         },
         {
           title: 'Aktuelles',
