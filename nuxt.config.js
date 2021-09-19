@@ -120,7 +120,12 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ['@nuxtjs/firebase', 'nuxt-stripe-module'],
+  modules: [
+    '@nuxtjs/firebase',
+    'nuxt-stripe-module',
+    '@nuxtjs/strapi',
+    '@nuxtjs/markdownit',
+  ],
   firebase: {
     config: {
       apiKey: 'AIzaSyDMjjzgxNWEsDWYETgWbFgaYnwzAmLyzhM',
@@ -156,6 +161,14 @@ export default {
       storage: true,
     },
     terminateDatabasesAfterGenerate: true,
+  },
+
+  strapi: {
+    // Options
+  },
+
+  markdownit: {
+    runtime: true, // Support `$md()`
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
