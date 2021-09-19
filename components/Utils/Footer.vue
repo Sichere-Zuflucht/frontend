@@ -2,7 +2,7 @@
   <v-footer
     inset
     app
-    class="d-flex flex-column mt-6"
+    class="d-flex flex-column mt-0"
     style="position: relative"
   >
     <v-row class="pa-2 caption" style="width: 100vw"
@@ -71,10 +71,6 @@
         justify-center
       "
     >
-      <div class="d-flex flex-column align-center mt-8">
-        <v-icon color="primary">mdi-heart</v-icon>
-        <p class="text-uppercase primary--text">du bist nicht allein!</p>
-      </div>
       <v-img
         contain
         max-width="60"
