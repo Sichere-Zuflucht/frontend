@@ -35,25 +35,14 @@
       </h3>
     </v-container>
 
-    <v-slide-group show-arrows class="pa-1">
-      <v-slide-item v-for="n in 15" :key="n">
-        <v-card class="ma-1" width="200">
-          <v-img
-            src="paige-cody-bOVZ_f3fbQM-unsplash.jpg"
-            max-height="300px"
-          ></v-img>
-          <v-card-text>
-            <h5 class="text-h5">Ich hab’s nie bereut!</h5>
-            <p class="caption">Juli 2020</p>
-            <q
-              >Ich freu mich so für dich“ schluchzte meine beste Freundin am
-              Telefon </q
-            >… weiterlesen
-          </v-card-text>
-          <v-card-actions
-            ><v-btn color="primary" block>lesen</v-btn></v-card-actions
-          >
-        </v-card>
+    <v-slide-group v-if="magazineList" show-arrows>
+      <v-slide-item v-for="(magazine, n) in magazineList" :key="n">
+        <!--<p class="pa-12">{{ n }}</p>-->
+        <MagazineTeaserBox
+          class="ma-4"
+          style="width: 300px"
+          :magazine-data="magazine"
+        />
       </v-slide-item>
     </v-slide-group>
     <v-divider />
@@ -127,3 +116,16 @@
     </v-container>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      magazineList: null,
+    }
+  },
+  async mounted() {
+    this.magazineList = await this.$strapi.find('magazines')
+  },
+}
+</script>

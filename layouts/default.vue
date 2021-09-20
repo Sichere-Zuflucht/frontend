@@ -187,6 +187,10 @@ export default {
           title: 'Aktuelles',
           to: '/aktuelles',
         },
+        {
+          title: 'Magazin',
+          to: '/magazine',
+        },
       ],
     }
   },
