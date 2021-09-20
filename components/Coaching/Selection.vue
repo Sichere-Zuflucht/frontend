@@ -275,7 +275,7 @@ export default {
       this.isLoading = true
       const uploadTask = this.$fire.storage
         .ref()
-        .child(this.$store.getters['modules/user/uid'])
+        .child('profiles/' + this.$store.getters['modules/user/uid'])
         .put(file)
       uploadTask.on(
         'state_changed',
