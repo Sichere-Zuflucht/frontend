@@ -1,10 +1,6 @@
 <template>
   <div>
-    <v-sheet color="secondary d-flex justify-center">
-      <v-icon size="60" class="pa-12" color="white"
-        >mdi-credit-card-plus-outline</v-icon
-      >
-    </v-sheet>
+    <UtilsBanner icon="mdi-credit-card-plus-outline" />
     <v-container>
       <div v-if="!stripe || !stripe.verified">
         <h1 class="text-h1 primary--text my-8">Bezahlung</h1>

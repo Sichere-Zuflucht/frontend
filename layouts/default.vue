@@ -177,7 +177,7 @@ export default {
         },
         {
           title: 'Wie wir helfen',
-          to: '/',
+          to: '/info-frauen',
         },
         {
           title: 'Wie du helfen kannst',
@@ -185,7 +185,7 @@ export default {
         },
         {
           title: 'Aktuelles',
-          to: '/',
+          to: '/aktuelles',
         },
       ],
     }
