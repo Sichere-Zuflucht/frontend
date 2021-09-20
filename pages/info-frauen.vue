@@ -25,9 +25,8 @@
       <h1 class="text-h2 secondary--text text-center py-8">
         Sichere Zuflucht Magazin
       </h1>
-      <p class="caption text-center">
-        {Platzhalter für fertige MagazinComponente}
-      </p>
+      <MagazineTeaserBox :magazine-data="magazineList" :append-url="false" />
+
       <UtilsBtn text="Zum Magazin" classname="pb-0" />
 
       <p class="font-weight-bold pt-8 pb-4 text-center">
@@ -108,6 +107,7 @@
 export default {
   data() {
     return {
+      magazineList: null,
       quotes: [
         {
           text: 'Wenn ich damals die Möglichkeiten gehabt hätte, die diese Plattform bietet, hätte ich den Schritt aus meiner Beziehung nicht er dann gewagt, als es um mein Leben ging!',
@@ -123,6 +123,9 @@ export default {
         },
       ],
     }
+  },
+  async mounted() {
+    this.magazineList = await this.$strapi.find('magazines')
   },
 }
 </script>

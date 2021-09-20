@@ -34,17 +34,7 @@
         Sichere Zuflucht Magazin
       </h3>
     </v-container>
-
-    <v-slide-group v-if="magazineList" show-arrows>
-      <v-slide-item v-for="(magazine, n) in magazineList" :key="n">
-        <!--<p class="pa-12">{{ n }}</p>-->
-        <MagazineTeaserBox
-          class="ma-4"
-          style="width: 300px"
-          :magazine-data="magazine"
-        />
-      </v-slide-item>
-    </v-slide-group>
+    <MagazineTeaserBox :magazine-data="magazineList" />
     <v-divider />
     <v-container>
       <v-row style="max-width: 700px" class="mx-auto">
