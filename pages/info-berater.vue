@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-img src="AdobeStock_342417877.jpeg" height="300" />
+    <UtilsBanner url="AdobeStock_342417877.jpeg" />
     <v-container class="py-md-16">
       <div class="text-center">
         <h1 class="text-h1 primary--text">
@@ -14,14 +14,14 @@
         <h2 class="text-h2 secondary--text">
           Warum brauchen gewaltbetroffene Frauen Ihre Unterstützung?
         </h2>
-        <h3 class="text-h3 primary--text text-uppercase pt-4">Die Fakten:</h3>
-        <img src="" />
-        <p class="caption">
+        <h3 class="text-h3 primary--text text-uppercase py-4">Die Fakten:</h3>
+        <v-img src="jede-dritte-frau.jpg" />
+        <p class="caption pt-2 mb-8">
           Jede 3. Frau ist betroffen! <br />D.h. jeder von uns kennt mindestens
           EINE.
         </p>
-        <img />
-        <p class="caption">
+        <v-img src="diagramm.jpg" />
+        <p class="caption pt-2 mb-8">
           Frauenhäuser und Beratungsangebote melden seit Jahren, dass sie der
           Nachfrage nicht gerecht werden können.
         </p>
@@ -62,63 +62,23 @@
         erreichbares <b>Unterstützungsangebot.</b>
       </p>
       <v-row
-        ><v-col>
+        ><v-col
+          v-for="(user, i) in users"
+          :key="i"
+          cols="6"
+          sm="4"
+          md="2"
+          class="pa-1"
+        >
           <v-card>
-            <img />
-            <v-card-text>
-              <p class="subtitle-2 primary--text">Katrin (30) + Leni (3)</p>
-              <p class="caption">Krankenschwester</p>
+            <v-img :src="user.src" />
+            <v-card-text class="text-center">
+              <p class="subtitle-2 primary--text mb-1">{{ user.name }}</p>
+              <p class="caption mb-0">{{ user.job }}</p>
             </v-card-text>
           </v-card>
         </v-col>
-        <v-col>
-          <v-card>
-            <img />
-            <v-card-text>
-              <p class="subtitle-2 primary--text">Heidi (73)</p>
-              <p class="caption">Rentnerin</p>
-            </v-card-text>
-          </v-card>
-        </v-col>
-        <v-col>
-          <v-card>
-            <img />
-            <v-card-text>
-              <p class="subtitle-2 primary--text">Angelika (43)</p>
-              <p class="caption">Anwältin</p>
-            </v-card-text>
-          </v-card>
-        </v-col></v-row
-      >
-      <v-row
-        ><v-col>
-          <v-card>
-            <img />
-            <v-card-text>
-              <p class="subtitle-2 primary--text">Nasrin (17)</p>
-              <p class="caption">Abiturientin</p>
-            </v-card-text>
-          </v-card>
-        </v-col>
-        <v-col>
-          <v-card>
-            <img />
-            <v-card-text>
-              <p class="subtitle-2 primary--text">Sanya (34) + Sam (8)</p>
-              <p class="caption">Köchin</p>
-            </v-card-text>
-          </v-card>
-        </v-col>
-        <v-col>
-          <v-card>
-            <img />
-            <v-card-text>
-              <p class="subtitle-2 primary--text">Llian (29) + Xi (4)</p>
-              <p class="caption">Sekretärin</p>
-            </v-card-text>
-          </v-card>
-        </v-col></v-row
-      >
+      </v-row>
       <ul class="secondary--text mt-8">
         <li>
           <p class="black--text">
@@ -215,7 +175,7 @@
           werden! <br /><br />Vielen Dank für ihr Engagement!
         </h3>
         <UtilsBtn text="Ja, ich möchte beraten" />
-        <v-img src="erol-ahmed-9XiN0r2NWSM-unsplash.jpg" class="pa-8"
+        <v-img src="teaser-spenden.jpg" class="pa-8"
           ><h2 class="white--text text-h2 text-center">
             Sie möchten uns unterstützen!
           </h2>
@@ -307,6 +267,38 @@ export default {
           title:
             'Ich bin begeistert von diesem Projekt. Kann ich meine Beratung auch erstmal kostenlos anbieten?',
           content: '',
+        },
+      ],
+      users: [
+        {
+          src: 'beispiel-frau-1.jpg',
+          name: 'Katrin (30) + Leni (3) ',
+          job: 'Krankenschwester ',
+        },
+        {
+          src: 'beispiel-frau-2.jpg',
+          name: 'Heidi (73) ',
+          job: 'Rentnerin ',
+        },
+        {
+          src: 'beispiel-frau-3.jpg',
+          name: 'Angelika (43) ',
+          job: 'Anwältin ',
+        },
+        {
+          src: 'beispiel-frau-4.jpg',
+          name: 'Nasrin (17) ',
+          job: 'Abiturientin',
+        },
+        {
+          src: 'beispiel-frau-5.jpg',
+          name: 'Sanya (34) + Sam (8) ',
+          job: 'Köchin ',
+        },
+        {
+          src: 'beispiel-frau-6.jpg',
+          name: 'Llian (29) + Xi (4)',
+          job: 'Sekretärin',
         },
       ],
     }
