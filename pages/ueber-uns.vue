@@ -57,9 +57,6 @@
           color="#C13584"
           ><v-icon>mdi-instagram</v-icon>
         </v-btn>
-        <!--<v-btn icon href="https://www.youtube.com/" target="_blank"
-          ><v-icon>mdi-youtube</v-icon>
-        </v-btn>-->
       </div>
     </v-container>
     <UtilsNews />
