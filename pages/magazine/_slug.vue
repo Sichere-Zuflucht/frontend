@@ -73,8 +73,15 @@
     <v-container>
       <h2 class="text-h2 secondary--text mb-4">Verwandte Einträge</h2>
       <div v-if="relatedArticles" class="d-flex flex-wrap">
-        <div v-for="(relatedArticle, k) in relatedArticles" :key="k">
-          <MagazineTeaserBox :magazine-data="relatedArticle" />
+        <div
+          v-for="(relatedArticle, k) in relatedArticles"
+          :key="k"
+          class="pb-4"
+        >
+          <MagazineTeaserBox
+            :magazine-data="relatedArticle"
+            :append-url="false"
+          />
         </div>
       </div>
     </v-container>

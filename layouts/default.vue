@@ -173,7 +173,7 @@ export default {
         },
         {
           title: 'Über uns',
-          to: '/',
+          to: '/ueber-uns',
         },
         {
           title: 'Wie wir helfen',

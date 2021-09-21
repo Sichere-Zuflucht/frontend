@@ -2,7 +2,7 @@
   <div class="my-4">
     <v-container class="py-md-16">
       <h1 class="text-h1 mb-4 text-center primary--text">
-        Niemand muss häusliche Gewalt aushalten.
+        Niemand muss <br />häusliche Gewalt aushalten.
       </h1>
       <h2 class="text-center secondary--text subtitle-1 mb-8">Auch du nicht</h2>
       <p class="text-center mx-auto" style="max-width: 530px">
@@ -28,15 +28,15 @@
     </v-sheet>
     <v-container>
       <h3
-        class="text-h3 text-uppercase text-center secondary--text"
+        class="text-h3 text-uppercase text-center secondary--text pt-8"
         style="font-weight: bold"
       >
-        Sichere Zuflucht Magazin
+        Sichere Zuflucht <br />Magazin
       </h3>
     </v-container>
-    <MagazineTeaserBox :magazine-data="magazineList" />
+    <MagazineSlider :list="magazineList" />
     <v-divider />
-    <v-container>
+    <v-container class="pt-16">
       <v-row style="max-width: 700px" class="mx-auto">
         <v-col cols="12" md="6">
           <v-card class="mx-auto" max-width="320">
@@ -61,19 +61,19 @@
               <b>Frauen</b>, die es geschafft haben, sich aus ihrer
               <b>gewaltvollen Beziehung zu befreien</b>
               und nun anderen helfen möchten.
-              <v-btn
-                color="primary my-4"
-                href="mailto:kontakt@sichere-zuflucht.de"
-              >
-                Anmeldung für Berater*innen
+              <v-btn color="primary mt-8 mb-1" to="registration/signup">
+                Als Berater*in registrieren
               </v-btn>
-              <v-btn class="text-decoration-line-through" text block
+              <v-btn
+                to="info-berater"
+                text
+                class="pl-1 text-decoration-underline caption"
                 >mehr erfahren</v-btn
               >
             </v-card-subtitle>
           </v-card>
         </v-col>
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="6" style="display: none">
           <v-card class="mx-auto" max-width="320">
             <v-img
               src="gleren-meneghin-VSLPOL9PwB8-unsplash.jpg"
@@ -96,9 +96,6 @@
               >
                 Ich biete meine Unterkunft an
               </v-btn>
-              <v-btn class="text-decoration-line-through" text block
-                >mehr erfahren</v-btn
-              >
             </v-card-subtitle>
           </v-card>
         </v-col>

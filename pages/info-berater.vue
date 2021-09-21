@@ -175,9 +175,9 @@
           werden! <br /><br />Vielen Dank für ihr Engagement!
         </h3>
         <UtilsBtn text="Ja, ich möchte beraten" />
-        <UtilsDonation />
       </v-container>
     </v-sheet>
+    <UtilsDonation />
   </div>
 </template>
 
