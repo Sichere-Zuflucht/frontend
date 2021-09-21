@@ -10,9 +10,9 @@ jobs:
         uses: ionos-deploy-now/retrieve-project-info-action@v1
         id: project
         with:
-          api-key: ${{ secrets.IONOS_API_KEY }}
-          project: d7fee1da-3b18-4df7-8f57-6941276f2146
+          project: 57dedaed-9367-497b-b834-6b66e666d6c5
           service-host: api-eu.ionos.space
+          api-key: ${{ secrets.IONOS_API_KEY }}
       - name: checkout
         if: ${{ steps.project.outputs.deployment-enabled == 'true' }}
         uses: actions/checkout@v2
@@ -38,10 +38,10 @@ jobs:
         if: ${{ steps.project.outputs.deployment-enabled == 'true' }}
         uses: ionos-deploy-now/deploy-to-ionos-action@v1
         with:
+          service-host: api-eu.ionos.space
           api-key: ${{ secrets.IONOS_API_KEY }}
           remote-host: ${{ steps.project.outputs.remote-host }}
-          dist-folder: dist
-          project: d7fee1da-3b18-4df7-8f57-6941276f2146
+          dist-folder: 
+          project: 57dedaed-9367-497b-b834-6b66e666d6c5
           storage-quota: ${{ steps.project.outputs.storage-quota }}
           branch-id: ${{ steps.project.outputs.branch-id }}
-          service-host: api-eu.ionos.space
