@@ -21,12 +21,12 @@
         </p></v-container
       ></v-sheet
     >
-    <v-container>
-      <h1 class="text-h2 secondary--text text-center py-8">
-        Sichere Zuflucht Magazin
-      </h1>
-      <MagazineTeaserBox :magazine-data="magazineList" :append-url="false" />
 
+    <h1 class="text-h2 secondary--text text-center py-8">
+      Sichere Zuflucht Magazin
+    </h1>
+    <MagazineSlider :list="magazineList" :append-url="false" />
+    <v-container>
       <UtilsBtn text="Zum Magazin" classname="pb-0" />
 
       <p class="font-weight-bold pt-8 pb-4 text-center">

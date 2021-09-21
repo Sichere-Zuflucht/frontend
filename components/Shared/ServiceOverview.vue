@@ -47,7 +47,7 @@
         </v-card>
       </v-hover>
     </v-col>
-    <v-col cols="12" md="6">
+    <v-col cols="12" md="6" style="display: none">
       <v-hover v-slot="{ hover }">
         <v-card class="mx-auto" max-width="320">
           <v-img src="erol-ahmed-9XiN0r2NWSM-unsplash.jpg" height="200px"

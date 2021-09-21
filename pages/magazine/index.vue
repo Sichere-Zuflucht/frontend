@@ -45,6 +45,7 @@
               : true
           )"
           :key="magazine.id"
+          class="pb-4"
         >
           <MagazineTeaserBox :magazine-data="magazine" />
         </div>

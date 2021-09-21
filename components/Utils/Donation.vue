@@ -8,6 +8,6 @@
       entwickeln wir in unserer Freizeit und finanzieren es aus unseren privaten
       Mitteln. Deshalb sind wir für jede Spende dankbar!
     </p>
-    <UtilsBtn text="Jetzt spenden" classname="py-2" />
+    <UtilsBtn text="Jetzt spenden" classname="py-2" link="spenden" />
   </v-img>
 </template>
