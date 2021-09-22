@@ -1,10 +1,6 @@
 <template>
   <div>
-    <v-sheet color="secondary d-flex justify-center">
-      <v-icon size="60" class="pa-12" color="white"
-        >mdi-account-cog-outline</v-icon
-      >
-    </v-sheet>
+    <UtilsBanner icon="mdi-account-cog-outline" />
     <v-container v-if="pubData && privData">
       <small>Name:</small>
       <p>
