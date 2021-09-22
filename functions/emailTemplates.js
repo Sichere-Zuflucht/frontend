@@ -62,9 +62,8 @@ exports.housingInitialMail = (name, content, userId) => {
     <br>
     —
     <br>
-    <span style="font-family: monospace; margin-left: 2em">"${
-      content.message
-    }"</span>
+    <span style="font-family: monospace; margin-left: 2em">"
+    ${content.message}"</span>
     <br>
     <br>
     Gesendet über das Wohnungsformular.
@@ -101,9 +100,7 @@ exports.coachAcceptedDate = (coachName, date, coachID) => {
              eine Frau hat Ihrem Termin zugesagt:
         <br>
         <br>
-        <span style="font-family: monospace; margin-left: 2em">"${dateToString(
-          date
-        )}"</span>
+        <span style="font-family: monospace; margin-left: 2em">"${date.date} ${date.time}"</span>
         <br>
         <br>
         Bitte loggen Sie sich auf unserer <a href="sichere-zuflucht.de">Plattform</a> ein, um für den Termin den Videocall aufzusetzen.
@@ -132,7 +129,7 @@ exports.reqDeletedNotificationMail = (date) => {
   return {
     subject: 'Sichere Zuflucht - Anfrage abgesagt',
     html: `<div style="font-size: 16px;">Anfrage wurde abgesagt<br><br>
-    Eine Frau hat Ihre Anfrage für den ${dateToString(date)} abgesagt.
+    Eine Frau hat Ihre Anfrage für den ${date.date} ${date.time} abgesagt.
     </div>`,
   }
 }

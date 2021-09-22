@@ -5,7 +5,7 @@
     class="d-flex flex-column mt-6"
     style="position: relative"
   >
-    <v-row class="pa-2 caption" style="width: 100vw"
+    <v-row class="pa-2 caption"
       ><v-col class="mt-6" cols="12" md="4">
         <v-card
           ><v-card-text

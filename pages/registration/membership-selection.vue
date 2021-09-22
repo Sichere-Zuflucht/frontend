@@ -15,8 +15,7 @@
         >
           <template slot="label">
             <p class="ma-0" style="padding-top: 2px">
-              <b>{{ n.description }}</b
-              ><br />{{ n.subdescription }}
+              <b>{{ n.description }}</b>
             </p>
           </template>
         </v-radio>
@@ -37,14 +36,6 @@
         class="secondary--text font-weight-bold"
         :rules="textRules"
         label="Nachname"
-      ></v-text-field>
-      <v-text-field
-        v-if="membership ? membership.id === 'Coach' : false"
-        v-model="profession"
-        type="text"
-        class="secondary--text font-weight-bold"
-        :rules="textRules"
-        label="Beruf"
       ></v-text-field>
       <v-text-field
         v-model="password"
@@ -88,7 +79,6 @@ export default {
         (v) => (v && v.length >= 3) || 'mind. 3 Zeichen lang',
       ],
       requiredRule: [(v) => !!v || 'Bitte ausfüllen'],
-      profession: null,
       password: '',
       hidePassword: true,
       password2: '',
@@ -113,6 +103,7 @@ export default {
     this.memberships = (
       await this.$fire.firestore.collection('memberships').get()
     ).docs.map((doc) => doc.data())
+    this.memberships.reverse()
     this.membership = this.memberships[0]
   },
   fetchOnServer: false,
@@ -133,8 +124,6 @@ export default {
             createdUserData.public = {
               firstName: this.firstName,
               lastName: this.lastName,
-              profession: this.profession,
-              professionDuration: this.professionDuration,
               membership: this.membership.id,
             }
             createdUserData.private = {
