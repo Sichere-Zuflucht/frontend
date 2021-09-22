@@ -64,7 +64,7 @@ $headings: (
     'text-transform': false,
   ),
   'subtitle-1': (
-    'size': 1.6rem,
+    'size': 0.8rem,
     'weight': normal,
     'line-height': 1.75rem,
     'letter-spacing': 0.009375em,
@@ -120,15 +120,3 @@ $headings: (
     'text-transform': uppercase,
   ),
 );
-.v-slide-group__next,
-.v-slide-group__prev {
-  position: absolute;
-  z-index: 2;
-  height: 100%;
-}
-.v-slide-group__next {
-  right: 0; 
-}
-.v-slide-group__prev {
-  left: 0; 
-}

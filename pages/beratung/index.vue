@@ -17,17 +17,40 @@
                 color="grey lighten-5"
                 class="d-flex align-center justify-start"
               >
-                <v-avatar class="pr-2 flex-shrink-1 flex-grow-0">
-                  <v-img
-                    :lazy-src="item.womanAvatar"
-                    :src="item.womanAvatar"
+                <v-avatar
+                  class="mr-2 flex-shrink-1 flex-grow-0"
+                  :style="'border: 1px solid ' + item.womanColor"
+                >
+                  <!-- <v-img
+                    lazy-src="woman-icon-sichere-zuflucht.svg"
+                    src="woman-icon-sichere-zuflucht.svg"
+                    :style="'border: 1px solid ' + item.womanColor"
+                    :color="item.womanColor"
                     max-height="40"
                     max-width="40"
-                  ></v-img>
+                  ></v-img> -->
+                  <SharedWomanIcon :color="item.womanColor" class="pa-2" />
                 </v-avatar>
-                <div class="d-flex flex-column flex-grow-0 flex-shrink-0">
-                  <p class="caption mb-0">Frau</p>
-                  <p class="font-weight-bold mb-0">{{ item.womanUserName }}</p>
+                <div
+                  class="d-flex flex-column flex-grow-0 flex-shrink-0"
+                  style="position: relative"
+                >
+                  <p
+                    class="mb-0"
+                    style="
+                      position: absolute;
+                      top: -50%;
+                      font-size: 0.5em !important;
+                    "
+                  >
+                    KryptoNr. Frau
+                  </p>
+                  <p
+                    class="font-weight-bold mb-0"
+                    :style="'color: ' + item.womanColor"
+                  >
+                    {{ item.womanUserName }}
+                  </p>
                 </div>
 
                 <v-chip
@@ -88,7 +111,9 @@
                             :key="di"
                           >
                             <v-list-item-content>
-                              <v-list-item-title class="font-weight-bold"
+                              <v-list-item-title
+                                class="font-weight-bold"
+                                style="font-size: 1em"
                                 >{{ formatDate(d.date) }}
                               </v-list-item-title>
                               <p class="caption">{{ d.time }} Uhr</p>
@@ -120,28 +145,54 @@
                         color="success"
                         target="_blank"
                         :href="
-                          item.videoType === 'Jitsi'
+                          item.videoType === 'sicherer Anbieter'
                             ? item.video
                             : item.video.codeArzt
                         "
-                        >zum {{ item.videoType }} Videocall
+                        >zum Videocall ({{ item.videoType }})
                       </v-btn>
                     </div>
 
                     <v-banner v-else>
-                      Es wurde noch kein Termin bestätigt...
-                    </v-banner></v-card-text
-                  >
+                      Es wurde noch kein Termin bestätigt. Ihre vorgeschlagenen
+                      Termine sind:<br /><br />
+                      <span
+                        v-for="(d, di) in item.suggestions"
+                        :key="di"
+                        class="pt-4"
+                        ><b>{{ formatDate(d.date) }}</b
+                        ><br />
+                        {{ d.time }} Uhr<br /><br
+                      /></span> </v-banner
+                  ></v-card-text>
                   <v-card-actions class="d-flex justify-end">
-                    <v-btn class="caption" plain>Frau absagen</v-btn>
                     <v-btn
                       v-if="!item.coachAnswered"
                       :loading="loading"
                       :disabled="item.suggestions.length < 3"
                       color="success"
                       @click="addSuggestions(item)"
-                      >Zusagen
+                      >Termine vorschlagen
                     </v-btn>
+                    <v-dialog v-model="isDelete" persistent max-width="290">
+                      <template #activator="{ on, attrs }">
+                        <v-btn small text color="grey" v-bind="attrs" v-on="on"
+                          >Termin absagen
+                        </v-btn>
+                      </template>
+                      <v-alert type="error" color="error" class="mt-2 ma-2"
+                        ><p>Wirklich absagen?</p>
+
+                        <v-btn
+                          light
+                          class="mr-1"
+                          :loading="eraseLoading"
+                          @click="cancel(item)"
+                          >Ja, absagen
+                        </v-btn>
+                        <v-btn light @click="isDelete = false"> nein</v-btn>
+                      </v-alert>
+                    </v-dialog>
                   </v-card-actions>
                 </v-card>
               </v-expansion-panel-content>
@@ -170,9 +221,11 @@ export default {
   data() {
     return {
       requests: null,
-      videoTypes: ['Jitsi', 'RED'],
-      selectedVideoType: 'Jitsi',
+      videoTypes: ['sicherer Anbieter', 'zertifizierter Anbieter'],
+      selectedVideoType: 'sicherer Anbieter',
       loading: false,
+      isDelete: false,
+      eraseLoading: false,
     }
   },
   async fetch() {
@@ -193,6 +246,22 @@ export default {
     },
   },
   methods: {
+    cancel(doc) {
+      this.eraseLoading = true
+      this.$fire.functions.httpsCallable('request-delete')({ docId: doc.id })
+      const fakeDate = {
+        date: 'noch nicht festgelegten',
+        time: 'Termin',
+      }
+      const date = doc.acceptedDate ? doc.acceptedDate : fakeDate
+      this.$fire.functions
+        .httpsCallable('email-sendRequestDeleted')(date)
+        .then(() => {
+          this.isDelete = false
+          this.eraseLoading = false
+          this.$emit('cancel')
+        })
+    },
     addSuggestions(request) {
       this.loading = true
       this.$fire.functions
