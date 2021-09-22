@@ -1,6 +1,6 @@
 <template>
   <v-sheet>
-    <UtilsBanner url="le-buzz-tVnm9I9jb8I-unsplash.jpg" />
+    <UtilsBanner url="../le-buzz-tVnm9I9jb8I-unsplash.jpg" />
     <v-container>
       <h1 class="text-h1 primary--text">Beratung und Hilfe</h1>
       <p class="mb-6">
