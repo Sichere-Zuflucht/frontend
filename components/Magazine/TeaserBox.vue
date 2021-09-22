@@ -19,7 +19,7 @@
       ><v-btn
         :to="(appendUrl ? '' : 'magazine/') + magazineData.slug"
         :append="appendUrl"
-        :exact="findSolution"
+        :exact="findSolutio"
         outlined
         color="primary"
         >zum Eintrag</v-btn
