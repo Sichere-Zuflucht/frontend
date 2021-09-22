@@ -329,7 +329,7 @@ export default {
   },
 }
 </script>
-<style>
+<style scoped>
 .v-expansion-panel-content__wrap {
   padding: 0;
 }
