@@ -2,6 +2,7 @@
   <div>
     <UtilsBanner icon="mdi-account-cog-outline" />
     <v-container v-if="pubData && privData">
+      <h1 class="text-h1 primary--text mb-4">Einstellungen<br />einsehen</h1>
       <small>Name:</small>
       <p>
         {{ pubData.firstName || privData.firstName }}
@@ -13,6 +14,7 @@
       <p>{{ privData.email }}</p>
       <small>Mitglied als:</small>
       <p v-if="pubData.membership">{{ pubData.membership.name }}</p>
+
       <v-btn
         :disabled="btn.disabled"
         :loading="btn.loading"
@@ -77,6 +79,13 @@
         class="mt-4"
         >{{ err.msg }}</v-alert
       >
+      <v-divider class="mt-8 pt-3"></v-divider>
+      <p class="caption">
+        Bei Änderungswünschen gerne eine E-Mail an
+        <a href="mailto:kontakt@sichere-zuflucht.de"
+          >kontakt@sichere-zuflucht.de</a
+        >
+      </p>
     </v-container>
   </div>
 </template>
@@ -147,8 +156,7 @@ export default {
           )
           this.$router.go('/')
         })
-        .catch((err) => {
-          console.log(err)
+        .catch(() => {
           this.err.status = true
           this.err.msg = 'Falsches Passwort eingegeben.'
           this.overlay = false

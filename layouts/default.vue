@@ -85,9 +85,22 @@
       ></v-toolbar-title>
       <v-spacer />
       <client-only>
-        <v-btn v-if="loggedIn && user.public" to="/profile" nuxt exact icon
-          ><v-avatar color="primary" size="38"
-            ><v-img :src="user.public.avatar" /></v-avatar
+        <v-btn
+          v-if="loggedIn && user.public"
+          :to="membership === 'Coach' ? '/beratung' : '/frauen'"
+          nuxt
+          exact
+          icon
+          plain
+        >
+          <v-avatar v-if="membership === 'Coach'" size="38"
+            ><v-img v-if="user.public.avatar" :src="user.public.avatar" />
+            <SharedCoachIcon
+              v-else
+              color="#b3b3b3"
+              style="border: 1px solid #000"
+              class="pa-2"
+            /> </v-avatar
         ></v-btn>
       </client-only>
     </v-app-bar>
@@ -95,8 +108,8 @@
       dark
       color="red"
       width="70"
-      style="position: fixed; bottom: 30%; right: 0; z-index: 100"
-      href="https://www.chefkoch.de/rs/s0/was+kochen/Rezepte.html"
+      style="position: fixed; bottom: 50px; right: 0; z-index: 100"
+      href="https://www.brigitte.de/"
       tile
     >
       <v-card-text class="pa-1 d-flex flex-column align-center">
@@ -154,11 +167,6 @@ export default {
           icon: 'mdi-credit-card',
           title: 'Bezahlung',
           to: '/beratung/bezahlung',
-        },
-        {
-          icon: 'mdi-shield-check',
-          title: 'Verifizierung',
-          to: '/beratung/personenverifizierung',
         },
         {
           icon: 'mdi-cog',

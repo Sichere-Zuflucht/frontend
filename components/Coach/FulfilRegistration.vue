@@ -28,7 +28,7 @@
           :complete="!!userData.public.info"
           step="1"
           :editable="!userData.public.info"
-          color="success"
+          :color="!!userData.public.info ? 'success' : 'secondary'"
         >
           <h2
             class="text-h5 text-uppercase secondary--text"
@@ -102,7 +102,7 @@
             {{
               userData.private.verifySetting.isVerifying
                 ? 'erneut anfragen'
-                : 'starten'
+                : 'anfragen'
             }}
           </v-btn>
         </v-stepper-content>

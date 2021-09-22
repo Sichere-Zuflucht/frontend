@@ -2,21 +2,25 @@
   <v-sheet class="pb-0">
     <v-sheet color="secondary pa-8"
       ><h1 class="text-h1 white--text">
-        Willkommen bei Sichere Zuflucht
+        Willkommen bei<br />Sichere Zuflucht
       </h1></v-sheet
     >
-    <v-container>
-      <h2 class="text-h4 font-weight-bold primary--text mt-3 mb-3">
-        Du hast Antwort auf deine Anfrage(n) von:
-      </h2>
-    </v-container>
+
     <div v-if="responses" class="pb-4">
-      <div v-if="responses.length === 0">
-        <p>Du hast noch keine Berater*innen kontaktiert.</p>
-        <v-btn to="/berater/suche" color="secondary"
+      <v-container>
+        <h2 class="text-h4 font-weight-bold primary--text mt-3 mb-3">
+          {{
+            responses.length === 0
+              ? 'Starte jetzt und suche deine passende Beratung.'
+              : 'Du hast Antwort auf deine Anfrage(n) von:'
+          }}
+        </h2>
+      </v-container>
+      <v-container v-if="responses.length === 0" class="pt-0">
+        <v-btn to="berater/suche" color="secondary"
           >Beratungsangebote ansehen
         </v-btn>
-      </div>
+      </v-container>
       <v-container v-else-if="responses.length === 1">
         <CoachingContactStatus
           :coach="responses[0].coach"
@@ -59,7 +63,7 @@
     <v-sheet color="blue-grey lighten-5">
       <v-container>
         <h2 class="text-h2 secondary--text mt-6 mb-3">Unsere Angebote</h2>
-        <SharedServiceOverview /> />
+        <SharedServiceOverview />
       </v-container>
     </v-sheet>
   </v-sheet>
@@ -103,3 +107,19 @@ export default {
   },
 }
 </script>
+
+<style>
+.v-slide-group__next,
+.v-slide-group__prev {
+  position: absolute;
+  z-index: 2;
+  height: calc(100% + 10px);
+  align-items: end !important;
+}
+.v-slide-group__next {
+  right: 0;
+}
+.v-slide-group__prev {
+  left: 0;
+}
+</style>
