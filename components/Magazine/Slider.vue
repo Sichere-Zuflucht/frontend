@@ -26,3 +26,18 @@ export default {
   },
 }
 </script>
+
+<style>
+.v-slide-group__next,
+.v-slide-group__prev {
+  position: absolute;
+  z-index: 2;
+  height: 100%;
+}
+.v-slide-group__next {
+  right: 0;
+}
+.v-slide-group__prev {
+  left: 0;
+}
+</style>

@@ -1,6 +1,6 @@
 <template>
   <v-sheet>
-    <UtilsBanner url="../le-buzz-tVnm9I9jb8I-unsplash.jpg" />
+    <UtilsBanner url="le-buzz-tVnm9I9jb8I-unsplash.jpg" />
     <v-container>
       <h1 class="text-h1 primary--text">Beratung und Hilfe</h1>
       <p class="mb-6">
@@ -28,14 +28,7 @@
           :info="user.info || {}"
           @filter="filter"
         />
-        <p class="caption mt-4">
-          <b>Dein Fachgebiet oder Thema ist nicht dabei?</b><br />
-          <a href="mailto:kontakt@sichere-zuflucht.de"
-            >Schreib uns eine Nachricht</a
-          >, vielleicht können wir trotzdem jemanden finden, der dir weiter
-          hilft.
-        </p></v-container
-      >
+      </v-container>
     </v-sheet>
     <v-container>
       <div
@@ -64,19 +57,19 @@
           class="mt-8"
         >
           Keiner unserer Berater*innen erfüllt den angegebenen Kriterien.
-          <a
-            class="white--text"
-            href="mailto:kontakt@sichere-zuflucht.de"
-            target="_blank"
-          >
-            Schreibe uns eine Nachricht</a
-          >, sollte gar keiner unserer Berater*innen zu dir passen.
         </v-alert>
         <v-btn outlined small color="primary" @click="resetFilter"
           >Alle anzeigen
         </v-btn>
       </div>
+      <p class="caption mt-4">
+        <b>Dein Fachgebiet oder Thema ist nicht dabei?</b><br />
+        <a href="mailto:kontakt@sichere-zuflucht.de"
+          >Schreib uns eine Nachricht</a
+        >, vielleicht können wir trotzdem jemanden finden, der dir weiter hilft.
+      </p>
     </v-container>
+
     <WomanPriceInfo />
   </v-sheet>
 </template>

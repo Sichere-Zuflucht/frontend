@@ -1,4 +1,4 @@
-# sichere-zufluch
+# Sichere Zuflucht
 
 ## Build Setup
 

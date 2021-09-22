@@ -17,15 +17,15 @@ export default {
   },
 
   router: {
-    // base,
+    base,
     middleware: 'index',
   },
   static: {
-    // prefix: base,
+    prefix: base,
   },
 
   publicRuntimeConfig: {
-    // base,
+    base,
     stripe: {
       publishableKey:
         'pk_test_51IbjZeFRsEq5IriEKQifwCzu8LMnx6uMxxhOz7HIELiaYpFCnsfNlVaiTOU72b2uWwQP4B5gI8GwDrsrSNJS0hPP00e8y3RbDo',

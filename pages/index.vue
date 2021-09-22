@@ -38,15 +38,15 @@
     <v-divider />
     <v-container class="pt-16">
       <v-row style="max-width: 700px" class="mx-auto">
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="12">
           <v-card class="mx-auto" max-width="320">
             <v-img src="AdobeStock_342417877.jpeg" height="200px"></v-img>
 
-            <v-card-title
+            <v-card-text
               ><h3 class="text-h3 primary--text font-weight-bold mb-2">
                 Werden Sie ein Teil von Sichere Zuflucht
               </h3>
-            </v-card-title>
+            </v-card-text>
 
             <v-card-subtitle>
               Wir erweitern permanent unseren Pool an Berater*innen und freuen
