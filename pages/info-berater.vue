@@ -10,7 +10,7 @@
           Unsere Plattform ermöglicht Frauen in Gewaltbeziehungen sich anonym
           Beratung zu holen – sicher, schnell, anonym und deutschlandweit.
         </p>
-        <UtilsBtn text="Ja, ich möchte beraten" />
+        <UtilsBtn text="Ja, ich möchte beraten" link="registration/signup" />
         <h2 class="text-h2 secondary--text">
           Warum brauchen gewaltbetroffene Frauen Ihre Unterstützung?
         </h2>
@@ -147,7 +147,7 @@
           </p>
         </div>
       </div>
-      <UtilsBtn text="Ja, ich möchte beraten" />
+      <UtilsBtn text="Ja, ich möchte beraten" link="registration/signup" />
     </v-container>
     <v-divider />
     <v-container>
@@ -174,7 +174,7 @@
           Wir würden uns sehr freuen, wenn sie teil unseres Berater*innen Pools
           werden! <br /><br />Vielen Dank für ihr Engagement!
         </h3>
-        <UtilsBtn text="Ja, ich möchte beraten" />
+        <UtilsBtn text="Ja, ich möchte beraten" link="registration/signup" />
       </v-container>
     </v-sheet>
     <UtilsDonation />

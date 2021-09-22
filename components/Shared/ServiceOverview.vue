@@ -1,6 +1,6 @@
 <template>
   <v-row style="max-width: 700px" class="mx-auto">
-    <v-col cols="12" md="6">
+    <v-col cols="12" md="12">
       <v-hover v-slot="{ hover }">
         <v-card class="mx-auto" max-width="320">
           <v-img src="le-buzz-tVnm9I9jb8I-unsplash.jpg" height="200px">
@@ -31,9 +31,9 @@
           </v-card-title>
 
           <v-card-subtitle>
-            in Form von <b>Online-Besprechungen</b> mit Fachleuten zu euren
-            Themen. Diese könnt ihr von überall ganz
-            <b>einfach und anonym</b> mit dem <b>Handy</b> machen.
+            in Form von <b>Online-Besprechungen</b> mit Fachleuten zu deinen
+            Themen. Diese kannst du von überall ganz
+            <b>einfach und anonym</b> mit deinem <b>Handy</b> machen.
             <v-btn
               color="secondary my-4"
               :disabled="disabled"
@@ -41,7 +41,7 @@
               exact
               to="berater/suche"
             >
-              Beratungs-Themen ansehen
+              Beratungsthemen ansehen
             </v-btn>
           </v-card-subtitle>
         </v-card>
@@ -78,8 +78,8 @@
           </v-card-title>
 
           <v-card-subtitle>
-            Du musst schnell zuhause raus? Pack deine Kinder ein und zieh in
-            eine unserer verbündeten Ferienunterkünfte.
+            Du musst zuhause raus? In einer sicheren Unterkunft kannst du zur
+            Ruhe kommen und die nächsten Schritte planen.
             <v-btn
               :disabled="disabled"
               color="secondary my-4"

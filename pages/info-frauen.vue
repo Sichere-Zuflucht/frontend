@@ -27,7 +27,7 @@
     </h1>
     <MagazineSlider :list="magazineList" :change="true" />
     <v-container>
-      <UtilsBtn text="Zum Magazin" classname="pb-0" />
+      <UtilsBtn text="Zum Magazin" link="/magazine" classname="pb-0" />
 
       <p class="font-weight-bold pt-8 pb-4 text-center">
         Was erlebst du in deinem Alltag. Wir wollen dir helfen, deine Situation
