@@ -34,7 +34,7 @@
         Sichere Zuflucht <br />Magazin
       </h3>
     </v-container>
-    <MagazineSlider :list="magazineList" />
+    <MagazineSlider :list="magazineList" :change="true" />
     <v-divider />
     <v-container class="pt-16">
       <v-row style="max-width: 700px" class="mx-auto">

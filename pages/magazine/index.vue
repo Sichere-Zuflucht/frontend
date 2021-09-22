@@ -47,7 +47,7 @@
           :key="magazine.id"
           class="pb-4"
         >
-          <MagazineTeaserBox :magazine-data="magazine" />
+          <MagazineTeaserBox :magazine-data="magazine" :append-url="true" />
         </div>
       </div>
     </div>

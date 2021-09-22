@@ -78,10 +78,7 @@
           :key="k"
           class="pb-4"
         >
-          <MagazineTeaserBox
-            :magazine-data="relatedArticle"
-            :append-url="false"
-          />
+          <MagazineTeaserBox :magazine-data="relatedArticle" />
         </div>
       </div>
     </v-container>

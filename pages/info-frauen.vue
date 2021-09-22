@@ -25,7 +25,7 @@
     <h1 class="text-h2 secondary--text text-center py-8">
       Sichere Zuflucht Magazin
     </h1>
-    <MagazineSlider :list="magazineList" :append-url="false" />
+    <MagazineSlider :list="magazineList" :change="true" />
     <v-container>
       <UtilsBtn text="Zum Magazin" classname="pb-0" />
 

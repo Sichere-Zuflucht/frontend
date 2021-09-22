@@ -35,6 +35,9 @@ jobs:
           SITE_URL: ${{ steps.project.outputs.site-url }}
           CI: true
           STRAPI_URL: ${{ secrets.STRAPI_URL }}
+          RED_API: ${{ secrets.STRAPI_URL }}
+          STRIPE_PK: ${{ secrets.STRAPI_URL }}
+          STRIPE_SK: ${{ secrets.STRAPI_URL }}
       - name: Deploy build
         if: ${{ steps.project.outputs.deployment-enabled == 'true' }}
         uses: ionos-deploy-now/deploy-to-ionos-action@v1

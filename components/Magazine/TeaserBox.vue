@@ -17,9 +17,8 @@
     >
     <v-card-actions class="pt-4"
       ><v-btn
-        :to="(appendUrl ? '' : 'magazine/') + magazineData.slug"
+        :to="(changeUrl ? 'magazine/' : '') + magazineData.slug"
         :append="appendUrl"
-        :exact="findSolution"
         outlined
         color="primary"
         >zum Eintrag</v-btn
@@ -37,7 +36,11 @@ export default {
     },
     appendUrl: {
       type: Boolean,
-      default: true,
+      default: false,
+    },
+    changeUrl: {
+      type: Boolean,
+      default: false,
     },
   },
 }
