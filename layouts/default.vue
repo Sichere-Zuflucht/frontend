@@ -180,6 +180,10 @@ export default {
           to: '/',
         },
         {
+          title: 'Magazin',
+          to: '/magazine',
+        },
+        {
           title: 'Über uns',
           to: '/ueber-uns',
         },
@@ -192,12 +196,12 @@ export default {
           to: '/info-berater',
         },
         {
-          title: 'Aktuelles',
-          to: '/aktuelles',
+          title: 'Spenden',
+          to: '/spenden',
         },
         {
-          title: 'Magazin',
-          to: '/magazine',
+          title: 'Aktuelles',
+          to: '/aktuelles',
         },
       ],
     }
