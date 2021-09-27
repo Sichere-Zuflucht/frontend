@@ -14,31 +14,126 @@
         </p>
       </v-container></v-sheet
     >
-    <v-container>
-      <h2 class="text-h2 text-center secondary--text py-6">
+    <v-container class="py-16">
+      <h2 class="text-h2 text-center secondary--text pb-6">
         Hier könnt ihr wählen, wie ihr unterstüzen wollt.
       </h2>
-      <v-slider
-        v-model="donationAmount"
-        step="0.05"
-        max="1"
-        min="0.1"
-        ticks
-        thumb-label
-      ></v-slider>
+      <v-stepper v-model="donationStep" elevation="0">
+        <v-stepper-items>
+          <v-stepper-content step="1" class="pa-0">
+            <v-card
+              v-for="(option, i) in donationOptions"
+              :key="i"
+              class="my-4 mx-2"
+            >
+              <v-card-text>
+                <v-row
+                  ><v-col cols="3"
+                    ><v-icon color="success" size="64">{{
+                      option.icon
+                    }}</v-icon></v-col
+                  ><v-col cols="9" class="text-right"
+                    ><h3 class="primary--text text-h3 font-weight-bold pb-2">
+                      {{ option.title }}
+                    </h3>
+                    <h4
+                      v-if="!option.ownVal"
+                      class="primary--text text-h4 pb-4"
+                    >
+                      Wert: {{ option.value }}€
+                    </h4>
+                    <v-form v-else v-model="validValue">
+                      <v-text-field
+                        v-model="option.value"
+                        outlined
+                        :rules="numRule"
+                        type="number"
+                        append-icon="mdi-currency-eur"
+                      ></v-text-field
+                    ></v-form>
+                    <v-btn
+                      v-if="!option.ownVal ? option.value : validValue"
+                      color="secondary"
+                      @click="choose(option)"
+                      >Spenden</v-btn
+                    ></v-col
+                  ></v-row
+                ></v-card-text
+              >
+            </v-card>
+          </v-stepper-content>
+          <v-stepper-content step="2" class="pa-0">
+            <p class="text-center">ausgewählt</p>
+            <v-card class="my-4 mx-2" color="secondary">
+              <v-card-text v-if="donationChosen">
+                <v-row
+                  ><v-col cols="3"
+                    ><v-icon size="64">mdi-check-circle-outline</v-icon></v-col
+                  ><v-col cols="9" class="text-right"
+                    ><h3 class="white--text text-h3 font-weight-bold pb-2">
+                      {{ donationChosen.title }}
+                    </h3>
+                    <h4 class="white--text text-h4 pb-4">
+                      Wert: {{ donationChosen.value }}€
+                    </h4>
 
-      <div class="ma-auto" style="width: 130px">
-        <v-text-field
-          v-model="toPay"
-          append-icon="€"
-          hide-details
-          class="text-h1 secondary--text text-center"
-        >
-        </v-text-field>
-      </div>
-      <h3 class="text-h3 secondary--text text-center pt-2">
-        entspricht {{ equals }} Stunde Beratung
+                    <v-btn text class="pr-0" @click="donationStep--"
+                      >ändern</v-btn
+                    >
+                  </v-col></v-row
+                ></v-card-text
+              >
+            </v-card>
+            <v-btn color="success" class="float-right mr-2" @click="donate"
+              >Spenden</v-btn
+            >
+          </v-stepper-content>
+          <v-stepper-content step="3" class="pa-0">
+            <v-card class="my-4 mx-2" color="grey lighten-3">
+              <v-card-text> Weiterleitung zum Bezahlungssystem </v-card-text>
+            </v-card>
+            <v-overlay color="secondary" opacity="1">
+              <p>Weiterleitung zu Stripe. Bitte warten...</p>
+            </v-overlay>
+          </v-stepper-content>
+        </v-stepper-items>
+      </v-stepper>
+      <p class="pt-8 text-center">
+        Ihr könnt für eure Spende direkt eine Spendenquittung erhalten.
+      </p>
+    </v-container>
+    <v-divider />
+    <v-container class="text-center class py-16">
+      <h3 class="text-h3 primary--text pb-4">
+        WAS PASSIERT MIT DEINEN SPENDENGELDERN?
       </h3>
+      <p class="font-weight-bold">
+        Wir sammeln eure Spenden und geben Sie direkt für eine Frau frei, wenn
+        eine volle Stunde erreicht ist.
+      </p>
+      <p>
+        Da wir nicht alle Frauen und ihre wirtschaftlichen Möglichkeiten kennen,
+        die sich bei uns melden, wollen wir perspektivisch mit Beratungsstellen
+        und Frauenhäusern zusammen arbeiten, die genau wissen, was sich die
+        Frauen, die dort Hilfe suchen, leisten können. Diese sollen eure
+        gespendeten Stunden dann zielgenau einsetzen.
+      </p>
+      <p>
+        Eine Stunde Beratung kostet 50€. Das ist ein wesentlich geringerer
+        Preis, als Beratungen auf dem freien Markt kosten. Unsere Berater*innen
+        und Coach*innen spenden somit ihrerseits bei jeder Beratung eine
+        Leistung.
+      </p>
+      <p>
+        In den 50 € sind jeweils 10€ enthalten, die wir als Sichere Zuflucht
+        einbehalten, um unser gemeinnütziges Unternehmen am Laufen halten zu
+        können. Wir finanzieren damit Hostinggebühren, Entwicklungsgebühren,
+        Software-Abos z.B. für die angeschlossenen Zahlungs- und
+        Online-Beratungs-Dienste u.v.m. Wir arbeiten gemeinnützig. D.h. alle
+        erwirtschafteten Gewinne fließen wieder direkt in Sichere Zuflucht. So
+        gewährleisten wir, dass es hier immer voran geht und wir weiter helfen
+        können.
+      </p>
     </v-container>
   </div>
 </template>
@@ -47,20 +142,47 @@
 export default {
   data() {
     return {
-      donationAmount: 0.75,
-      donationPrice: 50,
-      toPay: 37.5,
-      equals: 0.75,
+      donationStep: 1,
+      donationOptions: [
+        {
+          icon: 'mdi-heart-circle',
+          title: '1 Stunde Beratung',
+          value: '50',
+        },
+        {
+          icon: 'mdi-circle-slice-4',
+          title: '1/2 Stunde Beratung',
+          value: '25',
+        },
+        {
+          icon: 'mdi-circle-slice-2',
+          title: '1/4 Stunde Beratung',
+          value: '17.50',
+        },
+        {
+          icon: 'mdi-help-circle',
+          title: 'Einen freien Betrag spenden',
+          ownVal: true,
+          value: null,
+        },
+      ],
+      donationChosen: null,
+      numRule: [
+        (v) => parseInt(v) > 0 || 'Betrag muss größer 0 sein.',
+        (v) =>
+          /^\d{0,5}([,.]\d{0,2})?$/.test(v) ||
+          'ungültiger oder zu hoher Betrag.',
+      ],
+      validValue: true,
     }
   },
-  watch: {
-    donationAmount() {
-      const calc = this.donationAmount * this.donationPrice
-      return (this.toPay = calc.toFixed(2))
+  methods: {
+    choose(chosen) {
+      this.donationChosen = chosen
+      this.donationStep = 2
     },
-    toPay() {
-      const calc = this.toPay / this.donationPrice
-      return (this.equals = calc.toFixed(2))
+    donate() {
+      this.donationStep = 3
     },
   },
 }
