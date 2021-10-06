@@ -2,7 +2,7 @@ import colors from 'vuetify/es5/util/colors'
 
 const hostURL = 'https://sichere-zuflucht.github.io'
 const isDev = process.env.NODE_ENV !== 'production'
-const base = isDev ? '' : '/frontend'
+const base = '' // isDev ? '' : '/frontend'
 const port = 80
 const redAPI = process.env.RED_API
 
@@ -32,7 +32,7 @@ export default {
     },
     isDev,
     redAPI,
-    baseUrl: (isDev ? 'http://localhost:' + port : hostURL) + base,
+    baseUrl: isDev ? 'http://localhost:' + port : hostURL, // + base,
   },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -120,7 +120,12 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ['@nuxtjs/firebase', 'nuxt-stripe-module'],
+  modules: [
+    '@nuxtjs/firebase',
+    'nuxt-stripe-module',
+    '@nuxtjs/strapi',
+    '@nuxtjs/markdownit',
+  ],
   firebase: {
     config: {
       apiKey: 'AIzaSyDMjjzgxNWEsDWYETgWbFgaYnwzAmLyzhM',
@@ -132,8 +137,8 @@ export default {
     },
     services: {
       functions: {
-        // emulatorPort: process.env.NODE_ENV === 'development' ? 5001 : undefined,
-        emulatorPort: undefined,
+        emulatorPort: process.env.NODE_ENV === 'development' ? 5001 : undefined,
+        // emulatorPort: undefined,
       },
       auth: {
         initialize: {
@@ -156,6 +161,15 @@ export default {
       storage: true,
     },
     terminateDatabasesAfterGenerate: true,
+  },
+
+  strapi: {
+    // Options
+    url: process.env.STRAPI_URL || 'http://localhost:1337',
+  },
+
+  markdownit: {
+    runtime: true, // Support `$md()`
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify

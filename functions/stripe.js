@@ -76,7 +76,7 @@ exports.createPaymentForCoaching = async (coachID, requestID, isDev) => {
     .then((doc) => doc.data())
 
   const base = isDev
-    ? 'http://localhost:3000'
+    ? 'http://localhost'
     : 'https://sichere-zuflucht.github.io/frontend'
 
   const session = await stripe.checkout.sessions.create({

@@ -1,5 +1,5 @@
 {
-  "name": "sichere-zufluch",
+  "name": "sichere-zuflucht",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -23,6 +23,8 @@
   },
   "dependencies": {
     "@nuxtjs/firebase": "^7.6.1",
+    "@nuxtjs/markdownit": "^2.0.0",
+    "@nuxtjs/strapi": "^0.3.1",
     "core-js": "^3.9.1",
     "firebase": "^8.7.0",
     "lodash": "^4.17.21",

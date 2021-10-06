@@ -2,7 +2,7 @@
   <div class="my-4">
     <v-container class="py-md-16">
       <h1 class="text-h1 mb-4 text-center primary--text">
-        Niemand muss häusliche Gewalt aushalten.
+        Niemand muss <br />häusliche Gewalt aushalten.
       </h1>
       <h2 class="text-center secondary--text subtitle-1 mb-8">Auch du nicht</h2>
       <p class="text-center mx-auto" style="max-width: 530px">
@@ -28,46 +28,25 @@
     </v-sheet>
     <v-container>
       <h3
-        class="text-h3 text-uppercase text-center secondary--text"
+        class="text-h3 text-uppercase text-center secondary--text pt-8"
         style="font-weight: bold"
       >
-        Sichere Zuflucht Magazin
+        Sichere Zuflucht <br />Magazin
       </h3>
     </v-container>
-
-    <v-slide-group show-arrows class="pa-1">
-      <v-slide-item v-for="n in 15" :key="n">
-        <v-card class="ma-1" width="200">
-          <v-img
-            src="paige-cody-bOVZ_f3fbQM-unsplash.jpg"
-            max-height="300px"
-          ></v-img>
-          <v-card-text>
-            <h5 class="text-h5">Ich hab’s nie bereut!</h5>
-            <p class="caption">Juli 2020</p>
-            <q
-              >Ich freu mich so für dich“ schluchzte meine beste Freundin am
-              Telefon </q
-            >… weiterlesen
-          </v-card-text>
-          <v-card-actions
-            ><v-btn color="primary" block>lesen</v-btn></v-card-actions
-          >
-        </v-card>
-      </v-slide-item>
-    </v-slide-group>
+    <MagazineSlider :list="magazineList" :change="true" />
     <v-divider />
-    <v-container>
+    <v-container class="pt-16">
       <v-row style="max-width: 700px" class="mx-auto">
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="12">
           <v-card class="mx-auto" max-width="320">
             <v-img src="AdobeStock_342417877.jpeg" height="200px"></v-img>
 
-            <v-card-title
+            <v-card-text
               ><h3 class="text-h3 primary--text font-weight-bold mb-2">
                 Werden Sie ein Teil von Sichere Zuflucht
               </h3>
-            </v-card-title>
+            </v-card-text>
 
             <v-card-subtitle>
               Wir erweitern permanent unseren Pool an Berater*innen und freuen
@@ -82,17 +61,19 @@
               <b>Frauen</b>, die es geschafft haben, sich aus ihrer
               <b>gewaltvollen Beziehung zu befreien</b>
               und nun anderen helfen möchten.
-              <v-btn
-                color="primary my-4"
-                href="mailto:kontakt@sichere-zuflucht.de"
-              >
-                Anmeldung für Berater*innen
+              <v-btn color="primary mt-8 mb-1" to="registration/signup">
+                Als Berater*in registrieren
               </v-btn>
-              <v-btn text block>mehr erfahren</v-btn>
+              <v-btn
+                to="info-berater"
+                text
+                class="pl-1 text-decoration-underline caption"
+                >mehr erfahren</v-btn
+              >
             </v-card-subtitle>
           </v-card>
         </v-col>
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="6" style="display: none">
           <v-card class="mx-auto" max-width="320">
             <v-img
               src="gleren-meneghin-VSLPOL9PwB8-unsplash.jpg"
@@ -115,7 +96,6 @@
               >
                 Ich biete meine Unterkunft an
               </v-btn>
-              <v-btn text block>mehr erfahren</v-btn>
             </v-card-subtitle>
           </v-card>
         </v-col>
@@ -123,3 +103,16 @@
     </v-container>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      magazineList: null,
+    }
+  },
+  async mounted() {
+    this.magazineList = await this.$strapi.find('magazines')
+  },
+}
+</script>

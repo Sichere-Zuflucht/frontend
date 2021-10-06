@@ -92,8 +92,15 @@
           exact
           icon
           plain
-          ><v-avatar color="primary" size="38"
-            ><v-img :src="user.public.avatar" /></v-avatar
+        >
+          <v-avatar v-if="membership === 'Coach'" size="38"
+            ><v-img v-if="user.public.avatar" :src="user.public.avatar" />
+            <SharedCoachIcon
+              v-else
+              color="#b3b3b3"
+              style="border: 1px solid #000"
+              class="pa-2"
+            /> </v-avatar
         ></v-btn>
       </client-only>
     </v-app-bar>
@@ -115,6 +122,10 @@
     <v-main style="hyphens: auto" class="pb-6">
       <nuxt />
     </v-main>
+    <div class="d-flex flex-column align-center my-8">
+      <v-icon color="primary">mdi-heart</v-icon>
+      <p class="text-uppercase primary--text">du bist nicht allein!</p>
+    </div>
     <UtilsFooter></UtilsFooter>
   </v-app>
 </template>
@@ -158,11 +169,6 @@ export default {
           to: '/beratung/bezahlung',
         },
         {
-          icon: 'mdi-shield-check',
-          title: 'Verifizierung',
-          to: '/beratung/personenverifizierung',
-        },
-        {
           icon: 'mdi-cog',
           title: 'Einstellungen',
           to: '/beratung/settings',
@@ -174,20 +180,28 @@ export default {
           to: '/',
         },
         {
+          title: 'Magazin',
+          to: '/magazine',
+        },
+        {
           title: 'Über uns',
-          to: '/',
+          to: '/ueber-uns',
         },
         {
           title: 'Wie wir helfen',
-          to: '/',
+          to: '/info-frauen',
         },
         {
           title: 'Wie du helfen kannst',
-          to: '/',
+          to: '/info-berater',
+        },
+        {
+          title: 'Spenden',
+          to: '/spenden',
         },
         {
           title: 'Aktuelles',
-          to: '/',
+          to: '/aktuelles',
         },
       ],
     }
