@@ -2,7 +2,7 @@ import colors from 'vuetify/es5/util/colors'
 
 const testing = true
 const hostURL = testing
-  ? 'home-5004967117.app-ionos.space' // dev branch ionos
+  ? 'https://sichere-zuflucht.github.io' // 'home-5004967117.app-ionos.space' // dev branch ionos
   : 'https://sichere-zuflucht.de' // https://sichere-zuflucht.github.io
 const isDev = process.env.NODE_ENV !== 'production'
 const base = '' // isDev ? '' : '/frontend'
