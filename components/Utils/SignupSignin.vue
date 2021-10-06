@@ -38,7 +38,6 @@
                 mit der du deine Anmeldung bestätigen kannst.
               </p>
             </v-stepper-content>
-
             <v-stepper-content step="2" class="pa-0">
               <div v-if="requestPassword">
                 <v-alert
