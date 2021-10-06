@@ -42,13 +42,17 @@
         </v-slide-item>
       </v-slide-group>
       <v-container>
-        <v-btn text color="primary" small
+        <nuxt-link to="info-berater" text color="primary" small
           >Wie läuft das Beratungsgespräch ab?
-        </v-btn>
+        </nuxt-link>
         <br />
-        <v-btn text color="primary" small>Infos zur Termineinhaltung </v-btn>
+        <nuxt-link to="info-frauen" text color="primary" small
+          >Infos zur Termineinhaltung
+        </nuxt-link>
         <br />
-        <v-btn text color="primary" small>Infos zu Preisen</v-btn>
+        <nuxt-link to="info-frauen" text color="primary" small
+          >Infos zu Preisen</nuxt-link
+        >
       </v-container>
     </div>
     <v-container v-else>
@@ -107,19 +111,3 @@ export default {
   },
 }
 </script>
-
-<style>
-.v-slide-group__next,
-.v-slide-group__prev {
-  position: absolute;
-  z-index: 2;
-  height: calc(100% + 10px);
-  align-items: end !important;
-}
-.v-slide-group__next {
-  right: 0;
-}
-.v-slide-group__prev {
-  left: 0;
-}
-</style>

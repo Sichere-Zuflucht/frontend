@@ -64,7 +64,7 @@ $headings: (
     'text-transform': false,
   ),
   'subtitle-1': (
-    'size': 0.8rem,
+    'size': 1.5rem,
     'weight': normal,
     'line-height': 1.75rem,
     'letter-spacing': 0.009375em,
@@ -73,10 +73,10 @@ $headings: (
   ),
   'subtitle-2': (
     'size': 0.875rem,
-    'weight': 500,
+    'weight': normal,
     'line-height': 1.375rem,
     'letter-spacing': 0.0071428571em,
-    'font-family': $body-font-family,
+    'font-family': 'Yellowtail-Regular',
     'text-transform': false,
   ),
   'body-1': (
@@ -120,18 +120,3 @@ $headings: (
     'text-transform': uppercase,
   ),
 );
-
-/* 
-  .v-slide-group__next,
-  .v-slide-group__prev {
-    position: absolute;
-    z-index: 2;
-    height: 100%;
-  }
-  .v-slide-group__next {
-    right: 0; // -23px;
-  }
-  .v-slide-group__prev {
-    left: 0; // -23px;
-  }
- */
