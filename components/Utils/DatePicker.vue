@@ -15,9 +15,15 @@
         >Datum/Uhrzeit auswählen</v-btn
       >
     </template>
-    <v-date-picker v-model="date" :min="today" scrollable>
+    <v-date-picker
+      v-model="date"
+      :min="today"
+      scrollable
+      @input="focusTimeSelect"
+    >
       <v-spacer></v-spacer>
       <v-text-field
+        ref="timeSelect"
         v-model="time"
         label="Uhrzeit"
         type="time"
@@ -25,6 +31,7 @@
         outlined
         hide-details
         full-width
+        @keyup.enter="time ? addDates(item.suggestions) : 0"
       ></v-text-field>
       <v-spacer></v-spacer>
       <v-btn text color="primary" @click="modal = false"> Abbrechen </v-btn>
@@ -37,32 +44,6 @@
       </v-btn>
     </v-date-picker>
   </v-dialog>
-  <!-- <v-menu
-    v-model="menu"
-    :close-on-content-click="false"
-    :return-value.sync="date"
-    transition="scale-transition"
-    min-width="auto"
-    top
-    offset-y
-  >
-    <template #activator="{ on, attrs }">
-      <v-btn v-bind="attrs" v-on="on">Termin hinzufügen</v-btn>
-    </template>
-    <v-date-picker
-      v-model="date"
-      no-title
-      scrollable
-      :min="today"
-      elevation="15"
-    >
-      <v-spacer></v-spacer>
-      <v-btn text color="primary" @click="menu = false"> Schließen </v-btn>
-      <v-btn text color="primary" @click="addDates(item.suggestions)">
-        OK
-      </v-btn>
-    </v-date-picker>
-  </v-menu> -->
 </template>
 
 <script>
@@ -106,6 +87,9 @@ export default {
       if (day.length < 2) day = '0' + day
 
       return [year, month, day].join('-')
+    },
+    focusTimeSelect() {
+      this.$refs.timeSelect.focus()
     },
   },
 }
