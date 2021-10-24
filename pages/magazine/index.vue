@@ -21,13 +21,14 @@
         "
       >
         <p class="caption mb-0">Filtern:</p>
-        <v-chip-group v-model="tagsSelected" multiple column class="pt-0">
+        <v-chip-group v-model="tagsSelected" column class="pt-0">
           <v-chip
             v-for="tag in tagList"
             :key="tag.id"
             :value="tag.name"
             outlined
             small
+            filter
             active-class="primary primary--text"
           >
             {{ tag.name }}</v-chip
@@ -35,21 +36,24 @@
         </v-chip-group>
       </div>
       <v-alert v-if="error">{{ error }}</v-alert>
-      <div v-else class="pt-8" style="z-index: 1">
-        <div
+      <v-row v-else class="pt-8" style="z-index: 1">
+        <v-col
           v-for="magazine in magazineList.filter((m) =>
-            tagsSelected != 0
-              ? tagsSelected.includes(m.tag.name)
+            tagsSelected != null
+              ? tagsSelected == m.tag.name
                 ? true
                 : false
               : true
           )"
           :key="magazine.id"
+          cols="12"
+          sm="6"
+          md="4"
           class="pb-4"
         >
           <MagazineTeaserBox :magazine-data="magazine" :append-url="true" />
-        </div>
-      </div>
+        </v-col>
+      </v-row>
     </div>
   </v-container>
 </template>
@@ -60,7 +64,7 @@ export default {
     return {
       magazineList: null,
       tagList: [],
-      tagsSelected: [],
+      tagsSelected: null,
       error: null,
     }
   },

@@ -1,6 +1,13 @@
 <template>
   <v-app>
-    <v-navigation-drawer v-model="drawer" app class="secondary" dark fixed>
+    <v-navigation-drawer
+      v-model="drawer"
+      app
+      class="secondary"
+      dark
+      fixed
+      disable-resize-watcher
+    >
       <client-only>
         <v-list v-if="loggedIn">
           <div v-if="membership === 'Woman'">
@@ -119,13 +126,9 @@
         </p>
       </v-card-text>
     </v-card>
-    <v-main style="hyphens: auto" class="pb-6">
+    <v-main style="hyphens: auto" class="pb-0">
       <nuxt />
     </v-main>
-    <div class="d-flex flex-column align-center my-8">
-      <v-icon color="primary">mdi-heart</v-icon>
-      <p class="text-uppercase primary--text">du bist nicht allein!</p>
-    </div>
     <UtilsFooter></UtilsFooter>
   </v-app>
 </template>
@@ -146,11 +149,11 @@ export default {
           title: 'Beratungen',
           to: '/berater/suche',
         },
-        {
+        /* {
           icon: 'mdi-shield-home',
           title: 'Wohnungen',
           to: '/frauen/wohnungssuche',
-        },
+        }, */
         {
           icon: 'mdi-cog',
           title: 'Einstellungen',
@@ -178,6 +181,10 @@ export default {
         {
           title: 'Startseite',
           to: '/',
+        },
+        {
+          title: 'Berater*in finden',
+          to: '/berater/suche',
         },
         {
           title: 'Magazin',

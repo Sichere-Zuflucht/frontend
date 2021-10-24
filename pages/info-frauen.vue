@@ -33,10 +33,10 @@
         Was erlebst du in deinem Alltag. Wir wollen dir helfen, deine Situation
         einzuordnen.
       </p>
-      <h2 class="text-h2 text-center secondary--text">
+      <h2 class="text-h2 text-center secondary--text py-8">
         ... Das ist doch noch keine Gewalt, oder?
       </h2>
-      <p>
+      <p class="text-center">
         <b
           >Betroffenen fällt es oft nicht leicht die Gewalt zu erkennen. Sie
           fängt häufig schleichend an.</b
@@ -50,17 +50,17 @@
         eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
         voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
       </p>
-      <p class="font-weight-bold">
+      <p class="text-center font-weight-bold">
         Weitere Erfahrungen findest du in unserem Magazin.
       </p>
-      <UtilsBtn text="Zum Magazin"
+      <UtilsBtn text="Zum Magazin" link="/magazine"
     /></v-container>
     <v-divider />
-    <v-container>
-      <h2 class="text-h2 text-center secondary--text">
+    <v-container class="text-center">
+      <h2 class="text-h2 text-center secondary--text py-8">
         Du stehst vor der Trennung, hast aber viele Fragen?
       </h2>
-      <p class="mb-0">
+      <p style="max-width: 600px" class="mx-auto">
         <b
           >Wir bieten dir die Möglichkeit deine Fragen von Fachleuten
           beantworten zu lassen.</b
@@ -68,13 +68,11 @@
         In unseren Beratungsgesprächen und individuellen Coachings werden dir
         wichtige Fragen wie:
       </p>
-      <ul class="py-3">
-        <li>Sorgerecht</li>
-        <li>Finanzielle Möglichkeiten</li>
-        <li>Scheidungsfragen</li>
-        <li>Umgang mit dem sozialen Umfeld</li>
-      </ul>
-      <p>u.v.m zuverlässig beantwortet.</p>
+      <p class="font-weight-bold py-0 my-0">> Sorgerecht</p>
+      <p class="font-weight-bold py-0 my-0">> Finanzielle Möglichkeiten</p>
+      <p class="font-weight-bold py-0 my-0">> Scheidungsfragen</p>
+      <p class="font-weight-bold py-0 my-0">> Umgang mit dem sozialen Umfeld</p>
+      <p class="mt-4">u.v.m zuverlässig beantwortet.</p>
       <UtilsBtn
         text="Sieh dir unsere Beratungsthemen an"
         link="berater/suche"
@@ -94,8 +92,10 @@
             justify="center"
             height="100%"
           >
-            <p class="font-italic">"{{ quote.text }}"</p>
-            <p class="caption">{{ quote.by }}</p>
+            <p style="max-width: 500px">
+              <i class="font-italic">"{{ quote.text }}"</i><br />
+              <span class="caption">{{ quote.by }}</span>
+            </p>
           </v-row></v-carousel-item
         ></v-carousel
       >

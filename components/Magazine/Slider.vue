@@ -1,6 +1,6 @@
 <template>
   <v-slide-group v-if="list" show-arrows class="py-4">
-    <v-slide-item v-for="(magazine, n) in list" :key="n">
+    <v-slide-item v-for="(magazine, n) in list" :key="n" class="my-4">
       <MagazineTeaserBox
         :magazine-data="magazine"
         :append-url="append"

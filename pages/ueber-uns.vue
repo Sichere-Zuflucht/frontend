@@ -12,9 +12,9 @@
         </p>
         <p class="font-weight-bold">anonym – ortsunabhängig – professionell</p>
         <p>
-          Unsere Plattform sichere-zuflucht.de richtet sich an alle von
-          gewaltbetroffenen Frauen, egal welchen Alters, welcher Herkunft,
-          welchem Bildungstands, welches Einkommens, welcher Religion.
+          Unsere Plattform sichere-zuflucht.de richtet sich an jede von Gewalt
+          betroffene Frau ab 18 Jahren – unabhängig von
+          <b>Herkunft, Bildungsstand, Einkommen, Religion</b>.
         </p></v-container
       ></v-sheet
     ><v-container class="text-center"
@@ -75,9 +75,8 @@
       <h2 class="text-h2 secondary--text py-6">Mach mit!</h2>
       <p>
         Möchtest du dich als
-        <b>Berater*in, Coach*in, engangierte*r Unterkunftsgeber*in,</b> als
-        <b>Pate*in</b> für unsere Frauen oder als Mitarbeiter*in bei Sichere
-        Zuflucht engagieren?
+        <b>Berater*in, Coach*in, Sozialarbeiter*in</b> oder <b>Anwält*in</b> für
+        unsere Frauen oder als Mitarbeiter*in bei Sichere Zuflucht engagieren?
       </p>
       <p>
         Wir freuen uns über Verstärkung! Schreib uns einfach an

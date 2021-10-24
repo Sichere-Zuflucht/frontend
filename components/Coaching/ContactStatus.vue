@@ -152,7 +152,7 @@
         </v-alert>
       </v-dialog>
     </v-card-actions>
-    <v-overlay :value="redirectWarning" color="secondary" opacity="1">
+    <v-overlay :value="redirectWarning" color="black" opacity="0.8">
       <p>Weiterleitung zu Stripe. Bitte warten...</p>
     </v-overlay>
   </v-card>

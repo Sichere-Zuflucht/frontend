@@ -12,7 +12,7 @@
           {{
             responses.length === 0
               ? 'Starte jetzt und suche deine passende Beratung.'
-              : 'Du hast Antwort auf deine Anfrage(n) von:'
+              : 'Deine Korrespondenz'
           }}
         </h2>
       </v-container>

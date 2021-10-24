@@ -14,7 +14,7 @@
         </p>
       </v-container></v-sheet
     >
-    <v-container class="py-16">
+    <v-container id="paytitle" class="py-16">
       <h2 class="text-h2 text-center secondary--text pb-6">
         Hier könnt ihr wählen, wie ihr unterstüzen wollt.
       </h2>
@@ -63,7 +63,7 @@
             </v-card>
           </v-stepper-content>
           <v-stepper-content step="2" class="pa-0">
-            <p class="text-center">ausgewählt</p>
+            <p class="text-center">Sie haben ausgewählt:</p>
             <v-card class="my-4 mx-2" color="secondary">
               <v-card-text v-if="donationChosen">
                 <v-row
@@ -92,7 +92,7 @@
             <v-card class="my-4 mx-2" color="grey lighten-3">
               <v-card-text> Weiterleitung zum Bezahlungssystem </v-card-text>
             </v-card>
-            <v-overlay color="secondary" opacity="1">
+            <v-overlay color="black" opacity="0.8">
               <p>Weiterleitung zu Stripe. Bitte warten...</p>
             </v-overlay>
           </v-stepper-content>
@@ -180,6 +180,7 @@ export default {
     choose(chosen) {
       this.donationChosen = chosen
       this.donationStep = 2
+      this.$vuetify.goTo('#paytitle')
     },
     donate() {
       this.donationStep = 3
