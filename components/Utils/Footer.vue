@@ -2,9 +2,11 @@
   <v-footer
     inset
     app
-    class="d-flex flex-column mt-0"
+    class="d-flex flex-column mt-0 pt-8"
     style="position: relative"
   >
+    <v-icon color="primary">mdi-heart</v-icon>
+    <p class="text-uppercase primary--text">du bist nicht allein!</p>
     <v-row class="pa-2 caption"
       ><v-col class="mt-6" cols="12" md="4">
         <v-card
@@ -77,6 +79,15 @@
         src="android-chrome-512x512.png"
         class="mt-4 mb-8"
       />
+    </v-row>
+    <v-row
+      class="
+        d-flex
+        flex-wrap flex-column flex-sm-row
+        align-center
+        justify-center
+      "
+    >
       <div class="d-flex flex-wrap flex-column flex-sm-row justify-center">
         <v-btn v-for="(item, i) in footer" :key="i" :to="item.to" text plain
           ><p v-text="item.title"></p
@@ -113,7 +124,8 @@
         </v-btn>-->
       </div>
       <span class="mt-0 caption"
-        >&copy; {{ new Date().getFullYear() }} Sichere Zuflucht gGmbH</span
+        >&copy; {{ new Date().getFullYear() }} Sichere Zuflucht gemeinnützige
+        GmbH</span
       >
     </v-row>
   </v-footer>

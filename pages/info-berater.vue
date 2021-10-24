@@ -15,93 +15,123 @@
           Warum brauchen gewaltbetroffene Frauen Ihre Unterstützung?
         </h2>
         <h3 class="text-h3 primary--text text-uppercase py-4">Die Fakten:</h3>
-        <v-img src="jede-dritte-frau.jpg" />
-        <p class="caption pt-2 mb-8">
-          Jede 3. Frau ist betroffen! <br />D.h. jeder von uns kennt mindestens
-          EINE.
-        </p>
-        <v-img src="diagramm.jpg" />
-        <p class="caption pt-2 mb-8">
-          Frauenhäuser und Beratungsangebote melden seit Jahren, dass sie der
-          Nachfrage nicht gerecht werden können.
-        </p>
       </div>
-      <ul class="secondary--text">
-        <li>
-          <p class="black--text">
-            Häusliche Gewalt ist immer noch ein weit verbreitetes
-            gesellschaftliches Problem mit
-            <b>großem Stigma und hoher Dunkelziffer.</b>
-          </p>
-        </li>
-        <li>
-          <p class="black--text">
-            <span v-html="readmoreText.slice(0, length)"></span>
-            {{ length != readmoreText.length ? '...' : '' }}
-          </p>
-          <v-btn
-            v-if="length != readmoreText.length"
-            plain
-            color="primary"
-            class="pl-0"
-            @click="length = readmoreText.length"
-            ><u>weiterlesen</u></v-btn
+      <v-row
+        ><v-col cols="12" md="7" class="text-center">
+          <v-row
+            ><v-col cols="12" sm="6"
+              ><v-img src="jede-dritte-frau.jpg" />
+              <p class="caption pt-2 mb-8">
+                Jede 3. Frau ist betroffen! <br />D.h. jeder von uns kennt
+                mindestens EINE.
+              </p>
+            </v-col>
+            <v-col cols="12" sm="6">
+              <v-img src="diagramm.jpg" />
+              <p class="caption pt-2 mb-8">
+                Quelle:
+                <a
+                  href="https://www.bmfsfj.de/bmfsfj/service/publikationen/gewalt-gegen-frauen-in-paarbeziehungen-80614"
+                  target="_blank"
+                  >"Gewalt gegen Frauen in Paarbeziehungen”</a
+                >
+                vom BMFSFJ. Frauenhäuser und Beratungsangebote melden seit
+                Jahren, dass sie der Nachfrage nicht gerecht werden können.
+              </p>
+            </v-col></v-row
           >
-        </li>
-      </ul>
+        </v-col>
+        <v-col cols="12" md="5">
+          <ul class="secondary--text">
+            <li>
+              <p class="black--text">
+                Häusliche Gewalt ist immer noch ein weit verbreitetes
+                gesellschaftliches Problem mit
+                <b>großem Stigma und hoher Dunkelziffer.</b>
+              </p>
+            </li>
+            <li>
+              <p class="black--text">
+                <span v-html="readmoreText.slice(0, length)"></span>
+                {{ length != readmoreText.length ? '...' : '' }}
+              </p>
+              <v-btn
+                v-if="length != readmoreText.length"
+                plain
+                color="primary"
+                class="pl-0"
+                @click="length = readmoreText.length"
+                ><u>weiterlesen</u></v-btn
+              >
+            </li>
+          </ul></v-col
+        ></v-row
+      >
     </v-container>
     <v-divider />
     <v-container>
       <h2 class="text-h2 secondary--text text-center py-8">
         An wen richtet sich Sichere Zuflucht?
       </h2>
-      <p class="text-center">
+      <p class="text-center pb-8 mx-auto" style="max-width: 600px">
         Jede von Gewalt betroffene Frau – <b>egal</b> in welchem <b>Alter</b>,
         welcher <b>Herkunft</b> oder <b>Religion</b>, unabhängig von
         <b>Bildungsstand</b> und <b>Einkommen</b> – verdient ein für sie leicht
         erreichbares <b>Unterstützungsangebot.</b>
       </p>
       <v-row
-        ><v-col
-          v-for="(user, i) in users"
-          :key="i"
-          cols="6"
-          sm="4"
-          md="2"
-          class="pa-1"
-        >
-          <v-card>
-            <v-img :src="user.src" />
-            <v-card-text class="text-center">
-              <p class="subtitle-2 primary--text mb-1">{{ user.name }}</p>
-              <p class="caption mb-0">{{ user.job }}</p>
-            </v-card-text>
-          </v-card>
+        ><v-col cols="12" md="6">
+          <v-row
+            ><v-col
+              v-for="(user, i) in users"
+              :key="i"
+              cols="6"
+              sm="4"
+              class="pa-1"
+            >
+              <v-card>
+                <v-img :src="user.src" />
+                <v-card-text class="text-center">
+                  <p class="subtitle-2 primary--text mb-1">{{ user.name }}</p>
+                  <p class="caption mb-0">{{ user.job }}</p>
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+          <p class="caption pt-3 text-center">
+            Diese Frauen und Kinder stehen beispielhaft für die Vielfalt aller
+            betroffenen.
+          </p>
         </v-col>
-      </v-row>
-      <ul class="secondary--text mt-8">
-        <li>
-          <p class="black--text">
-            Frauen mit einem höheren Bildungshintergrund, Erfolg im Beruf und
-            eigenem Einkommen – die also
-            <b>fest im Leben stehen und sozial integriert</b> sind –
-            <b>schrecken häufig vor ihnen bekannten Hilfsangeboten zurück.</b>
-          </p>
-        </li>
-        <li>
-          <p class="black--text">
-            Aufgrund ihres <b>Schamgefühls</b> fällt es ihnen besonders schwer
-            Unterstützung in Frauenhäusern zu suchen oder sich an lokale
-            Hilfsangebote zu wenden.
-          </p>
-        </li>
-        <li>
-          <p class="black--text">
-            <b>Sichere Zuflucht</b> hat es sich zur Aufgabe gemacht diesen
-            Frauen eine für sie <b>passende Unterstützung</b> anzubieten.
-          </p>
-        </li>
-      </ul>
+        <v-col cols="12" md="6">
+          <ul class="secondary--text mt-8">
+            <li>
+              <p class="black--text">
+                Frauen mit einem höheren Bildungshintergrund, Erfolg im Beruf
+                und eigenem Einkommen – die also
+                <b>fest im Leben stehen und sozial integriert</b> sind –
+                <b
+                  >schrecken häufig vor ihnen bekannten Hilfsangeboten
+                  zurück.</b
+                >
+              </p>
+            </li>
+            <li>
+              <p class="black--text">
+                Aufgrund ihres <b>Schamgefühls</b> fällt es ihnen besonders
+                schwer Unterstützung in Frauenhäusern zu suchen oder sich an
+                lokale Hilfsangebote zu wenden.
+              </p>
+            </li>
+            <li>
+              <p class="black--text">
+                <b>Sichere Zuflucht</b> hat es sich zur Aufgabe gemacht diesen
+                Frauen eine für sie <b>passende Unterstützung</b> anzubieten.
+              </p>
+            </li>
+          </ul>
+        </v-col></v-row
+      >
     </v-container>
     <v-divider />
     <v-container>
@@ -129,24 +159,25 @@
       <p>Sind sie Anwalt/Anwältin im Bereich Familienrecht?</p>
     </v-container>
     <v-divider />
-    <v-container class="text-center">
-      <h3 class="text-h2 primary--text py-8">
+    <v-container>
+      <h3 class="text-h2 primary--text py-8 text-center">
         so laufen Terminfindung und Beratung ab
       </h3>
-      <div class="d-flex flex-column align-center">
-        <div v-for="(step, k) in steps" :key="k">
-          <v-avatar
-            class="pa-5"
-            :style="
-              'border: 1px solid ' + $vuetify.theme.themes.light.secondary
-            "
-            ><v-icon color="primary">{{ step.icon }}</v-icon></v-avatar
-          >
-          <p class="caption pt-4 pb-8">
-            {{ step.text }}
-          </p>
-        </div>
-      </div>
+      <v-row
+        ><v-col v-for="(step, k) in steps" :key="k" cols="12" md="3">
+          <v-card>
+            <v-sheet color="primary" class="pa-4"
+              ><v-icon color="white">{{ step.icon }}</v-icon></v-sheet
+            >
+            <v-card-title class="font-weight-bold primary--text pt-4 mb-0">
+              {{ step.title }}
+            </v-card-title>
+            <v-card-text class="caption pb-8">
+              {{ step.text }}
+            </v-card-text>
+          </v-card>
+        </v-col></v-row
+      >
       <UtilsBtn text="Ja, ich möchte beraten" link="registration/signup" />
     </v-container>
     <v-divider />
@@ -171,8 +202,8 @@
     <v-sheet color="grey lighten-5 pt-8">
       <v-container>
         <h3 class="text-h2 text-uppercase text-center primary--text mb-0">
-          Wir würden uns sehr freuen, wenn sie teil unseres Berater*innen Pools
-          werden! <br /><br />Vielen Dank für ihr Engagement!
+          Wir würden uns sehr freuen, wenn sie teil <br />unseres Berater*innen
+          Pools werden! <br /><br />Vielen Dank für ihr Engagement!
         </h3>
         <UtilsBtn text="Ja, ich möchte beraten" link="registration/signup" />
       </v-container>
@@ -187,32 +218,24 @@ export default {
     return {
       steps: [
         {
+          icon: 'mdi-login',
+          title: '1. Registrieren',
+          text: 'Um mit der beratenden Person Kontakt aufzunehmen, registriert sich die Frau auf unserer Plattform.',
+        },
+        {
           icon: 'mdi-account-search',
-          text: 'Die Frauen suchen sich den/die für sie passende Berater*in/Coach*in aus.',
+          title: '2. Beratung suchen',
+          text: 'Die Frau sucht sich eine passende Beratung aus und schreibt innerhalb unseres Portals eine Nachricht an die beratende Person.',
         },
         {
           icon: 'mdi-message-text',
-          text: 'An diese*n schreiben sie eine private Nachricht mit Terminanfrage, innerhalb unseres Portals.',
+          title: '3. Bezahlen',
+          text: 'Der/die Berater*in schickt der Frau 3 Terminvorschläge. Mit der Annahme eines Termins bezahlt die Frau die Beratung.',
         },
         {
           icon: 'mdi-calendar-check',
-          text: 'Sie können den Termin annehmen, ablehnen oder einen eigenen Vorschlag machen.',
-        },
-        {
-          icon: 'mdi-account-cash',
-          text: 'Ist ein Termin gefunden, bezahlt die Frau die Beratung im Voraus.',
-        },
-        {
-          icon: 'mdi-email',
-          text: 'Danach bekommen Sie beide eine E-Mail mit dem Termin und Einwahldaten zur Online-Beratung.',
-        },
-        {
-          icon: 'mdi-cellphone-basic',
-          text: 'An Ihrem Termin wählen Sie sich beide in unsere Meeting-Software RED (was ist das?) ein und haben 1 Stunde Zeit, sich zu besprechen.',
-        },
-        {
-          icon: 'mdi-cash-register',
-          text: 'Ist die Beratung beendet, erhalten Sie die Bezahlung.',
+          title: '4. Loslegen',
+          text: 'Nach der Bezahlung steht der Zugang zur online Beratung für den gewünschten Termin im eingeloggten Bereich zur Verfügung.',
         },
       ],
       length: 175,
