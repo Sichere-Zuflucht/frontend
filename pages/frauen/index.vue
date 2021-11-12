@@ -54,6 +54,11 @@
           >Infos zu Preisen</nuxt-link
         >
       </v-container>
+      <UtilsBtn
+        v-if="responses.length != 0"
+        text="Beratungsangebote ansehen"
+        link="/berater/suche"
+      />
     </div>
     <v-container v-else>
       <v-sheet elevation="2" class="pa-2">
@@ -64,12 +69,17 @@
         ></v-skeleton-loader>
       </v-sheet>
     </v-container>
-    <v-sheet color="blue-grey lighten-5">
+    <!-- <v-sheet color="blue-grey lighten-5" class="py-md-16">
       <v-container>
-        <h2 class="text-h2 secondary--text mt-6 mb-3">Unsere Angebote</h2>
-        <SharedServiceOverview />
+        <v-row
+          ><v-col cols="12" md="6">
+            <h2 class="text-h2 text-md-right secondary--text mt-6 mb-3">
+              Unsere Angebote
+            </h2></v-col
+          ><v-col cols="12" md="6"> <SharedServiceOverview /></v-col
+        ></v-row>
       </v-container>
-    </v-sheet>
+    </v-sheet> -->
   </v-sheet>
 </template>
 

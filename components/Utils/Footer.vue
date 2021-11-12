@@ -7,8 +7,24 @@
   >
     <v-icon color="primary">mdi-heart</v-icon>
     <p class="text-uppercase primary--text">du bist nicht allein!</p>
-    <v-row class="pa-2 caption"
+    <v-row class="pa-2 caption" style="width: 100%"
       ><v-col class="mt-6" cols="12" md="4">
+        <v-card
+          ><v-card-text
+            ><p class="text-center">Partner</p>
+            <v-row
+              ><v-col class="d-flex flex-column align-center"
+                ><v-img
+                  contain
+                  max-width="100"
+                  src="partner/project-together-logo.png" /></v-col
+              ><v-col class="d-flex flex-column align-center"
+                ><v-img
+                  contain
+                  max-width="100"
+                  src="partner/solution-enabler.png" /></v-col></v-row></v-card-text></v-card
+      ></v-col>
+      <v-col class="mt-6" cols="12" md="4">
         <v-card
           ><v-card-text
             ><p class="text-center">
@@ -38,22 +54,7 @@
           ></v-card
         ></v-col
       >
-      <v-col class="mt-6" cols="12" md="4">
-        <v-card
-          ><v-card-text
-            ><p class="text-center">Partner</p>
-            <v-row
-              ><v-col class="d-flex flex-column align-center"
-                ><v-img
-                  contain
-                  max-width="100"
-                  src="partner/project-together-logo.png" /></v-col
-              ><v-col class="d-flex flex-column align-center"
-                ><v-img
-                  contain
-                  max-width="100"
-                  src="partner/solution-enabler.png" /></v-col></v-row></v-card-text></v-card
-      ></v-col>
+
       <v-col class="mt-6" cols="12" md="4">
         <v-card
           ><v-card-text

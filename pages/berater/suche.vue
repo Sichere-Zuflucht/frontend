@@ -24,47 +24,22 @@
           <p class="caption mb-0">Filtern:</p>
           <v-chip-group v-model="tagsSelected" column class="pt-0">
             <v-chip
-              v-for="tag in tagList"
-              :key="tag.id"
-              :value="tag.name"
+              v-for="(tag, n) in coachingTypes"
+              :key="n"
+              :value="tag"
               outlined
               small
               filter
               active-class="primary primary--text"
             >
-              {{ tag.name }}</v-chip
+              {{ tag }}</v-chip
             >
           </v-chip-group>
         </div>
-        <!-- </v-container>
-
-    <v-sheet color="blue-grey lighten-5">
-      <v-container>
-        <div class="d-flex align-start">
-          <v-icon large color="secondary" class="pr-2">mdi-filter</v-icon>
-          <div>
-            <h2 class="text-h2 secondary--text">Beratungsfilter</h2>
-            <p class="caption">
-              Filtere hier die Berater*innen und Coaches nach den Fachgebieten
-              und Themen, die für dich relevant sind.
-            </p>
-          </div>
-        </div>
-
-        <CoachingSelection
-          :is-coach="false"
-          :info="user.info || {}"
-          @filter="filter"
-        />
-      </v-container>
-    </v-sheet> 
-    <v-container> -->
-        <div
-          v-if="filteredCoaches.length > 0"
-          class="d-flex flex-wrap justify-space-around"
-        >
-          <div
-            v-for="(coaching, i) in filteredCoaches.filter((m) =>
+        <v-alert v-if="error" color="error" dark>{{ error }}</v-alert>
+        <v-row v-else-if="!loading">
+          <v-col
+            v-for="(coaching, i) in allCoaches.filter((m) =>
               tagsSelected != null
                 ? tagsSelected == m.info.topicArea[0]
                   ? true
@@ -72,30 +47,22 @@
                 : true
             )"
             :key="i"
+            cols="12"
+            md="4"
             class="mt-5 px-1"
           >
             <CoachingProfileWrapper :pub-coach-data="coaching" />
-          </div>
-        </div>
-        <div
-          v-else-if="
-            filteredCoaches.length !== allCoaches.length ||
-            filteredCoaches.length === 0
-          "
-          class="d-flex flex-column justify-center align-center mt-4"
-        >
-          <v-alert
-            v-if="filteredCoaches.length === 0"
-            color="primary"
-            dark
-            class="mt-8"
-          >
-            Keiner unserer Berater*innen erfüllt den angegebenen Kriterien.
-          </v-alert>
-          <v-btn outlined small color="primary" @click="resetFilter"
-            >Alle anzeigen
-          </v-btn>
-        </div>
+          </v-col>
+        </v-row>
+        <v-row v-else>
+          <v-col v-for="n in 3" :key="n" cols="12" md="4">
+            <v-skeleton-loader
+              class="mx-auto"
+              max-width="300"
+              type="card-avatar, article"
+            ></v-skeleton-loader
+          ></v-col>
+        </v-row>
         <p class="caption mt-4">
           <b>Dein Fachgebiet oder Thema ist nicht dabei?</b><br />
           <a href="mailto:kontakt@sichere-zuflucht.de"
@@ -105,7 +72,6 @@
         </p>
       </div>
     </v-container>
-
     <WomanPriceInfo />
   </v-sheet>
 </template>
@@ -116,39 +82,63 @@ export default {
   data() {
     return {
       allCoaches: [],
-      filteredCoaches: [],
       user: this.$store.getters['modules/user/user'],
-      coachingTypes: null,
+      coachingTypes: [],
       tagsSelected: null,
+      loading: true,
+      error: null,
     }
   },
-  async fetch() {
-    this.allCoaches = (
-      await this.$fire.functions.httpsCallable('user-getCoaches')()
-    ).data
-    this.filteredCoaches = this.allCoaches
-    await this.$fire.firestore
-      .collection('coachingTypes')
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          this.coachingTypes.push(doc.data().topicArea)
+  async mounted() {
+    try {
+      await this.$fire.firestore
+        .collection('coachingTypes')
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            this.coachingTypes.push(doc.data().topicArea)
+          })
         })
-      })
+
+      /* this.allCoaches = (
+        await this.$fire.functions.httpsCallable('user-getCoaches')()
+      ).data */
+      await this.$fire.firestore
+        .collection('users')
+        .doc()
+        .collection('private')
+        .where('verifySetting.verified', '==', true)
+        .get()
+        .then((querySnapshot) => {
+          console.log('q:', querySnapshot)
+          querySnapshot.forEach((doc) => {
+            console.log('doc:', doc.data())
+            this.allCoaches.push(doc.data())
+          })
+        })
+      console.log(
+        'coaches',
+        await this.$fire.firestore
+          .collection('users')
+          .doc()
+          .collection('private')
+          .where('verifySetting.verified', '==', true)
+          .get()
+      )
+      console.log(
+        'coaches 2',
+        await this.$fire.firestore
+          .collectionGroup('private')
+          .where('verifySetting.verified', '==', true)
+          .get()
+      )
+
+      this.loading = false
+    } catch (error) {
+      this.error = error
+      this.loading = false
+    }
   },
   fetchOnServer: false,
-  methods: {
-    filter(data) {
-      this.filteredCoaches = this.allCoaches.filter((coach) => {
-        return (
-          coach.info.topicArea.filter((value) => data.topicArea.includes(value))
-            .length > 0
-        )
-      })
-    },
-    resetFilter() {
-      this.filteredCoaches = this.allCoaches
-    },
-  },
 }
 </script>
