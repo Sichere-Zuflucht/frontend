@@ -1,76 +1,88 @@
 <template>
   <div class="my-4">
     <v-container class="py-md-16">
-      <h1 class="text-h1 mb-4 text-center primary--text">
+      <h1 class="text-h1 mb-4 text-center primary--text pt-md-16">
         Niemand muss <br />häusliche Gewalt aushalten.
       </h1>
-      <h2 class="text-center secondary--text subtitle-1 mb-8">Auch du nicht</h2>
-      <p class="text-center mx-auto" style="max-width: 530px">
+      <h2 class="text-center secondary--text subtitle-1 mb-8 mb-md-16">
+        Auch du nicht
+      </h2>
+      <p class="text-center mx-auto pb-md-16" style="max-width: 530px">
         Wir bieten <b>Frauen und ihren Kindern aus Gewaltbeziehungen</b> Hilfe
         in Form einer persönlichen Online-Beratung und eine sichere Zuflucht an.
       </p>
     </v-container>
     <v-img src="paige-cody-bOVZ_f3fbQM-unsplash.jpg" max-height="300px"></v-img>
-    <v-sheet color="grey lighten-5"
+    <v-sheet color="grey lighten-5 py-md-16"
       ><v-container>
-        <h3 class="text-uppercase mb-4 text-center primary--text">
-          Wir helfen dir!<br /><span
-            class="secondary--text"
-            style="font-size: 3em; line-height: 1em"
-            >JETZT!</span
-          >
-        </h3>
-        <p class="text-center error--text font-weight-bold">
-          "Wir lassen dich mit deinen Erlebnissen nicht allein."
-        </p>
-        <SharedServiceOverview />
+        <v-row
+          ><v-col cols="12" md="6" class="text-center text-md-right">
+            <h3 class="text-uppercase mb-4 primary--text text-md-h1 pt-md-16">
+              Wir helfen dir!<br /><span
+                class="secondary--text"
+                style="font-size: 3em; line-height: 1em"
+                >JETZT!</span
+              >
+            </h3>
+            <p class="error--text font-weight-bold">
+              "Wir lassen dich mit deinen Erlebnissen nicht allein."
+            </p>
+          </v-col>
+          <v-col cols="12" md="6"><SharedServiceOverview /></v-col
+        ></v-row>
       </v-container>
     </v-sheet>
-    <v-container>
+    <v-container class="pt-md-16">
       <h3
-        class="text-h3 text-uppercase text-center secondary--text pt-8"
+        class="
+          text-h3 text-md-h1 text-uppercase text-center
+          secondary--text
+          pt-8
+        "
         style="font-weight: bold"
       >
         Sichere Zuflucht <br />Magazin
       </h3>
     </v-container>
     <MagazineSlider :list="magazineList" :change="true" />
-    <v-divider />
+    <v-divider class="mt-md-8" />
     <v-container class="pt-16">
       <v-row style="max-width: 700px" class="mx-auto">
-        <v-col cols="12" md="12">
+        <v-col cols="12" md="6" class="text-center text-md-right">
+          <h3 class="text-uppercase mb-4 primary--text text-md-h1 pt-md-5">
+            <span style="font-size: 3em; line-height: 1em">Helfen Sie mit</span>
+          </h3>
+          <p class="secondary--text font-weight-bold">
+            und beraten Sie Frauen in Not.
+          </p>
+          <p>
+            Sie können beraten in:
+            <br /><b>Psychologie?</b> <br /><b>Psychotherapie?</b> <br /><b
+              >Coaching?</b
+            ><br /><b>sozialer Arbeit?</b> <br /><b>medizinischen Themen?</b>
+            <br /><b>Anwaltsthemen zur Ehe?</b>
+          </p>
+        </v-col>
+        <v-col cols="12" md="6">
           <v-card class="mx-auto" max-width="320">
             <v-img src="AdobeStock_342417877.jpeg" height="200px"></v-img>
 
             <v-card-text
               ><h3 class="text-h3 primary--text font-weight-bold mb-2">
-                Werden Sie ein Teil von Sichere Zuflucht
+                Werden Sie ein Teil von<br />Sichere Zuflucht
               </h3>
-            </v-card-text>
-
-            <v-card-subtitle>
-              Wir erweitern permanent unseren Pool an Berater*innen und freuen
-              uns über alle, die
-              <b>Frauen und ihre Kinder aktiv unterstützten</b> wollen. Im
-              Besonderen suchen wir nach engagierten
-              <b
-                >Psycholog*innen, Psychotherapeut*innen, Coach*innen,
-                Ärzt*innen, Anwält*innen</b
-              >
-              zu Ehe-Themen, <b>Sozialarbeiter*innen</b> aber auch
-              <b>Frauen</b>, die es geschafft haben, sich aus ihrer
-              <b>gewaltvollen Beziehung zu befreien</b>
-              und nun anderen helfen möchten.
-              <v-btn color="primary mt-8 mb-1" to="registration/signup">
+              <p>
+                Wir erweitern permanent unseren Pool an Berater*innen und freuen
+                uns über alle, die
+                <b>Frauen und ihre Kinder aktiv unterstützten</b> wollen.
+              </p>
+              <v-btn color="primary mt-2 mb-1" to="registration/signup">
                 Als Berater*in registrieren
               </v-btn>
-              <v-btn
-                to="info-berater"
-                text
-                class="pl-1 text-decoration-underline caption"
+              <v-btn to="info-berater" class="secondary mb-1"
                 >mehr erfahren</v-btn
               >
-            </v-card-subtitle>
+            </v-card-text>
           </v-card>
         </v-col>
         <v-col cols="12" md="6" style="display: none">
