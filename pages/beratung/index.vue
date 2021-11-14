@@ -7,7 +7,13 @@
       </h1>
     </client-only>
     <CoachFulfilRegistration />
-    <div v-if="!!this.private && this.private.stripe">
+    <div
+      v-if="
+        !!this.private &&
+        this.private.stripe &&
+        this.private.verifySetting.verified
+      "
+    >
       <h2 class="primary--text mb-2">Anfragen</h2>
       <div v-if="requests != null">
         <div v-if="requests.length !== 0">
