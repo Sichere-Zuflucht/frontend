@@ -44,15 +44,17 @@
       <div v-if="pubData.info.topicArea">
         <p class="font-weight-bold mb-1 mt-2 caption">Fachgebiet</p>
         <div class="d-flex flex-wrap">
-          <v-chip
-            v-for="tag in pubData.info.topicArea"
-            :key="tag"
-            outlined
-            color="primary"
-            class="mr-1 mb-1 caption"
+          <p
+            v-for="(tag, i) in pubData.info.topicArea"
+            :key="i"
+            class="black--text ma-0 pa-0"
           >
-            <p class="black--text ma-0 pa-0">{{ tag }}</p>
-          </v-chip>
+            {{
+              i == Object.keys(pubData.info.topicArea).length - 1
+                ? tag
+                : tag + ', '
+            }}
+          </p>
         </div>
       </div>
       <div v-if="pubData.info.since">

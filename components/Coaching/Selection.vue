@@ -1,22 +1,131 @@
 <template>
   <div>
     <v-expand-transition>
-      <v-stepper v-show="open" v-model="e6" vertical class="mx-auto">
+      <v-stepper v-model="e6" vertical class="mx-auto">
         <v-stepper-step
-          v-if="isCoach"
-          :complete="e6 > 0"
-          :editable="e6 > 0"
-          step="0"
-          color="secondary"
+          :complete="e6 > 1"
+          :editable="e6 > 1"
+          :color="e6 > 1 ? 'success' : 'secondary'"
+          step="1"
           ><h2
             class="text-h5 text-uppercase secondary--text"
             style="text-shadow: none"
           >
-            Profilfoto
+            {{ coach.helpTitle }}
           </h2>
-          <small>Lade ein Profilfoto hoch</small>
+          <small>{{ coach.helpSubtitle }}</small>
         </v-stepper-step>
-        <v-stepper-content v-if="isCoach" step="0">
+        <v-stepper-content step="1">
+          <v-chip-group v-model="selectedTopic" column mandatory multiple>
+            <v-chip
+              v-for="(t, i) in topics"
+              :key="i"
+              :value="t.topicArea"
+              active-class="primary primary--text"
+              outlined
+              filter
+              >{{ t.topicArea }}
+            </v-chip>
+          </v-chip-group>
+          <v-btn color="primary" block @click="e6++">
+            <v-icon class="pr-1">mdi-arrow-down</v-icon>
+            Weiter
+          </v-btn>
+        </v-stepper-content>
+        <v-stepper-step
+          :complete="e6 > 2"
+          :editable="e6 > 2"
+          :color="e6 > 2 ? 'success' : 'secondary'"
+          step="2"
+        >
+          <h2
+            class="text-h5 text-uppercase secondary--text"
+            style="text-shadow: none"
+          >
+            {{ coach.bioTitle }}
+          </h2>
+          <small>{{ coach.bioSubtitle }}</small>
+        </v-stepper-step>
+        <v-stepper-content step="2">
+          <v-text-field
+            v-model="changeProfession"
+            outlined
+            class="pt-2"
+            label="Aktueller Beruf"
+            counter="25"
+            :rules="[
+              (v) => (!!v && v.length <= 25) || 'weniger als 25 Buchstaben',
+            ]"
+            placeholder="Jobbezeichnung."
+          ></v-text-field>
+          <v-text-field
+            v-model="changeSince"
+            outlined
+            label="Coach/Berater*in seit dem Jahr:"
+            type="number"
+            :rules="[
+              () =>
+                (!!changeSince &&
+                  changeSince >= yearsAgo &&
+                  changeSince <= new Date().getFullYear()) ||
+                'Die Jahresangabe muss zwischen ' +
+                  yearsAgo +
+                  ' und heute liegen',
+            ]"
+            placeholder="Jahreszahl"
+            min="1900"
+            :max="new Date().getFullYear()"
+            step="1"
+          ></v-text-field>
+          <v-textarea
+            v-model="changeHistory"
+            outlined
+            label="Beruflicher Hintergrund"
+            placeholder="z.B. was Sie vorher gemacht haben oder was Sie bewegt"
+          ></v-textarea>
+          <v-textarea
+            v-model="changeFocus"
+            outlined
+            label="Schwerpunkte"
+            placeholder="Am besten welche, die zu den Problemen unserer Frauen passen."
+          ></v-textarea>
+          <v-textarea
+            v-model="changeCoachingTopics"
+            outlined
+            label="Beratungs-/ Coaching-Themen"
+            placeholder="1. 2. 3. …"
+          ></v-textarea>
+          <v-textarea
+            v-model="changeDescription"
+            outlined
+            label="Persönliches über mich"
+            placeholder="Seien Sie Nahbar. So können Sie den Frauen helfen, ihre Scheu zu überwinden und sich Hilfe zu holen."
+          ></v-textarea>
+          <v-textarea
+            v-model="changeAssistance"
+            outlined
+            label="konkrete Hilfestellung"
+            placeholder="…"
+          ></v-textarea>
+          <v-btn color="primary" block @click="e6++">
+            <v-icon class="pr-1">mdi-arrow-down</v-icon>
+            weiter
+          </v-btn>
+        </v-stepper-content>
+        <v-stepper-step
+          :complete="e6 > 3"
+          :editable="e6 > 3"
+          step="3"
+          :color="e6 > 3 ? 'success' : 'secondary'"
+          ><h2
+            class="text-h5 text-uppercase secondary--text"
+            style="text-shadow: none"
+          >
+            {{ coach.picTitle }}
+          </h2>
+          <small>{{ coach.picSubtitle }}</small>
+        </v-stepper-step>
+        <v-stepper-content step="3">
           <v-row class="mb-4">
             <v-col class="d-flex align-center justify-center">
               <v-avatar size="80">
@@ -63,124 +172,12 @@
             </v-col>
           </v-row>
 
-          <v-btn color="primary" block @click="update(1)">
-            <v-icon>mdi-arrow-down</v-icon> Weiter
-          </v-btn>
-        </v-stepper-content>
-        <v-stepper-step
-          :complete="e6 > 1"
-          :editable="e6 > 1"
-          step="1"
-          color="secondary"
-          ><h2
-            class="text-h5 text-uppercase secondary--text"
-            style="text-shadow: none"
-          >
-            {{ isCoach ? coach.helpTitle : women.helpTitle }}
-          </h2>
-          <small>{{ isCoach ? coach.helpSubtitle : women.helpSubtitle }}</small>
-        </v-stepper-step>
-        <v-stepper-content step="1">
-          <v-chip-group v-model="selectedTopic" column mandatory multiple>
-            <v-chip
-              v-for="(t, i) in topics"
-              :key="i"
-              :value="t.topicArea"
-              active-class="primary primary--text"
-              outlined
-              >{{ t.topicArea }}
-            </v-chip>
-          </v-chip-group>
-          <v-btn color="primary" block @click="isCoach ? update(2) : finish()">
-            <v-icon>{{ isCoach ? 'mdi-arrow-down' : 'mdi-check' }}</v-icon>
-            {{ isCoach ? 'Weiter' : 'Fertig' }}
-          </v-btn>
-        </v-stepper-content>
-        <v-stepper-step
-          v-if="isCoach"
-          :complete="e6 > 2"
-          step="2"
-          color="secondary"
-        >
-          <h2
-            class="text-h5 text-uppercase secondary--text"
-            style="text-shadow: none"
-          >
-            {{ coach.bioTitle }}
-          </h2>
-          <small>{{ coach.bioSubtitle }}</small>
-        </v-stepper-step>
-        <v-stepper-content v-if="isCoach" step="2">
-          <p class="caption">
-            Bitte stellen Sie sich kurz vor, damit die Frauen sich ein besseres
-            Bild von Ihrer Person machen können. Z.B. mit Berufserfahrung,
-            Schwerpunkt etc.
-          </p>
-          <v-textarea
-            v-model="changeProfession"
-            outlined
-            label="Aktueller Beruf"
-            placeholder="Wie lautet Ihre Jobbezeichnung."
-          ></v-textarea>
-          <v-text-field
-            v-model="changeSince"
-            outlined
-            label="Coach/Berater*in seit dem Jahr:"
-            type="number"
-            :rules="[
-              () =>
-                (!!changeSince &&
-                  changeSince >= 1950 &&
-                  changeSince <= new Date().getFullYear()) ||
-                'Die Jahresabgabe muss zwischen 1950 und heute liegen',
-            ]"
-            placeholder="Jahreszahl"
-            min="1900"
-            :max="new Date().getFullYear()"
-            step="1"
-          ></v-text-field>
-          <v-textarea
-            v-model="changeHistory"
-            outlined
-            label="Beruflicher Hintergrund"
-            placeholder="z.B. was Sie „vorher“ gemacht haben oder was Sie bewegt"
-          ></v-textarea>
-          <v-textarea
-            v-model="changeFocus"
-            outlined
-            label="Schwerpunkte"
-            placeholder="Am besten welche, die zu den Problemen unserer Frauen passen."
-          ></v-textarea>
-          <v-textarea
-            v-model="changeCoachingTopics"
-            outlined
-            label="Beratungs-/ Coaching-Themen"
-            placeholder="1. 2. 3. …"
-          ></v-textarea>
-          <v-textarea
-            v-model="changeDescription"
-            outlined
-            label="Persönliches über mich"
-            placeholder="Mit Nahbarkeit können Sie den Frauen helfen, ihre Scheu zu überwinden und sich Ihre Hilfe zu holen."
-          ></v-textarea>
-          <v-textarea
-            v-model="changeAssistance"
-            outlined
-            label="konkrete Hilfestellung"
-            placeholder="… was soll hier rein?"
-          ></v-textarea>
           <v-btn color="primary" block @click="finish">
-            <v-icon>mdi-check</v-icon>
-            Speichern
+            <v-icon class="pr-1">mdi-content-save</v-icon> Profil speichern
           </v-btn>
         </v-stepper-content>
       </v-stepper>
     </v-expand-transition>
-    <div v-if="filter" class="d-flex justify-center">
-      <v-btn plain :v-ripple="false" @click="open = !open">
-        {{ open ? 'Filter verbergen' : 'Filter anzeigen' }}
-      </v-btn>
-    </div>
   </div>
 </template>
 
@@ -188,22 +185,6 @@
 export default {
   name: 'CoachingSelection',
   props: {
-    isCoach: {
-      type: Boolean,
-      default: false,
-    },
-    isOpen: {
-      type: Boolean,
-      default: true,
-    },
-    filter: {
-      type: Boolean,
-      default: true,
-    },
-    closable: {
-      type: Boolean,
-      default: true,
-    },
     info: {
       type: Object,
       default: () => {},
@@ -216,25 +197,16 @@ export default {
   data() {
     return {
       coach: {
-        langTitle: 'Sprachen',
-        langSubtitle: 'In welchen Sprachen bietest du Kurse an',
-        helpTitle: 'Fachgebiete',
-        helpSubtitle: 'Bitte wähle ein oder mehrere Fachgebiete aus',
-        areaTitle: 'Themenfelder',
-        areaSubtitle: 'Bitte wähle ein oder mehrere Themen aus',
+        helpTitle: 'Ihre Fachgebiete',
+        helpSubtitle:
+          'Bitte wählen Sie die Fachgebiete aus, zu denen Sie Beratung anbieten möchten.',
+        picTitle: 'Foto',
+        picSubtitle: 'Sammeln Sie Sympathiepunkte',
         bioTitle: 'Kurzbeschreibung',
-        bioSubtitle: 'Füge eine Kurzbeschreibung hinzu',
-      },
-      women: {
-        langTitle: 'Sprache',
-        langSubtitle: 'In welcher Sprache möchtest du beraten werden',
-        helpTitle: 'Fachgebiet',
-        helpSubtitle: 'Bitte wähle ein Fachgebiet aus',
-        areaTitle: 'Themen',
-        areaSubtitle: 'Bitte wähle ein oder mehrere Themen aus',
+        bioSubtitle: 'Damit die Frauen Ihr Angebot besser einschätzen können.',
       },
       topics: [],
-      selectedTopic: this.info.topicArea,
+      selectedTopic: [],
       changeProfession: this.info.profession,
       changeSince: this.info.since,
       changeDescription: this.info.description,
@@ -242,9 +214,8 @@ export default {
       changeFocus: this.info.focus,
       changeCoachingTopics: this.info.coachingTopics,
       changeAssistance: this.info.assistance,
-      e6: this.isCoach ? 0 : 1,
+      e6: 1,
       panel: [0],
-      open: this.isOpen,
       uploadRef: true,
       changeAvatar: null,
       imageFile: [],
@@ -257,6 +228,7 @@ export default {
           'Fotogröße sollte kleiner als 2 MB sein.',
         (value) => !!value || 'Lade ein Foto hoch.',
       ],
+      yearsAgo: new Date().getFullYear() - 100,
     }
   },
   async fetch() {
@@ -264,10 +236,14 @@ export default {
       await this.$fire.firestore.collection('coachingTypes').get()
     ).docs.map((doc) => doc.data())
   },
+  mounted() {
+    for (const v in this.info.topicArea) {
+      this.selectedTopic.push(this.info.topicArea[v])
+    }
+  },
   fetchOnServer: false,
   methods: {
     finish() {
-      this.open = false
       const data = {
         topicArea: this.selectedTopic,
         description: this.changeDescription,
@@ -279,15 +255,7 @@ export default {
         avatar: this.changeAvatar ? this.changeAvatar : this.avatar,
         profession: this.changeProfession,
       }
-      this.$emit('filter', data)
       this.$emit('selection', data)
-    },
-    update(val) {
-      this.e6 = val
-      this.$emit('filter', {
-        // languages: this.languages,
-        topicArea: this.selectedTopic.topicArea,
-      })
     },
     upload(file) {
       this.isLoading = true

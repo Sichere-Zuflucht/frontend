@@ -2,7 +2,10 @@
   <v-row class="ma-0">
     <v-col cols="12" md="6" height="100%" class="pa-0">
       <v-sheet color="secondary" dark height="100%">
-        <v-container style="max-width: 450px" class="ma-auto py-16">
+        <v-container
+          style="max-width: 450px; position: sticky; top: 100px"
+          class="ma-auto"
+        >
           <h1 class="h2--text white--text text-uppercase pb-8">Los geht's</h1>
           <p>Bitte zuerst den Anmeldeprozess abschließen.</p>
         </v-container>
@@ -73,11 +76,20 @@
           </v-stepper-items>
           <v-stepper-items>
             <v-stepper-content step="2">
-              <h2 class="text-h2 secondary--text pb-4">Anmeldung</h2>
-              <p v-if="membership ? membership.id === 'Coach' : false">
-                Ihr Vor- und Nachname werden in Ihrem Profil öffentlich sichtbar
-                sein.
-              </p>
+              <div v-if="membership ? membership.id === 'Coach' : false">
+                <h2 class="text-h2 secondary--text pb-4">Anmeldung</h2>
+                <p>
+                  Ihr Vor- und Nachname werden in Ihrem Profil öffentlich
+                  sichtbar sein.
+                </p>
+              </div>
+              <div v-else>
+                <h2 class="text-h2 secondary--text pb-4">Passwort</h2>
+                <p>
+                  Du brauchst ein Passwort, um dich in dein Konto einzuloggen
+                  und mit den Berater*innen Kontakt aufnehmen zu können.
+                </p>
+              </div>
               <v-form ref="form" v-model="validMem" class="pt-8">
                 <v-text-field
                   v-if="membership ? membership.id === 'Coach' : false"
@@ -130,7 +142,7 @@
                   :loading="loading"
                   :disabled="!validMem"
                   @click="updateProfile"
-                  >Anmeldung abschließen</v-btn
+                  >Passwort speichern</v-btn
                 ></v-form
               >
             </v-stepper-content></v-stepper-items
@@ -294,16 +306,20 @@ export default {
             createdUserData.private = {
               email: this.$fire.auth.currentUser.email,
             }
-
+            this.$store
+              .dispatch('modules/user/requestVerify', {
+                tel: this.verPhone,
+                www: this.verWeb,
+                email: this.verEmail,
+              })
+              .then(() => {
+                this.loading = false
+                this.success = true
+              })
             return this.$store.dispatch('modules/user/createFirebaseUser', {
-              createdUserData,
+              userData: createdUserData,
               redirectTo: false,
             })
-            /* this.$store.dispatch('modules/user/requestVerify', {
-              tel: this.verPhone,
-              www: this.verWeb,
-              email: this.verEmail,
-            }) */
           } else {
             createdUserData.public = {
               membership: this.membership.id,
@@ -314,7 +330,7 @@ export default {
               email: this.$fire.auth.currentUser.email,
             }
             return this.$store.dispatch('modules/user/createFirebaseUser', {
-              createdUserData,
+              userData: createdUserData,
               redirectTo: true,
             })
           }

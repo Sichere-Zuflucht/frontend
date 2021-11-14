@@ -1,7 +1,55 @@
 <template>
-  <div>
+  <div class="pt-4">
     <client-only v-if="userData && userData.private && userData.public">
+      <v-alert
+        v-if="!userData.public.info"
+        dark
+        color="error"
+        type="error"
+        icon="mdi-account-question"
+        >Es existiert noch kein Profil von Ihnen.</v-alert
+      >
+      <v-alert
+        v-if="!userData.private.stripe.payoutsEnabled"
+        dark
+        color="error"
+        type="error"
+        icon="mdi-credit-card-outlined"
+        >Es wurde noch kein Stripe Account errichtet.</v-alert
+      >
+      <v-alert
+        v-if="!userData.private.verifySetting.verified"
+        dark
+        color="error"
+        type="error"
+        icon="mdi-account-clock"
+        >Sie wurden von uns noch nicht verifiziert.</v-alert
+      >
       <p
+        v-if="
+          !(
+            userData.public.info &&
+            userData.private.stripe.payoutsEnabled &&
+            userData.private.verifySetting.verified
+          )
+        "
+        class="caption"
+      >
+        Solange Sie nicht
+        {{
+          !userData.private.verifySetting.verified
+            ? 'von uns verifiziert wurden, '
+            : null
+        }}{{
+          !userData.private.stripe.payoutsEnabled
+            ? 'Stripe eingerichtet haben, '
+            : null
+        }}
+        {{ !userData.public.info ? 'Profildaten eingerichtet haben, ' : null }}
+        ist Ihr Profil nicht öffentlich einsehbar und somit können auch keine
+        Anfragen an Sie gestellt werden.
+      </p>
+      <!--      <p
         v-if="
           !(
             userData.public.info &&
@@ -13,6 +61,7 @@
         Bitte vervollständigen Sie Ihr Konto, damit wir Ihr Profil freischalten
         können.
       </p>
+      
       <v-stepper
         v-if="
           !(
@@ -106,7 +155,7 @@
             }}
           </v-btn>
         </v-stepper-content>
-      </v-stepper>
+      </v-stepper>-->
     </client-only>
   </div>
 </template>
