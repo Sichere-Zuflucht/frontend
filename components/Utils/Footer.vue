@@ -138,28 +138,40 @@ export default {
     return {
       footer: [
         {
+          title: 'Magazin',
+          to: '/magazine',
+        },
+        {
+          title: 'Über uns',
+          to: '/ueber-uns',
+        },
+        {
+          title: 'Unterstützen',
+          to: '/spenden',
+        },
+        {
           title: 'Impressum',
-          to: '/',
+          to: '/impressum',
         },
         {
           title: 'Datenschutz',
-          to: '/',
+          to: '/datenschutz',
         },
         {
           title: 'AGB',
-          to: '/',
+          to: '/agb',
         },
         {
           title: 'Kontakt',
-          to: '/',
+          to: '/kontakt',
         },
         {
           title: 'FAQ',
-          to: '/',
+          to: '/faq',
         },
         {
           title: 'Hilfe',
-          to: '/',
+          to: '/hilfe',
         },
       ],
     }

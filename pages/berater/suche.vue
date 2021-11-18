@@ -100,10 +100,10 @@ export default {
           })
         })
 
-      /* this.allCoaches = (
+      this.allCoaches = (
         await this.$fire.functions.httpsCallable('user-getCoaches')()
-      ).data */
-      await this.$fire.firestore
+      ).data
+      /* await this.$fire.firestore
         .collection('users')
         .doc()
         .collection('private')
@@ -115,7 +115,7 @@ export default {
             console.log('doc:', doc.data())
             this.allCoaches.push(doc.data())
           })
-        })
+        }) */
       console.log(
         'coaches',
         await this.$fire.firestore

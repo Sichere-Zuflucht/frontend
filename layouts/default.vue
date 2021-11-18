@@ -94,11 +94,12 @@
       <client-only>
         <v-btn
           v-if="loggedIn && user.public"
-          :to="membership === 'Coach' ? '/beratung' : '/frauen'"
           nuxt
           exact
           icon
           plain
+          :to="membership === 'Coach' ? '/beratung' : null"
+          @click="membership === 'Coach' ? null : logout()"
         >
           <v-avatar v-if="membership === 'Coach'" size="38"
             ><v-img v-if="user.public.avatar" :src="user.public.avatar" />
@@ -108,7 +109,8 @@
               style="border: 1px solid #000"
               class="pa-2"
             /> </v-avatar
-        ></v-btn>
+          ><v-icon v-else>mdi-logout</v-icon></v-btn
+        >
       </client-only>
     </v-app-bar>
     <v-card
@@ -140,14 +142,14 @@ export default {
       drawer: false,
       loggedInWoman: [
         {
-          icon: 'mdi-view-dashboard',
-          title: 'Übersicht',
-          to: '/frauen',
-        },
-        {
           icon: 'mdi-account-box',
           title: 'Beratungen',
           to: '/berater/suche',
+        },
+        {
+          icon: 'mdi-view-dashboard',
+          title: 'Mein Bereich',
+          to: '/frauen',
         },
         /* {
           icon: 'mdi-shield-home',
@@ -156,14 +158,14 @@ export default {
         }, */
         {
           icon: 'mdi-cog',
-          title: 'Einstellungen',
+          title: 'Konto-Infos',
           to: '/frauen/settings',
         },
       ],
       loggedInCoach: [
         {
           icon: 'mdi-view-dashboard',
-          title: 'Übersicht',
+          title: 'Mein Profil',
           to: '/beratung',
         },
         {
@@ -173,7 +175,7 @@ export default {
         },
         {
           icon: 'mdi-cog',
-          title: 'Einstellungen',
+          title: 'Konto-Infos',
           to: '/beratung/settings',
         },
       ],
@@ -183,32 +185,32 @@ export default {
           to: '/',
         },
         {
-          title: 'Berater*in finden',
-          to: '/berater/suche',
+          title: 'Für Frauen',
+          to: '/info-frauen',
         },
         {
           title: 'Magazin',
           to: '/magazine',
         },
         {
-          title: 'Über uns',
-          to: '/ueber-uns',
+          title: 'Beratung finden',
+          to: '/berater/suche',
         },
         {
-          title: 'Wie wir helfen',
-          to: '/info-frauen',
-        },
-        {
-          title: 'Wie du helfen kannst',
+          title: 'Für Berater*innen',
           to: '/info-berater',
         },
         {
-          title: 'Spenden',
-          to: '/spenden',
+          title: 'Beratung anbieten',
+          to: '/registration/signup',
         },
         {
-          title: 'Aktuelles',
-          to: '/aktuelles',
+          title: 'Berater*innen Übersicht',
+          to: '/berater/suche',
+        },
+        {
+          title: 'Magazin',
+          to: '/magazine',
         },
       ],
     }

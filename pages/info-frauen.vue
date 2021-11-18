@@ -3,44 +3,74 @@
     <UtilsBanner url="header-frauen.jpg" />
     <v-sheet color="grey lighten-5"
       ><v-container class="text-center">
-        <h1 class="text-h1 primary--text py-8">
+        <h1 class="text-h1 primary--text pt-8">
           Für dein Leben ohne häusliche Gewalt
         </h1>
-        <p>
-          <b>Hier bist du richtig.</b> Wir helfen dir in deiner schwierigen
-          Situation.
-        </p>
+        <h2 class="text-h2 secondary--text pb-8">
+          HIER BIST DU RICHTIG. WIR HELFEN DIR IN DEINER SCHWIERIGEN SITUATION.
+        </h2>
         <p>
           Wir sammeln für dich Informationen und Berichte, die dich auf deinem
           Weg in ein Leben ohne Gewalt unterstützen können.
         </p>
-        <p>
-          Wir wollen, dass du nicht alleine bist!
-          <nuxt-link to="berater/suche">Lass dich online beraten.</nuxt-link>
-          Dafür stehen dir unsere Coaches*innen und Berater*innen zur Verfügung.
-        </p></v-container
-      ></v-sheet
+      </v-container></v-sheet
     >
 
-    <h1 class="text-h2 secondary--text text-center py-8">
-      Sichere Zuflucht Magazin
-    </h1>
+    <h2 class="text-h2 secondary--text text-center pt-16">
+      Das Sichere Zuflucht-Magazin
+    </h2>
     <MagazineSlider :list="magazineList" :change="true" />
-    <v-container>
+    <v-container class="pb-16 pt-0">
       <UtilsBtn text="Zum Magazin" link="/magazine" classname="pb-0" />
-
-      <p class="font-weight-bold pt-8 pb-4 text-center">
-        Was erlebst du in deinem Alltag. Wir wollen dir helfen, deine Situation
-        einzuordnen.
+    </v-container>
+    <v-divider />
+    <v-container class="pb-16">
+      <h2 class="text-h2 secondary--text text-center pt-16">
+        Nutze unser Hilfsangebot
+      </h2>
+      <p class="pb-4 text-center">
+        Wir wollen, dass du nicht alleine bist. Unsere Berater*innen stehen dir
+        mit Ihrer Erfahrung zur Seite. Deine <b>Beratung</b> findet
+        <b>sicher, online</b> und <b>anonym</b> statt.
       </p>
-      <h2 class="text-h2 text-center secondary--text py-8">
+      <CoachingSlider />
+      <UtilsBtn
+        text="Unsere Berater*innen"
+        link="/berater/suche"
+        classname="pb-0"
+      />
+      <h2 class="text-h2 secondary--text text-center pt-16">
+        DU STEHST VOR DER TRENNUNG, HAST ABER VIELE FRAGEN?!
+      </h2>
+      <p>
+        <b
+          >Wir bieten dir die Möglichkeit deine Fragen von Fachleuten
+          beantworten zu lassen.</b
+        ><br />
+        In unseren Beratungsgesprächen und individuellen Coachings werden dir
+        wichtige Fragen zuverlässig beantwortet, z.B.:
+      </p>
+      <ul>
+        <li>Sorgerecht</li>
+        <li>Finanzielle Möglichkeiten</li>
+        <li>Scheidungsfragen</li>
+        <li>Umgang mit dem sozialen Umfeld</li>
+      </ul>
+    </v-container>
+    <v-container class="py-16">
+      <h2 class="text-h2 text-center secondary--text pb-2">
         ... Das ist doch noch keine Gewalt, oder?
       </h2>
-      <p class="text-center">
+      <h3 class="text-h5 text-center primary--text pb-8">
+        WAS ERLEBST DU IN DEINEM ALLTAG. WIR WOLLEN DIR HELFEN, DEINE SITUATION
+        EINZUORDNEN.
+      </h3>
+      <p>
         <b
-          >Betroffenen fällt es oft nicht leicht die Gewalt zu erkennen. Sie
-          fängt häufig schleichend an.</b
+          >Betroffenen fällt es oft nicht leicht die Gewalt zu erkennen.<br />
+          Sie fängt häufig schleichend an.</b
         >
+        <br />
         Erklärtext, damit sich die Frauen einsortieren können. Lorem ipsum dolor
         sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
         invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
@@ -50,41 +80,19 @@
         eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
         voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
       </p>
-      <p class="text-center font-weight-bold">
-        Weitere Erfahrungen findest du in unserem Magazin.
+      <p>
+        Weitere Erfahrungen findest du in unserem
+        <nuxt-link to="/magazine">Magazin</nuxt-link>.
       </p>
-      <UtilsBtn text="Zum Magazin" link="/magazine"
-    /></v-container>
-    <v-divider />
-    <v-container class="text-center">
-      <h2 class="text-h2 text-center secondary--text py-8">
-        Du stehst vor der Trennung, hast aber viele Fragen?
-      </h2>
-      <p style="max-width: 600px" class="mx-auto">
-        <b
-          >Wir bieten dir die Möglichkeit deine Fragen von Fachleuten
-          beantworten zu lassen.</b
-        >
-        In unseren Beratungsgesprächen und individuellen Coachings werden dir
-        wichtige Fragen wie:
-      </p>
-      <p class="font-weight-bold py-0 my-0">> Sorgerecht</p>
-      <p class="font-weight-bold py-0 my-0">> Finanzielle Möglichkeiten</p>
-      <p class="font-weight-bold py-0 my-0">> Scheidungsfragen</p>
-      <p class="font-weight-bold py-0 my-0">> Umgang mit dem sozialen Umfeld</p>
-      <p class="mt-4">u.v.m zuverlässig beantwortet.</p>
-      <UtilsBtn
-        text="Sieh dir unsere Beratungsthemen an"
-        link="berater/suche"
-      />
     </v-container>
+    <v-divider />
     <v-sheet color="grey lighten-5">
-      <v-container>
+      <v-container class="pt-12">
         <h2 class="text-h2 text-center secondary--text pt-4">
           Stimmen von Frauen zu diesem Projekt
         </h2>
       </v-container>
-      <v-carousel hide-delimiters height="auto">
+      <v-carousel hide-delimiters height="auto" class="pb-12">
         <v-carousel-item v-for="(quote, n) in quotes" :key="n" class="px-4"
           ><v-row
             class="fill-height py-5 px-16 text-center"
@@ -110,15 +118,15 @@ export default {
       magazineList: null,
       quotes: [
         {
-          text: 'Wenn ich damals die Möglichkeiten gehabt hätte, die diese Plattform bietet, hätte ich den Schritt aus meiner Beziehung nicht er dann gewagt, als es um mein Leben ging!',
+          text: 'Wenn ich damals die Möglichkeiten gehabt hätte, die diese Plattform bietet, hätte ich den Schritt aus meiner Beziehung nicht erst dann gewagt, als es um mein Leben ging!',
           by: 'Jessica V.',
         },
         {
-          text: 'Wenn ich damals die Möglichkeiten gehabt hätte, asdf fasdfasdgaksölkfäaö asdfklams asdfläk die diese Plattform bietet, hätte ich den Schritt aus meiner Beziehung nicht er dann gewagt, als es um mein Leben ging!',
+          text: 'Wenn ich damals die Möglichkeiten gehabt hätte, asdf fasdfasdgaksölkfäaö asdfklams asdfläk die diese Plattform bietet, hätte ich den Schritt aus meiner Beziehung nicht erst dann gewagt, als es um mein Leben ging!',
           by: 'Maria M.',
         },
         {
-          text: 'Wenn ich damals die Möglichkeiten gehabt hätte, die diese Plattform bietet, hätte ich den Schritt aus meiner Beziehung nicht er dann gewagt, als es um mein Leben ging!',
+          text: 'Wenn ich damals die Möglichkeiten gehabt hätte, die diese Plattform bietet, hätte ich den Schritt aus meiner Beziehung nicht erst dann gewagt, als es um mein Leben ging!',
           by: 'Sarah R.',
         },
       ],
