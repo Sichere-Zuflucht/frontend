@@ -5,23 +5,13 @@
         Willkommen bei<br />Sichere Zuflucht
       </h1></v-sheet
     >
-
-    <div v-if="responses" class="pb-4">
-      <v-container>
-        <h2 class="text-h4 font-weight-bold primary--text mt-3 mb-3">
-          {{
-            responses.length === 0
-              ? 'Starte jetzt und suche deine passende Beratung.'
-              : 'Deine Korrespondenz'
-          }}
+    <div v-if="responses">
+      <v-container v-if="responses.length > 0">
+        <h2 class="text-h4 font-weight-bold primary--text mb-3">
+          Deine Korrespondenz
         </h2>
       </v-container>
-      <v-container v-if="responses.length === 0" class="pt-0">
-        <v-btn to="berater/suche" color="secondary"
-          >Beratungsangebote ansehen
-        </v-btn>
-      </v-container>
-      <v-container v-else-if="responses.length === 1">
+      <v-container v-if="responses.length === 1">
         <CoachingContactStatus
           :coach="responses[0].coach"
           :response="responses[0]"
@@ -29,7 +19,11 @@
           @cancel="responses = []"
         />
       </v-container>
-      <v-slide-group v-else show-arrows class="px-1 pb-4">
+      <v-slide-group
+        v-else-if="responses.length > 1"
+        show-arrows
+        class="px-1 pb-4"
+      >
         <v-slide-item v-for="(response, i) in responses" :key="i">
           <div style="width: 95vw; max-width: 300px; padding: 5px">
             <CoachingContactStatus
@@ -41,7 +35,7 @@
           </div>
         </v-slide-item>
       </v-slide-group>
-      <v-container>
+      <!-- <v-container>
         <nuxt-link to="info-berater" text color="primary" small
           >Wie läuft das Beratungsgespräch ab?
         </nuxt-link>
@@ -53,7 +47,7 @@
         <nuxt-link to="info-frauen" text color="primary" small
           >Infos zu Preisen</nuxt-link
         >
-      </v-container>
+      </v-container> -->
       <UtilsBtn
         v-if="responses.length != 0"
         text="Beratungsangebote ansehen"
@@ -69,17 +63,40 @@
         ></v-skeleton-loader>
       </v-sheet>
     </v-container>
-    <!-- <v-sheet color="blue-grey lighten-5" class="py-md-16">
+    <v-sheet color="blue-grey lighten-5">
       <v-container>
+        <v-alert
+          v-model="newWoman"
+          type="success"
+          color="success"
+          icon="mdi-check"
+          dismissible
+          >Geschafft! Ab jetzt sind alle Angebote von Sichere Zuflucht frei
+          zugänglich.</v-alert
+        >
+        <h2 class="text-h2 text-center primary--text my-6">Unsere Angebote</h2>
         <v-row
-          ><v-col cols="12" md="6">
-            <h2 class="text-h2 text-md-right secondary--text mt-6 mb-3">
-              Unsere Angebote
-            </h2></v-col
-          ><v-col cols="12" md="6"> <SharedServiceOverview /></v-col
-        ></v-row>
+          ><v-col v-for="(offer, i) in offers" :key="i" cols="12" md="6">
+            <v-card style="overflow: hidden"
+              ><v-row
+                ><v-col cols="3" class="pa-0"
+                  ><v-img
+                    :src="offer.img"
+                    width="100%"
+                    height="100%"
+                    cover /></v-col
+                ><v-col cols="9" class="py-8 px-4"
+                  ><h3 class="text-h5 primary--text pb-4">{{ offer.title }}</h3>
+                  <v-btn color="secondary" :to="offer.link" class="mb-8">{{
+                    offer.btntext
+                  }}</v-btn></v-col
+                ></v-row
+              ></v-card
+            >
+          </v-col></v-row
+        >
       </v-container>
-    </v-sheet> -->
+    </v-sheet>
   </v-sheet>
 </template>
 
@@ -89,6 +106,21 @@ export default {
     return {
       userData: null,
       responses: null,
+      offers: [
+        {
+          title: 'Sichere Zuflucht Magazin',
+          img: 'le-buzz-tVnm9I9jb8I-unsplash.jpg',
+          link: '/magazine',
+          btntext: 'Zum Magazin',
+        },
+        {
+          title: 'Berater*innen und Coaches',
+          img: 'le-buzz-tVnm9I9jb8I-unsplash.jpg',
+          link: '/berater/suche',
+          btntext: 'Berater*innen Übersicht',
+        },
+      ],
+      newWoman: false,
     }
   },
   async fetch() {
@@ -114,6 +146,10 @@ export default {
     )
   },
   fetchOnServer: false,
+  mounted() {
+    this.newWoman = window.localStorage.getItem('newWoman')
+    window.localStorage.removeItem('newWoman')
+  },
   methods: {
     cancel(response) {
       this.responses = this.responses.filter((r) => r !== response)

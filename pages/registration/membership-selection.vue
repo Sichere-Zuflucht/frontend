@@ -329,6 +329,7 @@ export default {
               lastName: this.lastName,
               email: this.$fire.auth.currentUser.email,
             }
+            window.localStorage.setItem('newWoman', true)
             return this.$store.dispatch('modules/user/createFirebaseUser', {
               userData: createdUserData,
               redirectTo: true,
