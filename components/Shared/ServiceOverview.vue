@@ -1,106 +1,50 @@
 <template>
-  <v-row style="max-width: 700px" class="mx-auto">
-    <v-col cols="12" md="12">
-      <v-card class="mx-auto" max-width="320">
-        <v-img src="le-buzz-tVnm9I9jb8I-unsplash.jpg" height="200px">
-          <v-expand-transition v-if="disabled">
-            <div
-              v-if="hover"
-              class="
-                d-flex
-                transition-fast-in-fast-out
-                secondary
-                v-card--reveal
-                font-weight-bold
-                d-flex
-                align-center
-                justify-center
-                text-center
-                white--text
-              "
-              style="height: 100%"
-            >
-              Bald können wir das anbieten.
-            </div>
-          </v-expand-transition>
-        </v-img>
-
-        <v-card-title class="text-h3 secondary--text font-weight-bold mb-2"
-          >Beratung und Hilfe
-        </v-card-title>
-
-        <v-card-subtitle>
-          in Form von <b>Online-Besprechungen</b> mit Fachleuten zu deinen
-          Themen. Diese kannst du von überall ganz <b>einfach und anonym</b> mit
-          deinem <b>Handy</b> machen.
-          <v-btn
-            color="secondary my-4"
-            :disabled="disabled"
-            nuxt
-            exact
-            to="berater/suche"
-          >
-            Beratungsthemen ansehen
-          </v-btn>
-        </v-card-subtitle>
-      </v-card>
-    </v-col>
-    <v-col cols="12" md="6" style="display: none">
-      <v-hover v-slot="{ hover }">
-        <v-card class="mx-auto" max-width="320">
-          <v-img src="erol-ahmed-9XiN0r2NWSM-unsplash.jpg" height="200px"
-            ><v-expand-transition v-if="disabled">
-              <div
-                v-if="hover"
-                class="
-                  d-flex
-                  transition-fast-in-fast-out
-                  secondary
-                  v-card--reveal
-                  font-weight-bold
-                  d-flex
-                  align-center
-                  justify-center
-                  text-center
-                  white--text
-                "
-                style="height: 100%"
-              >
-                Bald können wir das anbieten.
-              </div>
-            </v-expand-transition></v-img
-          >
-
-          <v-card-title class="text-h3 secondary--text font-weight-bold mb-2"
-            >Schnelle Unterkunft
-          </v-card-title>
-
-          <v-card-subtitle>
-            Du musst zuhause raus? In einer sicheren Unterkunft kannst du zur
-            Ruhe kommen und die nächsten Schritte planen.
-            <v-btn
-              :disabled="disabled"
-              color="secondary my-4"
-              nuxt
-              exact
-              to="frauen/wohnungssuche"
-            >
-              Anfrage für eine Unterkunft
-            </v-btn>
-          </v-card-subtitle>
-        </v-card>
-      </v-hover>
-    </v-col>
-  </v-row>
+  <div>
+    <h2 class="text-h2 text-center primary--text my-6">Unsere Angebote</h2>
+    <v-row
+      ><v-col v-for="(offer, i) in offers" :key="i" cols="12" md="6">
+        <v-card style="overflow: hidden"
+          ><v-row
+            ><v-col cols="4" class="pa-0"
+              ><v-img
+                :src="offer.img"
+                width="100%"
+                height="100%"
+                cover /></v-col
+            ><v-col cols="8" class="py-8 px-10"
+              ><h3 class="text-h5 primary--text pb-4">{{ offer.title }}</h3>
+              <p class="caption pr-0">{{ offer.text }}</p>
+              <v-btn color="primary" outlined :to="offer.link" class="mb-3">{{
+                offer.btntext
+              }}</v-btn></v-col
+            ></v-row
+          ></v-card
+        >
+      </v-col></v-row
+    >
+  </div>
 </template>
-
-<script setup>
+<script>
 export default {
-  props: {
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
+  data() {
+    return {
+      offers: [
+        {
+          title: 'Sichere Zuflucht Magazin',
+          text: 'Hier sammeln wir Erfahrungsberichte und Geschichten von betroffenen Frauen, um anderen Frauen Mut zu machen. Außerdem finden Sie hier Videos und Podcasts zum Thema häusliche Gewalt.',
+          img: 'le-buzz-tVnm9I9jb8I-unsplash.jpg',
+          link: '/magazine',
+          btntext: 'Zum Magazin',
+        },
+        {
+          title: 'Berater*innen und Coaches',
+          text: 'Schauen Sie sich gern um, welche Kolleg*innen noch ihre Hilfe anbieten.',
+          img: 'le-buzz-tVnm9I9jb8I-unsplash.jpg',
+          link: '/berater/suche',
+          btntext: 'Berater*innen Übersicht',
+        },
+      ],
+    }
   },
 }
 </script>

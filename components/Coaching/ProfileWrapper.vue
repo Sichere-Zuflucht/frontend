@@ -3,10 +3,10 @@
     elevation="2"
     nuxt
     :ripple="false"
-    style="padding: 12px"
-    max-width="300px"
+    width="300"
+    class="d-flex flex-column pb-2"
   >
-    <v-card-text class="pt-0">
+    <v-card-text class="pt-0 flex-grow-1 flex-shrink-0">
       <v-avatar color="primary" class="my-5" size="80"
         ><v-img :src="pubCoachData.avatar"
       /></v-avatar>
@@ -32,7 +32,7 @@
         </v-chip>
       </div>
     </v-card-text>
-    <v-card-actions class="my-4">
+    <v-card-actions class="my-4 flex-grow-0 flex-shrink-1">
       <v-btn absolute right color="primary" :to="'/berater/' + pubCoachData.uid"
         >Profil ansehen</v-btn
       >

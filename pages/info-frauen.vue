@@ -33,7 +33,9 @@
         mit Ihrer Erfahrung zur Seite. Deine <b>Beratung</b> findet
         <b>sicher, online</b> und <b>anonym</b> statt.
       </p>
-      <CoachingSlider />
+    </v-container>
+    <CoachingSlider />
+    <v-container>
       <UtilsBtn
         text="Unsere Berater*innen"
         link="/berater/suche"

@@ -4,35 +4,6 @@
       ><v-avatar :lazy-src="pubData.avatar" :src="pubData.avatar" size="162">
         <v-img :lazy-src="pubData.avatar" :src="pubData.avatar"></v-img
       ></v-avatar>
-      <v-dialog v-model="dialog" width="400">
-        <template #activator="{ on }">
-          <v-btn
-            color="secondary"
-            icon
-            elevation="1"
-            class="white"
-            style="position: absolute; bottom: 5px; margin-left: 30%"
-            v-on="on"
-            ><v-icon>mdi-share-variant</v-icon></v-btn
-          >
-        </template>
-        <v-card>
-          <v-card-title
-            ><h2 class="text-h2 primary--text">Teilen</h2></v-card-title
-          ><v-text-field
-            ref="link"
-            :label="copied ? 'Link kopiert' : 'Hier klicken zum kopieren'"
-            class="pa-4"
-            readonly
-            :value="linkVal"
-            @click="copy"
-          ></v-text-field
-          ><v-alert v-if="!copied" type="info" color="secondary" text
-            >Link kopieren</v-alert
-          >
-          <v-alert v-else type="success" text>Link kopiert</v-alert></v-card
-        ></v-dialog
-      >
     </v-sheet>
     <v-container>
       <h1 class="text-center text-h1 primary--text text-uppercase">
@@ -106,7 +77,9 @@
           {{ pubData.info.assistance }}
         </div>
       </div>
-      <div v-if="$route.params.beratung !== $store.getters['modules/user/uid']">
+    </v-container>
+    <div v-if="$route.params.beratung !== $store.getters['modules/user/uid']">
+      <v-container>
         <v-card
           outlined
           class="mt-8"
@@ -117,17 +90,15 @@
             >online-beratungstermin anfragen</v-card-title
           >
           <v-card-text v-if="$store.getters['modules/user/isAuthenticated']">
-            <p class="font-weight-bold mb-1 mt-2 caption">
-              Schlage dieser*m Berater*in passende Termine für euer
-              Beratungsgespräch vor.
-            </p>
             <p>
-              Deine Vorschläge sollten an Werktagen sein und mind. 24h in der
-              Zukunft liegen.
+              Fülle bitte die beiden Felder aus. Unser/e Berater*in sendet dir
+              dann passende Terminvorschläge für euren Beratungstermin.
             </p>
 
             <v-form
+              v-if="!showConfirmation"
               ref="form"
+              v-model="requestForm"
               class="pb-8 pt-4"
               @submit="
                 (e) => {
@@ -135,51 +106,81 @@
                 }
               "
             >
+              <v-text-field
+                v-model="msgTitle"
+                outlined
+                color="secondary"
+                placeholder="Dein Anliegen"
+                label="Thema"
+                counter="100"
+                persistent-hint
+                hint="Bitte nenne uns ein konkretes Thema für dein Anliegen"
+                class="mb-4"
+              ></v-text-field>
               <v-textarea
                 v-model="message"
                 outlined
                 color="secondary"
-                placeholder="Schlage hier Termine vor (Tag, Monat, Jahr, Uhrzeit) und am besten auch dein Thema:"
+                placeholder="Beschreibe bitte dein Anliegen."
                 value="Jemand möchte mit Ihnen Kontakt aufnehmen."
                 label="persönliche Anfrage schreiben"
+                counter="500"
               ></v-textarea>
 
-              <p>Preis pro 60 Min.: <b>50 €</b></p>
-
-              <div class="d-flex flex-row-reverse mb-4">
-                <v-btn
-                  color="secondary"
-                  :loading="loading"
-                  :disabled="isDisabled"
-                  @click="sendRequest"
-                  >{{ buttonText }}
-                </v-btn>
-              </div>
-              <v-alert
-                v-if="showConfirmation"
-                color="success"
-                dark
-                class="mt-4 d-flex flex-column justify-center"
-                ><v-icon class="mb-4">mdi-check</v-icon>
-                <p class="mb-0">
-                  Deine Anfrage wurde gesendet. {{ coachName }} wird sich
-                  innerhalb der nächsten 24h per E-Mail bei dir melden.
-                </p>
-              </v-alert>
-              <v-alert
-                v-if="error.status"
-                color="error"
-                class="white--text mt-4"
-                >{{ error.message }}
-              </v-alert>
-              <p class="caption">
-                Die Terminvorschläge werden von der/dem Berater*in bestätigt.
-                Danach kannst du die Beratung verbindlich buchen. <br /><br />
-                <a color="primary">Wie läuft das Beratungsgespräch ab?</a
-                ><br /><a color="primary"> Infos zur Termineinhaltung </a
-                ><br /><a color="primary"> zu Preisen</a>
+              <p class="font-weight-bold">
+                Preis pro Beratungseinheit (50 Min.): 50 €
               </p>
+              <v-row
+                ><v-col cols="12" md="8">
+                  <p class="font-weight-bold mb-0">Ablauf:</p>
+                  <ol class="mb-6">
+                    <li>Du sendest deine Anfrage an den/die Bearater*in</li>
+                    <li>Der/Die Berater*in sendet dir 3 Terminvorschläge</li>
+                    <li>
+                      Nimmst du einen Terminvorschlag an, wirst du direkt in den
+                      Zahlungsprozess weitergeleitet
+                    </li>
+                    <li>
+                      Mit deiner Zahlung buchst du diesen Termin verbindlich und
+                      euer Online-Beratungsraum wird reserviert.
+                    </li>
+                  </ol>
+                  <p class="caption">
+                    <nuxt-link to=""
+                      >Wie läuft das Beratungsgespräch ab?</nuxt-link
+                    ><br /><nuxt-link to="">
+                      Infos zur Termineinhaltung </nuxt-link
+                    ><br /><nuxt-link to=""> zu Preisen</nuxt-link>
+                  </p></v-col
+                ><v-col cols="12" md="4"
+                  ><div class="d-flex flex-row-reverse mb-4">
+                    <v-btn
+                      color="secondary"
+                      :loading="loading"
+                      :disabled="isDisabled"
+                      @click="sendRequest"
+                      >{{ buttonText }}
+                    </v-btn>
+                  </div></v-col
+                ></v-row
+              >
             </v-form>
+            <v-alert
+              v-else
+              color="success"
+              dark
+              icon="mdi-check"
+              class="mt-4 d-flex flex-column justify-center"
+            >
+              <p class="mb-0">
+                Fertig! Deine Anfrage wurde gesendet, {{ coachName }} wird sich
+                in den nächsten Tagen bei dir melden. <br />Sieh bitte auch in
+                deinem Spam-Ordner nach.
+              </p>
+            </v-alert>
+            <v-alert v-if="error.status" color="error" class="white--text mt-4"
+              >{{ error.message }}
+            </v-alert>
           </v-card-text>
           <v-card-text v-else
             ><p class="font-weight-bold my-2 caption">
@@ -193,28 +194,41 @@
             ></v-card-text
           >
         </v-card>
-        <v-divider class="mt-16 mb-6" />
+      </v-container>
+      <v-sheet color="grey lighten-5"
+        ><v-container> <WomanPriceInfo /></v-container
+      ></v-sheet>
+      <v-container>
+        <SharedFaq />
+      </v-container>
+      <v-divider class="mt-16 mb-6" />
+      <v-container>
         <h2 class="text-h2 mt-8 secondary--text">weitere Berater*innen</h2>
         <p class="caption">
           <b>Per Online-Beratung</b> werden dir unsere Berater*innen und Coaches
           zuhören und weiter helfen. Schau dich um, Sie beraten in vielen
-          Themen.
+          Themen. Per Online-Beratung werden dir unsere Berater*innen zuhören
+          und weiter helfen. Schau dich um. Sie beraten in vielen Themen. Die
+          Beratung findet digital und anonym statt.
         </p>
-        <div v-if="filteredCoaches.length > 0">
-          <div
-            v-for="(coaching, i) in filteredCoaches.slice(0, 2)"
-            :key="i"
-            class="mt-5"
-          >
-            <CoachingProfileWrapper :coach="coaching" />
-          </div>
-        </div>
-      </div>
-      <div v-else class="mt-16">
-        <v-btn to="/beratung/edit-profil" nuxt color="secondary"
-          >Profil bearbeiten</v-btn
-        >
-      </div>
+      </v-container>
+      <CoachingSlider />
+    </div>
+    <v-container v-else class="mt-16">
+      <v-btn to="/beratung/edit-profil" outlined nuxt color="primary"
+        >Profil bearbeiten</v-btn
+      >
+      <v-btn outlined nuxt color="primary" @click="copy">Profil teilen</v-btn>
+      <v-alert v-if="copied" type="success" text class="mt-4"
+        >Link in Zwischenablage kopiert</v-alert
+      >
+      <v-text-field
+        ref="link"
+        style="opacity: 0"
+        readonly
+        :value="linkVal"
+        @click="copy"
+      ></v-text-field>
     </v-container>
   </div>
   <div v-else>
@@ -229,11 +243,13 @@
 export default {
   data() {
     return {
+      requestForm: false,
       message: '',
+      msgTitle: '',
       showAddInfo: false,
       loading: false,
       isDisabled: false,
-      buttonText: 'Terminanfrage senden',
+      buttonText: 'Anfrage senden',
       showConfirmation: false,
       error: {
         status: false,
@@ -242,8 +258,7 @@ export default {
       allCoaches: [],
       filteredCoaches: [],
       dialog: false,
-      linkVal:
-        this.$config.baseUrl + '/beratung/' + this.$route.params.beratung,
+      linkVal: this.$config.baseUrl + '/berater/' + this.$route.params.beratung,
       copied: false,
       pubData: null,
     }
@@ -276,7 +291,7 @@ export default {
       this.$fire.functions
         .httpsCallable('request-sendRequest')({
           coachName: this.coachName,
-          message: this.message,
+          message: this.msgTitle + ': ' + this.message,
           coachUID: this.$route.params.beratung,
           createdAt: new Date(),
           isDev: this.$config.isDev,
