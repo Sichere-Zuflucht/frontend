@@ -6,10 +6,13 @@
           style="max-width: 450px; position: sticky; top: 100px"
           class="ma-auto"
         >
-          <h1 class="h2--text white--text text-uppercase pb-8">Los geht's</h1>
-          <p>Bitte zuerst den Anmeldeprozess abschließen.</p>
-        </v-container>
-      </v-sheet></v-col
+          <h1 class="text-h2 white--text text-uppercase pb-8">
+            SCHÖN, DASS DU DA BIST! <br />DU KANNST DIREKT LOSLEGEN.
+          </h1>
+          <p>Bitte schließe als erstes deine Registrierung ab.</p>
+          <v-icon large>mdi-arrow-right-thin</v-icon></v-container
+        ></v-sheet
+      ></v-col
     ><v-col cols="12" md="6" class="pa-0">
       <v-container>
         <v-stepper v-if="memberships" v-model="stepper" elevation="0">

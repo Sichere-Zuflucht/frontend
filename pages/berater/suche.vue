@@ -1,14 +1,18 @@
 <template>
-  <v-sheet>
-    <UtilsBanner url="le-buzz-tVnm9I9jb8I-unsplash.jpg" />
-    <v-container>
-      <h1 class="text-h1 primary--text">Beratung und Hilfe</h1>
-      <p class="mb-6">
-        in Form von <b>Online-Besprechungen</b> mit Fachleuten zu euren Themen.
-        Diese könnt ihr von überall ganz <b>einfach und anonym</b> mit dem
-        <b>Handy</b> machen.
-      </p>
-      <div style="position: relative; z-index: 0">
+  <div>
+    <v-sheet color="grey lighten-5">
+      <UtilsBanner url="le-buzz-tVnm9I9jb8I-unsplash.jpg" />
+      <v-container>
+        <h1 class="text-h1 primary--text">Beratung und Hilfe</h1>
+        <p class="mb-6">
+          Hier, bei Sichere Zuflucht kannst du <b>Online-Besprechungen</b> mit
+          Fachleuten zu deinen Themen machen. Diese kannst du von überall ganz
+          <b>einfach, sicher und anonym</b> mit dem <b>Handy</b> machen.
+        </p>
+        <h2 class="text-h2 secondary--text mt-16">Unsere Berater*innen</h2>
+      </v-container>
+      <CoachingSlider />
+      <!-- <div style="position: relative; z-index: 0">
         <div
           style="
             position: sticky;
@@ -71,9 +75,17 @@
           hilft.
         </p>
       </div>
+    </v-container> -->
+      <v-container> <WomanPriceInfo /></v-container
+    ></v-sheet>
+    <v-container class="py-16">
+      <h3 class="text-h3 text-uppercase secondary--text pb-8 font-weight-bold">
+        so laufen Terminfindung und Beratung ab
+      </h3>
+      <SharedSteps class="pb-16" />
+      <SharedFaq price onlinecoaching />
     </v-container>
-    <WomanPriceInfo />
-  </v-sheet>
+  </div>
 </template>
 
 <script>

@@ -28,8 +28,32 @@
               "Wir lassen dich mit deinen Erlebnissen nicht allein."
             </p>
           </v-col>
-          <v-col cols="12" md="6"><SharedServiceOverview /></v-col
-        ></v-row>
+          <v-col cols="12" md="6">
+            <v-card class="mx-auto" max-width="320">
+              <v-img src="le-buzz-tVnm9I9jb8I-unsplash.jpg" height="200px" />
+
+              <v-card-title
+                class="text-h3 secondary--text font-weight-bold mb-2"
+                >Beratung und Hilfe
+              </v-card-title>
+
+              <v-card-subtitle>
+                in Form von <b>Online-Besprechungen</b> mit Fachleuten zu deinen
+                Themen. Diese kannst du von überall ganz
+                <b>einfach und anonym</b> mit deinem <b>Handy</b> machen.
+                <v-btn
+                  color="secondary my-4"
+                  :disabled="disabled"
+                  nuxt
+                  exact
+                  to="berater/suche"
+                >
+                  Beratungsthemen ansehen
+                </v-btn>
+              </v-card-subtitle>
+            </v-card></v-col
+          ></v-row
+        >
       </v-container>
     </v-sheet>
     <v-container class="pt-md-16">

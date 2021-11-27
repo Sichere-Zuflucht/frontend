@@ -74,27 +74,7 @@
           >Geschafft! Ab jetzt sind alle Angebote von Sichere Zuflucht frei
           zugänglich.</v-alert
         >
-        <h2 class="text-h2 text-center primary--text my-6">Unsere Angebote</h2>
-        <v-row
-          ><v-col v-for="(offer, i) in offers" :key="i" cols="12" md="6">
-            <v-card style="overflow: hidden"
-              ><v-row
-                ><v-col cols="3" class="pa-0"
-                  ><v-img
-                    :src="offer.img"
-                    width="100%"
-                    height="100%"
-                    cover /></v-col
-                ><v-col cols="9" class="py-8 px-4"
-                  ><h3 class="text-h5 primary--text pb-4">{{ offer.title }}</h3>
-                  <v-btn color="secondary" :to="offer.link" class="mb-8">{{
-                    offer.btntext
-                  }}</v-btn></v-col
-                ></v-row
-              ></v-card
-            >
-          </v-col></v-row
-        >
+        <SharedServiceOverview />
       </v-container>
     </v-sheet>
   </v-sheet>
