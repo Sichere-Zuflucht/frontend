@@ -56,7 +56,7 @@
                   label="Deine E-mail-Adresse"
                   required
                   persistent-hint
-                  hint="Per E-Mail senden wir Benachrichtigen, sobald eine Anfrage vorliegt. Zudem kann per E-Mail das Passwort zurückgesetzt werden."
+                  hint="Per E-Mail senden wir eine Benachrichtigung, sobald eine Anfrage vorliegt. Zudem kann per E-Mail das Passwort zurückgesetzt werden."
                 ></v-text-field>
 
                 <div class="d-flex justify-end pt-6">

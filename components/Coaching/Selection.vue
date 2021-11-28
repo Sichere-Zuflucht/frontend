@@ -51,61 +51,45 @@
             v-model="changeProfession"
             outlined
             class="pt-2"
-            label="Aktueller Beruf"
-            counter="25"
-            :rules="[
-              (v) => (!!v && v.length <= 25) || 'weniger als 25 Buchstaben',
-            ]"
-            placeholder="Jobbezeichnung."
+            label="Beruf:"
+            :rules="[(v) => !!v || 'Bitte ausfüllen']"
+            placeholder="Jobbezeichnung"
           ></v-text-field>
-          <v-text-field
-            v-model="changeSince"
+          <v-textarea
+            v-model="changeQuote"
             outlined
-            label="Coach/Berater*in seit dem Jahr:"
-            type="number"
-            :rules="[
-              () =>
-                (!!changeSince &&
-                  changeSince >= yearsAgo &&
-                  changeSince <= new Date().getFullYear()) ||
-                'Die Jahresangabe muss zwischen ' +
-                  yearsAgo +
-                  ' und heute liegen',
-            ]"
-            placeholder="Jahreszahl"
-            min="1900"
-            :max="new Date().getFullYear()"
-            step="1"
-          ></v-text-field>
+            label="Persönliches Zitat:"
+            :rules="[(v) => !!v || 'Bitte ausfüllen']"
+            placeholder="Ein Zitat, mit dem Sie Ihre Weltsicht oder Arbeitweise umschreiben."
+            height="100"
+          ></v-textarea>
           <v-textarea
             v-model="changeHistory"
             outlined
-            label="Beruflicher Hintergrund"
+            label="Beruflicher Hintergrund / Schwerpunkte:"
             placeholder="z.B. was Sie vorher gemacht haben oder was Sie bewegt"
-          ></v-textarea>
-          <v-textarea
-            v-model="changeFocus"
-            outlined
-            label="Schwerpunkte"
-            placeholder="Am besten welche, die zu den Problemen unserer Frauen passen."
-          ></v-textarea>
-          <v-textarea
-            v-model="changeCoachingTopics"
-            outlined
-            label="Beratungs-/ Coaching-Themen"
-            placeholder="1. 2. 3. …"
+            counter="600"
+            :rules="[
+              (v) => !!v || 'Bitte ausfüllen',
+              (v) => (v && v.length) <= 600 || 'Zu viele Buchstaben',
+            ]"
           ></v-textarea>
           <v-textarea
             v-model="changeDescription"
             outlined
-            label="Persönliches über mich"
-            placeholder="Seien Sie Nahbar. So können Sie den Frauen helfen, ihre Scheu zu überwinden und sich Hilfe zu holen."
-          ></v-textarea>
-          <v-textarea
-            v-model="changeAssistance"
-            outlined
-            label="konkrete Hilfestellung"
-            placeholder="…"
+            label="Eisbrecher (etwas persönliches über Sie)"
+            placeholder="Schreiben Sie etwas persönliches über sich, das ein Eisbrecher sein könnte. Gern einfach in Form von Stichpunkten. z.B. 
+- Hobbies 
+- Interessen 
+- Lebenstationen 
+- Familie 
+
+… was Sie wollen"
+            counter="600"
+            :rules="[
+              (v) => !!v || 'Bitte ausfüllen',
+              (v) => (v && v.length) <= 600 || 'Zu viele Buchstaben',
+            ]"
           ></v-textarea>
           <v-btn color="primary" block @click="e6++">
             <v-icon class="pr-1">mdi-arrow-down</v-icon>
@@ -208,12 +192,9 @@ export default {
       topics: [],
       selectedTopic: [],
       changeProfession: this.info.profession,
-      changeSince: this.info.since,
+      changeQuote: this.info.quote,
       changeDescription: this.info.description,
       changeHistory: this.info.history,
-      changeFocus: this.info.focus,
-      changeCoachingTopics: this.info.coachingTopics,
-      changeAssistance: this.info.assistance,
       e6: 1,
       panel: [0],
       uploadRef: true,
@@ -247,11 +228,8 @@ export default {
       const data = {
         topicArea: this.selectedTopic,
         description: this.changeDescription,
-        since: this.changeSince,
+        quote: this.changeQuote,
         history: this.changeHistory,
-        focus: this.changeFocus,
-        coachingTopics: this.changeCoachingTopics,
-        assistance: this.changeAssistance,
         avatar: this.changeAvatar ? this.changeAvatar : this.avatar,
         profession: this.changeProfession,
       }
