@@ -9,69 +9,121 @@
       disable-resize-watcher
     >
       <client-only>
+        <v-list>
+          <div v-for="(item, i) in noUser" :key="i">
+            <v-list-group
+              v-if="item.subgroup"
+              :value="true"
+              no-action
+              :to="item.to"
+              nuxt
+              exact
+              active-class="white--text"
+            >
+              <template #activator>
+                <v-list-item-icon
+                  ><v-icon>{{ item.icon }}</v-icon></v-list-item-icon
+                >
+                <v-list-item-content>{{ item.title }}</v-list-item-content>
+              </template>
+              <v-list-item
+                v-for="(sub, n) in item.subgroup"
+                :key="n"
+                :to="sub.to"
+                nuxt
+                exact
+                active-class="white--text"
+              >
+                <v-list-item-content>
+                  {{ sub.title }}
+                </v-list-item-content>
+              </v-list-item></v-list-group
+            >
+            <v-list-item v-else :to="item.to">
+              <v-list-item-icon
+                ><v-icon>{{ item.icon }}</v-icon></v-list-item-icon
+              >
+              <v-list-item-content>
+                {{ item.title }}
+              </v-list-item-content>
+            </v-list-item>
+          </div>
+        </v-list>
+        <v-divider />
         <v-list v-if="loggedIn">
           <div v-if="membership === 'Woman'">
-            <v-list-item
+            <v-list-group
               v-for="(item, i) in loggedInWoman"
               :key="i"
-              :to="item.to"
-              nuxt
-              exact
+              :value="true"
+              no-action
+              active-class="white--text"
             >
-              <v-list-item-icon>
-                <v-icon>{{ item.icon }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                {{ item.title }}
-              </v-list-item-content>
-            </v-list-item>
+              <template #activator>
+                <v-list-item-icon
+                  ><v-icon>{{ item.icon }}</v-icon></v-list-item-icon
+                >
+                <v-list-item-content>{{ item.title }}</v-list-item-content>
+              </template>
+              <v-list-item
+                v-for="(sub, n) in item.subgroup"
+                :key="n"
+                :to="sub.to"
+                nuxt
+                exact
+                active-class="white--text"
+              >
+                <v-list-item-content>
+                  {{ sub.title }}
+                </v-list-item-content>
+              </v-list-item></v-list-group
+            >
           </div>
           <div v-else>
-            <v-list-item
+            <v-list-group
               v-for="(item, i) in loggedInCoach"
               :key="i"
-              :to="item.to"
-              nuxt
-              exact
+              :value="true"
+              no-action
+              active-class="white--text"
             >
-              <v-list-item-icon>
-                <v-icon>{{ item.icon }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                {{ item.title }}
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item
-              v-if="membership === 'Coach' && user.public"
-              :to="'/berater/' + user.public.uid"
-              nuxt
-              exact
+              <template #activator>
+                <v-list-item-icon
+                  ><v-icon>{{ item.icon }}</v-icon></v-list-item-icon
+                >
+                <v-list-item-content>{{ item.title }}</v-list-item-content>
+              </template>
+              <v-list-item
+                :to="'/berater/' + uid"
+                nuxt
+                exact
+                active-class="white--text"
+              >
+                <v-list-item-content> Mein Profil </v-list-item-content>
+              </v-list-item>
+              <v-list-item
+                v-for="(sub, n) in item.subgroup"
+                :key="n"
+                :to="sub.to"
+                nuxt
+                exact
+                active-class="white--text"
+              >
+                <v-list-item-content>
+                  {{ sub.title }}
+                </v-list-item-content>
+              </v-list-item></v-list-group
             >
-              <v-list-item-icon>
-                <v-icon>mdi-account-edit</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content> Profil </v-list-item-content>
-            </v-list-item>
           </div>
+          <v-divider class="my-2" />
           <v-list-item>
-            <v-btn block to="/" @click="logout">Abmelden</v-btn>
+            <v-btn block to="/" color="accent" @click="logout">Abmelden</v-btn>
           </v-list-item>
         </v-list>
         <v-list v-else>
-          <v-list-item
-            v-for="(item, i) in noUser"
-            :key="i"
-            :to="item.to"
-            nuxt
-            exact
-          >
-            <v-list-item-content>
-              {{ item.title }}
-            </v-list-item-content>
-          </v-list-item>
           <v-spacer />
           <v-list-item>
-            <v-btn to="/registration/signup" exact nuxt block
+            <v-btn to="/registration/signup" color="accent" exact nuxt block
               >Registrieren</v-btn
             >
           </v-list-item>
@@ -142,75 +194,86 @@ export default {
       drawer: false,
       loggedInWoman: [
         {
-          icon: 'mdi-account-box',
-          title: 'Beratungen',
-          to: '/berater/suche',
-        },
-        {
           icon: 'mdi-view-dashboard',
           title: 'Mein Bereich',
-          to: '/frauen',
-        },
-        /* {
-          icon: 'mdi-shield-home',
-          title: 'Wohnungen',
-          to: '/frauen/wohnungssuche',
-        }, */
-        {
-          icon: 'mdi-cog',
-          title: 'Konto-Infos',
-          to: '/frauen/settings',
+          subgroup: [
+            {
+              icon: 'mdi-account-box',
+              title: 'Beratung',
+              to: '/frauen',
+            },
+            {
+              icon: 'mdi-cog',
+              title: 'Konto',
+              to: '/frauen/settings',
+            },
+            /* {
+              icon: 'mdi-shield-home',
+              title: 'Wohnungen',
+              to: '/frauen/wohnungssuche',
+            }, */
+          ],
         },
       ],
       loggedInCoach: [
         {
           icon: 'mdi-view-dashboard',
-          title: 'Mein Profil',
-          to: '/beratung',
-        },
-        {
-          icon: 'mdi-credit-card',
-          title: 'Bezahlung',
-          to: '/beratung/bezahlung',
-        },
-        {
-          icon: 'mdi-cog',
-          title: 'Konto-Infos',
-          to: '/beratung/settings',
+          title: 'Mein Bereich',
+          subgroup: [
+            {
+              icon: 'mdi-account-box',
+              title: 'Beratung',
+              to: '/beratung',
+            },
+            {
+              icon: 'mdi-cog',
+              title: 'Konto',
+              to: '/beratung/settings',
+            },
+            {
+              icon: 'mdi-credit-card',
+              title: 'Bezahlung',
+              to: '/beratung/bezahlung',
+            },
+          ],
         },
       ],
       noUser: [
         {
-          title: 'Startseite',
-          to: '/',
-        },
-        {
-          title: 'Für Frauen',
-          to: '/info-frauen',
-        },
-        {
+          icon: 'mdi-newspaper-variant',
           title: 'Magazin',
           to: '/magazine',
         },
         {
-          title: 'Beratung finden',
-          to: '/berater/suche',
+          icon: 'mdi-face-woman',
+          title: 'Für Frauen',
+          subgroup: [
+            {
+              icon: 'mdi-information-variant',
+              title: 'Informationen',
+              to: '/info-frauen',
+            },
+            {
+              icon: 'mdi-account-search',
+              title: 'Beratung finden',
+              to: '/berater/suche',
+            },
+          ],
         },
         {
+          icon: 'mdi-hand-heart',
           title: 'Für Berater*innen',
           to: '/info-berater',
         },
         {
-          title: 'Beratung anbieten',
-          to: '/registration/signup',
+          icon: 'mdi-gift',
+          title: 'Spenden',
+          to: '/spenden',
         },
         {
-          title: 'Berater*innen Übersicht',
-          to: '/berater/suche',
-        },
-        {
-          title: 'Magazin',
-          to: '/magazine',
+          icon: 'mdi-account-group',
+          title: 'Über uns',
+          to: '/ueber-uns',
         },
       ],
     }
@@ -224,6 +287,9 @@ export default {
     },
     user() {
       return this.$store.getters['modules/user/user']
+    },
+    uid() {
+      return this.$store.getters['modules/user/uid']
     },
     membership() {
       return this.$store.getters['modules/user/membership']
