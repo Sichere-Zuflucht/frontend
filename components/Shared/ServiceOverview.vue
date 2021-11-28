@@ -2,7 +2,12 @@
   <div>
     <h2 class="text-h2 text-center primary--text my-6">Unsere Angebote</h2>
     <v-row
-      ><v-col v-for="(offer, i) in offers" :key="i" cols="12" md="6">
+      ><v-col
+        v-for="(offer, i) in offers"
+        :key="i"
+        cols="12"
+        :md="wrap ? '12' : '6'"
+      >
         <v-card style="overflow: hidden"
           ><v-row
             ><v-col cols="4" class="pa-0"
@@ -26,6 +31,12 @@
 </template>
 <script>
 export default {
+  props: {
+    wrap: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       offers: [

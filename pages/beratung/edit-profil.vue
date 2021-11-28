@@ -89,15 +89,17 @@
                 schnell und ist für Sie <b>kostenlos.</b>
               </p>
 
-              <v-btn
-                color="secondary"
-                class="mt-4 mb-2"
-                :loading="loading"
-                :disabled="disabled"
-                @click="addStripe"
-                >Mein Stripe-Konto anlegen</v-btn
-              >
-              <p class="caption">Wir leiten Sie zu Stripe weiter.</p>
+              <div class="d-flex flex-column align-center">
+                <v-btn
+                  color="secondary"
+                  class="mt-4 mb-2"
+                  :loading="loading"
+                  :disabled="disabled"
+                  @click="addStripe"
+                  >Mein Stripe-Konto anlegen</v-btn
+                >
+                <p class="caption">Wir leiten Sie zu Stripe weiter.</p>
+              </div>
               <v-alert
                 v-if="stripeRegisterURL"
                 color="secondary"
@@ -113,7 +115,6 @@
               <v-alert v-if="error" color="error" dark>
                 {{ error }}
               </v-alert>
-              <v-btn text :to="'/berater/' + user.public.uid">Später</v-btn>
               <h2 class="text-h2 secondary--text pb-4 pt-12">HÄUFIGE FRAGEN</h2>
               <nuxt-link to="">
                 Wie erstelle ich ein Konto bei Stripe?

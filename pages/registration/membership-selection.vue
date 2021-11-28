@@ -155,8 +155,8 @@
               <div v-if="!success">
                 <h2 class="text-h2 secondary--text pb-4">Verifizierung</h2>
                 <p>
-                  Wir prüfen Ihr Profil auf Echtheit. Dafür benötigen wir Ihre
-                  Telefonnummer, E-Mail-Adresse und ggf. Webseite.
+                  Wir nehmen innerhalb der nächsten Tage mit Ihnen Kontakt auf,
+                  um Sie kennenzulernen und offene Fragen klären zu können.
                 </p>
                 <nuxt-link to="" target="_blank"
                   >Warum ist eine Verifizierung nötig?</nuxt-link
@@ -168,12 +168,11 @@
                     :rules="rules.phone"
                     label="Telefonnummer"
                     type="tel"
-                  ></v-text-field>
-                  <p class="caption pb-4">
-                    Wir nehmen innerhalb der nächsten Tage mit Ihnen Kontakt
+                    persistent-hint
+                    hint="Wir nehmen innerhalb der nächsten Tage mit Ihnen Kontakt
                     auf, um Sie kennenzulernen und offene Fragen klären zu
-                    können.
-                  </p>
+                    können."
+                  ></v-text-field>
                   <v-text-field
                     v-model="verEmail"
                     class="secondary--text font-weight-bold"
