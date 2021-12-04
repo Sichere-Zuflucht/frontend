@@ -22,11 +22,7 @@
           class="mx-1"
           color="primary"
         >
-          {{
-            i == Object.keys(pubData.info.topicArea).length - 1
-              ? tag
-              : tag + ', '
-          }}
+          {{ tag }}
         </v-chip>
       </div>
       <div v-if="pubData.info.quote" class="text-center">
