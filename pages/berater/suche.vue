@@ -9,73 +9,8 @@
         <b>einfach, sicher und anonym</b> mit dem <b>Handy</b> machen.
       </p>
       <h2 class="text-h2 secondary--text mt-16">Unsere Berater*innen</h2>
-      {{ allCoaches }}
     </v-container>
-    <!-- <CoachingSlider /> -->
-    <!-- <div style="position: relative; z-index: 0">
-        <div
-          style="
-            position: sticky;
-            top: 50px;
-            width: calc(100% + 10px);
-            margin-left: -5px;
-            padding: 5px;
-            padding-top: 15px;
-            z-index: 5;
-            background-color: white;
-          "
-        >
-          <p class="caption mb-0">Filtern:</p>
-          <v-chip-group v-model="tagsSelected" column class="pt-0">
-            <v-chip
-              v-for="(tag, n) in coachingTypes"
-              :key="n"
-              :value="tag"
-              outlined
-              small
-              filter
-              active-class="primary primary--text"
-            >
-              {{ tag }}</v-chip
-            >
-          </v-chip-group>
-        </div>
-        <v-alert v-if="error" color="error" dark>{{ error }}</v-alert>
-        <v-row v-else-if="!loading">
-          <v-col
-            v-for="(coaching, i) in allCoaches.filter((m) =>
-              tagsSelected != null
-                ? tagsSelected == m.info.topicArea[0]
-                  ? true
-                  : false
-                : true
-            )"
-            :key="i"
-            cols="12"
-            md="4"
-            class="mt-5 px-1"
-          >
-            <CoachingProfileWrapper :pub-coach-data="coaching" />
-          </v-col>
-        </v-row>
-        <v-row v-else>
-          <v-col v-for="n in 3" :key="n" cols="12" md="4">
-            <v-skeleton-loader
-              class="mx-auto"
-              max-width="300"
-              type="card-avatar, article"
-            ></v-skeleton-loader
-          ></v-col>
-        </v-row>
-        <p class="caption mt-4">
-          <b>Dein Fachgebiet oder Thema ist nicht dabei?</b><br />
-          <a href="mailto:kontakt@sichere-zuflucht.de"
-            >Schreib uns eine Nachricht</a
-          >, vielleicht können wir trotzdem jemanden finden, der dir weiter
-          hilft.
-        </p>
-      </div>
-    </v-container> -->
+    <CoachingSlider />
     <v-sheet color="grey lighten-5">
       <v-container> <WomanPriceInfo /></v-container
     ></v-sheet>
