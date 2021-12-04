@@ -9,25 +9,32 @@
       <h1 class="text-center text-h1 primary--text text-uppercase">
         {{ pubData.firstName }} {{ pubData.lastName }}
       </h1>
-      <h2 class="text-center text-h5 mb-8">
+      <h2 class="text-center text-h4 mb-4">
         {{ pubData.info.profession }}
       </h2>
-      <div v-if="pubData.info.topicArea">
-        <p class="font-weight-bold mb-1 mt-2 caption">Fachgebiet</p>
-        <div class="d-flex flex-wrap">
-          <p
-            v-for="(tag, i) in pubData.info.topicArea"
-            :key="i"
-            class="black--text ma-0 pa-0"
-          >
-            {{
-              i == Object.keys(pubData.info.topicArea).length - 1
-                ? tag
-                : tag + ', '
-            }}
-          </p>
-        </div>
+      <div
+        v-if="pubData.info.topicArea"
+        class="d-flex flex-wrap justify-center mb-4"
+      >
+        <v-chip
+          v-for="(tag, i) in pubData.info.topicArea"
+          :key="i"
+          class="mx-1"
+          color="primary"
+        >
+          {{
+            i == Object.keys(pubData.info.topicArea).length - 1
+              ? tag
+              : tag + ', '
+          }}
+        </v-chip>
       </div>
+      <div v-if="pubData.info.quote" class="text-center">
+        <p>
+          <b>"{{ pubData.info.quote }}"</b>
+        </p>
+      </div>
+
       <div v-if="pubData.info.since">
         <p class="font-weight-bold mb-0 mt-4 caption">
           Ich bin Coach/Berater*in seit dem Jahr:
@@ -199,7 +206,7 @@
         ><v-container> <WomanPriceInfo /></v-container
       ></v-sheet>
       <v-container>
-        <SharedFaq />
+        <SharedFaq price onlinecoaching />
       </v-container>
       <v-divider class="mt-16 mb-6" />
       <v-container>

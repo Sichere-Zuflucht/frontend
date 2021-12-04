@@ -33,19 +33,19 @@ $headings: (
   ),
   'h3': (
     'size': 1.3rem,
-    'weight': 400,
+    'weight': 700,
     'line-height': 1.6rem,
     'letter-spacing': normal,
     'font-family': $heading-font-family,
-    'text-transform': false,
+    'text-transform': uppercase,
   ),
   'h4': (
     'size': 1.1rem,
-    'weight': 400,
+    'weight': 700,
     'line-height': 1.3rem,
     'letter-spacing': 0.0073529412em,
     'font-family': $heading-font-family,
-    'text-transform': false,
+    'text-transform': uppercase,
   ),
   'h5': (
     'size': 1rem,

@@ -85,38 +85,7 @@
         </a>
         wie du dich gern einbringen würdest.
       </p>
-      <h2 class="text-h2 secondary--text pt-16 pb-6">
-        Bleib' auf dem laufenden
-      </h2>
-      <p>
-        Wir erzählen in den sozialen Medien, wie unser Projekt voranschreitet,
-        wenn wir jemandem helfen konnten – klären auf und erzählen Geschichten
-        aus dem Leben der Frauen, denen wir helfen wollen.
-      </p>
-      <p class="font-weight-bold">Sei dabei und behalte uns in deinem Herzen</p>
-      <div class="d-flex flex-wrap justify-center">
-        <v-btn
-          icon
-          href="https://www.facebook.com/sichere.zuflucht"
-          target="_blank"
-          color="#3b5998"
-          ><v-icon>mdi-facebook</v-icon>
-        </v-btn>
-        <v-btn
-          icon
-          href="https://twitter.com/SichereZuflucht"
-          target="_blank"
-          color="#1DA1F2"
-          ><v-icon>mdi-twitter</v-icon>
-        </v-btn>
-        <v-btn
-          icon
-          href="https://www.instagram.com/sicherezuflucht/"
-          target="_blank"
-          color="#C13584"
-          ><v-icon>mdi-instagram</v-icon>
-        </v-btn>
-      </div>
+      <SharedStayTuned />
     </v-container>
     <UtilsNews />
   </div>

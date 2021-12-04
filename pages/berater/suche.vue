@@ -9,8 +9,9 @@
         <b>einfach, sicher und anonym</b> mit dem <b>Handy</b> machen.
       </p>
       <h2 class="text-h2 secondary--text mt-16">Unsere Berater*innen</h2>
+      {{ allCoaches }}
     </v-container>
-    <CoachingSlider />
+    <!-- <CoachingSlider /> -->
     <!-- <div style="position: relative; z-index: 0">
         <div
           style="
@@ -103,18 +104,29 @@ export default {
   },
   async mounted() {
     try {
-      await this.$fire.firestore
+      /* await this.$fire.firestore
         .collection('coachingTypes')
         .get()
         .then((querySnapshot) => {
           querySnapshot.forEach((doc) => {
             this.coachingTypes.push(doc.data().topicArea)
           })
-        })
+        }) */
 
       this.allCoaches = (
         await this.$fire.functions.httpsCallable('user-getCoaches')()
       ).data
+      /* await this.$fire.firestore
+        .collection('users')
+        .doc()
+        .get()
+        .then((querySnapshot) => {
+          console.log('q:', querySnapshot)
+          querySnapshot.forEach((doc) => {
+            console.log('doc:', doc.data())
+            this.allCoaches.push(doc.data())
+          })
+        }) */
       /* await this.$fire.firestore
         .collection('users')
         .doc()

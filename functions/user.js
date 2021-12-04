@@ -68,6 +68,8 @@ exports.getCoaches = functions.https.onCall(async (data, context) => {
     .where('verifySetting.verified', '==', true)
     .get()
 
+  functions.logger.log('search:', search)
+
   // get the parent and its id
   // then traverse back down to the public folder
   // return both

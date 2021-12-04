@@ -155,14 +155,12 @@ export default {
   },
   methods: {
     updateProfile(data) {
+      console.log('edit: ', data)
       this.$store.dispatch('modules/user/setInfo', {
         topicArea: data.topicArea, // topic
         description: data.description,
-        since: data.since,
+        quote: data.quote,
         history: data.history,
-        focus: data.focus,
-        coachingTopics: data.coachingTopics,
-        assistance: data.assistance,
         profession: data.profession,
       })
       this.$store.dispatch('modules/user/setAvatar', data.avatar)
