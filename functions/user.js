@@ -68,12 +68,14 @@ exports.getCoaches = functions.https.onCall(async (data, context) => {
     .where('verifySetting.verified', '==', true)
     .get()
 
-  functions.logger.log('search:', search)
+  functions.logger.log('getCoaches search', search)
+
+  return search
 
   // get the parent and its id
   // then traverse back down to the public folder
   // return both
-  return Promise.all(
+  /* return Promise.all(
     search.docs.map(async (doc) => {
       return {
         uid: doc.ref.parent.parent.id,
@@ -82,7 +84,19 @@ exports.getCoaches = functions.https.onCall(async (data, context) => {
         ).data(),
       }
     })
-  )
+  ) */
+})
+
+exports.getCoaches2 = functions.https.onCall(async (data, context) => {
+  if (context.app === undefined) {
+    throw new functions.https.HttpsError(
+      'failed-precondition',
+      'The function must be called from an App Check verified app.'
+    )
+  }
+
+  // find private docs with fulfill the criteria coach
+  return await admin.firestore().collection('memberships').doc().get()
 })
 
 exports.delete = functions.https.onCall(async (uid, context) => {

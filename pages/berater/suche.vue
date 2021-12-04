@@ -114,8 +114,12 @@ export default {
         }) */
 
       this.allCoaches = (
-        await this.$fire.functions.httpsCallable('user-getCoaches')()
+        await this.$fire.functions.httpsCallable('user-getCoaches2')()
       ).data
+      console.log(
+        'c2:',
+        await this.$fire.functions.httpsCallable('user-getCoaches2')()
+      )
       /* await this.$fire.firestore
         .collection('users')
         .doc()
