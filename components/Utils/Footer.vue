@@ -67,12 +67,7 @@
       ></v-col>
     </v-row>
     <v-row
-      class="
-        d-flex
-        flex-wrap flex-column flex-sm-row
-        align-center
-        justify-center
-      "
+      class="d-flex flex-wrap flex-column flex-sm-row align-center justify-center"
     >
       <v-img
         contain
@@ -82,12 +77,7 @@
       />
     </v-row>
     <v-row
-      class="
-        d-flex
-        flex-wrap flex-column flex-sm-row
-        align-center
-        justify-center
-      "
+      class="d-flex flex-wrap flex-column flex-sm-row align-center justify-center"
     >
       <div class="d-flex flex-wrap flex-column flex-sm-row justify-center">
         <v-btn v-for="(item, i) in footer" :key="i" :to="item.to" text plain
@@ -96,34 +86,9 @@
       </div>
     </v-row>
     <v-row
-      class="
-        d-flex
-        flex-wrap flex-column flex-sm-row
-        align-center
-        justify-center
-        pb-4
-      "
+      class="d-flex flex-wrap flex-column flex-sm-row align-center justify-center pb-4"
     >
-      <div class="d-flex flex-wrap justify-center">
-        <v-btn
-          icon
-          href="https://www.facebook.com/sichere.zuflucht"
-          target="_blank"
-          ><v-icon>mdi-facebook</v-icon>
-        </v-btn>
-        <v-btn icon href="https://twitter.com/SichereZuflucht" target="_blank"
-          ><v-icon>mdi-twitter</v-icon>
-        </v-btn>
-        <v-btn
-          icon
-          href="https://www.instagram.com/sicherezuflucht/"
-          target="_blank"
-          ><v-icon>mdi-instagram</v-icon>
-        </v-btn>
-        <!--<v-btn icon href="https://www.youtube.com/" target="_blank"
-          ><v-icon>mdi-youtube</v-icon>
-        </v-btn>-->
-      </div>
+      <SharedShare />
       <span class="mt-0 caption"
         >&copy; {{ new Date().getFullYear() }} Sichere Zuflucht gemeinnützige
         GmbH</span

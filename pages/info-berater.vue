@@ -138,14 +138,7 @@
     <v-container>
       <h2 class="text-h2 text-center secondary--text pt-8">Themenbereiche</h2>
       <h3
-        class="
-          text-h3 text-center
-          primary--text
-          text-uppercase
-          pt-2
-          pb-8
-          font-weight-bold
-        "
+        class="text-h3 text-center primary--text text-uppercase pt-2 pb-8 font-weight-bold"
       >
         wo können Sie mit Ihren Kompetenzen beraten?
       </h3>
@@ -175,13 +168,7 @@
         ><v-row
           ><v-col cols="12" md="5"
             ><h3
-              class="
-                text-h4
-                secondary--text
-                text-uppercase
-                font-weight-bold
-                mb-8
-              "
+              class="text-h4 secondary--text text-uppercase font-weight-bold mb-8"
             >
               Konditionen
             </h3>
@@ -241,7 +228,7 @@ export default {
     return {
       length: 332,
       readmoreText:
-        'Eine EU-weite Dunkelfeld-Erhebung hat ergeben, dass<b> 22% der Frauen</b>, die in einer Beziehung mit einem Mann sind oder waren, <b>körperliche Gewalt</b> erfahren haben und das dass zwei von fünf Frauen <b>(43 %)</b> einer Form<b> psychischer Gewalt</b> entweder durch den derzeitigen oder einen früheren Partner ausgesetzt waren. Die Studie “Gewalt gegen Frauen in Paarbeziehungen” vom BMFSFJ zeigt identische Zahlen und Faktenauf. Frauenhäuser und fachspezifische Beratung sind ein essenzieller Teil der Lösung, um diesem Missstand entgegen zu wirken. Aber sie reichen nicht aus. Die Angebote sind regional sehr unterschiedlich. Frauenhäuser und Beratungsstellen bieten ausschließlich lokale Lösungen an – aber das Thema Gewalt bedarf mitunter der Anonymität, die im lokalen Umfeld nicht zuverlässig gegeben ist. Die vorhandenen Online-Angebote zu diesem Thema zielen meist auf Bekanntmachung bestehender Beratungs-Angebote wie z.B. Hotlines ab. Sie bieten nur selten direkt Unterstützung in digitaler Form an.',
+        'Eine <a href="https://fra.europa.eu/de/publication/2014/gewalt-gegen-frauen-eine-eu-weite-erhebung-ergebnisse-auf-einen-blick" target="_blank">EU-weite Dunkelfeld-Erhebung</a> hat ergeben, dass<b> 22% der Frauen</b>, die in einer Beziehung mit einem Mann sind oder waren, <b>körperliche Gewalt</b> erfahren haben und das dass zwei von fünf Frauen <b>(43 %)</b> einer Form<b> psychischer Gewalt</b> entweder durch den derzeitigen oder einen früheren Partner ausgesetzt waren. Die Studie “Gewalt gegen Frauen in Paarbeziehungen” vom BMFSFJ zeigt identische Zahlen und Faktenauf. Frauenhäuser und fachspezifische Beratung sind ein essenzieller Teil der Lösung, um diesem Missstand entgegen zu wirken. Aber sie reichen nicht aus. Die Angebote sind regional sehr unterschiedlich. Frauenhäuser und Beratungsstellen bieten ausschließlich lokale Lösungen an – aber das Thema Gewalt bedarf mitunter der Anonymität, die im lokalen Umfeld nicht zuverlässig gegeben ist. Die vorhandenen Online-Angebote zu diesem Thema zielen meist auf Bekanntmachung bestehender Beratungs-Angebote wie z.B. Hotlines ab. Sie bieten nur selten direkt Unterstützung in digitaler Form an.',
       faqs: [
         {
           title:

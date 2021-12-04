@@ -1,31 +1,42 @@
 <template>
-  <div class="my-4">
-    <v-container class="py-md-16">
-      <h1 class="text-h1 mb-4 text-center primary--text pt-md-16">
+  <div>
+    <v-container class="py-md-8" style="min-height: calc(50vh - 74px)">
+      <h1 class="text-h1 mb-4 text-center primary--text pt-12">
         Niemand muss <br />häusliche Gewalt aushalten.
       </h1>
-      <h2 class="text-center secondary--text subtitle-1 mb-8 mb-md-16">
+      <h2 class="text-center secondary--text subtitle-1 mb-8 mb-md-12">
         Auch du nicht
       </h2>
-      <p class="text-center mx-auto pb-md-16" style="max-width: 530px">
+      <p class="text-center mx-auto pb-md-8" style="max-width: 530px">
         Wir bieten <b>Frauen und ihren Kindern aus Gewaltbeziehungen</b> Hilfe
-        in Form einer persönlichen Online-Beratung und eine sichere Zuflucht an.
+        in Form einer persönlichen Online-Beratung an.
       </p>
     </v-container>
-    <v-img src="paige-cody-bOVZ_f3fbQM-unsplash.jpg" max-height="300px"></v-img>
+    <v-img
+      src="paige-cody-bOVZ_f3fbQM-unsplash.jpg"
+      min-height="50vh"
+      max-height="300px"
+      :style="
+        'border-bottom: 3px solid ' + $vuetify.theme.themes.light.secondary
+      "
+    ></v-img>
     <v-sheet color="grey lighten-5 py-md-16"
       ><v-container>
         <v-row
           ><v-col cols="12" md="6" class="text-center text-md-right">
-            <h3 class="text-uppercase mb-4 primary--text text-md-h1 pt-md-16">
-              Wir helfen dir!<br /><span
-                class="secondary--text"
-                style="font-size: 3em; line-height: 1em"
-                >JETZT!</span
+            <h3 class="text-uppercase mb-4 secondary--text text-h1">
+              <span style="font-size: 2.5em; line-height: 1em"
+                >Wir<br />helfen<br />dir!</span
               >
             </h3>
-            <p class="error--text font-weight-bold">
-              "Wir lassen dich mit deinen Erlebnissen nicht allein."
+            <p class="primary--text font-weight-bold">
+              und lassen dich in deiner Situation nicht allein.
+            </p>
+            <p>
+              Unsere Beratungsthemen:<b>
+                <br />- Psychosoziale Beratung <br />- Rechtsberatung <br />-
+                Coaching</b
+              >
             </p>
           </v-col>
           <v-col cols="12" md="6">
@@ -40,7 +51,8 @@
               <v-card-subtitle>
                 in Form von <b>Online-Besprechungen</b> mit Fachleuten zu deinen
                 Themen. Diese kannst du von überall ganz
-                <b>einfach und anonym</b> mit deinem <b>Handy</b> machen.
+                <b>einfach, sicher und anonym</b> mit deinem
+                <b>Handy</b> machen.
                 <v-btn
                   color="secondary my-4"
                   :disabled="disabled"
@@ -48,7 +60,7 @@
                   exact
                   to="berater/suche"
                 >
-                  Beratungsthemen ansehen
+                  Berater*innen ansehen
                 </v-btn>
               </v-card-subtitle>
             </v-card></v-col
@@ -58,11 +70,7 @@
     </v-sheet>
     <v-container class="pt-md-16">
       <h3
-        class="
-          text-h3 text-md-h1 text-uppercase text-center
-          secondary--text
-          pt-8
-        "
+        class="text-h3 text-md-h1 text-uppercase text-center secondary--text pt-8"
         style="font-weight: bold"
       >
         Sichere Zuflucht <br />Magazin
@@ -81,10 +89,10 @@
           </p>
           <p>
             Sie können beraten in:
-            <br /><b>Psychologie?</b> <br /><b>Psychotherapie?</b> <br /><b
-              >Coaching?</b
-            ><br /><b>sozialer Arbeit?</b> <br /><b>medizinischen Themen?</b>
-            <br /><b>Anwaltsthemen zur Ehe?</b>
+            <br /><b
+              >- Psychosoziale Beratung <br />- Rechtsberatung <br />-
+              Coaching</b
+            >
           </p>
         </v-col>
         <v-col cols="12" md="6">
@@ -137,6 +145,8 @@
         </v-col>
       </v-row>
     </v-container>
+    <SharedQuotes />
+    <UtilsDonation />
   </div>
 </template>
 
