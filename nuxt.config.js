@@ -69,7 +69,7 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ['@nuxtjs/firebase', 'nuxt-stripe-module'],
+  modules: ['@nuxtjs/firebase', 'nuxt-stripe-module', '@nuxtjs/strapi'],
   firebase: {
     config: {
       apiKey: 'AIzaSyDMjjzgxNWEsDWYETgWbFgaYnwzAmLyzhM',
