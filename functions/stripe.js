@@ -27,7 +27,7 @@ exports.getStripeLink = functions.https.onCall(async (data, context) => {
     stripeId = userData.stripe.id
   }
   const base = data.isDev
-    ? 'http://localhost:3000'
+    ? 'http://localhost'
     : 'https://sichere-zuflucht.github.io/frontend'
 
   const accountLink = await stripe.accountLinks.create({
