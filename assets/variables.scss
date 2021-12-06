@@ -2,6 +2,12 @@
 //
 // The variables you want to modify
 // $font-size-root: 20px;
+
+@font-face {
+  font-family: 'Yellowtail';
+  src: local('Yellowtail'), url(~assets/Yellowtail-Regular.ttf);
+}
+
 $container-padding-x: 24px;
 $body-font-family: 'Exo', sans-serif !default;
 $btn-font-weight: 600;
@@ -27,19 +33,19 @@ $headings: (
   ),
   'h3': (
     'size': 1.3rem,
-    'weight': 400,
+    'weight': 700,
     'line-height': 1.6rem,
     'letter-spacing': normal,
     'font-family': $heading-font-family,
-    'text-transform': false,
+    'text-transform': uppercase,
   ),
   'h4': (
     'size': 1.1rem,
-    'weight': 400,
+    'weight': 700,
     'line-height': 1.3rem,
     'letter-spacing': 0.0073529412em,
     'font-family': $heading-font-family,
-    'text-transform': false,
+    'text-transform': uppercase,
   ),
   'h5': (
     'size': 1rem,
@@ -58,19 +64,19 @@ $headings: (
     'text-transform': false,
   ),
   'subtitle-1': (
-    'size': 1rem,
+    'size': 1.5rem,
     'weight': normal,
     'line-height': 1.75rem,
     'letter-spacing': 0.009375em,
-    'font-family': $body-font-family,
+    'font-family': 'Yellowtail-Regular',
     'text-transform': false,
   ),
   'subtitle-2': (
     'size': 0.875rem,
-    'weight': 500,
+    'weight': normal,
     'line-height': 1.375rem,
     'letter-spacing': 0.0071428571em,
-    'font-family': $body-font-family,
+    'font-family': 'Yellowtail-Regular',
     'text-transform': false,
   ),
   'body-1': (
@@ -114,15 +120,3 @@ $headings: (
     'text-transform': uppercase,
   ),
 );
-.v-slide-group__next,
-.v-slide-group__prev {
-  position: absolute;
-  z-index: 2;
-  height: 100%;
-}
-.v-slide-group__next {
-  right: -23px;
-}
-.v-slide-group__prev {
-  left: -23px;
-}

@@ -1,80 +1,139 @@
 <template>
-  <v-app light>
-    <v-navigation-drawer v-model="drawer" app class="primary" dark fixed>
-      <client-only v-if="loggedIn">
+  <v-app>
+    <v-navigation-drawer
+      v-model="drawer"
+      app
+      class="secondary"
+      dark
+      fixed
+      disable-resize-watcher
+    >
+      <client-only>
         <v-list>
-          <v-list-item
-            v-for="(item, i) in loggedInUser"
-            :key="i"
-            :to="item.to"
-            nuxt
-            exact
-          >
-            <v-list-item-icon>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title v-text="item.title" />
-            </v-list-item-content>
-          </v-list-item>
-          <div
-            v-if="
-              user && user.membership ? user.membership.id === 'Woman' : false
-            "
-          >
-            <v-list-item
+          <div v-for="(item, i) in noUser" :key="i">
+            <v-list-group
+              v-if="item.subgroup"
+              :value="true"
+              no-action
+              :to="item.to"
+              nuxt
+              exact
+              active-class="white--text"
+            >
+              <template #activator>
+                <v-list-item-icon
+                  ><v-icon>{{ item.icon }}</v-icon></v-list-item-icon
+                >
+                <v-list-item-content>{{ item.title }}</v-list-item-content>
+              </template>
+              <v-list-item
+                v-for="(sub, n) in item.subgroup"
+                :key="n"
+                :to="sub.to"
+                nuxt
+                exact
+                active-class="white--text"
+              >
+                <v-list-item-content>
+                  {{ sub.title }}
+                </v-list-item-content>
+              </v-list-item></v-list-group
+            >
+            <v-list-item v-else :to="item.to">
+              <v-list-item-icon
+                ><v-icon>{{ item.icon }}</v-icon></v-list-item-icon
+              >
+              <v-list-item-content>
+                {{ item.title }}
+              </v-list-item-content>
+            </v-list-item>
+          </div>
+        </v-list>
+        <v-divider />
+        <v-list v-if="loggedIn">
+          <div v-if="membership === 'Woman'">
+            <v-list-group
               v-for="(item, i) in loggedInWoman"
               :key="i"
-              :to="item.to"
-              nuxt
-              exact
+              :value="true"
+              no-action
+              active-class="white--text"
             >
-              <v-list-item-icon>
-                <v-icon>{{ item.icon }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title v-text="item.title" />
-              </v-list-item-content>
-            </v-list-item>
+              <template #activator>
+                <v-list-item-icon
+                  ><v-icon>{{ item.icon }}</v-icon></v-list-item-icon
+                >
+                <v-list-item-content>{{ item.title }}</v-list-item-content>
+              </template>
+              <v-list-item
+                v-for="(sub, n) in item.subgroup"
+                :key="n"
+                :to="sub.to"
+                nuxt
+                exact
+                active-class="white--text"
+              >
+                <v-list-item-content>
+                  {{ sub.title }}
+                </v-list-item-content>
+              </v-list-item></v-list-group
+            >
           </div>
           <div v-else>
-            <v-list-item
+            <v-list-group
               v-for="(item, i) in loggedInCoach"
               :key="i"
-              :to="item.to"
-              nuxt
-              exact
+              :value="true"
+              no-action
+              active-class="white--text"
             >
-              <v-list-item-icon>
-                <v-icon>{{ item.icon }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title v-text="item.title" />
-              </v-list-item-content>
-            </v-list-item>
+              <template #activator>
+                <v-list-item-icon
+                  ><v-icon>{{ item.icon }}</v-icon></v-list-item-icon
+                >
+                <v-list-item-content>{{ item.title }}</v-list-item-content>
+              </template>
+              <v-list-item
+                :to="'/berater/' + uid"
+                nuxt
+                exact
+                active-class="white--text"
+              >
+                <v-list-item-content> Mein Profil </v-list-item-content>
+              </v-list-item>
+              <v-list-item
+                v-for="(sub, n) in item.subgroup"
+                :key="n"
+                :to="sub.to"
+                nuxt
+                exact
+                active-class="white--text"
+              >
+                <v-list-item-content>
+                  {{ sub.title }}
+                </v-list-item-content>
+              </v-list-item></v-list-group
+            >
           </div>
+          <v-divider class="my-2" />
           <v-list-item>
-            <v-btn block to="/" @click="logout">Abmelden</v-btn>
+            <v-btn block to="/" color="accent" @click="logout">Abmelden</v-btn>
+          </v-list-item>
+        </v-list>
+        <v-list v-else>
+          <v-spacer />
+          <v-list-item>
+            <v-btn to="/registration/signup" color="accent" exact nuxt block
+              >Registrieren</v-btn
+            >
+          </v-list-item>
+          <v-list-item>
+            <v-btn to="/registration/signin" exact nuxt block text
+              >Einloggen</v-btn
+            >
           </v-list-item>
         </v-list>
       </client-only>
-      <v-list v-else>
-        <v-list-item
-          v-for="(item, i) in noUser"
-          :key="i"
-          :to="item.to"
-          nuxt
-          exact
-        >
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
-          </v-list-item-content>
-        </v-list-item>
-        <v-spacer />
-        <v-list-item>
-          <v-btn block to="signup">Anmelden</v-btn>
-        </v-list-item>
-      </v-list>
     </v-navigation-drawer>
     <v-app-bar app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
@@ -85,30 +144,46 @@
       ></v-toolbar-title>
       <v-spacer />
       <client-only>
-        <v-btn v-if="loggedIn" to="/profile" nuxt exact icon
-          ><v-avatar color="primary" size="38"
-            ><v-img :src="user.avatar" /></v-avatar
-        ></v-btn>
+        <v-btn
+          v-if="loggedIn && user.public"
+          nuxt
+          exact
+          icon
+          plain
+          :to="membership === 'Coach' ? '/beratung' : null"
+          @click="membership === 'Coach' ? null : logout()"
+        >
+          <v-avatar v-if="membership === 'Coach'" size="38"
+            ><v-img v-if="user.public.avatar" :src="user.public.avatar" />
+            <SharedCoachIcon
+              v-else
+              color="#b3b3b3"
+              style="border: 1px solid #000"
+              class="pa-2"
+            /> </v-avatar
+          ><v-icon v-else>mdi-logout</v-icon></v-btn
+        >
       </client-only>
     </v-app-bar>
-    <v-main>
-      <nuxt class="pb-8" />
+    <v-card
+      dark
+      color="red"
+      width="70"
+      style="position: fixed; bottom: 50px; right: 0; z-index: 100"
+      href="https://www.brigitte.de/"
+      tile
+    >
+      <v-card-text class="pa-1 d-flex flex-column align-center">
+        <v-icon small>mdi-eye-off</v-icon>
+        <p style="font-size: 10px; line-height: 10px" class="text-center mb-0">
+          Seite verstecken
+        </p>
+      </v-card-text>
+    </v-card>
+    <v-main style="hyphens: auto" class="pb-0">
+      <nuxt />
     </v-main>
-    <v-footer inset absolute app class="d-flex flex-column justify-center mt-6">
-      <span class="mt-4"
-        >&copy; {{ new Date().getFullYear() }} Sichere Zuflucht gGmbH</span
-      >
-      <span class="mb-6"
-        ><a href="mailto:kontakt@sichere-zuflucht.de"
-          >kontakt@sichere-zuflucht.de</a
-        ></span
-      >
-      <div class="d-flex flex-wrap justify-center">
-        <v-btn v-for="(item, i) in footer" :key="i" :to="item.to" text plain
-          ><p v-text="item.title"></p
-        ></v-btn>
-      </div>
-    </v-footer>
+    <UtilsFooter></UtilsFooter>
   </v-app>
 </template>
 
@@ -117,103 +192,112 @@ export default {
   data() {
     return {
       drawer: false,
-      loggedInUser: [
-        {
-          icon: 'mdi-view-dashboard',
-          title: 'Übersicht',
-          to: '/profile',
-        },
-      ],
       loggedInWoman: [
         {
-          icon: 'mdi-account-box',
-          title: 'Beratungen',
-          to: '/frauen/findCoach',
-        },
-        {
-          icon: 'mdi-shield-home',
-          title: 'Wohnungen',
-          to: '/frauen/wohnungssuche',
+          icon: 'mdi-view-dashboard',
+          title: 'Mein Bereich',
+          subgroup: [
+            {
+              icon: 'mdi-account-box',
+              title: 'Beratung',
+              to: '/frauen',
+            },
+            {
+              icon: 'mdi-cog',
+              title: 'Konto',
+              to: '/frauen/settings',
+            },
+            /* {
+              icon: 'mdi-shield-home',
+              title: 'Wohnungen',
+              to: '/frauen/wohnungssuche',
+            }, */
+          ],
         },
       ],
       loggedInCoach: [
         {
-          icon: 'mdi-credit-card',
-          title: 'Bezahlung',
-          to: '/beratung/bezahlung',
-        },
-        {
-          icon: 'mdi-shield-check',
-          title: 'Verifizierung',
-          to: '/beratung/personenverifizierung',
-        },
-        {
-          icon: 'mdi-account-edit',
-          title: 'Profil bearbeiten',
-          to: '/beratung/registrierung',
+          icon: 'mdi-view-dashboard',
+          title: 'Mein Bereich',
+          subgroup: [
+            {
+              icon: 'mdi-account-box',
+              title: 'Beratung',
+              to: '/beratung',
+            },
+            {
+              icon: 'mdi-cog',
+              title: 'Konto',
+              to: '/beratung/settings',
+            },
+            {
+              icon: 'mdi-credit-card',
+              title: 'Bezahlung',
+              to: '/beratung/bezahlung',
+            },
+          ],
         },
       ],
       noUser: [
         {
-          title: 'Startseite',
-          to: '/',
+          icon: 'mdi-newspaper-variant',
+          title: 'Magazin',
+          to: '/magazine',
         },
         {
+          icon: 'mdi-face-woman',
+          title: 'Für Frauen',
+          subgroup: [
+            {
+              icon: 'mdi-information-variant',
+              title: 'Informationen',
+              to: '/info-frauen',
+            },
+            {
+              icon: 'mdi-account-search',
+              title: 'Beratung finden',
+              to: '/berater/suche',
+            },
+          ],
+        },
+        {
+          icon: 'mdi-hand-heart',
+          title: 'Für Berater*innen',
+          to: '/info-berater',
+        },
+        {
+          icon: 'mdi-gift',
+          title: 'Spenden',
+          to: '/spenden',
+        },
+        {
+          icon: 'mdi-account-group',
           title: 'Über uns',
-          to: '/a',
-        },
-        {
-          title: 'Wie wir helfen',
-          to: '/a',
-        },
-        {
-          title: 'Wie du helfen kannst',
-          to: '/a',
-        },
-        {
-          title: 'Aktuelles',
-          to: '/a',
-        },
-      ],
-      footer: [
-        {
-          title: 'Presse',
-          to: '/',
-        },
-        {
-          title: 'FAQ',
-          to: '/',
-        },
-        {
-          title: 'AGB',
-          to: '/',
-        },
-        {
-          title: 'Datenschutz',
-          to: '/',
-        },
-        {
-          title: 'Impressum',
-          to: '/',
+          to: '/ueber-uns',
         },
       ],
     }
   },
   computed: {
-    loginText: (that) => (!that.loggedIn ? 'Login' : 'Logout'),
-    loggedIn: (that) => {
-      if (process.client)
-        return that.$store.getters['modules/user/isAuthenticated']
-      return false
+    loginText() {
+      return !this.loggedIn ? 'Login' : 'Logout'
     },
-    user: (that) => that.$store.getters['modules/user/user'],
+    loggedIn() {
+      return this.$store.getters['modules/user/isAuthenticated']
+    },
+    user() {
+      return this.$store.getters['modules/user/user']
+    },
+    uid() {
+      return this.$store.getters['modules/user/uid']
+    },
     membership() {
       return this.$store.getters['modules/user/membership']
     },
   },
   methods: {
     login() {
-      this.$router.push('/login')
+      this.$router.push('/registration/signup')
     },
     logout() {
       this.$fire.auth.signOut()

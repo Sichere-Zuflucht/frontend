@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 function dateToString(date) {
   if (date) {
     const d = new Date(date.date)
@@ -80,8 +81,8 @@ exports.womanSuggestedDates = (coachName, dates, womanID) => {
              der Coach ${coachName} hat auf Ihre Anfrage reagiert und schickt Ihnen folgende Terminvorschläge:
         <br>
         <span style="font-family: monospace;">${listToHTML(
-          dates.map(dateToString)
-        )}</span>
+      dates.map(dateToString)
+    )}</span>
         <br>
         Bitte loggen Sie sich auf unserer <a href="sichere-zuflucht.de">Plattform</a> ein, um einen Termin auszuwählen.
         <br>
@@ -113,7 +114,7 @@ exports.coachAcceptedDate = (coachName, date, coachID) => {
   }
 }
 
-exports.verificationNotificationMail = (email, tel, www) => {
+exports.verificationNotificationMail = (email, tel, www, coachID) => {
   return {
     subject: 'Sichere Zuflucht - Verifizierungsanfrage',
     html: `<div style="font-size: 16px;">Verifizierung Anfrage<br><br>
@@ -122,6 +123,7 @@ exports.verificationNotificationMail = (email, tel, www) => {
     <span style="font-family: monospace; margin-left: 2em">"E-Mail: ${email}"</span>
     <span style="font-family: monospace; margin-left: 2em">"Tel: ${tel}"</span>
     <span style="font-family: monospace; margin-left: 2em">"Webseite: ${www}"</span>
+    <span style="font-family: monospace; margin-left: 2em">"CoachID: ${coachID}"</span>
     </div>`,
   }
 }

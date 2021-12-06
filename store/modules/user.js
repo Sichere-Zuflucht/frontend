@@ -130,20 +130,21 @@ const actions = {
       .then(() => commit('setAvatar', avatar))
   },
   requestVerify({ commit }, verifyData) {
-    return this.$fire.functions
-      .httpsCallable('email-sendVerifyAccMail')(verifyData)
-      .then((settings) => {
-        commit('setVerify', settings.data)
-      })
+    return this.$fire.functions.httpsCallable('email-sendVerifyAccMail')(
+      verifyData
+    )
+    /* .then((settings) => {
+      commit('setVerify', settings.data)
+    }) */
   },
-  createFirebaseUser({ dispatch, commit }, userData) {
+  createFirebaseUser({ dispatch, commit }, { userData, redirectTo }) {
     this.$fire.functions
       .httpsCallable('user-create')(userData)
       .then(({ data }) => {
         commit('setClaims', {
           claims: data,
         })
-        dispatch('fetchUserProfile', { user: data, redirect: true })
+        dispatch('fetchUserProfile', { user: data, redirect: redirectTo })
       })
   },
 }
