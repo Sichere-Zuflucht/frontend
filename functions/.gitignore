@@ -1,4 +1,4 @@
 node_modules/
 /.runtimeconfig.json
 /package-lock.json
-sicherezuflucht-firebase-adminsdk.json
+/sicherezuflucht-firebase-adminsdk.json
