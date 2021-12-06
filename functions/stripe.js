@@ -85,7 +85,7 @@ exports.createPaymentForCoaching = async (coachID, requestID, isDev) => {
     line_items: [
       {
         name: 'Coaching',
-        amount: 6000,
+        amount: 5000,
         currency: 'eur',
         quantity: 1,
       },

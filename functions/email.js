@@ -86,20 +86,26 @@ exports.sendVerifyAccMail = functions.https.onCall(async (data, context) => {
     .collection('private')
     .doc('data')
     .get()
-
+  console.log('privData', privData)
+  /*
   const settings = {
     verifySetting: {
       isVerifying: true,
       verified: false,
     },
-  }
+  } */
 
   return Promise.all([
-    privData.ref.set(settings, { merge: true }),
+    // privData.ref.set(settings, { merge: true }),
     sendNotificationMailToSZ(
-      verificationNotificationMail(privData.data().email, data.tel, data.www)
+      verificationNotificationMail(
+        data.email,
+        data.tel,
+        data.www,
+        context.auth.uid
+      )
     ),
-  ]).then(() => settings.verifySetting)
+  ]) // .then(() => settings.verifySetting)
 })
 exports.sendReqHousingMail = functions.https.onCall(async (data, context) => {
   const womanData = await admin

@@ -91,3 +91,6 @@ sw.*
 
 
 .nvmrc
+/static/firebase-auth-sw.js
+/functions/yarn.lock
+/yarn.lock
