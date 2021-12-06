@@ -1,5 +1,6 @@
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
+const { sendRequestDeleted } = require('./email')
 
 const {
   coachInitialMail,
@@ -27,6 +28,8 @@ exports.sendRequest = functions.https.onCall(async (data, context) => {
     .firestore()
     .collection('users')
     .doc(context.auth.uid)
+    .collection('public')
+    .doc('data')
     .get()
     .then((doc) => doc.data())
 
@@ -47,6 +50,34 @@ exports.sendRequest = functions.https.onCall(async (data, context) => {
       updatedAt: new Date(),
     })
 })
+
+// maybe interesting for later, if sichere zuflucht account is existing
+/* exports.sendHousingRequest = functions.https.onCall(async (data, context) => {
+  const womanData = await admin
+    .firestore()
+    .collection('users')
+    .doc(context.auth.uid)
+    .get()
+    .then((doc) => doc.data())
+
+  await admin
+    .firestore()
+    .collection('houseRequests')
+    .add({
+      eMails: housingInitialMail(
+        womanData.userName,
+        data.message,
+        context.auth.uid
+      ),
+      gotAnswer: false,
+      womanId: context.auth.uid,
+      message: data.message,
+      womanUserName: womanData.userName,
+      womanAvatar: womanData.avatar,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    })
+}) */
 
 exports.addSuggestions = functions.https.onCall(async (data, context) => {
   // get the inital request
@@ -108,10 +139,20 @@ exports.acceptDate = functions.https.onCall(async (data, context) => {
             ),
             acceptedDate: data.acceptedDate,
             updatedAt: new Date(),
-            jitsiLink: data.jitsiLink,
-            redLink: data.redLink,
+            video: data.video,
           },
           { merge: true }
         )
     })
+})
+
+exports.delete = functions.https.onCall((data, context) => {
+  const docRef = admin.firestore().collection('requests').doc(data.docId)
+  return docRef.get().then((doc) => {
+    if (doc.data().ids.includes(context.auth.uid)) {
+      sendRequestDeleted((doc.data().acceptedDate || {}).date)
+      return docRef.delete()
+    }
+    return false
+  })
 })
