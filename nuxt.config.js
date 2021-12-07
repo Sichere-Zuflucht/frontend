@@ -1,7 +1,6 @@
 import colors from 'vuetify/es5/util/colors'
 
-const hostURL =
-  process.env.SITE_URL || 'https://sichere-zuflucht.github.io/frontend'
+const hostURL = 'home-5005995776.app-ionos.space' // 'https://sichere-zuflucht.github.io/frontend'
 const isDev = process.env.NODE_ENV !== 'production'
 // Change made for ionos!
 const base = '' // isDev ? '' : '/frontend'
