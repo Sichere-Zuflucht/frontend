@@ -1,8 +1,8 @@
 import colors from 'vuetify/es5/util/colors'
 
-const hostURL = 'https://sichere-zuflucht.github.io'
+const hostURL = process.env.SITE_URL || 'https://sichere-zuflucht.github.io'
 const isDev = process.env.NODE_ENV !== 'production'
-const base = isDev ? '' : '/frontend' // '' // isDev ? '' : '/frontend'
+const base = isDev ? '' : '/frontend'
 const port = 80
 const redAPI = process.env.RED_API
 
