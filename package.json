@@ -21,6 +21,7 @@
       "pre-commit": "lint-staged"
     }
   },
+  "type": "module",
   "dependencies": {
     "@nuxtjs/firebase": "^7.6.1",
     "@nuxtjs/markdownit": "^2.0.0",
