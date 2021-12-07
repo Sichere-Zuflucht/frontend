@@ -22,7 +22,7 @@ export default {
     middleware: 'index',
   },
   static: {
-    prefix: base,
+    prefix: 'test',
   },
 
   publicRuntimeConfig: {
