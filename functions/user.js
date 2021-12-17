@@ -23,7 +23,7 @@ exports.create = functions.https.onCall(async (data, context) => {
   const userName = context.auth.uid.substr(0, 8)
   _.merge(data.public, {
     userName,
-    avatar: 'https://picsum.photos/seed/' + userName + '/200',
+    // avatar: data.public.avatar, // : base + '/coach-avatar.jpg', // 'https://picsum.photos/seed/' + userName + '/200',
     membership,
     info: false,
   })

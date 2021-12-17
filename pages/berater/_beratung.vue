@@ -208,10 +208,10 @@
       <v-container>
         <h2 class="text-h2 mt-8 secondary--text">weitere Berater*innen</h2>
         <p class="caption">
-          <b>Per Online-Beratung</b> werden dir unsere Berater*innen und Coaches
+          <b>Per Online-Beratung</b> werden dir Berater*innen und Coaches
           zuhören und weiter helfen. Schau dich um, Sie beraten in vielen
-          Themen. Per Online-Beratung werden dir unsere Berater*innen zuhören
-          und weiter helfen. Schau dich um. Sie beraten in vielen Themen. Die
+          Themen. Per Online-Beratung werden dir Berater*innen zuhören und
+          weiter helfen. Schau dich um. Sie beraten in vielen Themen. Die
           Beratung findet digital und anonym statt.
         </p>
       </v-container>

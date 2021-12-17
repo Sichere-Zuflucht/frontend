@@ -27,7 +27,7 @@
               Profil
             </v-stepper-step>
             <v-divider v-if="!stripe"></v-divider>
-            <v-stepper-step v-if="!stripe" step="2">
+            <v-stepper-step v-if="!stripe" step="2" editable>
               Zahlung aktivieren
             </v-stepper-step>
           </v-stepper-header>

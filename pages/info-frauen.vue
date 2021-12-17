@@ -29,18 +29,14 @@
         Nutze unser Hilfsangebot
       </h2>
       <p class="pb-4 text-center">
-        Wir wollen, dass du nicht alleine bist. Unsere Berater*innen stehen dir
-        mit Ihrer Erfahrung zur Seite. Deine <b>Beratung</b> findet
+        Wir wollen, dass du nicht alleine bist. Berater*innen stehen dir mit
+        Ihrer Erfahrung zur Seite. Deine <b>Beratung</b> findet
         <b>sicher, online</b> und <b>anonym</b> statt.
       </p>
     </v-container>
     <CoachingSlider />
     <v-container>
-      <UtilsBtn
-        text="Unsere Berater*innen"
-        link="/berater/suche"
-        classname="pb-0"
-      />
+      <UtilsBtn text="Berater*innen" link="/berater/suche" classname="pb-0" />
       <h2 class="text-h2 secondary--text text-center pt-16">
         DU STEHST VOR DER TRENNUNG, HAST ABER VIELE FRAGEN?!
       </h2>

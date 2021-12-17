@@ -20,7 +20,7 @@
             <v-stepper-step
               step="1"
               :complete="stepper > 1"
-              :editable="stepper > 1"
+              :editable="stepper > 1 && stepper < 3"
               :color="stepper > 1 ? 'success' : 'primary'"
             >
               Anliegen
@@ -29,7 +29,7 @@
             <v-stepper-step
               step="2"
               :complete="stepper > 2"
-              :editable="stepper > 2"
+              :editable="stepper > 2 && stepper < 3"
               :color="stepper > 2 ? 'success' : 'primary'"
             >
               Anmeldung
@@ -134,7 +134,7 @@
                   class="mt-4"
                   style="float: right"
                   :disabled="!validMem"
-                  @click="stepper++"
+                  @click="updateProfile"
                   >Weiter</v-btn
                 >
                 <v-btn
@@ -152,76 +152,10 @@
           >
           <v-stepper-items>
             <v-stepper-content step="3">
-              <div v-if="!success">
-                <h2 class="text-h2 secondary--text pb-4">Verifizierung</h2>
-                <p>
-                  Wir nehmen innerhalb der nächsten Tage mit Ihnen Kontakt auf,
-                  um Sie kennenzulernen und offene Fragen klären zu können.
-                </p>
-                <nuxt-link to="" target="_blank"
-                  >Warum ist eine Verifizierung nötig?</nuxt-link
-                >
-                <v-form ref="verify" v-model="validRef" class="pt-8">
-                  <v-text-field
-                    v-model="verPhone"
-                    class="secondary--text font-weight-bold"
-                    :rules="rules.phone"
-                    label="Telefonnummer"
-                    type="tel"
-                    persistent-hint
-                    hint="Wir nehmen innerhalb der nächsten Tage mit Ihnen Kontakt
-                    auf, um Sie kennenzulernen und offene Fragen klären zu
-                    können."
-                  ></v-text-field>
-                  <v-text-field
-                    v-model="verEmail"
-                    class="secondary--text font-weight-bold"
-                    :rules="rules.email"
-                    label="E-Mail-Adresse"
-                    type="email"
-                    persistent-hint
-                    hint="Über die wir mit Ihnen Kontakt aufnehmen dürfen."
-                  ></v-text-field>
-                  <v-text-field
-                    v-model="verWeb"
-                    class="secondary--text font-weight-bold"
-                    label="Webseite (optional)"
-                  ></v-text-field>
-                  <v-btn
-                    color="secondary"
-                    :loading="loading"
-                    :disabled="!validRef"
-                    class="mt-4"
-                    style="float: right"
-                    @click="updateProfile"
-                    >Verifizierung starten</v-btn
-                  >
-                </v-form>
-              </div>
-              <div v-else>
-                <h2 class="text-h2 secondary--text pb-4">
-                  VERIFIZIERUNG GESTARTET
-                </h2>
-                <p>
-                  Es kann einige Tage dauern, bis wir uns bei Ihnen melden.
-                  Nutzen Sie die Zeit gern, um Ihr Profil zu erstellen.
-                </p>
-                <v-btn color="secondary" class="my-4" to="/beratung/edit-profil"
-                  >Profil anlegen</v-btn
-                >
-                <p>
-                  Sobald Ihr Profil vollständig ist und Sie verifiziert sind,
-                  stellen wir Ihr Profil online und Sie können mit der Beratung
-                  beginnen.
-                </p>
-              </div>
-              <v-alert v-if="error">{{ error ? error : '' }}</v-alert>
-            </v-stepper-content></v-stepper-items
-          >
-        </v-stepper>
-      </v-container></v-col
-    ></v-row
-  >
+              <SharedVerificationPage editprofile /> </v-stepper-content
+          ></v-stepper-items>
+        </v-stepper> </v-container></v-col
+  ></v-row>
 </template>
 
 <script>
@@ -230,7 +164,6 @@ export default {
   data() {
     return {
       validMem: false,
-      validRef: false,
       stepper: 1,
       // email: this.$store.getters['modules/user/user'].claims.email,
       lastName: null,
@@ -252,17 +185,6 @@ export default {
           (v) =>
             (!!v && v === this.password) || 'Passwörter müssen übereinstimmen',
         ],
-        phone: [
-          (v) => !!v || 'Telefonnummer nicht vergessen',
-          (v) =>
-            /^(?:\+\d{2}|0|00\d{2})(?:\s*\d{3}){2}\s*\d{4,10}/.test(v) ||
-            'Ungültiges Format',
-        ],
-        email: [
-          (v) =>
-            /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/.test(v) ||
-            'Ungültiges Format',
-        ],
       },
       password: '',
       hidePassword: true,
@@ -271,11 +193,6 @@ export default {
       loading: false,
       memberships: [],
       membership: undefined,
-      verPhone: '',
-      verEmail: '',
-      verWeb: '',
-      success: false,
-      error: null,
     }
   },
   async fetch() {
@@ -300,24 +217,16 @@ export default {
         .then(() => {
           const createdUserData = {}
           if (this.membership.id === 'Coach') {
+            this.stepper++
             createdUserData.public = {
               firstName: this.firstName,
               lastName: this.lastName,
               membership: this.membership.id,
+              avatar: this.$config.baseUrl + '/coach-avatar.jpg',
             }
             createdUserData.private = {
               email: this.$fire.auth.currentUser.email,
             }
-            this.$store
-              .dispatch('modules/user/requestVerify', {
-                tel: this.verPhone,
-                www: this.verWeb,
-                email: this.verEmail,
-              })
-              .then(() => {
-                this.loading = false
-                this.success = true
-              })
             return this.$store.dispatch('modules/user/createFirebaseUser', {
               userData: createdUserData,
               redirectTo: false,

@@ -120,9 +120,8 @@
       </p>
       <p>
         Eine Stunde Beratung kostet 50€. Das ist ein wesentlich geringerer
-        Preis, als Beratungen auf dem freien Markt kosten. Unsere Berater*innen
-        und Coach*innen spenden somit ihrerseits bei jeder Beratung eine
-        Leistung.
+        Preis, als Beratungen auf dem freien Markt kosten. Berater*innen und
+        Coach*innen spenden somit ihrerseits bei jeder Beratung eine Leistung.
       </p>
       <p>
         In den 50 € sind jeweils 10€ enthalten, die wir als Sichere Zuflucht

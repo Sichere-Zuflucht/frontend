@@ -73,7 +73,7 @@
         class="text-h3 text-md-h1 text-uppercase text-center secondary--text pt-8"
         style="font-weight: bold"
       >
-        Sichere Zuflucht <br />Magazin
+        Sichere Zuflucht-Magazin
       </h3>
     </v-container>
     <MagazineSlider :list="magazineList" :change="true" />

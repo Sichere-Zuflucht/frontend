@@ -16,6 +16,7 @@
         ' !important'
       "
     >
+      {{ coach.membership }}
       <v-avatar color="primary ma-5" size="35%">
         <v-img :src="coach.avatar" />
       </v-avatar>

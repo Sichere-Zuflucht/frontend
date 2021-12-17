@@ -56,7 +56,11 @@
                   label="Deine E-mail-Adresse"
                   required
                   persistent-hint
-                  hint="Per E-Mail senden wir eine Benachrichtigung, sobald eine Anfrage vorliegt. Zudem kann per E-Mail das Passwort zurückgesetzt werden."
+                  :hint="
+                    makeLogin
+                      ? ''
+                      : 'Per E-Mail senden wir eine Benachrichtigung, sobald eine Anfrage vorliegt. Zudem kann per E-Mail das Passwort zurückgesetzt werden.'
+                  "
                 ></v-text-field>
 
                 <div class="d-flex justify-end pt-6">
@@ -68,7 +72,7 @@
                     >Senden ></v-btn
                   >
                 </div>
-                <p class="caption mt-4">
+                <p v-if="!makeLogin" class="caption mt-4">
                   Wir senden im nächsten Schritt eine E-Mail an die o.g.
                   Adresse, um sie zu bestätigen.<br /><b
                     >Bitte auch im Spam-Ordner nachsehen.</b
@@ -148,7 +152,7 @@
                   Spam Ordner.
                 </p>
                 <p class="caption">
-                  Sollte nichts angekommen sein, kannst du dir die Email noch
+                  Sollte nichts angekommen sein, kannst du dir die E-mail noch
                   einmal zusenden lassen.
                 </p>
                 <v-btn

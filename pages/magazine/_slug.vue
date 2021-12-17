@@ -71,16 +71,20 @@
     </v-container>
     <v-divider />
     <v-container>
-      <h2 class="text-h2 secondary--text mb-4">Verwandte Einträge</h2>
-      <div v-if="relatedArticles" class="d-flex flex-wrap">
-        <div
-          v-for="(relatedArticle, k) in relatedArticles"
-          :key="k"
+      <h2 class="text-h2 secondary--text mb-4 mt-12">Verwandte Einträge</h2>
+      <v-row v-if="relatedArticles" class="pt-8" style="z-index: 1">
+        <v-col
+          v-for="relatedArticle in relatedArticles.filter(
+            (m) => m.tag.name != slugpath
+          )"
+          :key="relatedArticle.id"
+          cols="12"
+          sm="6"
+          md="4"
           class="pb-4"
         >
-          <MagazineTeaserBox :magazine-data="relatedArticle" />
-        </div>
-      </div>
+          <MagazineTeaserBox :magazine-data="relatedArticle" /> </v-col
+      ></v-row>
     </v-container>
   </div>
 </template>
@@ -92,6 +96,7 @@ export default {
       article: null,
       error: null,
       relatedArticles: null,
+      slugpath: this.$route.params.slug,
     }
   },
   computed: {

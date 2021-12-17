@@ -87,16 +87,16 @@ exports.sendVerifyAccMail = functions.https.onCall(async (data, context) => {
     .doc('data')
     .get()
   console.log('privData', privData)
-  /*
+
   const settings = {
     verifySetting: {
       isVerifying: true,
       verified: false,
     },
-  } */
+  }
 
   return Promise.all([
-    // privData.ref.set(settings, { merge: true }),
+    privData.ref.set(settings, { merge: true }),
     sendNotificationMailToSZ(
       verificationNotificationMail(
         data.email,
@@ -105,7 +105,7 @@ exports.sendVerifyAccMail = functions.https.onCall(async (data, context) => {
         context.auth.uid
       )
     ),
-  ]) // .then(() => settings.verifySetting)
+  ]).then(() => settings.verifySetting)
 })
 exports.sendReqHousingMail = functions.https.onCall(async (data, context) => {
   const womanData = await admin

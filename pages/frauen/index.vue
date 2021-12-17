@@ -88,7 +88,7 @@ export default {
       responses: null,
       offers: [
         {
-          title: 'Sichere Zuflucht Magazin',
+          title: 'Sichere Zuflucht-Magazin',
           img: 'le-buzz-tVnm9I9jb8I-unsplash.jpg',
           link: '/magazine',
           btntext: 'Zum Magazin',

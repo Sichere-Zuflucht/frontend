@@ -8,7 +8,7 @@
         Fachleuten zu deinen Themen machen. Diese kannst du von überall ganz
         <b>einfach, sicher und anonym</b> mit dem <b>Handy</b> machen.
       </p>
-      <h2 class="text-h2 secondary--text mt-16">Unsere Berater*innen</h2>
+      <h2 class="text-h2 secondary--text mt-16">Berater*innen</h2>
     </v-container>
     <CoachingSlider />
     <v-sheet color="grey lighten-5">

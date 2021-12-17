@@ -16,7 +16,7 @@
           <small>{{ coach.helpSubtitle }}</small>
         </v-stepper-step>
         <v-stepper-content step="1">
-          <v-chip-group v-model="selectedTopic" column mandatory multiple>
+          <v-chip-group v-model="selectedTopic" column>
             <v-chip
               v-for="(t, i) in topics"
               :key="i"
@@ -27,7 +27,7 @@
               >{{ t.topicArea }}
             </v-chip>
           </v-chip-group>
-          <v-btn color="primary" block @click="e6++">
+          <v-btn color="primary" block :disabled="!selectedTopic" @click="e6++">
             <v-icon class="pr-1">mdi-arrow-down</v-icon>
             Weiter
           </v-btn>
@@ -190,7 +190,7 @@ export default {
         bioSubtitle: 'Damit die Frauen Ihr Angebot besser einschätzen können.',
       },
       topics: [],
-      selectedTopic: [],
+      selectedTopic: null,
       changeProfession: this.info.profession,
       changeQuote: this.info.quote,
       changeDescription: this.info.description,

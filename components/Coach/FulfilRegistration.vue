@@ -1,29 +1,49 @@
 <template>
   <div class="pt-4">
     <client-only v-if="userData && userData.private && userData.public">
-      <v-alert
-        v-if="!userData.public.info"
-        dark
-        color="error"
-        type="error"
-        icon="mdi-account-question"
-        >Es existiert noch kein Profil von Ihnen.</v-alert
+      <v-alert v-if="!userData.public.info" dark color="error">
+        <v-row align="center">
+          <v-col class="shrink">
+            <v-icon>mdi-account-question</v-icon>
+          </v-col>
+          <v-col class="grow"> Es existiert noch kein Profil von Ihnen. </v-col>
+          <v-col cols="12" sm="auto" class="shrink">
+            <v-btn to="edit-profil" append>Profil anlegen</v-btn>
+          </v-col>
+        </v-row></v-alert
       >
-      <v-alert
-        v-if="!userData.private.stripe.payoutsEnabled"
-        dark
-        color="error"
-        type="error"
-        icon="mdi-credit-card-outlined"
-        >Es wurde noch kein Stripe Account errichtet.</v-alert
+      <v-alert v-if="!userData.private.stripe.payoutsEnabled" dark color="error"
+        ><v-row align="center">
+          <v-col class="shrink">
+            <v-icon>mdi-credit-card-off-outline</v-icon>
+          </v-col>
+          <v-col class="grow">
+            Es wurde noch kein Stripe Account eingerichtet.
+          </v-col>
+          <v-col cols="12" sm="auto" class="shrink">
+            <v-btn to="edit-profil" append>Stripe anlegen</v-btn>
+          </v-col>
+        </v-row></v-alert
       >
+
       <v-alert
         v-if="!userData.private.verifySetting.verified"
         dark
         color="error"
-        type="error"
-        icon="mdi-account-clock"
-        >Sie wurden von uns noch nicht verifiziert.</v-alert
+      >
+        <v-row align="center">
+          <v-col class="shrink">
+            <v-icon>mdi-account-clock</v-icon>
+          </v-col>
+          <v-col class="grow">
+            Sie wurden von uns noch nicht verifiziert.
+          </v-col>
+          <v-col cols="12" sm="auto" class="shrink">
+            <v-btn to="personenverifizierung" append
+              >Verifizierung ansehen</v-btn
+            >
+          </v-col>
+        </v-row></v-alert
       >
       <p
         v-if="
@@ -49,113 +69,6 @@
         ist Ihr Profil nicht öffentlich einsehbar und somit können auch keine
         Anfragen an Sie gestellt werden.
       </p>
-      <!--      <p
-        v-if="
-          !(
-            userData.public.info &&
-            userData.private.stripe.payoutsEnabled &&
-            userData.private.verifySetting.verified
-          )
-        "
-      >
-        Bitte vervollständigen Sie Ihr Konto, damit wir Ihr Profil freischalten
-        können.
-      </p>
-      
-      <v-stepper
-        v-if="
-          !(
-            userData.public.info &&
-            userData.private.stripe.payoutsEnabled &&
-            userData.private.verifySetting.verified
-          )
-        "
-        v-model="steps"
-        vertical
-      >
-        <v-stepper-step
-          :complete="!!userData.public.info"
-          step="1"
-          :editable="!userData.public.info"
-          :color="!!userData.public.info ? 'success' : 'secondary'"
-        >
-          <h2
-            class="text-h5 text-uppercase secondary--text"
-            style="text-shadow: none"
-          >
-            Profil
-          </h2>
-          <small>Erstelle oder vervollständige dein Profil</small>
-        </v-stepper-step>
-        <v-stepper-content step="1">
-          <v-btn
-            class="mr-2 mb-2"
-            color="secondary"
-            nuxt
-            append
-            to="/beratung/edit-profil"
-          >
-            bearbeiten
-          </v-btn>
-        </v-stepper-content>
-        <v-stepper-step
-          :complete="!!userData.private.stripe.payoutsEnabled"
-          :editable="!userData.private.stripe.payoutsEnabled"
-          step="2"
-          :color="
-            !!userData.private.stripe.payoutsEnabled ? 'success' : 'secondary'
-          "
-        >
-          <h2
-            class="text-h5 text-uppercase secondary--text"
-            style="text-shadow: none"
-          >
-            Zahlungsart
-          </h2>
-          <small>Mit dem Zahlungssystem verbinden</small>
-        </v-stepper-step>
-        <v-stepper-content step="2">
-          <v-btn class="mr-2 mb-2" color="secondary" nuxt append to="bezahlung">
-            verbinden
-          </v-btn>
-        </v-stepper-content>
-        <v-stepper-step
-          :complete="!!userData.private.verifySetting.verified"
-          :editable="!userData.private.verifySetting.verified"
-          step="3"
-          :color="
-            userData.private.verifySetting.isVerifying
-              ? 'blue'
-              : !!userData.private.verifySetting.verified
-              ? 'success'
-              : 'secondary'
-          "
-        >
-          <h2
-            class="text-h5 text-uppercase secondary--text"
-            style="text-shadow: none"
-          >
-            Verifizierung
-            {{ userData.private.verifySetting.isVerifying ? 'im Gange' : '' }}
-          </h2>
-          <small>Von uns verifizieren lassen</small>
-        </v-stepper-step>
-        <v-stepper-content step="3">
-          <v-btn
-            class="mr-2 mb-2"
-            color="secondary"
-            nuxt
-            append
-            to="personenverifizierung"
-          >
-            {{
-              userData.private.verifySetting.isVerifying
-                ? 'erneut anfragen'
-                : 'anfragen'
-            }}
-          </v-btn>
-        </v-stepper-content>
-      </v-stepper>-->
     </client-only>
   </div>
 </template>

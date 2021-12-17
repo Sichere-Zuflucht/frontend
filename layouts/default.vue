@@ -153,14 +153,18 @@
           :to="membership === 'Coach' ? '/beratung' : null"
           @click="membership === 'Coach' ? null : logout()"
         >
-          <v-avatar v-if="membership === 'Coach'" size="38"
+          <v-avatar
+            v-if="membership === 'Coach'"
+            size="38"
+            color="grey lighten-2"
             ><v-img v-if="user.public.avatar" :src="user.public.avatar" />
-            <SharedCoachIcon
+            <v-icon v-else>mdi-account</v-icon>
+            <!-- <SharedCoachIcon
               v-else
               color="#b3b3b3"
-              style="border: 1px solid #000"
+              style="border: 1px solid #b3b3b3"
               class="pa-2"
-            /> </v-avatar
+            />--> </v-avatar
           ><v-icon v-else>mdi-logout</v-icon></v-btn
         >
       </client-only>

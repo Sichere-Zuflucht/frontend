@@ -130,12 +130,11 @@ const actions = {
       .then(() => commit('setAvatar', avatar))
   },
   requestVerify({ commit }, verifyData) {
-    return this.$fire.functions.httpsCallable('email-sendVerifyAccMail')(
-      verifyData
-    )
-    /* .then((settings) => {
-      commit('setVerify', settings.data)
-    }) */
+    return this.$fire.functions
+      .httpsCallable('email-sendVerifyAccMail')(verifyData)
+      .then((settings) => {
+        commit('setVerify', settings.data)
+      })
   },
   createFirebaseUser({ dispatch, commit }, { userData, redirectTo }) {
     this.$fire.functions

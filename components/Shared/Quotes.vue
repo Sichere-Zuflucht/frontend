@@ -2,13 +2,13 @@
   <v-sheet color="grey lighten-5">
     <v-container class="pt-12">
       <h2 class="text-h2 text-center secondary--text pt-4">
-        Stimmen von Frauen zu diesem Projekt
+        Stimmen zu diesem Projekt
       </h2>
     </v-container>
     <v-carousel hide-delimiters height="auto" class="pb-12">
       <v-carousel-item v-for="(quote, n) in quotes" :key="n" class="px-4"
         ><v-row
-          class="fill-height py-5 px-16 text-center"
+          class="fill-height py-5 px-16 text-center black--text"
           align="center"
           justify="center"
           height="100%"
