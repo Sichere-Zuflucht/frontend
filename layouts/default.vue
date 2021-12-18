@@ -94,17 +94,13 @@
                 <v-list-item-content>{{ item.title }}</v-list-item-content>
               </template>
               <v-list-item
-                :to="'/berater/' + uid"
-                nuxt
-                exact
-                active-class="white--text"
-              >
-                <v-list-item-content> Mein Profil </v-list-item-content>
-              </v-list-item>
-              <v-list-item
                 v-for="(sub, n) in item.subgroup"
                 :key="n"
-                :to="sub.to"
+                :to="
+                  sub.appendUser
+                    ? sub.to + (user.public ? user.public.uid : '')
+                    : sub.to
+                "
                 nuxt
                 exact
                 active-class="white--text"
@@ -230,6 +226,12 @@ export default {
               to: '/beratung',
             },
             {
+              icon: 'mdi-account-box',
+              title: 'Mein Profil',
+              to: '/berater/',
+              appendUser: true,
+            },
+            {
               icon: 'mdi-cog',
               title: 'Konto',
               to: '/beratung/settings',
@@ -280,6 +282,7 @@ export default {
           to: '/ueber-uns',
         },
       ],
+      nuid: '',
     }
   },
   computed: {
@@ -291,9 +294,6 @@ export default {
     },
     user() {
       return this.$store.getters['modules/user/user']
-    },
-    uid() {
-      return this.$store.getters['modules/user/uid']
     },
     membership() {
       return this.$store.getters['modules/user/membership']
