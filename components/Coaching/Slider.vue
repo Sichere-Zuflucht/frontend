@@ -24,22 +24,19 @@ export default {
   },
   async mounted() {
     try {
-      this.allCoaches = (
-        await this.$fire.functions.httpsCallable('user-getCoaches')()
-      ).data
-      /* await this.$fire.firestore
+      await this.$fire.firestore
         .collection('users')
-        .doc()
-        .collection('private')
-        .where('verifySetting.verified', '==', true)
         .get()
-        .then((querySnapshot) => {
-          console.log('q:', querySnapshot)
-          querySnapshot.forEach((doc) => {
-            console.log('doc:', doc.data())
-            this.allCoaches.push(doc.data())
+        .then((docs) => {
+          docs.forEach(async (doc) => {
+            await this.$fire.firestore
+              .collection(doc.ref.path + '/public')
+              .get()
+              .then((docPub) => {
+                this.allCoaches = docPub.docs[0].data()
+              })
           })
-        }) */
+        })
     } catch (error) {
       console.log(error)
     }

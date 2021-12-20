@@ -9,8 +9,10 @@
         <b>einfach, sicher und anonym</b> mit dem <b>Handy</b> machen.
       </p>
       <h2 class="text-h2 secondary--text mt-16">Unsere Berater*innen</h2>
+      <v-btn @click="TestLoadCoaches">test</v-btn>
     </v-container>
     <CoachingSlider />
+    {{ allCoaches }}
     <v-sheet color="grey lighten-5">
       <v-container> <WomanPriceInfo /></v-container
     ></v-sheet>
@@ -39,59 +41,22 @@ export default {
   },
   async mounted() {
     try {
-      /* await this.$fire.firestore
-        .collection('coachingTypes')
-        .get()
-        .then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-            this.coachingTypes.push(doc.data().topicArea)
-          })
-        }) */
-
-      this.allCoaches = (
+      /* this.allCoaches = (
         await this.$fire.functions.httpsCallable('user-getCoaches')()
-      ).data
-      /* await this.$fire.firestore
+      ).data */
+      await this.$fire.firestore
         .collection('users')
-        .doc()
         .get()
-        .then((querySnapshot) => {
-          console.log('q:', querySnapshot)
-          querySnapshot.forEach((doc) => {
-            console.log('doc:', doc.data())
-            this.allCoaches.push(doc.data())
+        .then((docs) => {
+          docs.forEach(async (doc) => {
+            await this.$fire.firestore
+              .collection(doc.ref.path + '/public')
+              .get()
+              .then((docPub) => {
+                this.allCoaches = docPub.docs[0].data()
+              })
           })
-        }) */
-      /* await this.$fire.firestore
-        .collection('users')
-        .doc()
-        .collection('private')
-        .where('verifySetting.verified', '==', true)
-        .get()
-        .then((querySnapshot) => {
-          console.log('q:', querySnapshot)
-          querySnapshot.forEach((doc) => {
-            console.log('doc:', doc.data())
-            this.allCoaches.push(doc.data())
-          })
-        }) */
-      console.log(
-        'coaches',
-        await this.$fire.firestore
-          .collection('users')
-          .doc()
-          .collection('private')
-          .where('verifySetting.verified', '==', true)
-          .get()
-      )
-      console.log(
-        'coaches 2',
-        await this.$fire.firestore
-          .collectionGroup('private')
-          .where('verifySetting.verified', '==', true)
-          .get()
-      )
-
+        })
       this.loading = false
     } catch (error) {
       this.error = error
@@ -99,5 +64,26 @@ export default {
     }
   },
   fetchOnServer: false,
+  methods: {
+    async TestLoadCoaches() {
+      await this.$fire.firestore
+        .collection('users') // .collection('users') // memberships works
+        .get()
+        .then((docs) => {
+          console.log(docs)
+          docs.forEach(async (doc) => {
+            await this.$fire.firestore
+              .collection(doc.ref.path + '/public')
+              .get()
+              .then((docPub) => {
+                return docPub.docs[0].data()
+              })
+
+            // doc.ref.delete()
+          })
+        })
+      // console.log('TestLoadCoaches: ', test)
+    },
+  },
 }
 </script>
