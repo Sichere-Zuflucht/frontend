@@ -68,19 +68,17 @@ exports.getCoaches = functions.https.onCall(async (data, context) => {
     .where('verifySetting.verified', '==', true)
     .get()
 
-  functions.logger.log('search:', search)
-
   // get the parent and its id
   // then traverse back down to the public folder
   // return both
   return Promise.all(
     search.docs.map(async (doc) => {
-      return {
+      return JSON.stringify({
         uid: doc.ref.parent.parent.id,
         ...(
           await doc.ref.parent.parent.collection('public').doc('data').get()
         ).data(),
-      }
+      })
     })
   )
 })
