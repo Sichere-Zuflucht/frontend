@@ -11,7 +11,8 @@
         <v-card-text class="caption pb-8 flex-grow-1 flex-shrink-0">
           {{ step.text }}
         </v-card-text>
-        <v-card-actions v-if="step.btn" class="flex-grow-0 flex-shrink-1"
+
+        <v-card-actions v-if="step.rule" class="flex-grow-0 flex-shrink-1"
           ><nuxt-link v-if="step.textStyle" :to="step.link" class="caption">{{
             step.btn
           }}</nuxt-link
@@ -36,6 +37,7 @@ export default {
           btn: 'Registrieren',
           link: '/registration/signup',
           textStyle: false,
+          rule: this.$store.getters['modules/user/user'] === null,
         },
         {
           icon: 'mdi-account-search',
@@ -44,6 +46,7 @@ export default {
           btn: 'Berater*innen-Übersicht',
           link: '/berater/suche',
           textStyle: true,
+          rule: this.$route.path !== '/berater/suche',
         },
         {
           icon: 'mdi-message-text',
