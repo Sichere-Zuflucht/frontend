@@ -1,5 +1,5 @@
 <template>
-  <v-slide-group v-if="allCoaches" show-arrows class="py-4">
+  <v-slide-group v-if="!loading" show-arrows class="py-4">
     <v-slide-item v-for="(coaching, n) in allCoaches" :key="n" class="my-4">
       <CoachingProfileWrapper
         :pub-coach-data="coaching"
@@ -13,29 +13,32 @@
       />
     </v-slide-item>
   </v-slide-group>
+  <div v-else class="d-flex">
+    <v-card v-for="n in 3" :key="n" width="250" class="ma-2">
+      <v-card-text
+        ><v-skeleton-loader
+          type="list-item-avatar, list-item-three-line" /></v-card-text
+    ></v-card>
+  </div>
 </template>
 
 <script>
 export default {
   data() {
     return {
-      allCoaches: null,
+      allCoaches: [],
+      loading: true,
     }
   },
   async mounted() {
     try {
-      await this.$fire.firestore
-        .collection('users')
-        .get()
-        .then((docs) => {
-          docs.forEach(async (doc) => {
-            await this.$fire.firestore
-              .collection(doc.ref.path + '/public')
-              .get()
-              .then((docPub) => {
-                this.allCoaches = docPub.docs[0].data()
-              })
+      await this.$fire.functions
+        .httpsCallable('user-getCoaches')()
+        .then((d) => {
+          d.data.forEach((a) => {
+            this.allCoaches.push(JSON.parse(a))
           })
+          this.loading = false
         })
     } catch (error) {
       console.log(error)

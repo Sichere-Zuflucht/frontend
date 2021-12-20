@@ -61,25 +61,6 @@ exports.setData = functions.https.onCall(({ data, priv }, context) => {
 })
 
 exports.getCoaches = functions.https.onCall(async (data, context) => {
-  await admin
-    .firestore()
-    .collection('users') // .collection('users') // memberships works
-    .get()
-    .then((docs) => {
-      console.log(docs)
-      docs.forEach(async (doc) => {
-        await this.$fire.firestore
-          .collection(doc.ref.path + '/public')
-          .get()
-          .then((docPub) => {
-            console.log(docPub.docs[0].data())
-          })
-
-        // doc.ref.delete()
-      })
-    })
-
-  /*
   // find private docs with fulfill the criteria coach
   const search = await admin
     .firestore()
@@ -87,21 +68,19 @@ exports.getCoaches = functions.https.onCall(async (data, context) => {
     .where('verifySetting.verified', '==', true)
     .get()
 
-  functions.logger.log('search:', search)
-
   // get the parent and its id
   // then traverse back down to the public folder
   // return both
   return Promise.all(
     search.docs.map(async (doc) => {
-      return {
+      return JSON.stringify({
         uid: doc.ref.parent.parent.id,
         ...(
           await doc.ref.parent.parent.collection('public').doc('data').get()
         ).data(),
-      }
+      })
     })
-  ) */
+  )
 })
 
 exports.delete = functions.https.onCall(async (uid, context) => {
