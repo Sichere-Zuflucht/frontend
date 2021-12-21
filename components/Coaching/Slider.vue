@@ -13,6 +13,7 @@
       />
     </v-slide-item>
   </v-slide-group>
+  <v-alert v-else-if="error.status" type="error">{{ error.text }}</v-alert>
   <div v-else class="d-flex">
     <v-card v-for="n in 3" :key="n" width="250" class="ma-2">
       <v-card-text
@@ -28,6 +29,10 @@ export default {
     return {
       allCoaches: [],
       loading: true,
+      error: {
+        status: false,
+        text: '',
+      },
     }
   },
   async mounted() {
@@ -41,7 +46,8 @@ export default {
           this.loading = false
         })
     } catch (error) {
-      console.log(error)
+      error.status = true
+      error.text = error
     }
   },
   fetchOnServer: false,
