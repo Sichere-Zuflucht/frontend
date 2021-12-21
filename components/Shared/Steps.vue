@@ -46,7 +46,7 @@ export default {
           btn: 'Berater*innen-Übersicht',
           link: '/berater/suche',
           textStyle: true,
-          rule: this.$route.path !== '/berater/suche',
+          rule: !this.$route.path.startsWith('/berater/suche'),
         },
         {
           icon: 'mdi-message-text',
