@@ -4,7 +4,7 @@ const { sendRequestDeleted } = require('./email')
 
 const {
   coachInitialMail,
-  womanSuggestedDates,
+  // womanSuggestedDates,
   coachAcceptedDate,
 } = require('./emailTemplates')
 
@@ -87,29 +87,25 @@ exports.addSuggestions = functions.https.onCall(async (data, context) => {
     .doc(data.requestId)
     .get()
     .then((ref) => {
-      const requestData = ref.data()
+      // const requestData = ref.data()
 
       // update request
-      admin
-        .firestore()
-        .collection('requests')
-        .doc(data.requestId)
-        .set(
-          {
-            eMails: admin.firestore.FieldValue.arrayUnion(
+      admin.firestore().collection('requests').doc(data.requestId).set(
+        {
+          /* eMails: admin.firestore.FieldValue.arrayUnion(
               womanSuggestedDates(
                 data.coachName,
                 data.suggestions,
                 requestData.womanId
               )
-            ),
-            suggestions: data.suggestions,
-            coachAnswered: true,
-            videoType: data.videoType,
-            updatedAt: new Date(),
-          },
-          { merge: true }
-        )
+            ), */
+          suggestions: data.suggestions,
+          coachAnswered: true,
+          videoType: data.videoType,
+          updatedAt: new Date(),
+        },
+        { merge: true }
+      )
     })
 })
 
@@ -150,7 +146,7 @@ exports.delete = functions.https.onCall((data, context) => {
   const docRef = admin.firestore().collection('requests').doc(data.docId)
   return docRef.get().then((doc) => {
     if (doc.data().ids.includes(context.auth.uid)) {
-      sendRequestDeleted((doc.data().acceptedDate || {}).date)
+      sendRequestDeleted(doc.data().acceptedDate || {}) // .date)
       return docRef.delete()
     }
     return false

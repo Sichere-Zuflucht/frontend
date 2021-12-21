@@ -16,7 +16,6 @@
         ' !important'
       "
     >
-      {{ coach.membership }}
       <v-avatar color="primary ma-5" size="35%">
         <v-img :src="coach.avatar" />
       </v-avatar>
@@ -105,16 +104,18 @@
         <div v-else>
           <v-alert dark color="error" type="error"
             ><p>
-              Es liegt keine Bezahlung vor. Es scheint etwas schief gelaufen zu
-              sein.
+              Es liegt (noch) keine Bezahlung vor. Der Bezahlungsprozess kann
+              einige Minuten dauern. Bitte warten Sie ein paar Minuten und laden
+              Sie die Seite dann erneut. Sollte die Fehlermeldung trotzdem noch
+              existieren,
             </p>
-            <v-btn @click="pay(response.acceptedDate)"
+            <!-- <v-btn @click="pay(response.acceptedDate)"
               >Bezahlen erneut versuchen</v-btn
-            >
+            > -->
             <p class="caption mt-2">
-              oder den Support kontaktieren unter
-              <a href="mailto:technik@sichere-zuflucht.de"
-                >technik@sichere-zuflucht.de</a
+              kontaktieren Sie uns unter:
+              <a href="mailto:technik@sichere-zuflucht.de">
+                technik@sichere-zuflucht.de</a
               >
             </p>
           </v-alert>
@@ -154,7 +155,9 @@
       </v-dialog>
     </v-card-actions>
     <v-overlay :value="redirectWarning" color="black" opacity="0.8">
-      <p>Weiterleitung zu Stripe. Bitte warten...</p>
+      <p>
+        Weiterleitung zu Stripe. Dies kann ein bisschen dauern. Bitte warten...
+      </p>
     </v-overlay>
   </v-card>
 </template>
