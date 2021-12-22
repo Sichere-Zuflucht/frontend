@@ -147,12 +147,13 @@
             light
             class="mr-1"
             :loading="eraseLoading"
-            @click="cancel(response.id)"
+            @click="cancel(response)"
             >Ja, absagen
           </v-btn>
           <v-btn light @click="isDelete = false"> nein</v-btn>
         </v-alert>
       </v-dialog>
+      <v-alert v-if="error" type="error" color="error">{{ error }}</v-alert>
     </v-card-actions>
     <v-overlay :value="redirectWarning" color="black" opacity="0.8">
       <p>
@@ -196,6 +197,7 @@ export default {
         payButtonLoading: false,
       },
       redirectWarning: false,
+      error: null,
     }
   },
   computed: {
@@ -209,11 +211,22 @@ export default {
     cancel(doc) {
       this.eraseLoading = true
       this.$fire.functions
-        .httpsCallable('request-delete')({ docId: doc })
+        .httpsCallable('request-delete')({
+          docId: doc.id,
+          email: doc.coachEmail,
+        })
         .then(() => {
+          console.log('erased')
           this.isDelete = false
           this.eraseLoading = false
+          this.error = null
           this.$emit('cancel')
+        })
+        .catch((err) => {
+          this.isDelete = false
+          this.eraseLoading = false
+          this.error = err
+          console.log('delete error: ', err)
         })
     },
     async pay(dateInput) {

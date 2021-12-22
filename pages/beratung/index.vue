@@ -254,14 +254,11 @@ export default {
   methods: {
     cancel(doc) {
       this.eraseLoading = true
-      this.$fire.functions.httpsCallable('request-delete')({ docId: doc.id })
-      const fakeDate = {
-        date: 'noch nicht festgelegten',
-        time: 'Termin',
-      }
-      const date = doc.acceptedDate ? doc.acceptedDate : fakeDate
       this.$fire.functions
-        .httpsCallable('email-sendRequestDeleted')(date)
+        .httpsCallable('request-delete')({
+          docId: doc.id,
+          email: this.user.private.email,
+        })
         .then(() => {
           this.isDelete = false
           this.eraseLoading = false

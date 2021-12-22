@@ -5,7 +5,9 @@ const nodemailer = require('nodemailer')
 const {
   verificationNotificationMail,
   reqDeletedNotificationMail,
-  housingInitialMail,
+  userDeletedNotificationMail,
+  coachInitialMail,
+  // housingInitialMail,
 } = require('./emailTemplates')
 
 const transporter = nodemailer.createTransport({
@@ -29,7 +31,18 @@ async function sendMail(emailData) {
     .then((snap) => snap.data())
 
   const mailOptions = {
-    from: 's.fellner@sichere-zuflucht.de',
+    from: 'noreply@sichere-zuflucht.de',
+    to: email,
+    subject: emailData.subject,
+    html: emailData.html,
+  }
+
+  return transporter.sendMail(mailOptions)
+}
+
+function sendNotificationMail(emailData, email) {
+  const mailOptions = {
+    from: 'noreply@sichere-zuflucht.de',
     to: email,
     subject: emailData.subject,
     html: emailData.html,
@@ -40,7 +53,7 @@ async function sendMail(emailData) {
 
 function sendNotificationMailToSZ(emailData) {
   const mailOptions = {
-    from: 's.fellner@sichere-zuflucht.de',
+    from: 'noreply@sichere-zuflucht.de',
     to: 'kontakt@sichere-zuflucht.de',
     subject: emailData.subject,
     html: emailData.html,
@@ -107,7 +120,7 @@ exports.sendVerifyAccMail = functions.https.onCall(async (data, context) => {
     ),
   ]).then(() => settings.verifySetting)
 })
-exports.sendReqHousingMail = functions.https.onCall(async (data, context) => {
+/* exports.sendReqHousingMail = functions.https.onCall(async (data, context) => {
   const womanData = await admin
     .firestore()
     .collection('users')
@@ -118,8 +131,19 @@ exports.sendReqHousingMail = functions.https.onCall(async (data, context) => {
   return sendNotificationMailToSZ(
     housingInitialMail(womanData.email, data, context.auth.uid561)
   )
-})
+}) */
 
-exports.sendRequestDeleted = (data) => {
-  return sendNotificationMailToSZ(reqDeletedNotificationMail(data))
+exports.sendRequestDeleted = (email, date) => {
+  return sendNotificationMail(reqDeletedNotificationMail(date), email)
+}
+
+exports.sendUserDeleted = (email) => {
+  return sendNotificationMail(userDeletedNotificationMail(), email)
+}
+
+exports.sendRequestToCoach = (coachName, message, coachID, email) => {
+  return sendNotificationMail(
+    coachInitialMail(coachName, message, coachID, email),
+    email
+  )
 }

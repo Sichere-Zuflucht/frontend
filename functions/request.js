@@ -1,6 +1,6 @@
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
-const { sendRequestDeleted } = require('./email')
+const { sendRequestDeleted, sendRequestToCoach } = require('./email')
 
 const {
   coachInitialMail,
@@ -33,6 +33,15 @@ exports.sendRequest = functions.https.onCall(async (data, context) => {
     .get()
     .then((doc) => doc.data())
 
+  const priv = await admin
+    .firestore()
+    .collection('users')
+    .doc(data.coachUID)
+    .collection('private')
+    .doc('data')
+    .get()
+    .then((doc) => doc.data())
+
   await admin
     .firestore()
     .collection('requests')
@@ -40,6 +49,7 @@ exports.sendRequest = functions.https.onCall(async (data, context) => {
       eMails: [coachInitialMail(data.coachName, data.message, data.coachUID)],
       coachAnswered: false,
       coachId: data.coachUID,
+      coachEmail: data.coachEmail,
       womanId: context.auth.uid,
       ids: [data.coachUID, context.auth.uid],
       message: data.message,
@@ -48,6 +58,14 @@ exports.sendRequest = functions.https.onCall(async (data, context) => {
       womanAvatar: womanData.avatar,
       createdAt: new Date(),
       updatedAt: new Date(),
+    })
+    .then(() => {
+      sendRequestToCoach(
+        data.coachName,
+        data.message,
+        data.coachUID,
+        priv.email
+      )
     })
 })
 
@@ -146,8 +164,17 @@ exports.delete = functions.https.onCall((data, context) => {
   const docRef = admin.firestore().collection('requests').doc(data.docId)
   return docRef.get().then((doc) => {
     if (doc.data().ids.includes(context.auth.uid)) {
-      sendRequestDeleted(doc.data().acceptedDate || {}) // .date)
-      return docRef.delete()
+      return docRef.delete().then(() => {
+        sendRequestDeleted(
+          data.email,
+          doc.data().acceptedDate || {
+            date: 'noch nicht festgelegten',
+            time: 'Termin',
+          }
+        ) // .date
+        return true
+      })
+      // return docRef.delete()
     }
     return false
   })

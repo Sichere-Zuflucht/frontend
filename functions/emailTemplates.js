@@ -24,10 +24,16 @@ exports.coachInitialMail = (coachName, message, coachID) => {
     stellen.
     <br>
     <br>
-    Grüße von unserem engagierten Team.
+    Grüße von unserem engagierten Team.<br>
+    ______________________________________________________________________<br>
+    <br>
+    www.sichere-zuflucht.de<br>
+    <br>
+    Diese E-Mail-Adresse wird nicht überwacht. Antworten Sie bitte nicht auf diese E-Mail.
     </div>`,
     uid: coachID,
     sent: false,
+    
   }
 }
 function listToHTML(list) {
@@ -42,7 +48,7 @@ function listToHTML(list) {
   )
 }
 
-exports.housingInitialMail = (name, content, userId) => {
+/* exports.housingInitialMail = (name, content, userId) => {
   return {
     subject: 'Sichere Zuflucht - Anfrage von Frau',
     html: `<div style="font-size: 16px;">Wohnungssuche<br><br>
@@ -72,7 +78,7 @@ exports.housingInitialMail = (name, content, userId) => {
     uid: userId,
     sent: false,
   }
-}
+} */
 
 exports.womanSuggestedDates = (coachName, dates, womanID) => {
   return {
@@ -87,7 +93,12 @@ exports.womanSuggestedDates = (coachName, dates, womanID) => {
         Bitte loggen Sie sich auf unserer <a href="sichere-zuflucht.de">Plattform</a> ein, um einen Termin auszuwählen.
         <br>
         <br>
-        Grüße von unserem engagierten Team.
+        Grüße von unserem engagierten Team.<br>
+        ______________________________________________________________________<br>
+        <br>
+        www.sichere-zuflucht.de<br>
+        <br>
+        Diese E-Mail-Adresse wird nicht überwacht. Antworten Sie bitte nicht auf diese E-Mail.
         </div>`,
     uid: womanID,
     sent: false,
@@ -107,7 +118,12 @@ exports.coachAcceptedDate = (coachName, date, coachID) => {
         Bitte loggen Sie sich auf unserer <a href="sichere-zuflucht.de">Plattform</a> ein, um für den Termin den Videocall aufzusetzen.
         <br>
         <br>
-        Grüße von unserem engagierten Team.
+        Grüße von unserem engagierten Team.<br>
+        ______________________________________________________________________<br>
+        <br>
+        www.sichere-zuflucht.de<br>
+        <br>
+        Diese E-Mail-Adresse wird nicht überwacht. Antworten Sie bitte nicht auf diese E-Mail.
         </div>`,
     uid: coachID,
     sent: false,
@@ -123,7 +139,12 @@ exports.verificationNotificationMail = (email, tel, www, coachID) => {
     <span style="font-family: monospace; margin-left: 2em">"E-Mail: ${email}"</span>
     <span style="font-family: monospace; margin-left: 2em">"Tel: ${tel}"</span>
     <span style="font-family: monospace; margin-left: 2em">"Webseite: ${www}"</span>
-    <span style="font-family: monospace; margin-left: 2em">"CoachID: ${coachID}"</span>
+    <span style="font-family: monospace; margin-left: 2em">"CoachID: ${coachID}"</span><br>
+    ______________________________________________________________________<br>
+    <br>
+    www.sichere-zuflucht.de<br>
+    <br>
+    Diese E-Mail-Adresse wird nicht überwacht. Antworten Sie bitte nicht auf diese E-Mail.
     </div>`,
   }
 }
@@ -131,7 +152,26 @@ exports.reqDeletedNotificationMail = (date) => {
   return {
     subject: 'Sichere Zuflucht - Anfrage abgesagt',
     html: `<div style="font-size: 16px;">Anfrage wurde abgesagt<br><br>
-    Eine Frau hat Ihre Anfrage für den ${date.date} ${date.time} abgesagt.
+    Eine Frau hat Ihre Anfrage für den ${date.date} ${date.time} abgesagt.<br>
+    ______________________________________________________________________<br>
+    <br>
+    www.sichere-zuflucht.de<br>
+    <br>
+    Diese E-Mail-Adresse wird nicht überwacht. Antworten Sie bitte nicht auf diese E-Mail.
+    </div>`,
+  }
+}
+
+exports.userDeletedNotificationMail = () => {
+  return {
+    subject: 'Sichere Zuflucht - Account gelöscht',
+    html: `<div style="font-size: 16px;">Account erfolgreich gelöscht<br><br>
+    Ihr Account bei Sichere Zuflucht wurde erfolgreich gelöscht.<br>
+    ______________________________________________________________________<br>
+    <br>
+    www.sichere-zuflucht.de<br>
+    <br>
+    Diese E-Mail-Adresse wird nicht überwacht. Antworten Sie bitte nicht auf diese E-Mail.
     </div>`,
   }
 }

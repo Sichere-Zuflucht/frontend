@@ -152,7 +152,8 @@ export default {
         )
         .then(async () => {
           await this.$fire.functions.httpsCallable('user-delete')(
-            this.pubData.uid
+            this.pubData.uid,
+            this.privData.email // email stimmt
           )
           this.$router.go('/')
         })

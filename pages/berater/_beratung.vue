@@ -296,6 +296,7 @@ export default {
           coachName: this.coachName,
           message: this.msgTitle + ': ' + this.message,
           coachUID: this.$route.params.beratung,
+          coachEmail: this.$store.getters['modules/user/private'].email,
           createdAt: new Date(),
           isDev: this.$config.isDev,
         })

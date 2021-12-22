@@ -108,7 +108,6 @@ export default {
     const responses = (
       await this.$fire.functions.httpsCallable('request-getRequests')()
     ).data
-
     // get the data for each coach and add it to the response
     // then push it to the responses list
     this.responses = await Promise.all(

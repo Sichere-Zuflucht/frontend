@@ -3,6 +3,7 @@ const _ = require('lodash')
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
 const firebaseTools = require('firebase-tools')
+const { sendUserDeleted } = require('./email')
 
 exports.create = functions.https.onCall(async (data, context) => {
   const membership = admin
@@ -83,7 +84,7 @@ exports.getCoaches = functions.https.onCall(async (data, context) => {
   )
 })
 
-exports.delete = functions.https.onCall(async (uid, context) => {
+exports.delete = functions.https.onCall(async (uid, email) => {
   // delete requests
   await admin
     .firestore()
@@ -97,7 +98,12 @@ exports.delete = functions.https.onCall(async (uid, context) => {
     })
 
   // delete user in auth
-  await admin.auth().deleteUser(uid)
+  await admin
+    .auth()
+    .deleteUser(uid)
+    .then(() => {
+      sendUserDeleted(email.auth.token.email)
+    })
   // delete user in firestore
   return await firebaseTools.firestore.delete('/users/' + uid, {
     project: process.env.GCLOUD_PROJECT,
