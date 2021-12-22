@@ -222,7 +222,7 @@ export default {
               firstName: this.firstName,
               lastName: this.lastName,
               membership: this.membership.id,
-              avatar: this.$config.baseUrl + '/coach-avatar.jpg',
+              // avatar: this.$config.baseUrl + '/coach-avatar.jpg',
             }
             createdUserData.private = {
               email: this.$fire.auth.currentUser.email,

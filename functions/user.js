@@ -37,9 +37,6 @@ exports.create = functions.https.onCall(async (data, context) => {
     stripe: false,
     createdAt: new Date(),
   })
-
-  functions.logger.log('create user', data)
-  functions.logger.log('with id', context.auth.uid)
   // admin.firestore().collection('memberships').doc().create({})
   const docRef = admin.firestore().collection('users').doc(context.auth.uid)
   docRef.set({})

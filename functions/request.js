@@ -49,7 +49,6 @@ exports.sendRequest = functions.https.onCall(async (data, context) => {
       eMails: [coachInitialMail(data.coachName, data.message, data.coachUID)],
       coachAnswered: false,
       coachId: data.coachUID,
-      coachEmail: data.coachEmail,
       womanId: context.auth.uid,
       ids: [data.coachUID, context.auth.uid],
       message: data.message,

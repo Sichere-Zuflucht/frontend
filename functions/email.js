@@ -99,7 +99,6 @@ exports.sendVerifyAccMail = functions.https.onCall(async (data, context) => {
     .collection('private')
     .doc('data')
     .get()
-  console.log('privData', privData)
 
   const settings = {
     verifySetting: {

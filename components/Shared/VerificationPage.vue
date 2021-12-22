@@ -74,7 +74,7 @@ export default {
   props: {
     editprofil: {
       type: Boolean,
-      default: false,
+      default: true,
     },
   },
   data() {
