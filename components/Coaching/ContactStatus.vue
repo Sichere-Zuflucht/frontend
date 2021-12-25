@@ -6,13 +6,20 @@
     :ripple="clickable"
     :to="clickable ? '/berater/' + coach.id : null"
     outlined
-    :style="'border: 1px solid ' + $vuetify.theme.themes.light.primary"
+    :style="
+      'border: 1px solid ' +
+      (now
+        ? $vuetify.theme.themes.light.success
+        : $vuetify.theme.themes.light.primary)
+    "
   >
     <v-sheet
       class="d-flex"
       :style="
         'border-bottom: 1px solid ' +
-        $vuetify.theme.themes.light.primary +
+        (now
+          ? $vuetify.theme.themes.light.success
+          : $vuetify.theme.themes.light.primary) +
         ' !important'
       "
     >
@@ -123,6 +130,7 @@
       </div>
     </v-card-text>
     <v-card-actions
+      v-if="!now"
       style="border-top: 1px solid lightgrey"
       class="align-stretch pa-4"
     >
@@ -178,6 +186,10 @@ export default {
     clickable: {
       type: Boolean,
       default: true,
+    },
+    now: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

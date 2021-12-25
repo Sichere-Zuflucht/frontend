@@ -25,11 +25,31 @@
         class="px-1 pb-4"
       >
         <v-slide-item v-for="(response, i) in responses" :key="i">
-          <div style="width: 95vw; max-width: 300px; padding: 5px">
+          <div
+            v-if="
+              response.acceptedDate
+                ? new Date(
+                    response.acceptedDate.date +
+                      ' ' +
+                      response.acceptedDate.time
+                  ) >= newDate
+                : true
+            "
+            style="width: 95vw; max-width: 300px; padding: 5px"
+          >
             <CoachingContactStatus
               :coach="response.coach"
               :response="response"
               :clickable="false"
+              :now="
+                response.acceptedDate
+                  ? new Date(
+                      response.acceptedDate.date +
+                        ' ' +
+                        response.acceptedDate.time
+                    ) <= new Date()
+                  : false
+              "
               @cancel="cancel(response)"
             />
           </div>
@@ -101,6 +121,7 @@ export default {
         },
       ],
       newWoman: false,
+      newDate: new Date(new Date().setHours(new Date().getHours() - 2)),
     }
   },
   async fetch() {
