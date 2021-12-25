@@ -235,9 +235,13 @@ export default {
     }
   },
   async fetch() {
-    this.requests = (
+    const req = (
       await this.$fire.functions.httpsCallable('request-getRequests')()
     ).data
+
+    this.requests = req.sort((a, b) => {
+      return a.createdAt._seconds - b.createdAt._seconds
+    })
   },
   fetchOnServer: false,
   computed: {

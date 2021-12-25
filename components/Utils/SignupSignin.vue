@@ -69,7 +69,7 @@
                     :loading="loading"
                     :disabled="!valid"
                     @click="next"
-                    >Senden ></v-btn
+                    >Weiter ></v-btn
                   >
                 </div>
                 <p v-if="!makeLogin" class="caption mt-4">
