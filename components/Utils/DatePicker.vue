@@ -18,7 +18,7 @@
     <v-date-picker
       v-if="isSelectDate"
       v-model="date"
-      :min="today"
+      :min="today.toISOString().substr(0, 10)"
       scrollable
       locale="de-de"
       :first-day-of-week="1"
@@ -94,11 +94,20 @@ export default {
         },
         hours: (h) => {
           console.log(
-            'plus1Day',
-            new Date(this.date).getTime() + 1000 * 60 * 60 * 24 >
-              new Date(this.today).getTime()
+            'hours:',
+            this.date === this.today.toISOString().substr(0, 10)
+              ? h >= this.today.getHours()
+                ? 'bigger'
+                : 'smaller'
+              : 'false'
           )
-          return h >= 7 && h <= 19
+          return (
+            h >= 7 &&
+            h <= 19 &&
+            (this.date === this.today.toISOString().substr(0, 10)
+              ? h >= this.today.getHours()
+              : true)
+          )
         },
         minutes: (m) => {
           return m === 0 || m === 15 || m === 30 || m === 45
@@ -107,10 +116,7 @@ export default {
       date: '',
       time: '',
       modal: false,
-      plus1Day: new Date(new Date().getTime() + 1000 * 60 * 60 * 24),
-      today: new Date(new Date().getTime() + 1000 * 60 * 60 * 24)
-        .toISOString()
-        .substr(0, 10),
+      today: new Date(new Date().getTime() + 1000 * 60 * 60 * 24),
     }
   },
   computed: {
