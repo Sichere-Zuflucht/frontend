@@ -16,33 +16,66 @@
       >
     </template>
     <v-date-picker
+      v-if="isSelectDate"
       v-model="date"
       :min="today"
       scrollable
-      @input="focusTimeSelect"
+      locale="de-de"
+      :first-day-of-week="1"
+      :allowed-dates="allowed.dates"
     >
       <v-spacer></v-spacer>
-      <v-text-field
-        ref="timeSelect"
-        v-model="time"
-        label="Uhrzeit"
-        type="time"
+      <v-btn
+        text
+        color="primary"
+        @click="
+          () => {
+            modal = false
+            date = ''
+          }
+        "
+      >
+        Abbrechen
+      </v-btn>
+      <v-btn
         :disabled="!date"
-        outlined
-        hide-details
-        full-width
-        @keyup.enter="time ? addDates(item.suggestions) : 0"
-      ></v-text-field>
+        color="primary"
+        @click="isSelectDate = !isSelectDate"
+      >
+        Uhrzeit wählen
+      </v-btn>
+    </v-date-picker>
+    <v-time-picker
+      v-else
+      v-model="time"
+      min="7:00"
+      max="20:00"
+      format="24hr"
+      :allowed-hours="allowed.hours"
+      :allowed-minutes="allowed.minutes"
+    >
       <v-spacer></v-spacer>
-      <v-btn text color="primary" @click="modal = false"> Abbrechen </v-btn>
+      <v-btn
+        text
+        color="primary"
+        @click="
+          () => {
+            modal = false
+            date = ''
+            isSelectDate = true
+          }
+        "
+      >
+        Abbrechen
+      </v-btn>
       <v-btn
         :disabled="!time"
         color="primary"
         @click="addDates(item.suggestions)"
       >
-        OK
+        Fertig
       </v-btn>
-    </v-date-picker>
+    </v-time-picker>
   </v-dialog>
 </template>
 
@@ -54,10 +87,30 @@ export default {
   data() {
     return {
       menu: false,
+      isSelectDate: true,
+      allowed: {
+        dates: (d) => {
+          return new Date(d).getDay() > 0 && new Date(d).getDay() < 6
+        },
+        hours: (h) => {
+          console.log(
+            'plus1Day',
+            new Date(this.date).getTime() + 1000 * 60 * 60 * 24 >
+              new Date(this.today).getTime()
+          )
+          return h >= 7 && h <= 19
+        },
+        minutes: (m) => {
+          return m === 0 || m === 15 || m === 30 || m === 45
+        },
+      },
       date: '',
       time: '',
       modal: false,
-      today: new Date().toISOString().substr(0, 10),
+      plus1Day: new Date(new Date().getTime() + 1000 * 60 * 60 * 24),
+      today: new Date(new Date().getTime() + 1000 * 60 * 60 * 24)
+        .toISOString()
+        .substr(0, 10),
     }
   },
   computed: {
@@ -74,6 +127,7 @@ export default {
       })
       this.date = ''
       this.time = ''
+      this.isSelectDate = true
       // this.menu = false
       this.$refs.dialog.save()
     },
@@ -87,9 +141,6 @@ export default {
       if (day.length < 2) day = '0' + day
 
       return [year, month, day].join('-')
-    },
-    focusTimeSelect() {
-      this.$refs.timeSelect.focus()
     },
   },
 }
