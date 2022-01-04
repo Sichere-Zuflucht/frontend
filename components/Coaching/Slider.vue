@@ -25,6 +25,12 @@
 
 <script>
 export default {
+  props: {
+    withoutid: {
+      type: String,
+      default: null,
+    },
+  },
   data() {
     return {
       allCoaches: [],
@@ -41,7 +47,12 @@ export default {
         .httpsCallable('user-getCoaches')()
         .then((d) => {
           d.data.forEach((a) => {
-            this.allCoaches.push(JSON.parse(a))
+            const b = JSON.parse(a)
+            if (this.withoutid) {
+              if (this.withoutid !== b.uid) this.allCoaches.push(b)
+            } else {
+              this.allCoaches.push(b)
+            }
           })
           this.loading = false
         })

@@ -33,13 +33,14 @@
                 nuxt
                 exact
                 active-class="white--text"
+                @click="drawer = false"
               >
                 <v-list-item-content>
                   {{ sub.title }}
                 </v-list-item-content>
               </v-list-item></v-list-group
             >
-            <v-list-item v-else :to="item.to">
+            <v-list-item v-else :to="item.to" @click="drawer = false">
               <v-list-item-icon
                 ><v-icon>{{ item.icon }}</v-icon></v-list-item-icon
               >
@@ -72,6 +73,7 @@
                 nuxt
                 exact
                 active-class="white--text"
+                @click="drawer = false"
               >
                 <v-list-item-content>
                   {{ sub.title }}
@@ -104,6 +106,7 @@
                 nuxt
                 exact
                 active-class="white--text"
+                @click="drawer = false"
               >
                 <v-list-item-content>
                   {{ sub.title }}
@@ -119,12 +122,24 @@
         <v-list v-else>
           <v-spacer />
           <v-list-item>
-            <v-btn to="/registration/signup" color="accent" exact nuxt block
+            <v-btn
+              to="/registration/signup"
+              color="accent"
+              exact
+              nuxt
+              block
+              @click="drawer = false"
               >Registrieren</v-btn
             >
           </v-list-item>
           <v-list-item>
-            <v-btn to="/registration/signin" exact nuxt block text
+            <v-btn
+              to="/registration/signin"
+              exact
+              nuxt
+              block
+              text
+              @click="drawer = false"
               >Einloggen</v-btn
             >
           </v-list-item>

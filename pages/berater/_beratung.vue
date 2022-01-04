@@ -220,7 +220,7 @@
           Beratung findet digital und anonym statt.
         </p>
       </v-container>
-      <CoachingSlider />
+      <CoachingSlider :withoutid="$route.params.beratung" />
     </div>
     <v-container v-else class="mt-16">
       <v-btn to="/beratung/edit-profil" outlined nuxt color="primary"
@@ -239,11 +239,31 @@
       ></v-text-field>
     </v-container>
   </div>
+  <div v-else-if="pubData !== false">
+    <v-container>
+      <v-skeleton-loader
+        class="mx-auto"
+        max-width="300"
+        type="avatar, article, list-item-two-line, list-item-two-line, actions"
+      ></v-skeleton-loader>
+    </v-container>
+  </div>
   <div v-else>
-    <v-sheet class="ma-5">
-      <v-row>Dieser coach konnte leider nicht gefunden werden. </v-row>
-      <v-row><v-btn @click="$router.go(-1)">zurück</v-btn></v-row>
-    </v-sheet>
+    <v-container class="mt-16">
+      <h1 class="text-h1 secondary--text mb-4">Unbekannt</h1>
+      <v-alert type="error" dark color="red">
+        Dieser/diese Berater*in scheint nicht zu existieren.
+      </v-alert>
+      <p>
+        Es tut uns leid, da muss wohl ein Fehler vorliegen. Der/die Berater*in
+        unter dieser URL scheint nicht oder nicht mehr zu existieren. Bitte
+        überprüfen Sie die Korrektheit der URL oder wenden Sie sich an uns unter
+        <a href="mailto:kontakt@sichere-zuflucht.de"
+          >kontakt@sichere-zuflucht.de</a
+        >
+      </p>
+      <SharedServiceOverview class="pb-16" />
+    </v-container>
   </div>
 </template>
 
@@ -268,7 +288,7 @@ export default {
       dialog: false,
       linkVal: this.$config.baseUrl + '/berater/' + this.$route.params.beratung,
       copied: false,
-      pubData: null,
+      pubData: undefined,
     }
   },
   async fetch() {
@@ -285,6 +305,7 @@ export default {
           .doc('data')
           .get()
       ).data()
+      if (this.pubData === undefined) this.pubData = false
     }
   },
   fetchOnServer: false,
