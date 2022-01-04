@@ -81,7 +81,12 @@
         </div>
       </div>
     </v-container>
-    <div v-if="$route.params.beratung !== $store.getters['modules/user/uid']">
+    <div
+      v-if="
+        $route.params.beratung !== $store.getters['modules/user/uid'] &&
+        $store.getters['modules/user/membership'] !== 'Coach'
+      "
+    >
       <v-container>
         <v-card
           outlined
