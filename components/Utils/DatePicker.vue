@@ -82,7 +82,10 @@
 <script>
 export default {
   props: {
-    item: {},
+    item: {
+      type: Object,
+      default: null,
+    },
   },
   data() {
     return {
@@ -93,14 +96,6 @@ export default {
           return new Date(d).getDay() > 0 && new Date(d).getDay() < 6
         },
         hours: (h) => {
-          console.log(
-            'hours:',
-            this.date === this.today.toISOString().substr(0, 10)
-              ? h >= this.today.getHours()
-                ? 'bigger'
-                : 'smaller'
-              : 'false'
-          )
           return (
             h >= 7 &&
             h <= 19 &&

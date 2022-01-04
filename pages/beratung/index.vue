@@ -438,8 +438,8 @@ export default {
         })
     },
     eraseDate(d, list) {
-      const d2 = d + d
-      d === 0 ? list.splice(d) : list.splice(d, d2)
+      const d2 = d + 1
+      list.splice(d, d2)
     },
     formatDate(date) {
       const d = new Date(date)
