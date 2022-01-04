@@ -9,7 +9,7 @@
       <b>Bildungsstand</b> und <b>Einkommen</b> – verdient ein für sie leicht
       erreichbares <b>Unterstützungsangebot.</b>
     </p>
-    <v-slide-group show-arrows class="pt-4">
+    <v-slide-group show-arrows class="pt-4 mx-auto" style="max-width: 1000px">
       <v-slide-item v-for="(example, i) in allExamples" :key="i" class="my-4">
         <v-card width="150" class="mx-2">
           <v-img :src="example.src" />
