@@ -1,6 +1,11 @@
 <template>
   <div :class="'d-flex align-center justify-center ' + classname">
-    <v-btn :to="link" color="secondary">{{ text }}</v-btn>
+    <v-btn
+      :to="!mailto ? link : null"
+      :href="mailto ? link : null"
+      color="secondary"
+      >{{ text }}</v-btn
+    >
   </div>
 </template>
 
@@ -18,6 +23,10 @@ export default {
     link: {
       type: String,
       default: '',
+    },
+    mailto: {
+      type: Boolean,
+      default: false,
     },
   },
 }

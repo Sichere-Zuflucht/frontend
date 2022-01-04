@@ -283,8 +283,19 @@ export default {
         },
         {
           icon: 'mdi-hand-heart',
-          title: 'Für Berater*innen',
-          to: '/info-berater',
+          title: 'Helfen Sie',
+          subgroup: [
+            {
+              icon: 'mdi-hand-heart',
+              title: 'Als Berater*innen',
+              to: '/info-berater',
+            },
+            {
+              icon: 'mdi-hand-heart',
+              title: 'Mit einer Unterkunft',
+              to: '/info-unterkunft',
+            },
+          ],
         },
         {
           icon: 'mdi-gift',
