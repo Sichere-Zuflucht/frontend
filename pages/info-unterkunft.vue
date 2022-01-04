@@ -47,7 +47,7 @@
       </v-container></v-sheet
     >
     <v-container class="pb-16">
-      <h2 class="text-h2 secondary--text text-center pt-16">
+      <h2 class="text-h2 secondary--text text-center pt-16 pb-4">
         WELCHE UNTERKÜNFTE SIND GEEIGNET?
       </h2>
       <p class="pb-4 text-center">
@@ -93,7 +93,7 @@
     </v-container>
     <v-sheet color="grey lighten-5">
       <v-container class="py-16">
-        <h2 class="text-h2 secondary--text text-center">IHRE VORTEILE</h2>
+        <h2 class="text-h2 secondary--text text-center pb-4">IHRE VORTEILE</h2>
         <ul>
           <li>Sie können jemandem direkt helfen</li>
           <li>
