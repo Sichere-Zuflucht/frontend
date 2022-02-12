@@ -21,14 +21,8 @@
       <v-divider class="my-3" />
       <p class="font-weight-bold mb-1 mt-2 caption">Fachgebiet</p>
       <div class="d-flex flex-wrap">
-        <v-chip
-          v-for="tag in pubCoachData.info.topicArea"
-          :key="tag"
-          outlined
-          color="primary"
-          class="mr-1 mb-1 caption"
-        >
-          <p class="black--text ma-0 pa-0">{{ tag }}</p>
+        <v-chip outlined color="primary" class="mr-1 mb-1 caption">
+          <p class="black--text ma-0 pa-0">{{ pubCoachData.info.topicArea }}</p>
         </v-chip>
       </div>
     </v-card-text>

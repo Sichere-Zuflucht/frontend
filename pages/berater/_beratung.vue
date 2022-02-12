@@ -16,13 +16,8 @@
         v-if="pubData.info.topicArea"
         class="d-flex flex-wrap justify-center mb-4"
       >
-        <v-chip
-          v-for="(tag, i) in pubData.info.topicArea"
-          :key="i"
-          class="mx-1"
-          color="primary"
-        >
-          {{ tag }}
+        <v-chip class="mx-1" color="primary">
+          {{ pubData.info.topicArea }}
         </v-chip>
       </div>
       <div v-if="pubData.info.quote" class="text-center">

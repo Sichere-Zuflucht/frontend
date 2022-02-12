@@ -219,7 +219,7 @@ export default {
   },
   mounted() {
     for (const v in this.info.topicArea) {
-      this.selectedTopic.push(this.info.topicArea[v])
+      this.selectedTopic = this.info.topicArea[v]
     }
   },
   fetchOnServer: false,

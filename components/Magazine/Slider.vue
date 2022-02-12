@@ -12,6 +12,11 @@
       />
     </v-slide-item>
   </v-slide-group>
+  <v-row v-else>
+    <v-col v-for="i in 3" :key="i">
+      <v-skeleton-loader type="card" max-width="300"></v-skeleton-loader>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
