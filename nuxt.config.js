@@ -137,8 +137,8 @@ export default {
     },
     services: {
       functions: {
-        emulatorPort: process.env.NODE_ENV === 'development' ? 5001 : undefined,
-        // emulatorPort: undefined,
+        // emulatorPort: process.env.NODE_ENV === 'development' ? 5000 : undefined, // 5001
+        emulatorPort: undefined,
       },
       auth: {
         initialize: {
