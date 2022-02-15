@@ -147,38 +147,63 @@
       </client-only>
     </v-navigation-drawer>
     <v-app-bar app>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-spacer />
-      <v-toolbar-title class="pa-0"
-        ><v-btn to="/" nuxt exact text plain :ripple="false"
-          ><v-img contain width="150" src="Sichere-Zuflucht-Logo.svg" /></v-btn
-      ></v-toolbar-title>
-      <v-spacer />
-      <client-only>
-        <v-btn
-          v-if="loggedIn && user.public"
-          nuxt
-          exact
-          icon
-          plain
-          :to="membership === 'Coach' ? '/beratung' : null"
-          @click="membership === 'Coach' ? null : logout()"
-        >
-          <v-avatar
-            v-if="membership === 'Coach'"
-            size="38"
-            color="grey lighten-2"
-            ><v-img v-if="user.public.avatar" :src="user.public.avatar" />
-            <v-icon v-else>mdi-account</v-icon>
-            <!-- <SharedCoachIcon
+      <v-row no-gutters align-content="center">
+        <v-col cols="1" sm="4" align-self="center"
+          ><v-app-bar-nav-icon @click.stop="drawer = !drawer"
+        /></v-col>
+        <v-col cols="10" sm="4" align-self="center"
+          ><v-toolbar-title class="pa-0 d-flex justify-center"
+            ><v-btn to="/" nuxt exact text plain :ripple="false"
+              ><v-img
+                contain
+                width="200"
+                src="Sichere-Zuflucht-Logo.svg" /></v-btn></v-toolbar-title
+        ></v-col>
+        <v-col cols="1" sm="4" align-self="center" class="d-flex justify-end">
+          <div
+            v-if="!loggedIn && $vuetify.breakpoint.smAndUp"
+            class="d-flex justify-end"
+            style="max-width: 300px"
+          >
+            <v-btn
+              v-if="$vuetify.breakpoint.mdAndUp"
+              to="/registration/signin"
+              exact
+              nuxt
+              text
+              >Einloggen</v-btn
+            >
+            <v-btn to="/registration/signup" color="accent" exact nuxt
+              >Registrieren</v-btn
+            >
+          </div>
+          <client-only>
+            <v-btn
+              v-if="loggedIn && user.public"
+              nuxt
+              exact
+              icon
+              plain
+              :to="membership === 'Coach' ? '/beratung' : null"
+              @click="membership === 'Coach' ? null : logout()"
+            >
+              <v-avatar
+                v-if="membership === 'Coach'"
+                size="38"
+                color="grey lighten-2"
+                ><v-img v-if="user.public.avatar" :src="user.public.avatar" />
+                <v-icon v-else>mdi-account</v-icon>
+                <!-- <SharedCoachIcon
               v-else
               color="#b3b3b3"
               style="border: 1px solid #b3b3b3"
               class="pa-2"
             />--> </v-avatar
-          ><v-icon v-else>mdi-logout</v-icon></v-btn
-        >
-      </client-only>
+              ><v-icon v-else>mdi-logout</v-icon></v-btn
+            >
+          </client-only>
+        </v-col>
+      </v-row>
     </v-app-bar>
     <v-card
       dark

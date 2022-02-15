@@ -54,7 +54,7 @@ exports.sendRequest = functions.https.onCall(async (data, context) => {
       message: data.message,
       suggestions: [],
       womanUserName: womanData.userName,
-      womanAvatar: womanData.avatar,
+      // womanAvatar: womanData.avatar,
       createdAt: new Date(),
       updatedAt: new Date(),
     })
