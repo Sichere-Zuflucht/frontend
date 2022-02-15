@@ -7,16 +7,21 @@
     class="d-flex flex-column pb-2"
   >
     <v-card-text class="pt-0 flex-grow-1 flex-shrink-0">
-      <v-avatar color="primary" class="my-5" size="80"
-        ><v-img :src="pubCoachData.avatar"
-      /></v-avatar>
+      <nuxt-link :to="'/berater/' + pubCoachData.uid">
+        <v-avatar color="primary" class="my-5" size="80"
+          ><v-img :src="pubCoachData.avatar" /></v-avatar
+      ></nuxt-link>
       <div class="d-flex flex-column justify-center">
-        <h2 class="secondary--text text-h2">
-          {{ pubCoachData.firstName }} {{ pubCoachData.lastName }}
-        </h2>
-        <h3 class="text-h5">
-          {{ pubCoachData.info.profession }}
-        </h3>
+        <nuxt-link
+          :to="'/berater/' + pubCoachData.uid"
+          style="text-decoration: none"
+          ><h2 class="secondary--text text-h2">
+            {{ pubCoachData.firstName }} {{ pubCoachData.lastName }}
+          </h2>
+          <h3 class="text-h5">
+            {{ pubCoachData.info.profession }}
+          </h3></nuxt-link
+        >
       </div>
       <v-divider class="my-3" />
       <p class="font-weight-bold mb-1 mt-2 caption">Fachgebiet</p>
