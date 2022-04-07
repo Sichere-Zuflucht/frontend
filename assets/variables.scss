@@ -4,8 +4,8 @@
 // $font-size-root: 20px;
 
 @font-face {
-  font-family: 'Yellowtail';
-  src: local('Yellowtail'), url(~assets/Yellowtail-Regular.ttf);
+  font-family: "Yellowtail";
+  src: local('Yellowtail'), url(~assets/Yellowtail/Yellowtail-Regular.ttf) format("truetype");
 }
 
 $container-padding-x: 24px;
@@ -68,7 +68,7 @@ $headings: (
     'weight': normal,
     'line-height': 1.75rem,
     'letter-spacing': 0.009375em,
-    'font-family': 'Yellowtail-Regular',
+    'font-family': 'Yellowtail',
     'text-transform': false,
   ),
   'subtitle-2': (
@@ -76,7 +76,7 @@ $headings: (
     'weight': normal,
     'line-height': 1.375rem,
     'letter-spacing': 0.0071428571em,
-    'font-family': 'Yellowtail-Regular',
+    'font-family': 'Yellowtail',
     'text-transform': false,
   ),
   'body-1': (
